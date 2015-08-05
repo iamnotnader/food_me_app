@@ -16,10 +16,28 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+
+//Set up the main app module and pull in all the dependencies.
+var initAngularStuff = function() {
+  // Declare app level module which depends on views, and components
+  console.log('Engaging angular.');
+  angular.module('foodMeApp', [
+    'ngRoute',
+    'foodMeApp.dummyAppScreen',
+  ]).
+  config(['$routeProvider',
+      function($routeProvider) {
+    $routeProvider.otherwise({redirectTo: '/dummy_app_screen'});
+  }]);
+};
+
 var app = {
     // Application Constructor
     initialize: function() {
         this.bindEvents();
+
+        //Set up the main app module and pull in all the dependencies.
+        initAngularStuff();
     },
     // Bind Event Listeners
     //
@@ -37,6 +55,7 @@ var app = {
     },
     // Update DOM on a Received Event
     receivedEvent: function(id) {
+        //TODO(daddy): Remove this example code.
         var parentElement = document.getElementById(id);
         var listeningElement = parentElement.querySelector('.listening');
         var receivedElement = parentElement.querySelector('.received');
