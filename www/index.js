@@ -24,10 +24,11 @@ var initAngularStuff = function() {
   angular.module('foodMeApp', [
     'ngRoute',
     'foodMeApp.dummyAppScreen',
+    'foodMeApp.introScreen',
   ]).
   config(['$routeProvider',
       function($routeProvider) {
-    $routeProvider.otherwise({redirectTo: '/dummy_app_screen'});
+    $routeProvider.otherwise({redirectTo: '/intro_screen'});
   }]);
 };
 

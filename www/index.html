@@ -26,16 +26,18 @@
         <meta name="msapplication-tap-highlight" content="no" />
         <!-- WARNING: for iOS 7, remove the width=device-width and height=device-height attributes. See https://issues.apache.org/jira/browse/CB-4323 -->
         <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" />
-        <link rel="stylesheet" type="text/css" href="css/index.css" />
         <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css">
         <link rel="stylesheet" href="bower_components/html5-boilerplate/dist/css/normalize.css">
         <link rel="stylesheet" href="bower_components/html5-boilerplate/dist/css/main.css">
+        <!--My stuff-->
+        <link rel="stylesheet" type="text/css" href="styles/index.css" />
+        <!--Thing I don't understand.-->
         <script src="bower_components/html5-boilerplate/dist/js/vendor/modernizr-2.8.3.min.js"></script>
         <title>FoodMe</title>
     </head>
     <body>
         <!--TODO(daddy): One view for now but we will probably want to use UIRouter-->
-        <div ng-view id="topOfPage"></div>
+        <div ng-view></div>
 
         <!--Angular stuff.-->
         <script src="bower_components/jquery/dist/jquery.js"></script>
@@ -43,8 +45,15 @@
         <script src="bower_components/angular/angular.js"></script>
         <script src="bower_components/angular-route/angular-route.js"></script>
         <!--Cordova stuff-->
-        <script type="text/javascript" src="cordova.js"></script>
+        <!--TODO(daddy): Including cordova in Chrome freezes the browser. This is a-->
+        <!--shitty workaround for now.-->
+        <script type="text/javascript">
+            if (!navigator.userAgent.toLowerCase().match('chrome')) {
+                document.write("<script src='cordova.js'><\/script>");
+            }
+        </script>
         <!--My stuff-->
+        <script type="text/javascript" src="intro_screen/intro_screen.js"></script>
         <script type="text/javascript" src="dummy_app_screen/dummy_app_screen.js"></script>
         <script type="text/javascript" src="index.js"></script>
         <script type="text/javascript">
