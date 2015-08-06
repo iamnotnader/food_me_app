@@ -4,3 +4,6 @@ www/bower_components
 platforms/ios/www
 platforms/android/assets/www/
 .sass-cache
+xcuserdata
+xcshareddata
+phonegap.js
