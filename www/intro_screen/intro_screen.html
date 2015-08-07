@@ -6,6 +6,54 @@
       </div>
     </div>
     <div class="intro_screen__lower_container">
+      <div class="intro_screen__dot_slider">
+        <!--The number of circles in this div must equal numPhotos in the-->
+        <!--intro_sceen.js file. The dot-N is used by angular to set the active
+            dot.-->
+        <div class="intro_screen__dot_indicator intro_screen__dot-0"></div>
+        <div class="intro_screen__dot_indicator intro_screen__dot-1"></div>
+        <div class="intro_screen__dot_indicator intro_screen__dot-2"></div>
+        <div class="intro_screen__dot_indicator intro_screen__dot-3"></div>
+      </div>
+      <!--This div has a total width of 300% because it contains three pieces of
+          text that will be swiped through. The number of divs in this container
+          must equal numPhotos in the intro_screen.js file.-->
+      <div class="intro_screen__overall_text_container">
+        <div class="intro_screen__text_container">
+          <p class="intro_screen__main_text">Swipe to add to cart.</p>
+          <p class="intro_screen__description_text">
+            Stop sifting through restaurants and<br>
+            menus and start ordering food<br>
+            the way you date!
+          </p>
+          
+        </div>
+        <div class="intro_screen__text_container" style="left: 100%;">
+          <p class="intro_screen__main_text">Learns your preferences.</p>
+          <p class="intro_screen__description_text">
+            We use advanced neural network<br>
+            algorithms to learn from your swipes.<br>
+            So your stack gets better over time!
+          </p>
+        </div>
+        <div class="intro_screen__text_container" style="left: 200%;">
+          <p class="intro_screen__main_text">Verify your order.</p>
+          <p class="intro_screen__description_text">
+            Customize your meal and enter<br>
+            payment info— or just hang with<br>
+            the defaults.
+          </p>
+        </div>
+        <div class="intro_screen__text_container" style="left: 300%;">
+          <p class="intro_screen__main_text">Submit and enjoy.</p>
+          <p class="intro_screen__description_text">
+            After submitting, your order will be<br>
+            delivered to you. So simple, right?<br>
+            NOW GIVE IT A TRY.
+          </p>
+        </div>
+      </div>
+      <img class="intro_screen__sign_in_button" ng-src="img/sign_in_button.png" alt="">
     </div>
     <!--<h1>{{testString}}</h1>-->
 </div>

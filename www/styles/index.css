@@ -16,6 +16,12 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+@font-face {
+  font-family: TitleFont;
+  src: url("fonts/Alegreya Sans 900.ttf"); }
+@font-face {
+  font-family: TaglineFont;
+  src: url("fonts/Alegreya Sans 500.ttf"); }
 * {
   -webkit-tap-highlight-color: transparent;
   /* make transparent link selection, adjust last value opacity 0 to 1.0 */ }
@@ -122,18 +128,19 @@ h1 {
 .intro_screen__upper_container {
   position: absolute;
   top: 0;
-  bottom: 30%;
+  bottom: 40%;
   left: 0;
   right: 0;
   background-color: #B09D8F; }
 
 .intro_screen__lower_container {
   position: absolute;
-  top: 70%;
+  top: 60%;
   bottom: 0;
   left: 0;
   right: 0;
-  background-color: white; }
+  background-color: white;
+  overflow: hidden; }
 
 .intro_screen__phone {
   position: absolute;
@@ -159,5 +166,54 @@ h1 {
 .intro_screen__all_intro_screenshots {
   height: 100%;
   position: absolute; }
+
+.intro_screen__text_container {
+  position: absolute;
+  width: 100%; }
+
+.intro_screen__overall_text_container {
+  position: absolute;
+  width: 100%;
+  left: 0; }
+
+.intro_screen__main_text {
+  font-family: TitleFont;
+  font-size: 1.5rem;
+  text-align: center;
+  text-transform: none;
+  margin-bottom: 0; }
+
+.intro_screen__description_text {
+  font-family: TaglineFont;
+  text-transform: none;
+  font-size: 1.3rem;
+  text-align: center;
+  padding: 0 .5rem; }
+
+.intro_screen__dot_slider {
+  margin-top: 1rem;
+  margin-bottom: 0;
+  text-align: center; }
+
+.intro_screen__dot_indicator {
+  width: 15px;
+  height: 15px;
+  display: inline-block;
+  border-radius: 50%;
+  background-color: #707070;
+  margin: 0 4px;
+  vertical-align: middle; }
+
+.intro_screen__active_dot {
+  width: 20px;
+  height: 20px; }
+
+.intro_screen__sign_in_button {
+  position: absolute;
+  width: 90%;
+  margin: 0 auto;
+  left: 0;
+  right: 0;
+  bottom: 3%; }
 
 /*# sourceMappingURL=index.css.map */
