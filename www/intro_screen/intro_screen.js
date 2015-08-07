@@ -78,6 +78,9 @@ angular.module('foodMeApp.introScreen', ['ngRoute'])
               scope.textToScreenshotRatio = scope.textWidth / scope.screenshotWidth;
 
               scope.setActiveDot(0);
+              
+              $('.intro_screen__upper_container').css('background-color',
+                  scope.colorList[0]);
             });
         }
     };

@@ -133,7 +133,7 @@ $intro_screen__lower_container_offset: 40%;
   bottom: $intro_screen__lower_container_offset;
   left: 0;
   right: 0;
-  background-color: $brown-1;
+  background-color: none; // This is overwritten by JS. See colorList.
 }
 
 .intro_screen__lower_container {
@@ -200,7 +200,7 @@ $intro_screen__screenshot_height: (260 / 350) * $intro_screen__phone_height;
 .intro_screen__description_text {
   font-family: TaglineFont;
   text-transform: none;
-  font-size: 1.3rem;
+  font-size: 1.1rem;
   text-align: center;
   padding: 0 .5rem;
 }
@@ -217,7 +217,7 @@ $intro_screen__screenshot_height: (260 / 350) * $intro_screen__phone_height;
   height: 15px;
   display: inline-block;
   border-radius: 50%;
-  background-color: $grey-1; // This is redefined and overwritten in JS. Look for grey_1.
+  background-color: none; // This is redefined and overwritten in JS. Look for colorList.
   margin: 0 4px;
   vertical-align: middle;
 }

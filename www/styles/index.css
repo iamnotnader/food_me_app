@@ -131,7 +131,7 @@ h1 {
   bottom: 40%;
   left: 0;
   right: 0;
-  background-color: #B09D8F; }
+  background-color: none; }
 
 .intro_screen__lower_container {
   position: absolute;
@@ -186,7 +186,7 @@ h1 {
 .intro_screen__description_text {
   font-family: TaglineFont;
   text-transform: none;
-  font-size: 1.3rem;
+  font-size: 1.1rem;
   text-align: center;
   padding: 0 .5rem; }
 
@@ -200,7 +200,7 @@ h1 {
   height: 15px;
   display: inline-block;
   border-radius: 50%;
-  background-color: #707070;
+  background-color: none;
   margin: 0 4px;
   vertical-align: middle; }
 
