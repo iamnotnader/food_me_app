@@ -26,7 +26,7 @@ angular.module('foodMeApp.introScreen', ['ngRoute'])
   // add more without anything breaking, but you won't see them unless you make
   // numPhotos bigger above to correspond. Note that you can have fewer colors
   // than photos and the colors will just repeat.
-  $scope.colorList = ["#B09D8F", "#443133", "#C0965E"];
+  $scope.colorList = ["#8C6954", "#BFAF80", "#260126"];
   // The index into colorList that determines which background color we're on
   // currently.
   $scope.colorIndex = 0;

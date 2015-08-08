@@ -181,14 +181,41 @@ h1 {
   font-size: 1.5rem;
   text-align: center;
   text-transform: none;
-  margin-bottom: 0; }
+  margin-bottom: 0;
+  /*TODO(daddy): this is really shitty-- don't ever do this.*/ }
+  @media only screen and (max-device-width: 320px) and (max-device-height: 480px) and (orientation: portrait) and (-webkit-min-device-pixel-ratio: 2) {
+    .intro_screen__main_text {
+      font-size: 1.3rem; } }
+  @media only screen and (max-device-width: 320px) and (min-device-height: 481px) and (max-device-height: 568px) and (orientation: portrait) and (-webkit-min-device-pixel-ratio: 2) {
+    .intro_screen__main_text {
+      font-size: 1.5rem; } }
+  @media only screen and (min-device-width: 321px) and (max-device-width: 375px) and (min-device-height: 569px) and (max-device-height: 667px) and (orientation: portrait) and (-webkit-min-device-pixel-ratio: 2) {
+    .intro_screen__main_text {
+      font-size: 1.8rem; } }
+  @media only screen and (min-device-width: 376px) and (max-device-width: 414px) and (min-device-height: 569px) and (max-device-height: 736px) and (orientation: portrait) and (-webkit-min-device-pixel-ratio: 2) {
+    .intro_screen__main_text {
+      font-size: 1.8rem;
+      margin-top: 0.5rem; } }
 
 .intro_screen__description_text {
   font-family: TaglineFont;
   text-transform: none;
-  font-size: 1.1rem;
   text-align: center;
-  padding: 0 .5rem; }
+  padding: 0 .5rem;
+  /*TODO(daddy): this is really shitty-- don't ever do this.*/ }
+  @media only screen and (max-device-width: 320px) and (max-device-height: 480px) and (orientation: portrait) and (-webkit-min-device-pixel-ratio: 2) {
+    .intro_screen__description_text {
+      font-size: 1.0rem; } }
+  @media only screen and (max-device-width: 320px) and (min-device-height: 481px) and (max-device-height: 568px) and (orientation: portrait) and (-webkit-min-device-pixel-ratio: 2) {
+    .intro_screen__description_text {
+      font-size: 1.3rem; } }
+  @media only screen and (min-device-width: 321px) and (max-device-width: 375px) and (min-device-height: 569px) and (max-device-height: 667px) and (orientation: portrait) and (-webkit-min-device-pixel-ratio: 2) {
+    .intro_screen__description_text {
+      font-size: 1.5rem; } }
+  @media only screen and (min-device-width: 376px) and (max-device-width: 414px) and (min-device-height: 569px) and (max-device-height: 736px) and (orientation: portrait) and (-webkit-min-device-pixel-ratio: 2) {
+    .intro_screen__description_text {
+      font-size: 1.5rem;
+      margin-top: 0.5rem; } }
 
 .intro_screen__dot_slider {
   margin-top: 1rem;
