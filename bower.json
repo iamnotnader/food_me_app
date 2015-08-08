@@ -16,6 +16,7 @@
     "angular-animate": "1.4.x",
     "jquery": "~2.1.4",
     "jquery-ui": "~1.11.4",
-    "jquery-color": "~2.1.2"
+    "jquery-color": "~2.1.2",
+    "angular-touch": "~1.4.3"
   }
 }

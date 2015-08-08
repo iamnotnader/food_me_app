@@ -1,4 +1,4 @@
-angular.module('foodMeApp.introScreen', ['ngRoute'])
+angular.module('foodMeApp.introScreen', ['ngRoute', 'ngTouch'])
 
 .config(['$routeProvider', function($routeProvider) {
   $routeProvider.when('/intro_screen', {
@@ -58,6 +58,53 @@ angular.module('foodMeApp.introScreen', ['ngRoute'])
         $scope.colorList[dotIndex % $scope.colorList.length])
         .addClass('intro_screen__active_dot'); 
   };
+
+  // This URL gives us back an access code, which we can then exchange for an
+  // access token. What follows is a dance between us and delivery.com to get
+  // the sweet, sweet access token that we need to do everything.
+  $scope.oauthUrl = 'https://api.delivery.com/third_party/authorize?' +
+                    'client_id=NDIyZDg1MjA0M2M4Y2NhYzgxOGY1NDhjMmE0YTIwMTJh&' +
+                    'redirect_uri=http://localhost:3000&' +
+                    'response_type=code&' +
+                    'scope=global&' +
+                    'state=';
+  $scope.token_data = null;
+  $scope.signInButtonClicked = function() {
+    // This is a hack but it looks like it's supported by Google...
+    // Basically the flow is this:
+    //   1) Open the delivery.com oauth page in a new webview.
+    //   2) User types credentials
+    //   3) delivery.com redirects to localhost:3000?code=blah
+    //   4) We grab the value of code in the start listener then kill the
+    //      webview.
+    var ref = window.open($scope.oauthUrl, '_blank', 'location=yes');
+    ref.addEventListener('loadstart', function(event) {
+      var url = event.url;
+      var code = /\?code=(.+)[&|$]/.exec(url);
+      var error = /\?error=(.+)[&|$]/.exec(url);
+      if (code) {
+        $.post('https://api.delivery.com/third_party/access_token', {
+          client_id: 'NDIyZDg1MjA0M2M4Y2NhYzgxOGY1NDhjMmE0YTIwMTJh',
+          redirect_uri: 'http://localhost:3000',
+          grant_type: 'authorization_code',
+          client_secret: 'YEQZ54Wvth4TDtpNclTxOolRVgX6UK79pNw82O1s',
+          code: code[1],
+        }).done(function(data) {
+          $scope.token_data = data;
+          alert('Got back a token: ' + $scope.token_data.access_token); // TODO(daddy): delete this.
+          // TODO(daddu): Potentially redirect to a new screen.
+        }).fail(function(response) {
+          // TODO(daddy): Change this to something more user-friendly.
+          alert('Post to get token failed with response: ' + response);
+        });
+      } else if (error) {
+        // TODO(daddy): Change this to something more user-friendly.
+        alert('We got an error with our delivery URL: ' + error);
+      }
+      // TODO(daddy): Redirect to a loading screen-- or maybe an app screen.
+      ref.close();
+    });
+  }
 }])
 
 //We set the phoneWidth on the scope so we can use it to set the width of the
