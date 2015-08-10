@@ -7,3 +7,4 @@ platforms/android/assets/www/
 xcuserdata
 xcshareddata
 phonegap.js
+platforms/android/.gradle/
