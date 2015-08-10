@@ -7,7 +7,7 @@ angular.module('foodMeApp.introScreen', ['ngRoute', 'ngTouch'])
   });
 }])
 
-.controller('IntroScreenCtrl', ["$scope", function($scope) {
+.controller('IntroScreenCtrl', ["$scope", "$location", "$http", function($scope, $location, $http) {
   $scope.testString = "test";
   // The width of the phone png. Gets set in introScreenImageOnload
   $scope.phoneWidth = 0;
@@ -70,6 +70,9 @@ angular.module('foodMeApp.introScreen', ['ngRoute', 'ngTouch'])
                     'state=';
   $scope.token_data = null;
   $scope.signInButtonClicked = function() {
+    console.log("Delivery button clicked!");
+
+    // Do a dance to get a token for the used.
     // This is a hack but it looks like it's supported by Google...
     // Basically the flow is this:
     //   1) Open the delivery.com oauth page in a new webview.
@@ -77,7 +80,7 @@ angular.module('foodMeApp.introScreen', ['ngRoute', 'ngTouch'])
     //   3) delivery.com redirects to localhost:3000?code=blah
     //   4) We grab the value of code in the start listener then kill the
     //      webview.
-    var ref = window.open($scope.oauthUrl, '_blank', 'location=yes');
+    var ref = window.open($scope.oauthUrl, '_blank', 'location=yes,toolbar=no');
     ref.addEventListener('loadstart', function(event) {
       var url = event.url;
       var code = /\?code=(.+)[&|$]/.exec(url);
@@ -92,17 +95,17 @@ angular.module('foodMeApp.introScreen', ['ngRoute', 'ngTouch'])
         }).done(function(data) {
           $scope.token_data = data;
           alert('Got back a token: ' + $scope.token_data.access_token); // TODO(daddy): delete this.
-          // TODO(daddu): Potentially redirect to a new screen.
+          ref.close();
+          // TODO(daddy): Transition to a new page. Didn't work before.
         }).fail(function(response) {
           // TODO(daddy): Change this to something more user-friendly.
-          alert('Post to get token failed with response: ' + response);
+          alert('Post to get token failed with response: ' + response.statusText);
+          ref.close();
         });
       } else if (error) {
         // TODO(daddy): Change this to something more user-friendly.
-        alert('We got an error with our delivery URL: ' + error);
+        alert('We got an error with our delivery URL: ' + error.statusText);
       }
-      // TODO(daddy): Redirect to a loading screen-- or maybe an app screen.
-      ref.close();
     });
   }
 }])
