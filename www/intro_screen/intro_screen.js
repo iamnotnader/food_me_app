@@ -1,4 +1,4 @@
-angular.module('foodMeApp.introScreen', ['ngRoute', 'ngTouch'])
+angular.module('foodMeApp.introScreen', ['ngRoute', 'ngTouch', 'foodmeApp.localStorage', 'foodmeApp.sharedState'])
 
 .config(['$routeProvider', function($routeProvider) {
   $routeProvider.when('/intro_screen', {
@@ -7,8 +7,28 @@ angular.module('foodMeApp.introScreen', ['ngRoute', 'ngTouch'])
   });
 }])
 
-.controller('IntroScreenCtrl', ["$scope", "$location", "$http", function($scope, $location, $http) {
-  $scope.testString = "test";
+.controller('IntroScreenCtrl', ["$scope", "$location", "$http", "$localStorage", '$sharedState', function($scope, $location, $http, $localStorage, $sharedState) {
+  // Reroute the user if they're logged in already and/or already have their
+  // address chosen. Don't reroute if we're in a browser because we use it for
+  // testing.
+  var userToken = $localStorage.getObject('userToken');
+  if (_.has(userToken, 'access_token')) {
+    // Getting here implies user has logged in already.
+    if ($localStorage.get('userAddress', false)) {
+      $location.path('/swipe_page');
+      return;
+    } else {
+      $location.path('/choose_address');
+      return;
+    }
+  }
+
+  // This line is necessary in order to make Angular $http post requests behave
+  // like jQuery $.post requests. Namely, it makes it so the params are added
+  // to the URL like ?a=whatever&b=whatever instead of sent as JSON. This is
+  // necessary because the delivery.com API is php and doesn't like JSON.
+  $http.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
+
   // The width of the phone png. Gets set in introScreenImageOnload
   $scope.phoneWidth = 0;
   // The width of the screenshot embedded within the phone. Computed from the
@@ -62,9 +82,10 @@ angular.module('foodMeApp.introScreen', ['ngRoute', 'ngTouch'])
   // This URL gives us back an access code, which we can then exchange for an
   // access token. What follows is a dance between us and delivery.com to get
   // the sweet, sweet access token that we need to do everything.
+  $scope.redirectUri = 'http://localhost:3000';
   $scope.oauthUrl = 'https://api.delivery.com/third_party/authorize?' +
-                    'client_id=NDIyZDg1MjA0M2M4Y2NhYzgxOGY1NDhjMmE0YTIwMTJh&' +
-                    'redirect_uri=http://localhost:3000&' +
+                    'client_id=' + $sharedState.client_id + '&' +
+                    'redirect_uri=' + $scope.redirectUri + '&' +
                     'response_type=code&' +
                     'scope=global&' +
                     'state=';
@@ -80,31 +101,35 @@ angular.module('foodMeApp.introScreen', ['ngRoute', 'ngTouch'])
     //   3) delivery.com redirects to localhost:3000?code=blah
     //   4) We grab the value of code in the start listener then kill the
     //      webview.
-    var ref = window.open($scope.oauthUrl, '_blank', 'location=yes,toolbar=no');
+    var ref = window.open($scope.oauthUrl, '_blank',
+        'location=yes,toolbar=no,clearcache=yes,clearsessioncache=yes');
     ref.addEventListener('loadstart', function(event) {
       var url = event.url;
-      var code = /\?code=(.+)[&|$]/.exec(url);
-      var error = /\?error=(.+)[&|$]/.exec(url);
-      if (code) {
-        $.post('https://api.delivery.com/third_party/access_token', {
-          client_id: 'NDIyZDg1MjA0M2M4Y2NhYzgxOGY1NDhjMmE0YTIwMTJh',
-          redirect_uri: 'http://localhost:3000',
-          grant_type: 'authorization_code',
-          client_secret: 'YEQZ54Wvth4TDtpNclTxOolRVgX6UK79pNw82O1s',
-          code: code[1],
-        }).done(function(data) {
-          $scope.token_data = data;
-          alert('Got back a token: ' + $scope.token_data.access_token); // TODO(daddy): delete this.
-          ref.close();
-          // TODO(daddy): Transition to a new page. Didn't work before.
-        }).fail(function(response) {
+      if (url.indexOf($scope.redirectUri) == 0) {
+        var code = /\?code=(.+)[&|$]/.exec(url);
+        var error = /\?error=(.+)[&|$]/.exec(url);
+        // We have to send like this instead of just doing $http.post because
+        // the delivery.com API doesn't like JSON. See the comment at the top
+        // of the controller.
+        $http({
+          method: "post",
+          url: "https://api.delivery.com/third_party/access_token",
+          data: 'client_id=NDIyZDg1MjA0M2M4Y2NhYzgxOGY1NDhjMmE0YTIwMTJh&' +
+                'redirect_uri=http://localhost:3000&' +
+                'grant_type=authorization_code&' +
+                'client_secret=' + $sharedState.client_secret + '&' +
+                'code=' + code[1]
+        }).then(function(response) {
+          $scope.token_data = response.data;
+          $localStorage.setObject('userToken', $scope.token_data);
+          // TODO(daddy): Add the token to some global state before transitioning.
+          $location.path('/choose_address');
+        }, function(error) {
           // TODO(daddy): Change this to something more user-friendly.
-          alert('Post to get token failed with response: ' + response.statusText);
-          ref.close();
+          alert('Post to get token failed with response: ' + error.statusText);
         });
-      } else if (error) {
-        // TODO(daddy): Change this to something more user-friendly.
-        alert('We got an error with our delivery URL: ' + error.statusText);
+        ref.close();
+        // TODO(daddy): Initiate some loading animation maybe.
       }
     });
   }

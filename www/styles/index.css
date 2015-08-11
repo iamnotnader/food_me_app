@@ -207,7 +207,7 @@ h1 {
       font-size: 1.0rem; } }
   @media only screen and (max-device-width: 320px) and (min-device-height: 481px) and (max-device-height: 568px) and (orientation: portrait) and (-webkit-min-device-pixel-ratio: 2) {
     .intro_screen__description_text {
-      font-size: 1.3rem; } }
+      font-size: 1.2rem; } }
   @media only screen and (min-device-width: 321px) and (max-device-width: 375px) and (min-device-height: 569px) and (max-device-height: 667px) and (orientation: portrait) and (-webkit-min-device-pixel-ratio: 2) {
     .intro_screen__description_text {
       font-size: 1.5rem; } }

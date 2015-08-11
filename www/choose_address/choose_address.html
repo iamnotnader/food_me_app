@@ -1,2 +1,9 @@
-TESTING WOO!
-{{testString}}
+<div>
+  {{userToken.access_token}}
+  {{locationList}}
+  <div ng-repeat="locationObj in locationList">
+    {{locationObj.location_id}}
+    {{locationObj.street}}
+    {{locationObj.city}}
+  </div>
+</div>

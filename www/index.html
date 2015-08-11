@@ -47,15 +47,14 @@
         <script src="bower_components/angular/angular.js"></script>
         <script src="bower_components/angular-touch/angular-touch.js"></script>
         <script src="bower_components/angular-route/angular-route.js"></script>
+        <script src="bower_components/underscore/underscore.js"></script>
         <!--Cordova stuff-->
         <!--TODO(daddy): Including cordova in Chrome freezes the browser. This is a-->
         <!--shitty workaround for now.-->
-        <script type="text/javascript">
-            if (!navigator.userAgent.toLowerCase().match('chrome')) {
-                document.write("<script src='cordova.js'><\/script>");
-            }
-        </script>
+        <script type="text/javascript" src="cordova.js"></script>
         <!--My stuff-->
+        <script type="text/javascript" src="services/shared_state.js"></script>
+        <script type="text/javascript" src="services/localstorage.js"></script>
         <script type="text/javascript" src="dummy_app_screen/dummy_app_screen.js"></script>
         <script type="text/javascript" src="intro_screen/intro_screen.js"></script>
         <script type="text/javascript" src="choose_address/choose_address.js"></script>
