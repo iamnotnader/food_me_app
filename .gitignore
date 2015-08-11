@@ -8,3 +8,4 @@ xcuserdata
 xcshareddata
 phonegap.js
 platforms/android/.gradle/
+platforms/android/CordovaLib/build/
