@@ -1,6 +1,6 @@
 angular.module('foodmeApp.localStorage', [])
 
-.factory('$localStorage', ['$window', function($window) {
+.factory('fmaLocalStorage', ['$window', function($window) {
   return {
     set: function(key, value) {
       $window.localStorage[key] = value;

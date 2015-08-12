@@ -242,4 +242,124 @@ h1 {
   right: 0;
   bottom: 3%; }
 
+.choose_address__container {
+  height: 100%;
+  width: 100%;
+  position: absolute; }
+
+.choose_address__top_bar {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  height: 3rem;
+  background-color: #260126;
+  color: white;
+  font-family: TitleFont;
+  font-size: 1.3rem;
+  text-transform: none;
+  text-align: center; }
+
+.choose_address__address_list {
+  padding-top: 3rem;
+  height: 100%;
+  background-color: white;
+  overflow: auto;
+  overflow-y: scroll;
+  -webkit-overflow-scrolling: touch; }
+
+.choose_address__middle_text {
+  position: absolute;
+  top: 50%;
+  margin-left: auto;
+  margin-right: auto;
+  left: 0;
+  right: 0;
+  -webkit-transform: translateY(-50%); }
+
+.choose_address__right_text {
+  position: absolute;
+  top: 50%;
+  -webkit-transform: translateY(-50%);
+  right: 0.5em; }
+
+.choose_address__left_text {
+  position: absolute;
+  top: 50%;
+  -webkit-transform: translateY(-50%);
+  left: 0.5em; }
+
+.choose_address__list_cell {
+  padding: 1rem 1rem;
+  color: #260126;
+  background-color: white;
+  font-family: TitleFont;
+  font-size: 1rem;
+  text-transform: none;
+  position: relative; }
+
+.choose_address__cell_border {
+  border-bottom: 1px solid #260126;
+  position: absolute;
+  left: 1rem;
+  right: 1rem;
+  bottom: 0;
+  margin-left: auto;
+  margin-right: auto; }
+
+.choose_address__add_new_text {
+  margin: 0.5rem 0; }
+
+.choose_address__arrow {
+  position: absolute;
+  width: 1rem;
+  height: 1rem;
+  right: 0;
+  top: 50%;
+  -webkit-transform: translateY(-50%);
+  right: 1rem; }
+
+.choose_address__selected_badge {
+  width: 2.8rem;
+  position: absolute;
+  top: 50%;
+  -webkit-transform: translateY(-50%);
+  right: 1em; }
+
+.add_address__input_container {
+  padding: 0rem 1rem;
+  padding-top: 1rem;
+  color: #260126;
+  background-color: white;
+  font-family: TitleFont;
+  font-size: 1rem;
+  text-transform: none;
+  position: relative; }
+
+.add_address__input_cell {
+  padding: 0 1rem;
+  padding-top: 0.5rem;
+  color: #260126;
+  background-color: white;
+  font-family: TitleFont;
+  font-size: 1rem;
+  text-transform: none;
+  position: relative; }
+
+.add_address__cell_bottom_row input {
+  width: 100%;
+  font-size: 1.5rem;
+  margin-bottom: .2rem; }
+
+.add_address__cell_top_row {
+  font-size: 1.3rem; }
+
+.add_address__cell_bottom_row select {
+  width: 4rem;
+  background-color: #260126;
+  color: white;
+  border: none;
+  height: 1.5rem;
+  font-size: 1.1rem;
+  vertical-align: middle; }
+
 /*# sourceMappingURL=index.css.map */

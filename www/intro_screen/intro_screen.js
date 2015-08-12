@@ -7,14 +7,15 @@ angular.module('foodMeApp.introScreen', ['ngRoute', 'ngTouch', 'foodmeApp.localS
   });
 }])
 
-.controller('IntroScreenCtrl', ["$scope", "$location", "$http", "$localStorage", '$sharedState', function($scope, $location, $http, $localStorage, $sharedState) {
+.controller('IntroScreenCtrl', ["$scope", "$location", "$http", "fmaLocalStorage", 'fmaSharedState',
+function($scope, $location, $http, fmaLocalStorage, fmaSharedState) {
   // Reroute the user if they're logged in already and/or already have their
   // address chosen. Don't reroute if we're in a browser because we use it for
   // testing.
-  var userToken = $localStorage.getObject('userToken');
-  if (_.has(userToken, 'access_token')) {
+  var userToken = fmaLocalStorage.getObject('userToken');
+  if (!fmaSharedState.use_desktop && _.has(userToken, 'access_token')) {
     // Getting here implies user has logged in already.
-    if ($localStorage.get('userAddress', false)) {
+    if (fmaLocalStorage.get('userAddress', false)) {
       $location.path('/swipe_page');
       return;
     } else {
@@ -82,10 +83,9 @@ angular.module('foodMeApp.introScreen', ['ngRoute', 'ngTouch', 'foodmeApp.localS
   // This URL gives us back an access code, which we can then exchange for an
   // access token. What follows is a dance between us and delivery.com to get
   // the sweet, sweet access token that we need to do everything.
-  $scope.redirectUri = 'http://localhost:3000';
   $scope.oauthUrl = 'https://api.delivery.com/third_party/authorize?' +
-                    'client_id=' + $sharedState.client_id + '&' +
-                    'redirect_uri=' + $scope.redirectUri + '&' +
+                    'client_id=' + fmaSharedState.client_id + '&' +
+                    'redirect_uri=' + fmaSharedState.redirect_uri + '&' +
                     'response_type=code&' +
                     'scope=global&' +
                     'state=';
@@ -105,7 +105,7 @@ angular.module('foodMeApp.introScreen', ['ngRoute', 'ngTouch', 'foodmeApp.localS
         'location=yes,toolbar=no,clearcache=yes,clearsessioncache=yes');
     ref.addEventListener('loadstart', function(event) {
       var url = event.url;
-      if (url.indexOf($scope.redirectUri) == 0) {
+      if (url.indexOf(fmaSharedState.redirect_uri) == 0) {
         var code = /\?code=(.+)[&|$]/.exec(url);
         var error = /\?error=(.+)[&|$]/.exec(url);
         // We have to send like this instead of just doing $http.post because
@@ -117,11 +117,11 @@ angular.module('foodMeApp.introScreen', ['ngRoute', 'ngTouch', 'foodmeApp.localS
           data: 'client_id=NDIyZDg1MjA0M2M4Y2NhYzgxOGY1NDhjMmE0YTIwMTJh&' +
                 'redirect_uri=http://localhost:3000&' +
                 'grant_type=authorization_code&' +
-                'client_secret=' + $sharedState.client_secret + '&' +
+                'client_secret=' + fmaSharedState.client_secret + '&' +
                 'code=' + code[1]
         }).then(function(response) {
           $scope.token_data = response.data;
-          $localStorage.setObject('userToken', $scope.token_data);
+          fmaLocalStorage.setObject('userToken', $scope.token_data);
           alert('Got token: ' + JSON.stringify($scope.token_data));
           // TODO(daddy): Add the token to some global state before transitioning.
           $location.path('/choose_address');

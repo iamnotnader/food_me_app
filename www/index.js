@@ -26,6 +26,7 @@ var initAngularStuff = function() {
     'foodMeApp.dummyAppScreen',
     'foodMeApp.introScreen',
     'foodMeApp.chooseAddress',
+    'foodMeApp.addAddress',
   ]).
   config(['$routeProvider',
       function($routeProvider) {
@@ -37,10 +38,10 @@ var initAngularStuff = function() {
 var app = {
     // Application Constructor
     initialize: function() {
-        this.bindEvents();
+      this.bindEvents();
 
-        //Set up the main app module and pull in all the dependencies.
-        initAngularStuff();
+      //Set up the main app module and pull in all the dependencies.
+      initAngularStuff();
     },
     // Bind Event Listeners
     //
