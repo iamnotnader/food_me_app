@@ -9,3 +9,5 @@ xcshareddata
 phonegap.js
 platforms/android/.gradle/
 platforms/android/CordovaLib/build/
+platforms/browser
+plugins/browser.json

@@ -24,6 +24,9 @@ function($scope, $location, $localStorage, $http, $sharedState) {
   },
   function(err) {
     alert('Error fetching addresses: ' + err.statusText);
+    // This is a hack since we don't refresh our token.
+    $localStorage.setObject('userToken', null);
+    $location.path('/intro_screen');
   });
   
 }]);

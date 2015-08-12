@@ -122,6 +122,7 @@ angular.module('foodMeApp.introScreen', ['ngRoute', 'ngTouch', 'foodmeApp.localS
         }).then(function(response) {
           $scope.token_data = response.data;
           $localStorage.setObject('userToken', $scope.token_data);
+          alert('Got token: ' + JSON.stringify($scope.token_data));
           // TODO(daddy): Add the token to some global state before transitioning.
           $location.path('/choose_address');
         }, function(error) {
