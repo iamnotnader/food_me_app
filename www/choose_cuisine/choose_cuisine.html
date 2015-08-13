@@ -1,0 +1,20 @@
+<div class="choose_address__container">
+  <div class="choose_address__address_list">
+    <div ng-repeat="cuisineObj in all_cuisines">
+      <div class="choose_address__list_cell" ng-click="cellTapped($index)">
+        <div class="choose_address__cell_top_row">
+          {{cuisineObj.name}}
+        </div>
+        <div class="choose_address__cell_border"></div>
+        <img class="choose_address__selected_badge" ng-if="isSelected($index)"
+              src="img/happy_burger.png" alt="">
+      </div>
+    </div>
+    <div style="margin-bottom: 1em;"></div>
+  </div>
+  <div class="choose_address__top_bar">
+    <div class="choose_address__middle_text">Cuisine choose!</div>
+    <div class="choose_address__right_text" ng-click="chooseCuisineDonePressed()">Done</div>
+    <div class="choose_address__left_text" ng-click="chooseCuisineBackPressed()()">Back</div>
+  </div>
+</div>

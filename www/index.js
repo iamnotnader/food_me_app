@@ -27,6 +27,7 @@ var initAngularStuff = function() {
     'foodMeApp.introScreen',
     'foodMeApp.chooseAddress',
     'foodMeApp.addAddress',
+    'foodMeApp.chooseCuisine',
   ]).
   config(['$routeProvider',
       function($routeProvider) {

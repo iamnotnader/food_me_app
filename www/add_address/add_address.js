@@ -9,11 +9,21 @@ angular.module('foodMeApp.addAddress', ['ngRoute', 'ngTouch', 'foodmeApp.localSt
 
 .controller('AddAddressCtrl', ["$scope", "$location", "fmaLocalStorage", "$http", "fmaSharedState",
 function($scope, $location, fmaLocalStorage, $http, fmaSharedState) {
+  // TODO(daddy): This should really be some kind of pre-router hook or something.
   $scope.userToken = fmaLocalStorage.getObject('userToken');
-  if (!fmaSharedState.use_desktop && !_.has($scope.userToken, 'access_token')) {
+  $scope.rawAccessToken = null;
+  if (fmaSharedState.fake_token) {
+    alert('Warning-- you are using a fake access token.');
+    $scope.rawAccessToken = fmaSharedState.fake_token;
+  } else if (_.has($scope.userToken, 'access_token')) {
+    $scope.rawAccessToken = $scope.userToken.access_token;
+  }
+  if ($scope.rawAccessToken === null) {
     $location.path('/intro_screen');
     return;
   }
+
+
   // Create a forms object that we can attach our form to in the view.
   $scope.forms = {};
   // These are the address fields we will need to send to delivery.com
@@ -29,40 +39,49 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState) {
   $scope.possibleStates = fmaSharedState.possibleStates;
   // When the done button is pressed, we validate all the fields, then try to
   // send them to delivery.com.
-  $scope.doneButtonPressed = function() {
+  $scope.addAddressDonePressed = function() {
     console.log('Done button pressed.');
-    // Attempt to save. If can save, go back to the address selection page. If
-    // not, pop up an alert explaining why.
-    if ($scope.forms.newAddressForm.$error.required) {
-      console.log('Missing fields.');
-      console.log($scope.forms.newAddressForm.$error);
-      alert('You have missing fields! Fill them in so you can food...');
-      return;
-    }
-    // If we're on the desktop, just route back without trying to update
-    // delivery.com.
-    if (fmaSharedState.use_desktop) {
-      $location.path('/choose_address');
-      return;
-    }
 
-    // TODO(daddy): Try to get the fields validated by delivery.com and create
-    // a real user location.
-    $http.defaults.headers.common.Authorization = $scope.userToken.access_token;
-    //$http.get('https://api.delivery.com/customer/location?client_id=' + fmaSharedState.client_id).then(
-    //function(res) {
-      //$scope.locationList = res.data.locations;
-      //alert(JSON.stringify($scope.locationList));
-    //},
-    //function(err) {
-      //alert('Error fetching addresses: ' + err.statusText);
-      //// This is a hack since we don't refresh our token.
-      //fmaLocalStorage.setObject('userToken', null);
-      //$location.path('/intro_screen');
-    //});
-    $location.path('/choose_address');
+    var dataObj = {
+      street: $scope.addressFields.streetAddress,
+      city: $scope.addressFields.city,
+      state: $scope.addressFields.state,
+      zip_code: $scope.addressFields.zip,
+      phone: $scope.addressFields.phone,
+      unit_number: $scope.addressFields.apartmentNumber,
+    };
+    console.log(JSON.stringify(dataObj));
+    console.log($scope.rawAccessToken);
+    $http({
+      method: 'POST',
+      url: 'https://api.delivery.com/customer/location?client_id=' + fmaSharedState.client_id,
+      data: dataObj,
+      headers: {
+        "Authorization": $scope.rawAccessToken,
+        "Content-Type": "application/json",
+      }
+    })
+    .then(
+      function(res) {
+        console.log('Successfully added address.');
+        console.log(JSON.stringify(res));
+        $location.path('/choose_address');
+      },
+      function(err) {
+        console.log('Error adding address.');
+        console.log(JSON.stringify(err));
+        if (!err.data.message) {
+          alert("A weeeird error occurred. Going to be real with you here-- " +
+                "not quite sure what happened but it's probably a " +
+                "connectivity issue, which isn't my fault.");
+          return;
+        }
+        alert(err.data.message[0].user_msg);
+        return;
+    });
   };
-  $scope.cancelButtonPressed = function() {
+
+  $scope.addAddressCancelPressed = function() {
     console.log('Cancel button pressed.');
     $location.path('/choose_address');
   };

@@ -9,16 +9,28 @@ angular.module('foodMeApp.introScreen', ['ngRoute', 'ngTouch', 'foodmeApp.localS
 
 .controller('IntroScreenCtrl', ["$scope", "$location", "$http", "fmaLocalStorage", 'fmaSharedState',
 function($scope, $location, $http, fmaLocalStorage, fmaSharedState) {
-  // Reroute the user if they're logged in already and/or already have their
-  // address chosen. Don't reroute if we're in a browser because we use it for
-  // testing.
-  var userToken = fmaLocalStorage.getObject('userToken');
-  if (!fmaSharedState.use_desktop && _.has(userToken, 'access_token')) {
+  // TODO(daddy): This should really be some kind of pre-router hook or something.
+  $scope.userToken = fmaLocalStorage.getObject('userToken');
+  $scope.rawAccessToken = null;
+  if (fmaSharedState.fake_token) {
+    alert('Warning-- you are using a fake access token.');
+    $scope.rawAccessToken = fmaSharedState.fake_token;
+  } else if (_.has($scope.userToken, 'access_token')) {
+    $scope.rawAccessToken = $scope.userToken.access_token;
+  }
+  if ($scope.rawAccessToken !== null) {
     // Getting here implies user has logged in already.
-    if (fmaLocalStorage.get('userAddress', false)) {
-      $location.path('/swipe_page');
+    if (fmaLocalStorage.isSet('userAddress')) {
+      if (fmaLocalStorage.isSet('userCuisines')) {
+        // Logged in with a chosen address and cuisines implies we go to the swipe page.
+        $location.path('/swipe_page');
+        return;
+      }
+      // If we have a token and an address but no cuisines, we have to choose some.
+      $location.path('/choose_cuisine');
       return;
     } else {
+      // Logged in without an address implies we need to choose one.
       $location.path('/choose_address');
       return;
     }
@@ -69,8 +81,8 @@ function($scope, $location, $http, fmaLocalStorage, fmaSharedState) {
     // Kinda gross. We have to reset the background color manually on all the
     // other dots.
     for (var i = 0; i < $scope.numPhotos; i++) {
-      var grey_1 = "#707070"
-      $('.intro_screen__dot-'+i).css('background-color', grey_1)
+      var grey_1 = "#707070";
+      $('.intro_screen__dot-'+i).css('background-color', grey_1);
     }    
     // unset the last active dot.
     $('.intro_screen__active_dot').removeClass('intro_screen__active_dot');
@@ -105,12 +117,12 @@ function($scope, $location, $http, fmaLocalStorage, fmaSharedState) {
         'location=yes,toolbar=no,clearcache=yes,clearsessioncache=yes');
     ref.addEventListener('loadstart', function(event) {
       var url = event.url;
-      if (url.indexOf(fmaSharedState.redirect_uri) == 0) {
+      if (url.indexOf(fmaSharedState.redirect_uri) === 0) {
         var code = /\?code=(.+)[&|$]/.exec(url);
         var error = /\?error=(.+)[&|$]/.exec(url);
         // We have to send like this instead of just doing $http.post because
         // the delivery.com API doesn't like JSON. See the comment at the top
-        // of the controller.
+        // of the controller. Note that this is obviously super insecure.
         $http({
           method: "post",
           url: "https://api.delivery.com/third_party/access_token",
@@ -121,7 +133,8 @@ function($scope, $location, $http, fmaLocalStorage, fmaSharedState) {
                 'code=' + code[1]
         }).then(function(response) {
           $scope.token_data = response.data;
-          fmaLocalStorage.setObject('userToken', $scope.token_data);
+          fmaLocalStorage.setObjectWithExpirationSeconds('userToken', $scope.token_data,
+              fmaSharedState.testing_invalidation_seconds);
           alert('Got token: ' + JSON.stringify($scope.token_data));
           // TODO(daddy): Add the token to some global state before transitioning.
           $location.path('/choose_address');
@@ -133,7 +146,7 @@ function($scope, $location, $http, fmaLocalStorage, fmaSharedState) {
         // TODO(daddy): Initiate some loading animation maybe.
       }
     });
-  }
+  };
 }])
 
 //We set the phoneWidth on the scope so we can use it to set the width of the

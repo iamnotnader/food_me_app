@@ -12,9 +12,16 @@ angular.module('foodmeApp.sharedState', [])
     // For example, we might redirect the user to the intro_screen if their
     // token isn't set. Setting this to false would disable this behavior for
     // testing purposes.
-    use_desktop: false, // TODO(daddy): This should always be true in prod.
     possibleStates: [
       'NY', 'VA',
-    ]
+    ],
+
+    // Variables that are strictly for testing purposes.
+
+    // Invalidate everything in localStorage after this amount of time for now.
+    testing_invalidation_seconds: 60 * 60,
+
+    //fake_token: 'Q9rcncn0daWlTrAqa67soecPjFURIsy43p21Cj1s',
+    fake_token: null,
   };
 }]);
