@@ -39,7 +39,6 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState) {
   )
   .then(
   function(res) {
-    console.log(res);
     fmaLocalStorage.setObjectWithExpirationSeconds(
         'allNearbyMerchantData', res.data,
         fmaSharedState.testing_invalidation_seconds);
