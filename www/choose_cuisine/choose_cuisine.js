@@ -28,6 +28,7 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState) {
   $scope.userAddress = fmaLocalStorage.getObject('userAddress');
   // When we get here, we have a valid user token and a valid address.
 
+  $scope.isLoading = true;
   console.log(JSON.stringify($scope.userAddress));
   $http.defaults.headers.common.Authorization = $scope.rawAccessToken;
   $http.get('https://api.delivery.com/merchant/search/delivery?' + 
@@ -47,6 +48,7 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState) {
       return b.count - a.count;
     });
     $scope.all_cuisines = $scope.all_cuisines.slice(0, 30);
+    $scope.isLoading = false;
   },
 
   function(err) {

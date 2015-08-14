@@ -23,6 +23,7 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState) {
     return;
   }
 
+  $scope.isLoading = true;
   // The location the user wants to use when looking for restaurants. This is an
   // object so we can use it in ng-repeat without scope issues.
   $scope.selectedLocationIndex = { value: null };
@@ -39,6 +40,7 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState) {
         break;
       }
     }
+    $scope.isLoading = false;
   },
   function(err) {
     alert('Error fetching addresses: ' + err.statusText);
