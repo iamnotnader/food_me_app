@@ -28,6 +28,7 @@ var initAngularStuff = function() {
     'foodMeApp.chooseAddress',
     'foodMeApp.addAddress',
     'foodMeApp.chooseCuisine',
+    'foodMeApp.swipePage',
   ]).
   config(['$routeProvider',
       function($routeProvider) {

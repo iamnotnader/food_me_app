@@ -9,13 +9,18 @@ angular.module('foodMeApp.introScreen', ['ngRoute', 'ngTouch', 'foodmeApp.localS
 
 .controller('IntroScreenCtrl', ["$scope", "$location", "$http", "fmaLocalStorage", 'fmaSharedState',
 function($scope, $location, $http, fmaLocalStorage, fmaSharedState) {
-  // TODO(daddy): This should really be some kind of pre-router hook or something.
+  // This is the first screen our app hits when it restarts, so we put some custom
+  // logic in to redirect if the user is already signed in, has already entered
+  // an address, etc...
+  console.log('In intro controller.');
   $scope.userToken = fmaLocalStorage.getObject('userToken');
   $scope.rawAccessToken = null;
   if (fmaSharedState.fake_token) {
     alert('Warning-- you are using a fake access token.');
+    console.log('Fake access token being used.');
     $scope.rawAccessToken = fmaSharedState.fake_token;
   } else if (_.has($scope.userToken, 'access_token')) {
+    console.log('Stored access token being used.');
     $scope.rawAccessToken = $scope.userToken.access_token;
   }
   if ($scope.rawAccessToken !== null) {
@@ -23,18 +28,22 @@ function($scope, $location, $http, fmaLocalStorage, fmaSharedState) {
     if (fmaLocalStorage.isSet('userAddress')) {
       if (fmaLocalStorage.isSet('userCuisines')) {
         // Logged in with a chosen address and cuisines implies we go to the swipe page.
+        console.log('We have token, address, and cuisines so go to the swipe page.');
         $location.path('/swipe_page');
         return;
       }
       // If we have a token and an address but no cuisines, we have to choose some.
+      console.log('We have token, address but missing cuisines.');
       $location.path('/choose_cuisine');
       return;
     } else {
       // Logged in without an address implies we need to choose one.
+      console.log('We have token but no address.');
       $location.path('/choose_address');
       return;
     }
   }
+  // We get here only if the user doesn't have an access token.
 
   // This line is necessary in order to make Angular $http post requests behave
   // like jQuery $.post requests. Namely, it makes it so the params are added
@@ -138,6 +147,7 @@ function($scope, $location, $http, fmaLocalStorage, fmaSharedState) {
           alert('Got token: ' + JSON.stringify($scope.token_data));
           // TODO(daddy): Add the token to some global state before transitioning.
           $location.path('/choose_address');
+          return;
         }, function(error) {
           // TODO(daddy): Change this to something more user-friendly.
           alert('Post to get token failed with response: ' + error.statusText);

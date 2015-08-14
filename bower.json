@@ -18,6 +18,7 @@
     "jquery-ui": "~1.11.4",
     "jquery-color": "~2.1.2",
     "angular-touch": "~1.4.3",
-    "underscore": "~1.8.3"
+    "underscore": "~1.8.3",
+    "he": "~0.5.0"
   }
 }

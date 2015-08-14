@@ -9,21 +9,30 @@ angular.module('foodMeApp.chooseCuisine', ['ngRoute', 'ngTouch', 'foodmeApp.loca
 
 .controller('ChooseCuisineCtrl', ["$scope", "$location", "fmaLocalStorage", "$http", "fmaSharedState",
 function($scope, $location, fmaLocalStorage, $http, fmaSharedState) {
-  // TODO(daddy): This should really be some kind of pre-router hook or something.
+  // For this controller, we need a token and an address. If we are missing
+  // either one of those, we redirect to another screen in order to get it.
+  console.log('In choose_cuisine controller.');
   $scope.userToken = fmaLocalStorage.getObject('userToken');
   $scope.rawAccessToken = null;
   if (fmaSharedState.fake_token) {
     alert('Warning-- you are using a fake access token.');
+    console.log('Fake token being used.');
     $scope.rawAccessToken = fmaSharedState.fake_token;
   } else if (_.has($scope.userToken, 'access_token')) {
+    console.log('Stored token being used.');
     $scope.rawAccessToken = $scope.userToken.access_token;
   }
   if ($scope.rawAccessToken === null) {
+    alert('In order to set cuisines, we need you to log in first.');
+    console.log('No token found-- go back to intro_screen.');
     $location.path('/intro_screen');
     return;
   }
   if (!fmaLocalStorage.isSet('userAddress')) {
-    throw new Error("In order to choose cuisines, you must first have an address.");
+    alert("In order to set cuisines, we need an address first. Please enter one.");
+    console.log('No address found-- go back to choose_address to get it.');
+    $location.path('/choose_address');
+    return;
   }
   $scope.userAddress = fmaLocalStorage.getObject('userAddress');
   // When we get here, we have a valid user token and a valid address.
@@ -40,17 +49,18 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState) {
   )
   .then(
   function(res) {
+    // Set the merchant data and reinitialize the chosen cuisines.
+    res.data.cuisines.sort(function(a, b) {
+      return b.count - a.count;
+    });
     fmaLocalStorage.setObjectWithExpirationSeconds(
         'allNearbyMerchantData', res.data,
         fmaSharedState.testing_invalidation_seconds);
+    fmaLocalStorage.setObject('userCuisines', null);
     $scope.all_cuisines = res.data.cuisines;
-    $scope.all_cuisines.sort(function(a, b) {
-      return b.count - a.count;
-    });
     $scope.all_cuisines = $scope.all_cuisines.slice(0, 30);
     $scope.isLoading = false;
   },
-
   function(err) {
     console.log('Error occurred.');
     console.log(JSON.stringify(err));
@@ -60,10 +70,6 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState) {
     console.log('Back button pressed.');
     $location.path('choose_address');
     return;
-  };
-
-  $scope.chooseCuisineDonePressed = function() {
-    console.log('Done button pressed.');
   };
 
   // The location the user wants to use when looking for restaurants. This is an
@@ -84,4 +90,25 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState) {
     chosenIndices.push(indexTapped);
   };
   
+  $scope.chooseCuisineDonePressed = function() {
+    console.log('Done button pressed.');
+    if ($scope.selectedCuisineIndices.value.length === 0) {
+      console.log('No cuisines selected.');
+      alert('You must select at least one cuisine or no food.');
+      return;
+    }
+    var cuisineIndices = $scope.selectedCuisineIndices.value;
+    var userCuisines = [];
+    for (var x = 0; x < cuisineIndices.length; x++) {
+      userCuisines.push($scope.all_cuisines[cuisineIndices[x]]);
+    }
+    // These correspond directly to values in allNearbyMerchantData.cuisines.
+    console.log(userCuisines);
+    fmaLocalStorage.setObjectWithExpirationSeconds(
+        'userCuisines', userCuisines,
+        fmaSharedState.testing_invalidation_seconds);
+    $location.path('/swipe_page');
+    return;
+  };
+
 }]);

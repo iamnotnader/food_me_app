@@ -1,0 +1,9 @@
+<div ng-repeat="foodInfo in joinedFoodInfo">
+  <div>{{foodInfo.foodData.name}}</div>
+  <img style="width:50%;" ng-src="{{foodInfo.imageLinks.urls[0]}}">
+</div>
+
+<div class="overall__loading_container" ng-if="isLoading">
+  <div class="overall__loading_widget_background"></div>
+  <div class="overall__loading_widget">Loading!</div>
+</div>

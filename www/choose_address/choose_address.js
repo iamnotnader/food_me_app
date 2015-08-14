@@ -9,19 +9,25 @@ angular.module('foodMeApp.chooseAddress', ['ngRoute', 'ngTouch', 'foodmeApp.loca
 
 .controller('ChooseAddressCtrl', ["$scope", "$location", "fmaLocalStorage", "$http", "fmaSharedState",
 function($scope, $location, fmaLocalStorage, $http, fmaSharedState) {
-  // TODO(daddy): This should really be some kind of pre-router hook or something.
+  // On this screen, we need a valid user token. If we are missing one, we need
+  // to go back to the intro_screen to get it.
+  console.log('In choose_address controller.');
   $scope.userToken = fmaLocalStorage.getObject('userToken');
   $scope.rawAccessToken = null;
   if (fmaSharedState.fake_token) {
     alert('Warning-- you are using a fake access token.');
+    console.log('Fake access token being used.');
     $scope.rawAccessToken = fmaSharedState.fake_token;
   } else if (_.has($scope.userToken, 'access_token')) {
+    alert('Stored token being used.');
     $scope.rawAccessToken = $scope.userToken.access_token;
   }
   if ($scope.rawAccessToken === null) {
+    alert('In order to choose an address, we need you to log in first.');
     $location.path('/intro_screen');
     return;
   }
+  // If we get here, we have a valid user token.
 
   $scope.isLoading = true;
   // The location the user wants to use when looking for restaurants. This is an
@@ -49,6 +55,7 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState) {
     fmaSharedState.fake_token = null;
     console.log("Using an expired token!");
     $location.path('/intro_screen');
+    return;
   });
 
   $scope.doneButtonPressed = function() {
@@ -69,6 +76,7 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState) {
   $scope.addAddressButtonPressed = function() {
     console.log('Add address button pressed.');
     $location.path('/add_address');
+    return;
   };
 
   // Set the selected location index when a user taps a cell.
