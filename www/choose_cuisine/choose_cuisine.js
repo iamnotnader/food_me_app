@@ -56,7 +56,7 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState) {
     fmaLocalStorage.setObjectWithExpirationSeconds(
         'allNearbyMerchantData', res.data,
         fmaSharedState.testing_invalidation_seconds);
-    fmaLocalStorage.setObject('userCuisines', null);
+    fmaLocalStorage.setObject('userCuisines', {});
     $scope.all_cuisines = res.data.cuisines;
     $scope.all_cuisines = $scope.all_cuisines.slice(0, 30);
     $scope.isLoading = false;

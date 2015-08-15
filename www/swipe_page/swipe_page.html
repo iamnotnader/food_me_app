@@ -1,7 +1,28 @@
-<div ng-repeat="foodInfo in joinedFoodInfo">
-  <div>{{foodInfo.foodData.name}}</div>
-  <img style="width:50%;" ng-src="{{foodInfo.imageLinks.urls[0]}}">
+<div class="swipe_page__jtinder_container">
+  <div id="tinderslide" class="swipe_page__tinderslide">
+      <ul>
+          <!--<div ng-repeat="foodInfo in joinedFoodInfo">-->
+            <!--<div>{{foodInfo.foodData.name}}</div>-->
+            <!--<img style="width:50%;" ng-src="{{foodInfo.imageLinks.urls[0]}}">-->
+          <!--</div>-->
+          <!--<li class="pane1"><div class="img"></div><div>Miami Beach</div><div class="like"></div><div class="dislike"></div></li>-->
+          <!--<li class="pane1"><div class="img"></div><div>San Francisco</div><div class="like"></div><div class="dislike"></div></li>-->
+          <!--<li class="pane1"><div class="img"></div><div>Chicago</div><div class="like"></div><div class="dislike"></div></li>-->
+          <!--<li class="pane1"><div class="img"></div><div>New York</div><div class="like"></div><div class="dislike"></div></li>-->
+          <!--<li class="pane1"><div class="img"></div></li>-->
+          <li class="pane1" ng-repeat="foodInfo in joinedFoodInfo">
+            <img style="height:80%;" ng-src="{{foodInfo.imageLinks.urls[0]}}">
+            <div style="font-family: TitleFont; text-transform: none; font-size: 1.3rem; vertical-align: middle;">
+              {{foodInfo.foodData.name}}
+            </div>
+            <div class="like"></div>
+            <div class="dislike"></div>
+          </li>
+      </ul>
+  </div>
 </div>
+
+
 
 <div class="overall__loading_container" ng-if="isLoading">
   <div class="overall__loading_widget_background"></div>

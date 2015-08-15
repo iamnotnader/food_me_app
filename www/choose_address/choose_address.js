@@ -18,8 +18,7 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState) {
     alert('Warning-- you are using a fake access token.');
     console.log('Fake access token being used.');
     $scope.rawAccessToken = fmaSharedState.fake_token;
-  } else if (_.has($scope.userToken, 'access_token')) {
-    alert('Stored token being used.');
+  } else if ($scope.userToken != null && _.has($scope.userToken, 'access_token')) {
     $scope.rawAccessToken = $scope.userToken.access_token;
   }
   if ($scope.rawAccessToken === null) {
@@ -40,10 +39,12 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState) {
     $scope.locationList = res.data.locations;
     console.log(JSON.stringify($scope.locationList));
     var currentAddress = fmaLocalStorage.getObject('userAddress');
-    for (var i = 0; i < $scope.locationList.length; i++) {
-      if ($scope.locationList[i].location_id === currentAddress.location_id) {
-        $scope.selectedLocationIndex.value = i;
-        break;
+    if (currentAddress != null) {
+      for (var i = 0; i < $scope.locationList.length; i++) {
+        if ($scope.locationList[i].location_id === currentAddress.location_id) {
+          $scope.selectedLocationIndex.value = i;
+          break;
+        }
       }
     }
     $scope.isLoading = false;

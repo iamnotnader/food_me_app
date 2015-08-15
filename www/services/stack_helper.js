@@ -30,10 +30,10 @@ function(fmaLocalStorage, $http, fmaSharedState, $q) {
         var allNearbyMerchantData = res.data;
         var foodData = [];
         var merchants = allNearbyMerchantData.merchants;
-        var cuisinesOverlap = function(merchantCuisines, userCuisines) {
+        var cuisinesOverlap = function(merchantCuisines, cuisines) {
           for (var mCuis = 0; mCuis < merchantCuisines.length; mCuis++) {
-            for (var uCuis = 0; uCuis < userCuisines.length; uCuis++) {
-              if (merchantCuisines[mCuis] == userCuisines[uCuis].name) {
+            for (var uCuis = 0; uCuis < cuisines.length; uCuis++) {
+              if (merchantCuisines[mCuis] == cuisines[uCuis].name) {
                   return true;
               }
             }
@@ -90,24 +90,28 @@ function(fmaLocalStorage, $http, fmaSharedState, $q) {
 
   // This is called if we don't find the image data for each item in localStorage.
   // Will be called AFTER asyncGetMerchantAndFoodData.
-  var asyncGetFoodImageLinks = function(foodData) {
+  //
+  // Getting images is a heavy-weight operation, so we allow the caller to pass
+  // in an foodDataCursor, which tells us what index to start fetching at in
+  // foodData.
+  var asyncGetFoodImageLinks = function(foodData, foodDataCursor, numPicsToFetch) {
     console.log('Asynchronously getting all the image data.');
     // Sorry the below code is a little confusing-- I'm not a huge fan of
     // Google's API. We actually process the images in searchComplete.
     return $q(function(resolve, reject) { 
-      var numPicsToFetch = Math.min(10, foodData.length);
       var foodImageLinks = [];
       for (var x = 0; x < numPicsToFetch; x++) {
         // Need a closure to preserve the loop index.
         (function(index) {
+          var foodDataObj = foodData[foodDataCursor + index];
           $http.get('https://ajax.googleapis.com/ajax/services/search/images?v=1.0&q=' +
-                    escape(foodData[index].name))
+                    escape(foodDataObj.name))
           .then(
             function(res) {
               var imageDataList = res.data.responseData.results; 
               var currentLinkObj = {};
               currentLinkObj.index = index;
-              currentLinkObj.foodDataId = foodData[index].id;
+              currentLinkObj.foodDataId = foodDataObj.id;
               currentLinkObj.urls = [];
               for (var y = 0; y < imageDataList.length; y++) {
                 currentLinkObj.urls.push(unescape(imageDataList[y].url)); 
@@ -123,7 +127,7 @@ function(fmaLocalStorage, $http, fmaSharedState, $q) {
             function(err) {
               var currentLinkObj = {};
               currentLinkObj.index = index;
-              currentLinkObj.foodDataId = foodData[index].id;
+              currentLinkObj.foodDataId = foodDataObj.id;
               foodImageLinks.push(currentLinkObj);
               if (foodImageLinks.length == numPicsToFetch) {
                 resolve({foodImageLinks: foodImageLinks});
@@ -135,7 +139,7 @@ function(fmaLocalStorage, $http, fmaSharedState, $q) {
   };
 
   // Called after we get all of the merchant data AND all of the image data.
-  var setUpDataVariables = function(latitude, longitude, token, cuisines, forceRefresh) {
+  var setUpDataVariables = function(latitude, longitude, token, cuisines, numPicsToFetch, forceRefresh) {
     var retVars = {};
     return $q(function(resolve, reject) {
       if (forceRefresh ||
@@ -152,7 +156,8 @@ function(fmaLocalStorage, $http, fmaSharedState, $q) {
             retVars.allNearbyMerchantData = allData.allNearbyMerchantData;
             // Array of food items, one for each card.
             retVars.foodData = allData.foodData;
-            return asyncGetFoodImageLinks(retVars.foodData);
+            return asyncGetFoodImageLinks(retVars.foodData, 0, 
+                Math.min(numPicsToFetch, retVars.foodData.length));
           },
           function(err) {
             console.log("Error getting merchant data WTF.");
@@ -204,5 +209,6 @@ function(fmaLocalStorage, $http, fmaSharedState, $q) {
 
   return {
     setUpDataVariables: setUpDataVariables,
+    asyncGetFoodImageLinks: asyncGetFoodImageLinks,
   };
 }]);

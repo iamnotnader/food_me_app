@@ -1,40 +1,38 @@
 angular.module('foodmeApp.localStorage', [])
 
 .factory('fmaLocalStorage', ['$window', function($window) {
-  var getFunc = function(key, defaultValue) {
-    return $window.localStorage[key] || defaultValue;
-  };
   var getObjectFunc =  function(key) {
-    var value = JSON.parse($window.localStorage[key] || '{}');
-    if (value == null) {
-      return {};
+    var itemFound = JSON.parse($window.localStorage[key] || 'null');
+    if (itemFound == null) { return null; }
+
+    // The object exists; check to see if it's expired.
+    if (itemFound.expirationTime != null &&
+        (new Date().getTime() > new Date(itemFound.expirationTime).getTime())) {
+      return null;
     }
-    console.log(value);
-    if (value.expirationTime != null &&
-        (new Date().getTime() > new Date(value.expirationTime).getTime())) {
-      return {};
-    }
+
+    var value = itemFound.value;
+    if (value == null) { return null; }
+
     return value;
   };
   return {
-    set: function(key, value) {
-      $window.localStorage[key] = value;
-    },
-    get: getFunc,
     setObject: function(key, value) {
-      $window.localStorage[key] = JSON.stringify(value);
+      $window.localStorage[key] = JSON.stringify({
+        value: value,
+      });
     },
     setObjectWithExpirationSeconds: function(key, value, secondsUntilExpiration) {
       var now = new Date();
       now.setUTCSeconds(now.getUTCSeconds() + secondsUntilExpiration);
-      value.expirationTime = now;
-      console.log('set: ' + secondsUntilExpiration);
-      console.log(value);
-      $window.localStorage[key] = JSON.stringify(value);
+      $window.localStorage[key] = JSON.stringify({
+        value: value,
+        expirationTime: now,
+      });
     },
     getObject: getObjectFunc,
     isSet: function(key) {
-      return !_.isEmpty(getObjectFunc(key));
+      return getObjectFunc(key) != null;
     }
   };
 }]);

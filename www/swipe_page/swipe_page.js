@@ -44,6 +44,39 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $q, fmaStack
   $scope.userCuisines = fmaLocalStorage.getObject('userCuisines');
   // If we get here, we have a token, an address, and some chosen cuisines.
 
+  // foodData is like a lot of food objects. Like > 100. But the stack consists
+  // of fewer-- a max of $scope.numPicsInStack to be exact. In order to avoid
+  // refetching foodData every time we want to refresh the stack, we keep an
+  // index into the gigantic foodData array. That index is $scope.foodDataCursor.
+  $scope.foodDataCursor = 0;
+  $scope.numPicsInStack = 3;
+  $scope.maybeRefreshStack = function() {
+    console.log("Checking refresh: " + $scope.foodDataCursor);
+    if ($scope.foodDataCursor % $scope.numPicsInStack !== 0) {
+      return;
+    }
+    numPicsToFetch = Math.min(
+        $scope.numPicsInStack, $scope.foodData.length - $scope.foodDataCursor);
+    fmaStackHelper.asyncGetFoodImageLinks($scope.foodData, $scope.foodDataCursor, numPicsToFetch)
+    .then(
+      function(retVars) {
+        $scope.foodImageLinks = retVars.foodImageLinks;
+        computeJoinedFoodDataImageList($scope.foodDataCursor);
+      },
+      function(err) {
+    });
+  };
+  $scope.userLikedDish = function(item) {
+    $scope.foodDataCursor++;
+    $scope.maybeRefreshStack();
+    // TODO(daddy): Make it so the dish is added to the user's cart in this case.
+  };
+  $scope.userDislikedDish = function(item) {
+    $scope.foodDataCursor++;
+    $scope.maybeRefreshStack();
+    // TODO(daddy): Make it so the dish is added to history or something.
+  };
+
   // By the time we reach this function, we are guaranteed to haeve set:
   //  - $scope.allNearbyMerchantData
   //  - $scope.foodData
@@ -52,31 +85,49 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $q, fmaStack
   // Furthermore, foodImageLinks will be shorter than foodData, because we only
   // fetch a maximum of 10 sets of images. We do some joining in this function
   // to make it easier to display the results.
-  var finalSetup = function() {
-    console.log('Yay reached final setup!');
+  //
+  // foodDataCursor is the index into foodData where our images start. The stack
+  // and all the images in imageData represent the food in
+  //   - foodData[foodDataCursor:foodDataCursor + $scope.foodImageLinks.length]
+  var computeJoinedFoodDataImageList = function(foodDataCursor) {
+    console.log('Yay joining foodData and imageLinks!');
     $scope.joinedFoodInfo = [];
     // Note that foodImageLinks always has fewer items than foodData because we
     // populate it conservatively.
     for (var x = 0; x < $scope.foodImageLinks.length; x++) {
       $scope.joinedFoodInfo.push({
-        foodData: $scope.foodData[x],
+        foodData: $scope.foodData[foodDataCursor + x],
         imageLinks: $scope.foodImageLinks[x],
       });
     }
+
+    // TODO(daddy): THIS IS A DIRTY_HACK!!!
+    setTimeout(function() {
+      console.log('Loaded jTinder');
+      $("#tinderslide").jTinder({
+          onDislike: $scope.userDislikedDish,
+          onLike: $scope.userLikedDish,
+          animationRevertSpeed: 200,
+          animationSpeed: 400,
+          threshold: 1,
+          likeSelector: '.like',
+          dislikeSelector: '.dislike'
+      });
+    }, 0);
   };
 
   // After loading all the data variables, we do some more setup.
   $scope.isLoading = true;
   fmaStackHelper.setUpDataVariables(
       $scope.userAddress.latitude, $scope.userAddress.longitude,
-      $scope.rawAccessToken, $scope.userCuisines, false).then(
+      $scope.rawAccessToken, $scope.userCuisines, $scope.numPicsInStack, false).then(
     function(retVars) {
       $scope.allNearbyMerchantData = retVars.allNearbyMerchantData;
       $scope.foodData = retVars.foodData;
       $scope.foodImageLinks = retVars.foodImageLinks;
 
       console.log('Final setup.');
-      finalSetup();
+      computeJoinedFoodDataImageList($scope.foodDataCursor);
       
       $scope.isLoading = false;
     },

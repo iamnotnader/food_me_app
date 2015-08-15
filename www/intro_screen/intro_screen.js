@@ -144,7 +144,6 @@ function($scope, $location, $http, fmaLocalStorage, fmaSharedState) {
           $scope.token_data = response.data;
           fmaLocalStorage.setObjectWithExpirationSeconds('userToken', $scope.token_data,
               fmaSharedState.testing_invalidation_seconds);
-          alert('Got token: ' + JSON.stringify($scope.token_data));
           // TODO(daddy): Add the token to some global state before transitioning.
           $location.path('/choose_address');
           return;
