@@ -56,10 +56,6 @@ function($scope, $location, $http, fmaLocalStorage, fmaSharedState) {
   // The width of the screenshot embedded within the phone. Computed from the
   // phone's width in the introScreenImageOnload directive.
   $scope.screenshotWidth = 0;
-  // The amount we shift the screenshot. The screenshot is actually three
-  // images next to each other. When we slide our finger across the screen, the
-  // screenshots all slide by adjusting this variable.
-  $scope.screenshotOffset = 0;
   // We have a single giant png that contains all of the app intro screens. Its
   // width should be screenshotWidth * numPhotos so we can slide through it
   // properly.
@@ -79,9 +75,6 @@ function($scope, $location, $http, fmaLocalStorage, fmaSharedState) {
   // next to each other all side by side. When we slide our finger across the
   // screen, the divs all slide by adjusting this variable.
   $scope.textOffset = 0;
-  // For every pixel we move the screenshot, we have to move the text over by
-  // this ratio. This is set in the introScreenImageOnload directive.
-  $scope.textToScreenshotRatio = 0;
 
   // When we're on the Nth screen, we want to set the Nth dot as "active." That
   // basically means make it a little bigger and make its color equal to the
@@ -173,7 +166,6 @@ function($scope, $location, $http, fmaLocalStorage, fmaSharedState) {
               $('.intro_screen__screenshot_container').width(scope.screenshotWidth);
   
               scope.textWidth =  $('.intro_screen__overall_text_container').width();
-              scope.textToScreenshotRatio = scope.textWidth / scope.screenshotWidth;
 
               scope.setActiveDot(0);
               
@@ -187,28 +179,26 @@ function($scope, $location, $http, fmaLocalStorage, fmaSharedState) {
 .directive('introScreenSwipeThrough', ['$document', function($document) {
   return {
     link: function(scope, element, attr) {
-      var startX = 0;
+      var startX = 0, startingTextOffset, amountMoved;
 
       element.on('touchstart', function(event) {
         // Prevent default dragging of selected content
         event.preventDefault();
-        startX = event.originalEvent.touches[0].pageX - scope.screenshotOffset;
+        startX = event.originalEvent.touches[0].pageX;
+        startingTextOffset = scope.textOffset;
+        amountMoved = 0;
         $document.on('touchmove', touchmove);
         $document.on('touchend', touchend);
       });
 
       function touchmove(event) {
-        scope.screenshotOffset = event.originalEvent.touches[0].pageX - startX;
-        scope.screenshotOffset = Math.min(scope.screenshotOffset, 0);
-        scope.screenshotOffset =
-            Math.max(scope.screenshotOffset,
-            -1 * (scope.numPhotos-1) * scope.screenshotWidth);
-        scope.textOffset = Math.min(scope.screenshotOffset * scope.textToScreenshotRatio, 0);
+        amountMoved = event.originalEvent.touches[0].pageX - startX;
+        scope.textOffset = startingTextOffset + amountMoved;
         scope.textOffset =
             Math.max(scope.textOffset,
             -1 * (scope.numPhotos-1) * scope.textWidth);
-        // Move the screenshot over.
-        $('.intro_screen__all_intro_screenshots').css({left: scope.screenshotOffset});
+        scope.textOffset =
+            Math.min(scope.textOffset, 0);
         $('.intro_screen__overall_text_container').css({left: scope.textOffset});
       }
 
@@ -216,22 +206,20 @@ function($scope, $location, $http, fmaLocalStorage, fmaSharedState) {
         $document.off('touchmove', touchmove);
         $document.off('touchend', touchend);
         // Compute the index of the screen we're going to snap to.
-        var screenIndex = Math.floor(Math.abs(scope.screenshotOffset) / scope.screenshotWidth);
-        if (Math.abs(scope.screenshotOffset) % scope.screenshotWidth >
-            scope.screenshotWidth / 2) {
+        var screenIndex = Math.floor(Math.abs(scope.textOffset) / scope.textWidth);
+
+        // We have to add 1 in the equation below because of floating point precision issues.
+        var remainder = (Math.abs(scope.textOffset) + 1) % scope.textWidth;
+        if (remainder > 0 && amountMoved < 0) {
           screenIndex += 1;
         }
-        // Compute the final position we want the screenshot to snap to.
-        var finalScreenshotOffset = -1 * screenIndex * scope.screenshotWidth;
-        scope.screenshotOffset = finalScreenshotOffset;
-        $('.intro_screen__all_intro_screenshots').animate(
-            {left: finalScreenshotOffset}, 200);
-
+        screenIndex = Math.min(screenIndex, scope.numPhotos - 1);
         // Compute the final position we want the text to snap to.
         var finalTextOffset = -1 * screenIndex * scope.textWidth;
         scope.textOffset = finalTextOffset;
         $('.intro_screen__overall_text_container').animate(
             {left: finalTextOffset}, 200);
+        console.log(scope.textOffset);
 
         // Compute the color we want the background to end up at.
         scope.colorIndex = screenIndex % scope.colorList.length;

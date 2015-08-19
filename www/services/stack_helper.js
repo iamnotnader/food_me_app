@@ -105,7 +105,8 @@ function(fmaLocalStorage, $http, fmaSharedState, $q) {
         (function(index) {
           var foodDataObj = foodData[foodDataCursor + index];
           $http.get('https://ajax.googleapis.com/ajax/services/search/images?v=1.0&q=' +
-                    escape(foodDataObj.name))
+                    escape(foodDataObj.name) + '&' +
+                    'imgsz=small|medium')
           .then(
             function(res) {
               var imageDataList = res.data.responseData.results; 

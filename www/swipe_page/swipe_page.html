@@ -1,24 +1,37 @@
-<div class="swipe_page__jtinder_container">
-  <div id="tinderslide" class="swipe_page__tinderslide">
-      <ul>
-          <!--<div ng-repeat="foodInfo in joinedFoodInfo">-->
-            <!--<div>{{foodInfo.foodData.name}}</div>-->
-            <!--<img style="width:50%;" ng-src="{{foodInfo.imageLinks.urls[0]}}">-->
-          <!--</div>-->
-          <!--<li class="pane1"><div class="img"></div><div>Miami Beach</div><div class="like"></div><div class="dislike"></div></li>-->
-          <!--<li class="pane1"><div class="img"></div><div>San Francisco</div><div class="like"></div><div class="dislike"></div></li>-->
-          <!--<li class="pane1"><div class="img"></div><div>Chicago</div><div class="like"></div><div class="dislike"></div></li>-->
-          <!--<li class="pane1"><div class="img"></div><div>New York</div><div class="like"></div><div class="dislike"></div></li>-->
-          <!--<li class="pane1"><div class="img"></div></li>-->
+<div class="swipe_page__overall_container">
+  <div class="swipe_page__top_text">
+    <div class="swipe_page__vertically_center">
+      Swipe your destiny.  
+    </div>
+  </div>
+  <div class="swipe_page__jtinder_container">
+    <div id="tinderslide" class="swipe_page__tinderslide">
+        <ul>
           <li class="pane1" ng-repeat="foodInfo in joinedFoodInfo">
-            <img style="height:80%;" ng-src="{{foodInfo.imageLinks.urls[0]}}">
-            <div style="font-family: TitleFont; text-transform: none; font-size: 1.3rem; vertical-align: middle;">
-              {{foodInfo.foodData.name}}
+            <div class="swipe_page__food_image" fma-back-img="{{foodInfo.imageLinks.urls[0]}}">
             </div>
             <div class="like"></div>
             <div class="dislike"></div>
           </li>
-      </ul>
+        </ul>
+    </div>
+  </div>
+  <div class="swipe_page__food_info_container">
+    <div ng-repeat="foodInfo in joinedFoodInfo">
+      <div ng-if="shouldShowItem($index)" style="font-family: TitleFont; text-transform: none; font-size: 1rem; vertical-align: middle;">
+        <div style="font-size: 1.3rem;">${{foodInfo.foodData.price}}</div>
+        <div style="font-size: 1.3rem;">{{foodInfo.foodData.name}}</div>
+        <div>from</div>
+        <div style="font-size: 1.3rem;">{{foodInfo.foodData.merchantName}}</div>
+        <div>{{foodInfo.foodData.description}}</div>
+        <div>{{foodInfo.foodData.merchantDescription}}</div>
+        <div>{{foodInfo.foodData.length}}</div>
+      </div>
+    </div>
+  </div>
+  <div class="swipe_page__bottom_menu">
+    <div class="swipe_page__bottom_button" style="border-right: 1px solid white;"><img style="height: 70%;" class="swipe_page__vertically_center" src="img/gear.png"></div>
+    <div class="swipe_page__bottom_button"><img style="height: 70%;" class="swipe_page__vertically_center" src="img/cart.png"></div>
   </div>
 </div>
 

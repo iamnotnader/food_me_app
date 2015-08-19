@@ -139,14 +139,14 @@
           current_pane_elem = panes.eq(current_pane);
           if (opa >= 1) {
             if (posX > 0) {
-              current_pane_elem.animate({"transform": "translate(" + (pane_width) + "px," + (posY + pane_width) + "px) rotate(60deg)"}, $that.settings.animationSpeed, function () {
+              current_pane_elem.animate({"transform": "translate(" + 5*(posX + pane_width) + "px," + (0) + "px)"}, $that.settings.animationSpeed, function () {
                 if($that.settings.onLike) {
                   $that.settings.onLike(current_pane_elem);
                 }
                 $that.next();
               });
             } else {
-              current_pane_elem.animate({"transform": "translate(-" + (pane_width) + "px," + (posY + pane_width) + "px) rotate(-60deg)"}, $that.settings.animationSpeed, function () {
+              current_pane_elem.animate({"transform": "translate(-" + 5*(-posX + pane_width) + "px," + (0) + "px)"}, $that.settings.animationSpeed, function () {
                 if($that.settings.onDislike) {
                   $that.settings.onDislike(current_pane_elem);
                 }

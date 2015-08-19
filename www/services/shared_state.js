@@ -18,10 +18,14 @@ angular.module('foodmeApp.sharedState', [])
 
     // Variables that are strictly for testing purposes.
 
-    // Invalidate everything in localStorage after this amount of time for now.
-    testing_invalidation_seconds: 60 * 60,
+    // Testing
+    //testing_invalidation_seconds: 60 * 60,
+    //fake_token: 'Q9rcncn0daWlTrAqa67soecPjFURIsy43p21Cj1s',
 
-    fake_token: 'Q9rcncn0daWlTrAqa67soecPjFURIsy43p21Cj1s',
-    //fake_token: null,
+    // Prod
+    // Invalidate everything in localStorage after this amount of time for now.
+    testing_invalidation_seconds: 60,
+    fake_token: null,
+
   };
 }]);

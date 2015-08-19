@@ -7,8 +7,8 @@ angular.module('foodMeApp.swipePage', ['ngRoute', 'ngTouch', 'foodmeApp.localSto
   });
 }])
 
-.controller('SwipePageCtrl', ["$scope", "$location", "fmaLocalStorage", "$http", "fmaSharedState", "$q", "fmaStackHelper",
-function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $q, fmaStackHelper) {
+.controller('SwipePageCtrl', ["$scope", "$location", "fmaLocalStorage", "$http", "fmaSharedState", "$q", "fmaStackHelper", "$timeout",
+function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $q, fmaStackHelper, $timeout) {
   // For this page, we need a token, an address, and some chosen cuisines. If we
   // are missing any of these, then we redirect to the proper page to get them.
   console.log('In swipe_page controller.');
@@ -50,11 +50,13 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $q, fmaStack
   // index into the gigantic foodData array. That index is $scope.foodDataCursor.
   $scope.foodDataCursor = 0;
   $scope.numPicsInStack = 3;
+  $scope.showFoodInfo = true;
   $scope.maybeRefreshStack = function() {
     console.log("Checking refresh: " + $scope.foodDataCursor);
     if ($scope.foodDataCursor % $scope.numPicsInStack !== 0) {
       return;
     }
+    $scope.showFoodInfo = false;
     numPicsToFetch = Math.min(
         $scope.numPicsInStack, $scope.foodData.length - $scope.foodDataCursor);
     fmaStackHelper.asyncGetFoodImageLinks($scope.foodData, $scope.foodDataCursor, numPicsToFetch)
@@ -62,19 +64,32 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $q, fmaStack
       function(retVars) {
         $scope.foodImageLinks = retVars.foodImageLinks;
         computeJoinedFoodDataImageList($scope.foodDataCursor);
+        $scope.showFoodInfo = true;
       },
       function(err) {
     });
   };
   $scope.userLikedDish = function(item) {
-    $scope.foodDataCursor++;
-    $scope.maybeRefreshStack();
-    // TODO(daddy): Make it so the dish is added to the user's cart in this case.
+    $scope.$apply(function() {
+      console.log('liked!');
+      $scope.foodDataCursor++;
+      $scope.maybeRefreshStack();
+      // TODO(daddy): Make it so the dish is added to the user's cart in this case.
+    });
   };
   $scope.userDislikedDish = function(item) {
-    $scope.foodDataCursor++;
-    $scope.maybeRefreshStack();
-    // TODO(daddy): Make it so the dish is added to history or something.
+    $scope.$apply(function() {
+      console.log('disliked!');
+      $scope.foodDataCursor++;
+      $scope.maybeRefreshStack();
+      // TODO(daddy): Make it so the dish is added to history or something.
+    });
+  };
+
+  $scope.shouldShowItem = function(itemIndex) {
+    var reverseItemIndex = ($scope.numPicsInStack - itemIndex - 1);
+    var stackIndex = $scope.foodDataCursor % $scope.numPicsInStack;
+    return (reverseItemIndex === stackIndex) && $scope.showFoodInfo;
   };
 
   // By the time we reach this function, we are guaranteed to haeve set:
@@ -100,9 +115,10 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $q, fmaStack
         imageLinks: $scope.foodImageLinks[x],
       });
     }
+    console.log($scope.joinedFoodInfo);
 
     // TODO(daddy): THIS IS A DIRTY_HACK!!!
-    setTimeout(function() {
+    $timeout(function() {
       console.log('Loaded jTinder');
       $("#tinderslide").jTinder({
           onDislike: $scope.userDislikedDish,
@@ -135,4 +151,14 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $q, fmaStack
       // Not really sure what to do here.
     } 
   );
-}]);
+}])
+
+.directive('fmaBackImg', function(){
+    return function(scope, element, attrs){
+        var url = attrs.fmaBackImg;
+        element.css({
+            'background-image': 'url(' + url +')',
+            'background-size' : 'cover'
+        });
+    };
+});
