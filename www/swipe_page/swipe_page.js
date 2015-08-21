@@ -86,12 +86,6 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $q, fmaStack
     });
   };
 
-  $scope.shouldShowItem = function(itemIndex) {
-    var reverseItemIndex = ($scope.numPicsInStack - itemIndex - 1);
-    var stackIndex = $scope.foodDataCursor % $scope.numPicsInStack;
-    return (reverseItemIndex === stackIndex) && $scope.showFoodInfo;
-  };
-
   // By the time we reach this function, we are guaranteed to haeve set:
   //  - $scope.allNearbyMerchantData
   //  - $scope.foodData

@@ -156,7 +156,9 @@ h1 {
   left: 0;
   right: 0;
   margin: auto;
-  height: 90%; }
+  height: 90%;
+  box-shadow: 0px 15px 70px black;
+  border-radius: 25px; }
 
 /*We place the screenshot image inside the phone. To do this we take where the*/
 /*phone is relative to the outer div, and add the offset of the screenshot to it.*/
@@ -249,7 +251,7 @@ h1 {
   margin: 0 auto;
   left: 0;
   right: 0;
-  bottom: 3%; }
+  bottom: 8%; }
 
 .choose_address__container {
   height: 100%;
@@ -395,7 +397,7 @@ h1 {
   opacity: 0.8; }
 
 .swipe_page__overall_container {
-  background-color: white;
+  background-color: #E7E8E9;
   height: 100%;
   width: 100%;
   position: absolute; }
@@ -408,12 +410,13 @@ h1 {
   text-transform: none;
   font-family: TitleFont;
   font-size: 2rem;
-  text-align: center; }
+  text-align: center;
+  color: #6E6666; }
 
 .swipe_page__jtinder_container {
-  width: 85%;
-  height: 43%;
-  top: 12%;
+  width: 92%;
+  height: 72%;
+  top: 15%;
   position: absolute;
   left: 0;
   right: 0;
@@ -447,42 +450,22 @@ h1 {
   left: 0;
   background-size: contain; }
 
-.swipe_page__food_info_container {
-  top: 55%;
-  top: 53%;
-  position: absolute;
-  margin-top: 8%;
-  margin-left: 5%;
-  margin-right: 5%;
-  text-align: center;
-  left: 0;
-  right: 0;
-  height: 30%;
-  overflow: scroll;
-  border-radius: 10px;
-  background-color: #260126;
-  color: white; }
-
 .swipe_page__bottom_menu {
-  height: 9%;
+  height: 7%;
   bottom: 0;
   position: absolute;
   left: 0;
-  background-color: #260126;
   right: 0;
   font-size: 0; }
 
 .swipe_page__bottom_button {
   display: inline-block;
   width: 50%;
-  height: 100%;
+  height: 75%;
   position: relative; }
 
 #tinderslide {
   background: none;
   background-color: transparent; }
-
-.pane1 {
-  border-radius: 100%; }
 
 /*# sourceMappingURL=index.css.map */

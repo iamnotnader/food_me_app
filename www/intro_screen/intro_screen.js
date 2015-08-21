@@ -180,6 +180,8 @@ function($scope, $location, $http, fmaLocalStorage, fmaSharedState) {
   return {
     link: function(scope, element, attr) {
       var startX = 0, startingTextOffset, amountMoved;
+      var textObject = $('.intro_screen__overall_text_container');
+      var backgroundObject = $('.intro_screen__upper_container');
 
       element.on('touchstart', function(event) {
         // Prevent default dragging of selected content
@@ -192,14 +194,14 @@ function($scope, $location, $http, fmaLocalStorage, fmaSharedState) {
       });
 
       function touchmove(event) {
-        amountMoved = event.originalEvent.touches[0].pageX - startX;
-        scope.textOffset = startingTextOffset + amountMoved;
+        amountMoved = (event.originalEvent.touches[0].pageX - startX) / 2.0;
+        scope.textOffset = (startingTextOffset + amountMoved);
         scope.textOffset =
             Math.max(scope.textOffset,
             -1 * (scope.numPhotos-1) * scope.textWidth);
         scope.textOffset =
             Math.min(scope.textOffset, 0);
-        $('.intro_screen__overall_text_container').css({left: scope.textOffset});
+        textObject.css({left: scope.textOffset});
       }
 
       function touchend() {
@@ -217,13 +219,13 @@ function($scope, $location, $http, fmaLocalStorage, fmaSharedState) {
         // Compute the final position we want the text to snap to.
         var finalTextOffset = -1 * screenIndex * scope.textWidth;
         scope.textOffset = finalTextOffset;
-        $('.intro_screen__overall_text_container').animate(
+        textObject.animate(
             {left: finalTextOffset}, 200);
         console.log(scope.textOffset);
 
         // Compute the color we want the background to end up at.
         scope.colorIndex = screenIndex % scope.colorList.length;
-        $('.intro_screen__upper_container').animate(
+        backgroundObject.animate(
             {backgroundColor: scope.colorList[scope.colorIndex]}, 200);
 
         scope.setActiveDot(screenIndex);

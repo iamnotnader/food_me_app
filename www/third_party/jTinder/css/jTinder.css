@@ -41,7 +41,6 @@ body {
     box-shadow: 0 0 20px rgba(0, 0, 0, .2);
     overflow: hidden;
     text-align: center;
-    padding: 10px 10px 10px 10px;
     background: #eee;
     font-size: 24px;
     color: #000;
@@ -71,11 +70,6 @@ body {
 
 /* Image rotation */
 #tinderslide li.pane1 {
-    -webkit-transform: rotate(-1deg);
-    -moz-transform: rotate(-1deg);
-    -o-transform: rotate(-1deg);
-    -ms-transform: rotate(-1deg);
-    transform: rotate(-1deg);
 }
 
 #tinderslide li.pane2 {
