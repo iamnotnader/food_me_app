@@ -432,13 +432,26 @@ h1 {
   margin-left: auto;
   margin-right: auto; }
 
-.swipe_page__loading_pusheen {
+.swipe_page__loading_text {
+  font-family: TitleFont;
+  color: #464646;
   position: absolute;
-  top: 10%;
+  top: 0%;
   left: 0;
-  width: 100%;
   right: 0;
   margin-right: auto;
+  margin-left: auto;
+  text-align: center;
+  font-size: 3rem; }
+
+.swipe_page__loading_pusheen {
+  position: absolute;
+  top: 20%;
+  left: 0;
+  width: 80%;
+  right: 0;
+  margin-right: auto;
+  margin-left: auto;
   border-radius: 100%;
   border: 5px solid #464646; }
 
