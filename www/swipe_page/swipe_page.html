@@ -8,19 +8,22 @@
     <div id="tinderslide" class="swipe_page__tinderslide">
         <ul>
           <li class="pane1" ng-repeat="foodInfo in joinedFoodInfo">
-            <div style="width: 100%; height: 30%; position: absolute;">
+            <div class= "swipe_page__food_image_container">
               <div class="swipe_page__food_image" fma-back-img="{{foodInfo.imageLinks.urls[0]}}"></div>
             </div>
             <div class="like"></div>
             <div class="dislike"></div>
 
-            <div style="font-size: 1.3rem;">${{foodInfo.foodData.price}}</div>
-            <div style="font-size: 1.3rem;">{{foodInfo.foodData.name}}</div>
-            <div>from</div>
-            <div style="font-size: 1.3rem;">{{foodInfo.foodData.merchantName}}</div>
-            <div>{{foodInfo.foodData.description}}</div>
-            <div>{{foodInfo.foodData.merchantDescription}}</div>
-            <div>{{foodInfo.foodData.length}}</div>
+            <div class="swipe_page__food_text_container">
+              <div class="swipe_page__price">${{foodInfo.foodData.price}}</div>
+              <div style="font-size: 1.3rem;">{{foodInfo.foodData.name}}</div>
+              <div style="margin-top: -.3rem; margin-bottom: -0.4rem;">from</div>
+              <div style="font-size: 1.3rem;">{{foodInfo.foodData.merchantName}}</div>
+              <div class="swipe_page__description_container">
+                <div>{{foodInfo.foodData.description}}</div>
+                <div>{{foodInfo.foodData.merchantDescription}}</div>
+              </div>
+            </div>
           </li>
         </ul>
     </div>
