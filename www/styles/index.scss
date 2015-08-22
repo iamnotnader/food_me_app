@@ -27,17 +27,7 @@ body {
   -webkit-touch-callout: none;        /* prevent callout to copy image, etc when tap to hold */
   -webkit-text-size-adjust: none;       /* prevent webkit from resizing text to fit */
   -webkit-user-select: none;          /* prevent copy paste, to allow, change 'none' to 'text' */
-  background-color:#E4E4E4;
-  background-image:linear-gradient(top, #A7A7A7 0%, #E4E4E4 51%);
-  background-image:-webkit-linear-gradient(top, #A7A7A7 0%, #E4E4E4 51%);
-  background-image:-ms-linear-gradient(top, #A7A7A7 0%, #E4E4E4 51%);
-  background-image:-webkit-gradient(
-    linear,
-    left top,
-    left bottom,
-    color-stop(0, #A7A7A7),
-    color-stop(0.51, #E4E4E4)
-  );
+  background-color:white;
   background-attachment:fixed;
   font-family:'HelveticaNeue-Light', 'HelveticaNeue', Helvetica, Arial, sans-serif;
   font-size:12px;
@@ -46,6 +36,7 @@ body {
   padding:0px;
   text-transform:uppercase;
   width:100%;
+  background:white;
 }
 
 /* Portrait layout (default) */
@@ -555,11 +546,63 @@ $swipe_page__stack_height: 72%;
   right: 0;
 }
 
+$sp_ph: 2.7rem; 
 .swipe_page__price {
   font-size: 2rem;
   margin: -.5rem;
   color: #6E6666;
   font-family: TitleFont;
+  height: $sp_ph;
+}
+
+$sp_fnh: 1.6rem; 
+.swipe_page__food_name {
+  font-size: 1.3rem;
+  overflow: hidden;
+  height: $sp_fnh;
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+}
+
+$sp_rnh: 1.6rem; 
+.swipe_page__restaurant_name {
+  font-size: 1.3rem;
+  height: $sp_rnh;
+  overflow: hidden;
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+}
+
+$sp_top_bar_height: 0.5rem;
+.swipe_page__top_description_bar {
+  height: $sp_top_bar_height;
+  border-bottom: 1px solid #6E6666;
+  width: 80%;
+  margin-left: 10%;
+}
+
+$sp_bottom_offset: 4%;
+.swipe_page__bottom_description_bar {
+  border-bottom: 1px solid #6E6666;
+  width: 80%;
+  margin-left: 10%;
+  position: absolute;
+  bottom: $sp_bottom_offset;
+}
+
+.swipe_page__scroller {
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+  text-align: center;
+}
+
+.swipe_page__description_container {
+  position: absolute;
+  overflow: hidden;
+  top: $sp_ph + $sp_fnh + $sp_rnh + $sp_top_bar_height;
+  bottom: $sp_bottom_offset;
+  left: 0;
+  right: 0;
 }
 
 .swipe_page__bottom_menu {
@@ -584,4 +627,55 @@ $swipe_page__stack_height: 72%;
 }
 
 .pane1 {
+}
+
+
+// Testing view transitions
+/*animate*/  
+.slide-left > .ng-enter,  
+.slide-left > .ng-leave,  
+.slide-right > .ng-enter,  
+.slide-right > .ng-leave {  
+    position: absolute;  
+    top: 0; right: 0; bottom: 0; left: 0;  
+    background: inherit;  
+    -ms-transition: .5s ease-in-out;  
+    -webkit-transition: .5s ease-in-out;  
+    transition:  .5s ease-in-out;  
+}  
+.slide-left > .ng-enter {  
+    z-index: 101;  
+    -webkit-transform: translateX(100%);  
+    transform: translateX(100%);  
+}  
+.slide-left > .ng-enter.ng-enter-active {  
+    -webkit-transform: translateX(0);  
+    transform: translateX(0);  
+}  
+.slide-left > .ng-leave {  
+    z-index: 100;  
+    -webkit-transform: translateX(0);  
+    transform: translateX(0);  
+}  
+.slide-left > .ng-leave.ng-leave-active {  
+    -webkit-transform: translateX(-100%);  
+    transform: translateX(-100%);  
+}  
+.slide-right > .ng-enter {  
+    z-index: 100;  
+    -webkit-transform: translateX(-100%);  
+    transform: translateX(-100%);  
+}  
+.slide-right > .ng-enter.ng-enter-active {  
+    -webkit-transform: translateX(0);  
+    transform: translateX(0);  
+}  
+.slide-right > .ng-leave {  
+    z-index: 101;  
+    -webkit-transform: translateX(0);  
+    transform: translateX(0);  
+}  
+.slide-right > .ng-leave.ng-leave-active {  
+    -webkit-transform: translateX(100%);  
+    transform: translateX(100%);  
 }

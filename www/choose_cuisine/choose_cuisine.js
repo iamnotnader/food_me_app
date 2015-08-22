@@ -7,8 +7,10 @@ angular.module('foodMeApp.chooseCuisine', ['ngRoute', 'ngTouch', 'foodmeApp.loca
   });
 }])
 
-.controller('ChooseCuisineCtrl', ["$scope", "$location", "fmaLocalStorage", "$http", "fmaSharedState",
-function($scope, $location, fmaLocalStorage, $http, fmaSharedState) {
+.controller('ChooseCuisineCtrl', ["$scope", "$location", "fmaLocalStorage", "$http", "fmaSharedState", "$rootScope",
+function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope) {
+  var mainViewObj = $('#main_view_container');
+
   // For this controller, we need a token and an address. If we are missing
   // either one of those, we redirect to another screen in order to get it.
   console.log('In choose_cuisine controller.');
@@ -25,12 +27,16 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState) {
   if ($scope.rawAccessToken === null) {
     alert('In order to set cuisines, we need you to log in first.');
     console.log('No token found-- go back to intro_screen.');
+    mainViewObj.removeClass();
+    mainViewObj.addClass('slide-right');
     $location.path('/intro_screen');
     return;
   }
   if (!fmaLocalStorage.isSet('userAddress')) {
     alert("In order to set cuisines, we need an address first. Please enter one.");
     console.log('No address found-- go back to choose_address to get it.');
+    mainViewObj.removeClass();
+    mainViewObj.addClass('slide-right');
     $location.path('/choose_address');
     return;
   }
@@ -68,6 +74,8 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState) {
 
   $scope.chooseCuisineBackPressed = function() {
     console.log('Back button pressed.');
+    mainViewObj.removeClass();
+    mainViewObj.addClass('slide-right');
     $location.path('choose_address');
     return;
   };
@@ -92,9 +100,9 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState) {
   
   $scope.chooseCuisineDonePressed = function() {
     console.log('Done button pressed.');
-    if ($scope.selectedCuisineIndices.value.length === 0) {
+    if ($scope.selectedCuisineIndices.value.length < 3) {
       console.log('No cuisines selected.');
-      alert('You must select at least one cuisine or no food.');
+      alert('You must select at least three cuisines or no food.');
       return;
     }
     var cuisineIndices = $scope.selectedCuisineIndices.value;
@@ -107,6 +115,8 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState) {
     fmaLocalStorage.setObjectWithExpirationSeconds(
         'userCuisines', userCuisines,
         fmaSharedState.testing_invalidation_seconds);
+    mainViewObj.removeClass();
+    mainViewObj.addClass('slide-left');
     $location.path('/swipe_page');
     return;
   };

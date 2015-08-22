@@ -86,6 +86,10 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $q, fmaStack
     });
   };
 
+  var isBadDescription = function(description) {
+    return description == null || description.length < 5;
+  }
+
   // By the time we reach this function, we are guaranteed to haeve set:
   //  - $scope.allNearbyMerchantData
   //  - $scope.foodData
@@ -104,8 +108,13 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $q, fmaStack
     // Note that foodImageLinks always has fewer items than foodData because we
     // populate it conservatively.
     for (var x = 0; x < $scope.foodImageLinks.length; x++) {
+      var foodDataObj = $scope.foodData[foodDataCursor + x];
+      if (isBadDescription(foodDataObj.description) &&
+          isBadDescription(foodDataObj.merchantDescription)) {
+        foodDataObj.description = "No description available :(";
+      }
       $scope.joinedFoodInfo.push({
-        foodData: $scope.foodData[foodDataCursor + x],
+        foodData: foodDataObj,
         imageLinks: $scope.foodImageLinks[x],
       });
     }

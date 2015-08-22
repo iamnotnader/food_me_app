@@ -7,8 +7,12 @@ angular.module('foodMeApp.introScreen', ['ngRoute', 'ngTouch', 'foodmeApp.localS
   });
 }])
 
-.controller('IntroScreenCtrl', ["$scope", "$location", "$http", "fmaLocalStorage", 'fmaSharedState',
-function($scope, $location, $http, fmaLocalStorage, fmaSharedState) {
+.controller('IntroScreenCtrl', ["$scope", "$location", "$http", "fmaLocalStorage", 'fmaSharedState', '$rootScope',
+function($scope, $location, $http, fmaLocalStorage, fmaSharedState, $rootScope) {
+  // Capture the main view container so we can add/remove animations.
+  var mainViewObj = $('#main_view_container');
+  mainViewObj.removeClass();
+
   // This is the first screen our app hits when it restarts, so we put some custom
   // logic in to redirect if the user is already signed in, has already entered
   // an address, etc...
@@ -44,6 +48,9 @@ function($scope, $location, $http, fmaLocalStorage, fmaSharedState) {
     }
   }
   // We get here only if the user doesn't have an access token.
+
+  // Default to sliding left.
+  mainViewObj.addClass('slide-left');
 
   // This line is necessary in order to make Angular $http post requests behave
   // like jQuery $.post requests. Namely, it makes it so the params are added
@@ -116,7 +123,7 @@ function($scope, $location, $http, fmaLocalStorage, fmaSharedState) {
     //   4) We grab the value of code in the start listener then kill the
     //      webview.
     var ref = window.open($scope.oauthUrl, '_blank',
-        'location=yes,clearcache=yes,clearsessioncache=yes');
+        'location=yes,clearcache=yes,clearsessioncache=yes,transitionstyle=fliphorizontal');
     ref.addEventListener('loadstart', function(event) {
       var url = event.url;
       if (url.indexOf(fmaSharedState.redirect_uri) === 0) {
@@ -137,7 +144,6 @@ function($scope, $location, $http, fmaLocalStorage, fmaSharedState) {
           $scope.token_data = response.data;
           fmaLocalStorage.setObjectWithExpirationSeconds('userToken', $scope.token_data,
               fmaSharedState.testing_invalidation_seconds);
-          // TODO(daddy): Add the token to some global state before transitioning.
           $location.path('/choose_address');
           return;
         }, function(error) {
@@ -166,6 +172,7 @@ function($scope, $location, $http, fmaLocalStorage, fmaSharedState) {
               $('.intro_screen__screenshot_container').width(scope.screenshotWidth);
   
               scope.textWidth =  $('.intro_screen__overall_text_container').width();
+              $('.intro_screen__screenshot_container').show();
 
               scope.setActiveDot(0);
               

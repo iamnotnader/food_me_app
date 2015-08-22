@@ -9,6 +9,8 @@ angular.module('foodMeApp.addAddress', ['ngRoute', 'ngTouch', 'foodmeApp.localSt
 
 .controller('AddAddressCtrl', ["$scope", "$location", "fmaLocalStorage", "$http", "fmaSharedState",
 function($scope, $location, fmaLocalStorage, $http, fmaSharedState) {
+  var mainViewObj = $('#main_view_container');
+
   // TODO(daddy): This should really be some kind of pre-router hook or something.
   $scope.userToken = fmaLocalStorage.getObject('userToken');
   $scope.rawAccessToken = null;
@@ -22,7 +24,6 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState) {
     $location.path('/intro_screen');
     return;
   }
-
 
   // Create a forms object that we can attach our form to in the view.
   $scope.forms = {};
@@ -65,6 +66,8 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState) {
       function(res) {
         console.log('Successfully added address.');
         console.log(JSON.stringify(res));
+        mainViewObj.removeClass();
+        mainViewObj.addClass('slide-right');
         $location.path('/choose_address');
       },
       function(err) {
@@ -83,6 +86,8 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState) {
 
   $scope.addAddressCancelPressed = function() {
     console.log('Cancel button pressed.');
+    mainViewObj.removeClass();
+    mainViewObj.addClass('slide-right');
     $location.path('/choose_address');
   };
   

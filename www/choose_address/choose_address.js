@@ -7,8 +7,10 @@ angular.module('foodMeApp.chooseAddress', ['ngRoute', 'ngTouch', 'foodmeApp.loca
   });
 }])
 
-.controller('ChooseAddressCtrl', ["$scope", "$location", "fmaLocalStorage", "$http", "fmaSharedState",
-function($scope, $location, fmaLocalStorage, $http, fmaSharedState) {
+.controller('ChooseAddressCtrl', ["$scope", "$location", "fmaLocalStorage", "$http", "fmaSharedState", "$rootScope",
+function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope) {
+  var mainViewObj = $('#main_view_container');
+
   // On this screen, we need a valid user token. If we are missing one, we need
   // to go back to the intro_screen to get it.
   console.log('In choose_address controller.');
@@ -23,6 +25,8 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState) {
   }
   if ($scope.rawAccessToken === null) {
     alert('In order to choose an address, we need you to log in first.');
+    mainViewObj.removeClass();
+    mainViewObj.addClass('slide-right');
     $location.path('/intro_screen');
     return;
   }
@@ -55,6 +59,8 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState) {
     fmaLocalStorage.setObject('userToken', null);
     fmaSharedState.fake_token = null;
     console.log("Using an expired token!");
+    mainViewObj.removeClass();
+    mainViewObj.addClass('slide-right');
     $location.path('/intro_screen');
     return;
   });
@@ -68,6 +74,9 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState) {
       fmaLocalStorage.setObjectWithExpirationSeconds(
           'userAddress', $scope.locationList[chosenLocIndex],
           fmaSharedState.testing_invalidation_seconds);
+      mainViewObj.removeClass();
+      mainViewObj.addClass('slide-left');
+      console.log('added class...');
       $location.path('/choose_cuisine');
       return;
     }
@@ -76,6 +85,8 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState) {
   };
   $scope.addAddressButtonPressed = function() {
     console.log('Add address button pressed.');
+    mainViewObj.removeClass();
+    mainViewObj.addClass('slide-left');
     $location.path('/add_address');
     return;
   };

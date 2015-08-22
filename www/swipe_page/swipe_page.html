@@ -16,13 +16,17 @@
 
             <div class="swipe_page__food_text_container">
               <div class="swipe_page__price">${{foodInfo.foodData.price}}</div>
-              <div style="font-size: 1.3rem;">{{foodInfo.foodData.name}}</div>
-              <div style="margin-top: -.3rem; margin-bottom: -0.4rem;">from</div>
-              <div style="font-size: 1.3rem;">{{foodInfo.foodData.merchantName}}</div>
+              <div class="swipe_page__food_name">{{foodInfo.foodData.name}}</div>
+              <div style="margin-bottom: -0.6rem;">from</div>
+              <div class="swipe_page__restaurant_name">{{foodInfo.foodData.merchantName}}</div>
+              <div class="swipe_page__top_description_bar"></div>
               <div class="swipe_page__description_container">
-                <div>{{foodInfo.foodData.description}}</div>
-                <div>{{foodInfo.foodData.merchantDescription}}</div>
+                <div class="swipe_page__scroller">
+                  <div>{{foodInfo.foodData.description}}</div>
+                  <div>{{foodInfo.foodData.merchantDescription}}</div>
+                </div>
               </div>
+              <div class="swipe_page__bottom_description_bar"></div>
             </div>
           </li>
         </ul>
@@ -33,8 +37,6 @@
     <div class="swipe_page__bottom_button"><img style="height: 100%;" class="swipe_page__vertically_center" src="img/cart.png" alt=""></div>
   </div>
 </div>
-
-
 
 <div class="overall__loading_container" ng-if="isLoading">
   <div class="overall__loading_widget_background"></div>

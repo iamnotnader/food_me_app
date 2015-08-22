@@ -23,6 +23,7 @@ var initAngularStuff = function() {
   console.log('Engaging angular.');
   angular.module('foodMeApp', [
     'ngRoute',
+    'ngAnimate',
     'foodMeApp.dummyAppScreen',
     'foodMeApp.introScreen',
     'foodMeApp.chooseAddress',
@@ -35,6 +36,8 @@ var initAngularStuff = function() {
       function($routeProvider) {
     $routeProvider
       .otherwise({redirectTo: '/intro_screen'});
+  }]).
+  run(['$rootScope', function($rootScope) {
   }]);
 };
 
@@ -63,5 +66,8 @@ var app = {
     // Update DOM on a Received Event
     receivedEvent: function(id) {
       console.log('Received Event: ' + id);
+      setTimeout(function () {
+        navigator.splashscreen.hide();
+      }, 1500);
     }
 };
