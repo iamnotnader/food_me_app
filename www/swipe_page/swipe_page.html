@@ -31,6 +31,7 @@
           </li>
         </ul>
     </div>
+    <img class="swipe_page__loading_pusheen" src="img/pusheen_eating.gif" alt="" ng-if="!showFoodInfo">
   </div>
   <div class="swipe_page__bottom_menu">
     <div class="swipe_page__bottom_button" style="border-right: 1px solid #6E6666;"><img style="height: 100%;" class="swipe_page__vertically_center" src="img/gear.png" alt=""></div>
@@ -38,7 +39,5 @@
   </div>
 </div>
 
-<div class="overall__loading_container" ng-if="isLoading">
-  <div class="overall__loading_widget_background"></div>
-  <div class="overall__loading_widget">Loading!</div>
-</div>
+<div ng-include src="'loading_screen/loading_screen.html'" ng-if="isLoading"></div>
+

@@ -155,7 +155,7 @@ h1 {
   margin: auto;
   height: 90%;
   box-shadow: 0px 15px 70px black;
-  border-radius: 25px; }
+  border-radius: 30px; }
 
 /*We place the screenshot image inside the phone. To do this we take where the*/
 /*phone is relative to the outer div, and add the offset of the screenshot to it.*/
@@ -379,7 +379,8 @@ h1 {
 
 .overall__loading_widget {
   position: fixed;
-  top: 50%;
+  top: 20%;
+  bottom: auto;
   left: 50%;
   -webkit-transform: translate(-50%, -50%);
   font-family: TitleFont;
@@ -392,6 +393,17 @@ h1 {
   height: 100%;
   background-color: white;
   opacity: 0.8; }
+
+.overall__loading_pusheen {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 30%;
+  bottom: auto;
+  margin-left: auto;
+  margin-right: auto;
+  border-radius: 100%;
+  border: 5px solid #464646; }
 
 .swipe_page__overall_container {
   background-color: #E7E8E9;
@@ -419,6 +431,16 @@ h1 {
   right: 0;
   margin-left: auto;
   margin-right: auto; }
+
+.swipe_page__loading_pusheen {
+  position: absolute;
+  top: 10%;
+  left: 0;
+  width: 100%;
+  right: 0;
+  margin-right: auto;
+  border-radius: 100%;
+  border: 5px solid #464646; }
 
 .swipe_page__vertically_center {
   position: absolute;
@@ -580,5 +602,12 @@ h1 {
 .slide-right > .ng-leave.ng-leave-active {
   -webkit-transform: translateX(100%);
   transform: translateX(100%); }
+
+.fade-me.ng-leave {
+  transition: 0.25s linear all;
+  opacity: 1; }
+
+.fade-me.ng-leave.ng-leave-active {
+  opacity: 0; }
 
 /*# sourceMappingURL=index.css.map */

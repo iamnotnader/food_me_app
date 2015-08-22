@@ -7,8 +7,8 @@ angular.module('foodMeApp.chooseAddress', ['ngRoute', 'ngTouch', 'foodmeApp.loca
   });
 }])
 
-.controller('ChooseAddressCtrl', ["$scope", "$location", "fmaLocalStorage", "$http", "fmaSharedState", "$rootScope",
-function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope) {
+.controller('ChooseAddressCtrl', ["$scope", "$location", "fmaLocalStorage", "$http", "fmaSharedState", "$rootScope", "$timeout",
+function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, $timeout) {
   var mainViewObj = $('#main_view_container');
 
   // On this screen, we need a valid user token. If we are missing one, we need
@@ -33,36 +33,41 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope) 
   // If we get here, we have a valid user token.
 
   $scope.isLoading = true;
+  var loadStartTime = (new Date()).getTime();
   // The location the user wants to use when looking for restaurants. This is an
   // object so we can use it in ng-repeat without scope issues.
   $scope.selectedLocationIndex = { value: null };
   $scope.locationList = {};
   $http.defaults.headers.common.Authorization = $scope.rawAccessToken;
   $http.get('https://api.delivery.com/customer/location?client_id=' + fmaSharedState.client_id).then(
-  function(res) {
-    $scope.locationList = res.data.locations;
-    console.log(JSON.stringify($scope.locationList));
-    var currentAddress = fmaLocalStorage.getObject('userAddress');
-    if (currentAddress != null) {
-      for (var i = 0; i < $scope.locationList.length; i++) {
-        if ($scope.locationList[i].location_id === currentAddress.location_id) {
-          $scope.selectedLocationIndex.value = i;
-          break;
+    function(res) {
+      $scope.locationList = res.data.locations;
+      console.log(JSON.stringify($scope.locationList));
+      var currentAddress = fmaLocalStorage.getObject('userAddress');
+      if (currentAddress != null) {
+        for (var i = 0; i < $scope.locationList.length; i++) {
+          if ($scope.locationList[i].location_id === currentAddress.location_id) {
+            $scope.selectedLocationIndex.value = i;
+            break;
+          }
         }
       }
-    }
-    $scope.isLoading = false;
-  },
-  function(err) {
-    alert('Error fetching addresses: ' + err.statusText);
-    // This is a hack since we don't refresh our token.
-    fmaLocalStorage.setObject('userToken', null);
-    fmaSharedState.fake_token = null;
-    console.log("Using an expired token!");
-    mainViewObj.removeClass();
-    mainViewObj.addClass('slide-right');
-    $location.path('/intro_screen');
-    return;
+      // Make the loading last at least a second.
+      var timePassedMs = (new Date()).getTime() - loadStartTime;
+      $timeout(function() {
+        $scope.isLoading = false;
+      }, Math.max(fmaSharedState.minLoadingMs - timePassedMs, 0));
+    },
+    function(err) {
+      alert('Error fetching addresses: ' + err.statusText);
+      // This is a hack since we don't refresh our token.
+      fmaLocalStorage.setObject('userToken', null);
+      fmaSharedState.fake_token = null;
+      console.log("Using an expired token!");
+      mainViewObj.removeClass();
+      mainViewObj.addClass('slide-right');
+      $location.path('/intro_screen');
+      return;
   });
 
   $scope.doneButtonPressed = function() {

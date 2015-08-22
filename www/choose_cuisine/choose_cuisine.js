@@ -7,8 +7,8 @@ angular.module('foodMeApp.chooseCuisine', ['ngRoute', 'ngTouch', 'foodmeApp.loca
   });
 }])
 
-.controller('ChooseCuisineCtrl', ["$scope", "$location", "fmaLocalStorage", "$http", "fmaSharedState", "$rootScope",
-function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope) {
+.controller('ChooseCuisineCtrl', ["$scope", "$location", "fmaLocalStorage", "$http", "fmaSharedState", "$rootScope", "$timeout",
+function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, $timeout) {
   var mainViewObj = $('#main_view_container');
 
   // For this controller, we need a token and an address. If we are missing
@@ -44,6 +44,7 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope) 
   // When we get here, we have a valid user token and a valid address.
 
   $scope.isLoading = true;
+  var loadStartTime = (new Date()).getTime();
   console.log(JSON.stringify($scope.userAddress));
   $http.defaults.headers.common.Authorization = $scope.rawAccessToken;
   $http.get('https://api.delivery.com/merchant/search/delivery?' + 
@@ -65,7 +66,11 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope) 
     fmaLocalStorage.setObject('userCuisines', {});
     $scope.all_cuisines = res.data.cuisines;
     $scope.all_cuisines = $scope.all_cuisines.slice(0, 30);
-    $scope.isLoading = false;
+    // Make the loading last at least a second.
+    var timePassedMs = (new Date()).getTime() - loadStartTime;
+    $timeout(function() {
+      $scope.isLoading = false;
+    }, Math.max(fmaSharedState.minLoadingMs - timePassedMs, 0));
   },
   function(err) {
     console.log('Error occurred.');

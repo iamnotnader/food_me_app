@@ -57,14 +57,19 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $q, fmaStack
       return;
     }
     $scope.showFoodInfo = false;
+    var foodFetchStartTime = (new Date()).getTime();
     numPicsToFetch = Math.min(
         $scope.numPicsInStack, $scope.foodData.length - $scope.foodDataCursor);
     fmaStackHelper.asyncGetFoodImageLinks($scope.foodData, $scope.foodDataCursor, numPicsToFetch)
     .then(
       function(retVars) {
-        $scope.foodImageLinks = retVars.foodImageLinks;
-        computeJoinedFoodDataImageList($scope.foodDataCursor);
-        $scope.showFoodInfo = true;
+        // Wait at least 150ms to bring the cards back.
+        var timePassedMs = (new Date()).getTime() - foodFetchStartTime;
+        $timeout(function() {
+          $scope.foodImageLinks = retVars.foodImageLinks;
+          computeJoinedFoodDataImageList($scope.foodDataCursor);
+          $scope.showFoodInfo = true;
+        }, Math.max(1000 - timePassedMs, 0));
       },
       function(err) {
     });
@@ -137,6 +142,7 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $q, fmaStack
 
   // After loading all the data variables, we do some more setup.
   $scope.isLoading = true;
+  var loadStartTime = (new Date()).getTime();
   fmaStackHelper.setUpDataVariables(
       $scope.userAddress.latitude, $scope.userAddress.longitude,
       $scope.rawAccessToken, $scope.userCuisines, $scope.numPicsInStack, false).then(
@@ -149,6 +155,11 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $q, fmaStack
       computeJoinedFoodDataImageList($scope.foodDataCursor);
       
       $scope.isLoading = false;
+      // Make the loading last at least a second.
+      var timePassedMs = (new Date()).getTime() - loadStartTime;
+      $timeout(function() {
+        $scope.isLoading = false;
+      }, Math.max(fmaSharedState.minLoadingMs - timePassedMs, 0));
     },
     function(err) {
       // Not really sure what to do here.
