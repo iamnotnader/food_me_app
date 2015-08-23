@@ -9,6 +9,9 @@ angular.module('foodMeApp.swipePage', ['ngRoute', 'ngTouch', 'foodmeApp.localSto
 
 .controller('SwipePageCtrl', ["$scope", "$location", "fmaLocalStorage", "$http", "fmaSharedState", "$q", "fmaStackHelper", "$timeout",
 function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $q, fmaStackHelper, $timeout) {
+  // We attach classes to this to make transitions smooth.
+  var mainViewObj = $('#main_view_container');
+
   // For this page, we need a token, an address, and some chosen cuisines. If we
   // are missing any of these, then we redirect to the proper page to get them.
   console.log('In swipe_page controller.');
@@ -44,6 +47,24 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $q, fmaStack
   $scope.userCuisines = fmaLocalStorage.getObject('userCuisines');
   // If we get here, we have a token, an address, and some chosen cuisines.
 
+  // The items in the user's cart.
+  $scope.showCartBadge = false;
+  $scope.userCart = [];
+  if (fmaLocalStorage.isSet('userCart')) {
+    $scope.userCart = fmaLocalStorage.getObject('userCart');
+  }
+
+  $scope.cartButtonPressed = function() {
+    console.log('cart pressed!');
+    mainViewObj.removeClass();
+    mainViewObj.addClass('slide-left');
+    $location.path('/cart_page');
+  };
+
+  $scope.settingsButtonPressed = function() {
+    console.log('settings pressed!');
+  };
+
   // foodData is like a lot of food objects. Like > 100. But the stack consists
   // of fewer-- a max of $scope.numPicsInStack to be exact. In order to avoid
   // refetching foodData every time we want to refresh the stack, we keep an
@@ -77,9 +98,15 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $q, fmaStack
   $scope.userLikedDish = function(item) {
     $scope.$apply(function() {
       console.log('liked!');
+      // Add the swiped food to the cart and save the cart to localStorage.
+      $scope.userCart.push($scope.foodData[$scope.foodDataCursor]);
+      fmaLocalStorage.setObjectWithExpirationSeconds(
+          'userCart', $scope.userCart,
+          fmaSharedState.testing_invalidation_seconds);
+
+      // Update the food cursor and possibly refresh the stack.
       $scope.foodDataCursor++;
       $scope.maybeRefreshStack();
-      // TODO(daddy): Make it so the dish is added to the user's cart in this case.
     });
   };
   $scope.userDislikedDish = function(item) {
@@ -93,7 +120,7 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $q, fmaStack
 
   var isBadDescription = function(description) {
     return description == null || description.length < 5;
-  }
+  };
 
   // By the time we reach this function, we are guaranteed to haeve set:
   //  - $scope.allNearbyMerchantData
@@ -124,6 +151,8 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $q, fmaStack
       });
     }
     console.log($scope.joinedFoodInfo);
+    // We need to reverse the list we show.
+    $scope.joinedFoodInfo.reverse();
 
     // TODO(daddy): THIS IS A DIRTY_HACK!!!
     $timeout(function() {
@@ -175,4 +204,28 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $q, fmaStack
             'background-size' : 'cover'
         });
     };
-});
+})
+
+// We position the badge with the number of items added to cart on
+// loading the screen. It's hard to do otherwise.
+// TODO(daddy): This is pretty shitty-- we actually use a timeout to wait
+// for everything to load before we move the little badge.
+.directive('swipePageCartImageOnLoad', ['$timeout', function($timeout) {
+    return {
+        restrict: 'A',
+        link: function(scope, element, attrs) {
+            element.bind('load', function() {
+              $timeout(function() {
+                var cartWidth = element.width();
+                var cartHeight = element.height();
+                var cartLeftOffset = element.offset().left;
+                var cartRightOffset = element.offset().top;
+                var badge = $('.swipe_page__num_items_in_cart_badge');
+                badge.css('top', cartRightOffset - badge.height()/2);
+                badge.css('left', cartLeftOffset + cartWidth - badge.width()/2);
+                scope.showCartBadge = true;
+              }, 1000);
+            });
+        }
+    };
+}]);

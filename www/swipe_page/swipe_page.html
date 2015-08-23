@@ -34,10 +34,20 @@
     <img class="swipe_page__loading_pusheen" src="img/pusheen_eating.gif" alt="" ng-if="!showFoodInfo">
   </div>
   <div class="swipe_page__bottom_menu">
-    <div class="swipe_page__bottom_button" style="border-right: 1px solid #6E6666;"><img style="height: 100%;" class="swipe_page__vertically_center" src="img/gear.png" alt=""></div>
-    <div class="swipe_page__bottom_button"><img style="height: 100%;" class="swipe_page__vertically_center" src="img/cart.png" alt=""></div>
+    <div ng-click="settingsButtonPressed()" class="swipe_page__bottom_button" style="border-right: 1px solid #6E6666;">
+      <img style="height: 100%;" class="swipe_page__vertically_center" src="img/gear.png" alt="">
+    </div>
+    <div ng-click="cartButtonPressed()" class="swipe_page__bottom_button">
+      <!--We use the onload method to set the little badge-->
+      <img swipe-page-cart-image-on-load style="height: 100%;" class="swipe_page__vertically_center" src="img/cart.png" alt="">
+    </div>
   </div>
 </div>
 
 <div ng-include src="'loading_screen/loading_screen.html'" ng-if="isLoading"></div>
+<!--This gets positioned by javascript in the swipe-page-cart-image-on-load function.-->
+<!--Not ideal, but oh well.-->
+<div class="swipe_page__num_items_in_cart_badge" ng-show="userCart.length > 0 && showCartBadge">
+  <div class="swipe_page__num_items_in_cart_text swipe_page__vertically_center">{{userCart.length}}</div>
+</div>
 

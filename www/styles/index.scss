@@ -646,6 +646,24 @@ $sp_bottom_offset: 4%;
   position: relative;
 }
 
+// We position this with javascript.
+.swipe_page__num_items_in_cart_badge {
+  height: 1.3rem;
+  width: 1.3rem;
+  background-color: #FFB2B2;
+  border-radius: 100%;
+  border: 1px solid #6E6666;
+  position: absolute;
+  text-align: center;
+  color: #6E6666;
+  font-family: TitleFont;
+  font-size: 0.8rem;
+}
+
+.swipe_page__num_items_in_cart_badge {
+  font-size: .9rem;
+}
+
 #tinderslide {
   background: none;
   background-color: transparent;
