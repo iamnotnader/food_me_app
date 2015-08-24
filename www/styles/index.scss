@@ -108,6 +108,11 @@ h1 {
   -webkit-animation:fade 3000ms infinite;
 }
 
+// Disable the scroll bar
+::-webkit-scrollbar { 
+    display: none; 
+}
+
 
 // Below is all my stuff.
 $iphone-4: "only screen 
@@ -303,6 +308,7 @@ $intro_screen__screenshot_height: (260 / 350) * $intro_screen__phone_height;
   height: 100%;
   width: 100%;
   position: absolute;
+  padding-bottom: 3rem;
 }
 
 $choose_address__top_bar_height: 3rem;
@@ -319,7 +325,7 @@ $choose_address__top_bar_height: 3rem;
   background-color: white;
 }
 .choose_address__address_list {
-  padding-top: $choose_address__top_bar_height;
+  margin-top: $choose_address__top_bar_height;
   height: 100%;
   background-color: white;
   overflow: auto;
@@ -466,15 +472,24 @@ $choose_address__padding: 1rem;
 }
 
 .overall__loading_pusheen {
+  background: url("../img/pusheen_eating.gif") no-repeat center center;
   position: absolute;
-  left: 0;
-  right: 0;
+  left: 5%;
+  right: 5%;
   top: 30%;
   bottom: auto;
   margin-left: auto;
   margin-right: auto;
   border-radius: 100%;
   border: 5px solid #464646;
+  height: 50%;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+}
+
+.overall__inner_pusheen {
 }
 
 $swipe_page__text_height: 12%;
@@ -510,6 +525,7 @@ $swipe_page__stack_height: 72%;
 }
 
 .swipe_page__loading_pusheen {
+  background-image: url("../img/pusheen_eating.gif");
   position: absolute;
   top: 20%;
   left: 0;
@@ -519,6 +535,13 @@ $swipe_page__stack_height: 72%;
   margin-left: auto;
   border-radius: 100%;
   border: 5px solid #464646;
+  height: 50%;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
 }
 
 .swipe_page__vertically_center {
@@ -673,6 +696,77 @@ $sp_bottom_offset: 4%;
 }
 
 
+// Cart page
+.cart_page__delete_icon {
+  width: 1.3rem;
+  height: 1.3rem;
+  position: absolute;
+  left: 1rem;
+  right: auto;
+}
+
+.cart_page__cell_text_container {
+  margin-left: 1.8rem;
+  margin-right: 3.5rem;
+  overflow: hidden;
+  display: block;
+}
+
+.cart_page__price {
+  right: 1rem;
+  left: auto;
+  font-size: 1.3rem;
+}
+
+.cart_page__clear_text {
+  font-family: TitleFont;
+  color: #6E6666;
+  font-size: 2.1rem;
+  background-color: #FFB2B2;
+  padding: 0.2rem;
+  border-top: 1px solid #6E6666;
+  border-bottom: 1px solid #6E6666;
+}
+
+.cart_page__bottom_bar {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  height: 3rem;
+  color: red;
+  font-family: TitleFont;
+  font-size: 1.3rem;
+  text-transform: none;
+  text-align: center;
+  background-color: #464646;
+}
+
+.cart_page__clear_cart {
+  padding: 0;
+  position: fixed;
+  bottom: 3.5rem;
+  width: 100%;
+  height: 3rem;
+  font-family: TitleFont;
+  font-size: 1.3rem;
+  text-transform: none;
+  text-align: center;
+}
+
+.cart_page__empty_cart {
+  font-family: TitleFont;
+  text-transform: none;
+  margin-top: 1rem;
+  margin-left: 1.5rem;
+  margin-right: 1.5rem;
+  font-size: 1.5rem;
+  text-align: center;
+  color: #464646;
+}
+
+
+
+
 // Testing view transitions
 /*animate*/  
 .slide-left > .ng-enter,  
@@ -688,7 +782,7 @@ $sp_bottom_offset: 4%;
 }  
 .slide-left > .ng-enter {  
     z-index: 101;  
-    -webkit-transform: translateX(100%);  
+    -webkit-transform: translateX(100%); 
     transform: translateX(100%);  
 }  
 .slide-left > .ng-enter.ng-enter-active {  
@@ -730,3 +824,91 @@ $sp_bottom_offset: 4%;
 .fade-me.ng-leave.ng-leave-active {
   opacity:0;
 }
+
+.cart_page__repeated_cell_animated {
+  overflow: hidden;
+}
+
+.cart_page__repeated_cell_animated.ng-leave {  
+    -ms-transition: .5s linear;  
+    -webkit-transition: .5s linear;  
+    transition:  .5s linear;  
+    max-height: 10rem;
+    opacity: 1;
+}  
+.cart_page__repeated_cell_animated.ng-leave.ng-leave-active {  
+    max-height: 0rem;
+    opacity: 0;
+} 
+
+.cart_page__empty_cart.ng-enter {
+  ms-transition: 5s ease-in-out;  
+  webkit-transition: 5s ease-in-out;  
+  transition:  5s ease-in-out;  
+  opacity: 0;
+}
+.cart_page__empty_cart.ng-enter.ng-enter-active {
+  opacity: 1;
+}
+
+.fade-in-300ms.ng-enter {
+  ms-transition: .3s ease-in-out;  
+  webkit-transition: .3s ease-in-out;  
+  transition:  .3s ease-in-out;  
+  opacity: 0;
+}
+.fade-in-300ms.ng-enter.ng-enter-active {
+  opacity: 1;
+}
+.fade-out-300ms.ng-leave {
+  ms-transition: .3s ease-in-out;  
+  webkit-transition: .3s ease-in-out;  
+  transition:  .3s ease-in-out;  
+  opacity: 1;
+}
+.fade-out-300ms.ng-leave.ng-leave-active {
+  opacity: 0;
+}
+
+.fade-in-500ms.ng-enter {
+  ms-transition: .5s ease-in-out;  
+  webkit-transition: .5s ease-in-out;  
+  transition:  .5s ease-in-out;  
+  opacity: 0;
+}
+.fade-in-500ms.ng-enter.ng-enter-active {
+  opacity: 1;
+}
+.fade-out-500ms.ng-leave {
+  ms-transition: .5s ease-in-out;  
+  webkit-transition: .5s ease-in-out;  
+  transition:  .5s ease-in-out;  
+  opacity: 1;
+}
+.fade-out-500ms.ng-leave.ng-leave-active {
+  opacity: 0;
+}
+
+.leave-right-centered.ng-leave {  
+    -ms-transition: .3s ease-in-out;  
+    -webkit-transition: .3s ease-in-out;  
+    transition:  .3s ease-in-out;  
+    -webkit-transform: translateX(0) translateY(-50%);  
+    transform: translateX(0) translateY(-50%); 
+}  
+.leave-right-centered.ng-leave.ng-leave-active {  
+    -webkit-transform: translateX(300%) translateY(-50%);  
+    transform: translateX(300%) translateY(-50%); 
+} 
+
+.enter-right-centered.ng-enter {  
+    -ms-transition: .3s ease-in-out;  
+    -webkit-transition: .3s ease-in-out;  
+    transition:  .3s ease-in-out;  
+    -webkit-transform: translateX(300%) translateY(-50%);  
+    transform: translateX(300%) translateY(-50%); 
+}  
+.enter-right-centered.ng-enter.ng-enter-active {  
+    -webkit-transform: translateX(0%) translateY(-50%);  
+    transform: translateX(0%) translateY(-50%); 
+} 

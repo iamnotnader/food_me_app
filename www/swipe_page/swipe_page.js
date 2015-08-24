@@ -100,6 +100,9 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $q, fmaStack
       console.log('liked!');
       // Add the swiped food to the cart and save the cart to localStorage.
       $scope.userCart.push($scope.foodData[$scope.foodDataCursor]);
+      $scope.userCart = _.uniq($scope.userCart, function(item) {
+        return item.name;
+      });
       fmaLocalStorage.setObjectWithExpirationSeconds(
           'userCart', $scope.userCart,
           fmaSharedState.testing_invalidation_seconds);

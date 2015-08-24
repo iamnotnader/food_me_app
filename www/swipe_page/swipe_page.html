@@ -7,7 +7,7 @@
   <div class="swipe_page__jtinder_container">
     <div id="tinderslide" class="swipe_page__tinderslide">
         <ul>
-          <li class="pane1" ng-repeat="foodInfo in joinedFoodInfo">
+          <li class="pane1 fade-in-300ms" ng-repeat="foodInfo in joinedFoodInfo">
             <div class= "swipe_page__food_image_container">
               <div class="swipe_page__food_image" fma-back-img="{{foodInfo.imageLinks.urls[0]}}"></div>
             </div>
@@ -31,7 +31,8 @@
           </li>
         </ul>
     </div>
-    <img class="swipe_page__loading_pusheen" src="img/pusheen_eating.gif" alt="" ng-if="!showFoodInfo">
+
+    <div class="swipe_page__loading_pusheen fade-in-300ms fade-out-300ms" src="img/pusheen_eating.gif" alt="" ng-if="!showFoodInfo"></div>
   </div>
   <div class="swipe_page__bottom_menu">
     <div ng-click="settingsButtonPressed()" class="swipe_page__bottom_button" style="border-right: 1px solid #6E6666;">

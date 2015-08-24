@@ -123,7 +123,7 @@ function($scope, $location, $http, fmaLocalStorage, fmaSharedState, $rootScope) 
     //   4) We grab the value of code in the start listener then kill the
     //      webview.
     var ref = window.open($scope.oauthUrl, '_blank',
-        'location=yes,clearcache=yes,clearsessioncache=yes,transitionstyle=fliphorizontal');
+        'location=yes,clearcache=yes,clearsessioncache=yes,transitionstyle=crossdissolve');
     ref.addEventListener('loadstart', function(event) {
       var url = event.url;
       if (url.indexOf(fmaSharedState.redirect_uri) === 0) {

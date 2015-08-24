@@ -37,7 +37,7 @@ angular.module('foodmeApp.sharedState', [])
 
     // Prod
     // Invalidate everything in localStorage after this amount of time for now.
-    testing_invalidation_seconds: 60,
+    testing_invalidation_seconds: 60 * 5,
     fake_token: null,
 
   };

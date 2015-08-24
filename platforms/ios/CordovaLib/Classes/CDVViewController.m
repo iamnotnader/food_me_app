@@ -295,6 +295,7 @@
     }
 
     self.webView.scalesPageToFit = [enableViewportScale boolValue];
+    
 
     /*
      * Fire up CDVLocalStorage to work-around WebKit storage limitations: on all iOS 5.1+ versions for local-only backups, but only needed on iOS 5.1 for cloud backup.
