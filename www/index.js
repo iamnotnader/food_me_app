@@ -68,7 +68,7 @@ var app = {
       console.log('Received Event: ' + id);
       setTimeout(function () {
         navigator.splashscreen.hide();
-      }, 1000);
+      }, 1500);
       window.alert = function (txt) {
           navigator.notification.alert(txt, function(){
           }, "Burgie says..", "hush");
