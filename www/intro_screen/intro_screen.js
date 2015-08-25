@@ -104,7 +104,7 @@ function($scope, $location, $http, fmaLocalStorage, fmaSharedState, $rootScope) 
   // This URL gives us back an access code, which we can then exchange for an
   // access token. What follows is a dance between us and delivery.com to get
   // the sweet, sweet access token that we need to do everything.
-  $scope.oauthUrl = 'https://api.delivery.com/third_party/authorize?' +
+  $scope.oauthUrl = 'https://api.delivery.com/third_party/account/create?' +
                     'client_id=' + fmaSharedState.client_id + '&' +
                     'redirect_uri=' + fmaSharedState.redirect_uri + '&' +
                     'response_type=code&' +

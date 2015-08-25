@@ -117,6 +117,9 @@ h1 {
 ::-webkit-scrollbar {
   display: none; }
 
+.main_view {
+  -webkit-backface-visibility: hidden; }
+
 .intro_screen_container {
   position: absolute;
   top: 0;
@@ -277,6 +280,7 @@ h1 {
   background-color: white;
   overflow: auto;
   overflow-y: scroll;
+  overflow-x: hidden;
   -webkit-overflow-scrolling: touch; }
 
 .choose_address__middle_text {
@@ -310,7 +314,10 @@ h1 {
   font-size: 1rem;
   text-transform: none;
   position: relative;
-  color: #6E6666; }
+  color: #6E6666;
+  -webkit-backface-visibility: hidden;
+  -webkit-transform: translate3d(0, 0, 0);
+  transform: translate3d(0, 0, 0); }
 
 .choose_address__cell_border {
   border-bottom: 1px solid #979797;
@@ -339,8 +346,9 @@ h1 {
   width: 2.8rem;
   position: absolute;
   top: 50%;
-  -webkit-transform: translateY(-50%);
-  right: 1em; }
+  right: 1em;
+  -webkit-transform: translate3d(0, -50%, 0);
+  transform: translate3d(0, -50%, 0); }
 
 .add_address__input_container {
   padding: 0rem 1rem;
@@ -591,7 +599,10 @@ h1 {
   height: 1.3rem;
   position: absolute;
   left: 1rem;
-  right: auto; }
+  right: auto;
+  -webkit-backface-visibility: hidden;
+  -webkit-transform: translate3d(0, -50%, 0);
+  transform: translate3d(0, -50%, 0); }
 
 .cart_page__cell_text_container {
   margin-left: 1.8rem;
@@ -634,7 +645,9 @@ h1 {
   font-family: TitleFont;
   font-size: 1.3rem;
   text-transform: none;
-  text-align: center; }
+  text-align: center;
+  -webkit-transform: translate3d(0, 0, 0);
+  transform: translate3d(0, 0, 0); }
 
 .cart_page__empty_cart {
   font-family: TitleFont;
@@ -705,6 +718,9 @@ h1 {
   opacity: 0; }
 
 .cart_page__repeated_cell_animated {
+  -webkit-backface-visibility: hidden;
+  -webkit-transform: translate3d(0, 0, 0);
+  transform: translate3d(0, 0, 0);
   overflow: hidden; }
 
 .cart_page__repeated_cell_animated.ng-leave {
@@ -746,43 +762,51 @@ h1 {
   opacity: 0; }
 
 .fade-in-500ms.ng-enter {
+  -webkit-backface-visibility: hidden;
   ms-transition: .5s ease-in-out;
   webkit-transition: .5s ease-in-out;
   transition: .5s ease-in-out;
   opacity: 0; }
 
 .fade-in-500ms.ng-enter.ng-enter-active {
+  -webkit-backface-visibility: hidden;
   opacity: 1; }
 
 .fade-out-500ms.ng-leave {
+  -webkit-backface-visibility: hidden;
   ms-transition: .5s ease-in-out;
   webkit-transition: .5s ease-in-out;
   transition: .5s ease-in-out;
   opacity: 1; }
 
 .fade-out-500ms.ng-leave.ng-leave-active {
+  -webkit-backface-visibility: hidden;
   opacity: 0; }
 
 .leave-right-centered.ng-leave {
+  -webkit-backface-visibility: hidden;
   -ms-transition: .3s ease-in-out;
   -webkit-transition: .3s ease-in-out;
   transition: .3s ease-in-out;
-  -webkit-transform: translateX(0) translateY(-50%);
-  transform: translateX(0) translateY(-50%); }
+  -webkit-transform: translate3d(0, -50%, 0);
+  transform: translate3d(0, -50%, 0); }
 
 .leave-right-centered.ng-leave.ng-leave-active {
-  -webkit-transform: translateX(300%) translateY(-50%);
-  transform: translateX(300%) translateY(-50%); }
+  -webkit-backface-visibility: hidden;
+  -webkit-transform: translate3d(300%, -50%, 0);
+  transform: translate3d(300%, -50%, 0); }
 
 .enter-right-centered.ng-enter {
+  -webkit-backface-visibility: hidden;
   -ms-transition: .3s ease-in-out;
   -webkit-transition: .3s ease-in-out;
   transition: .3s ease-in-out;
-  -webkit-transform: translateX(300%) translateY(-50%);
-  transform: translateX(300%) translateY(-50%); }
+  -webkit-transform: translate3d(300%, -50%, 0);
+  transform: translate3d(300%, -50%, 0); }
 
 .enter-right-centered.ng-enter.ng-enter-active {
-  -webkit-transform: translateX(0%) translateY(-50%);
-  transform: translateX(0%) translateY(-50%); }
+  -webkit-backface-visibility: hidden;
+  -webkit-transform: translate3d(0%, -50%, 0);
+  transform: translate3d(0%, -50%, 0); }
 
 /*# sourceMappingURL=index.css.map */

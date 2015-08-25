@@ -285,14 +285,7 @@
     }
     _visible = visible;
 
-    id fadeSplashScreenValue = [self.commandDelegate.settings objectForKey:[@"FadeSplashScreen" lowercaseString]];
-    id fadeSplashScreenDuration = [self.commandDelegate.settings objectForKey:[@"FadeSplashScreenDuration" lowercaseString]];
-
-    float fadeDuration = fadeSplashScreenDuration == nil ? kSplashScreenDurationDefault : [fadeSplashScreenDuration floatValue];
-
-    if ((fadeSplashScreenValue == nil) || ![fadeSplashScreenValue boolValue]) {
-        fadeDuration = 0;
-    }
+    float fadeDuration = .25f;
 
     // Never animate the showing of the splash screen.
     if (visible) {
@@ -303,10 +296,9 @@
         [self destroyViews];
     } else {
       __weak __typeof(self) weakSelf = self;
-
       [UIView transitionWithView:self.viewController.view
                         duration:fadeDuration
-                         options:UIViewAnimationOptionTransitionNone
+                         options:UIViewAnimationOptionTransitionCrossDissolve
                       animations:^(void) {
                           __typeof(self) strongSelf = weakSelf;
                           if (strongSelf != nil) {
@@ -323,7 +315,7 @@
                               });
                           }
                       }
-      ];      
+      ];
     }
 }
 

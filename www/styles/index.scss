@@ -144,6 +144,11 @@ $iphone-6to6plus: "only screen
     and (orientation : portrait) 
     and (-webkit-min-device-pixel-ratio : 2)";
 
+// The parent of the angular views
+.main_view {
+  -webkit-backface-visibility: hidden;
+}
+
 .intro_screen_container {
   position:absolute;
   top: 0;
@@ -330,6 +335,7 @@ $choose_address__top_bar_height: 3rem;
   background-color: white;
   overflow: auto;
   overflow-y: scroll;
+  overflow-x: hidden;
   -webkit-overflow-scrolling: touch;
 }
 
@@ -368,6 +374,9 @@ $choose_address__padding: 1rem;
   text-transform: none;
   position: relative;
   color: #6E6666;
+  -webkit-backface-visibility: hidden;
+  -webkit-transform: translate3d(0, 0, 0);  
+  transform: translate3d(0, 0, 0); 
 }
 
 .choose_address__cell_border {
@@ -400,8 +409,9 @@ $choose_address__padding: 1rem;
   width: 2.8rem;
   position: absolute;
   top: 50%;
-  -webkit-transform: translateY(-50%);
   right: 1em;
+  -webkit-transform: translate3d(0, -50%, 0);  
+  transform: translate3d(0, -50%, 0); 
 }
 
 
@@ -703,6 +713,9 @@ $sp_bottom_offset: 4%;
   position: absolute;
   left: 1rem;
   right: auto;
+  -webkit-backface-visibility: hidden;
+  -webkit-transform: translate3d(0, -50%, 0);  
+  transform: translate3d(0, -50%, 0); 
 }
 
 .cart_page__cell_text_container {
@@ -751,6 +764,8 @@ $sp_bottom_offset: 4%;
   font-size: 1.3rem;
   text-transform: none;
   text-align: center;
+  -webkit-transform: translate3d(0, 0, 0);  
+  transform: translate3d(0, 0, 0); 
 }
 
 .cart_page__empty_cart {
@@ -826,6 +841,9 @@ $sp_bottom_offset: 4%;
 }
 
 .cart_page__repeated_cell_animated {
+  -webkit-backface-visibility: hidden;
+  -webkit-transform: translate3d(0, 0, 0);  
+  transform: translate3d(0, 0, 0); 
   overflow: hidden;
 }
 
@@ -871,44 +889,52 @@ $sp_bottom_offset: 4%;
 }
 
 .fade-in-500ms.ng-enter {
+  -webkit-backface-visibility: hidden;
   ms-transition: .5s ease-in-out;  
   webkit-transition: .5s ease-in-out;  
   transition:  .5s ease-in-out;  
   opacity: 0;
 }
 .fade-in-500ms.ng-enter.ng-enter-active {
+  -webkit-backface-visibility: hidden;
   opacity: 1;
 }
 .fade-out-500ms.ng-leave {
+  -webkit-backface-visibility: hidden;
   ms-transition: .5s ease-in-out;  
   webkit-transition: .5s ease-in-out;  
   transition:  .5s ease-in-out;  
   opacity: 1;
 }
 .fade-out-500ms.ng-leave.ng-leave-active {
+  -webkit-backface-visibility: hidden;
   opacity: 0;
 }
 
 .leave-right-centered.ng-leave {  
-    -ms-transition: .3s ease-in-out;  
-    -webkit-transition: .3s ease-in-out;  
-    transition:  .3s ease-in-out;  
-    -webkit-transform: translateX(0) translateY(-50%);  
-    transform: translateX(0) translateY(-50%); 
+  -webkit-backface-visibility: hidden;
+  -ms-transition: .3s ease-in-out;  
+  -webkit-transition: .3s ease-in-out;  
+  transition:  .3s ease-in-out;  
+  -webkit-transform: translate3d(0, -50%, 0);  
+  transform: translate3d(0, -50%, 0); 
 }  
 .leave-right-centered.ng-leave.ng-leave-active {  
-    -webkit-transform: translateX(300%) translateY(-50%);  
-    transform: translateX(300%) translateY(-50%); 
+  -webkit-backface-visibility: hidden;
+  -webkit-transform: translate3d(300%, -50%, 0);  
+  transform: translate3d(300%, -50%, 0); 
 } 
 
 .enter-right-centered.ng-enter {  
-    -ms-transition: .3s ease-in-out;  
-    -webkit-transition: .3s ease-in-out;  
-    transition:  .3s ease-in-out;  
-    -webkit-transform: translateX(300%) translateY(-50%);  
-    transform: translateX(300%) translateY(-50%); 
+  -webkit-backface-visibility: hidden;
+  -ms-transition: .3s ease-in-out;  
+  -webkit-transition: .3s ease-in-out;  
+  transition:  .3s ease-in-out;  
+  -webkit-transform: translate3d(300%, -50%, 0);  
+  transform: translate3d(300%, -50%, 0); 
 }  
 .enter-right-centered.ng-enter.ng-enter-active {  
-    -webkit-transform: translateX(0%) translateY(-50%);  
-    transform: translateX(0%) translateY(-50%); 
+  -webkit-backface-visibility: hidden;
+  -webkit-transform: translate3d(0%, -50%, 0);  
+  transform: translate3d(0%, -50%, 0); 
 } 
