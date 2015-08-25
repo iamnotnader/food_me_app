@@ -69,5 +69,9 @@ var app = {
       setTimeout(function () {
         navigator.splashscreen.hide();
       }, 1000);
+      window.alert = function (txt) {
+          navigator.notification.alert(txt, function(){
+          }, "Burgie says..", "hush");
+      };
     }
 };

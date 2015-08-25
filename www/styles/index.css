@@ -256,6 +256,12 @@ h1 {
   right: 0;
   bottom: 8%; }
 
+.choose_cuisine__select_all {
+  text-align: center;
+  font-family: TitleFont;
+  color: #464646;
+  font-size: 1.5rem; }
+
 .choose_address__container {
   height: 100%;
   width: 100%;

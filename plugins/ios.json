@@ -23,6 +23,14 @@
                         {
                             "xml": "<feature name=\"InAppBrowser\"><param name=\"ios-package\" value=\"CDVInAppBrowser\" /></feature>",
                             "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"Notification\"><param name=\"ios-package\" value=\"CDVNotification\" /></feature>",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"Vibration\"><param name=\"ios-package\" value=\"CDVVibration\" /></feature>",
+                            "count": 1
                         }
                     ]
                 }
@@ -32,6 +40,12 @@
                     "CoreGraphics.framework": [
                         {
                             "xml": false,
+                            "count": 2
+                        }
+                    ],
+                    "AudioToolbox.framework": [
+                        {
+                            "xml": true,
                             "count": 2
                         }
                     ]
@@ -53,6 +67,12 @@
             "PACKAGE_NAME": "com.phonegap.helloworld"
         },
         "org.apache.cordova.inappbrowser": {
+            "PACKAGE_NAME": "com.phonegap.helloworld"
+        },
+        "org.apache.cordova.dialogs": {
+            "PACKAGE_NAME": "com.phonegap.helloworld"
+        },
+        "org.apache.cordova.vibration": {
             "PACKAGE_NAME": "com.phonegap.helloworld"
         }
     },

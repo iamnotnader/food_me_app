@@ -43,6 +43,28 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
   $scope.userAddress = fmaLocalStorage.getObject('userAddress');
   // When we get here, we have a valid user token and a valid address.
 
+  // The location the user wants to use when looking for restaurants. This is an
+  // object so we can use it in ng-repeat without scope issues.
+  $scope.selectedCuisineIndices = { value: [] };
+  $scope.isSelected = function(index) {
+    return $scope.selectedCuisineIndices.value.indexOf(index) != -1;
+  };
+
+  // The button at the top lets you select all. We default it to having selected
+  // everything by toggling once.
+  $scope.selectAllButtonSet = true;
+  $scope.toggleSelectAll = function() {
+    $scope.selectAllButtonSet = !$scope.selectAllButtonSet;
+    if ($scope.selectAllButtonSet) {
+      $scope.selectAllText = "select all cuisines";
+      $scope.selectedCuisineIndices = { value: [] };
+    } else {
+      $scope.selectAllText = "deselect all cuisines";
+      $scope.selectedCuisineIndices = { value: _.range(30) };
+    }
+  };
+  $scope.toggleSelectAll();
+
   $scope.isLoading = true;
   var loadStartTime = (new Date()).getTime();
   console.log(JSON.stringify($scope.userAddress));
@@ -66,6 +88,7 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
     fmaLocalStorage.setObject('userCuisines', {});
     $scope.all_cuisines = res.data.cuisines;
     $scope.all_cuisines = $scope.all_cuisines.slice(0, 30);
+    $scope.selectedCuisineIndices = { value: _.range(30) };
     // Make the loading last at least a second.
     var timePassedMs = (new Date()).getTime() - loadStartTime;
     $timeout(function() {
@@ -83,13 +106,6 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
     mainViewObj.addClass('slide-right');
     $location.path('choose_address');
     return;
-  };
-
-  // The location the user wants to use when looking for restaurants. This is an
-  // object so we can use it in ng-repeat without scope issues.
-  $scope.selectedCuisineIndices = { value: [] };
-  $scope.isSelected = function(index) {
-    return $scope.selectedCuisineIndices.value.indexOf(index) != -1;
   };
 
   // Set the selected location index when a user taps a cell.

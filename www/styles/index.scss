@@ -307,6 +307,13 @@ $intro_screen__screenshot_height: (260 / 350) * $intro_screen__phone_height;
   bottom: 8%;
 }
 
+.choose_cuisine__select_all {
+  text-align: center;
+  font-family: TitleFont;
+  color: #464646;
+  font-size: 1.5rem;
+}
+
 
 // The choose address screen.
 .choose_address__container {
