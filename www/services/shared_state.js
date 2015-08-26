@@ -19,6 +19,10 @@ angular.module('foodmeApp.sharedState', [])
       'NM','NY','NC','ND','OH','OK','OR','PA','RI','SC',
       'SD','TN','TX','UT','VT','VA','WA','WV','WI','WY',
     ],
+    getDayAsString: function() {
+      var days = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
+      return days[new Date().getDay()];
+    },
     // Controls how long the loading screen shows for. If you make this too small,
     // the app looks buggy because the loading screen snaps away in the middle of
     // screen transitions.

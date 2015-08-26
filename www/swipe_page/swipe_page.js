@@ -73,7 +73,6 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $q, fmaStack
   $scope.numPicsInStack = 3;
   $scope.showFoodInfo = true;
   $scope.maybeRefreshStack = function() {
-    console.log("Checking refresh: " + $scope.foodDataCursor);
     if ($scope.foodDataCursor % $scope.numPicsInStack !== 0) {
       return;
     }
@@ -138,7 +137,7 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $q, fmaStack
   // and all the images in imageData represent the food in
   //   - foodData[foodDataCursor:foodDataCursor + $scope.foodImageLinks.length]
   var computeJoinedFoodDataImageList = function(foodDataCursor) {
-    console.log('Yay joining foodData and imageLinks!');
+    console.log('Joining foodData and imageLinks!');
     $scope.joinedFoodInfo = [];
     // Note that foodImageLinks always has fewer items than foodData because we
     // populate it conservatively.
@@ -153,7 +152,6 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $q, fmaStack
         imageLinks: $scope.foodImageLinks[x],
       });
     }
-    console.log($scope.joinedFoodInfo);
     // We need to reverse the list we show.
     $scope.joinedFoodInfo.reverse();
 
@@ -183,7 +181,6 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $q, fmaStack
       $scope.foodData = retVars.foodData;
       $scope.foodImageLinks = retVars.foodImageLinks;
 
-      console.log('Final setup.');
       computeJoinedFoodDataImageList($scope.foodDataCursor);
       
       $scope.isLoading = false;

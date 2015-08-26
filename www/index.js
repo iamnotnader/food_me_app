@@ -31,6 +31,7 @@ var initAngularStuff = function() {
     'foodMeApp.chooseCuisine',
     'foodMeApp.swipePage',
     'foodMeApp.cartPage',
+    'foodMeApp.chooseCard',
   ]).
   config(['$routeProvider',
       function($routeProvider) {

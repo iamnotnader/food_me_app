@@ -21,9 +21,9 @@
           <div class="choose_address__cell_border" ng-if="userCart.length < 5 || ($index !== userCart.length - 1)"></div>
         </div>
         </div>
-    </div>
-    <div class="cart_page__empty_cart" ng-if="userCart.length === 0">
-      Nothing in your cart-- swipe on, babeh!
+      <div class="cart_page__empty_cart" ng-if="userCart.length === 0">
+        Nothing in your cart-- swipe on, babeh!
+      </div>
     </div>
   </div>
   <div ng-if="userCart.length > 0" class="cart_page__clear_cart fade-out-500ms"
@@ -32,7 +32,7 @@
   </div>
   <div class="choose_address__top_bar">
     <div class="choose_address__middle_text">Edit Cart</div>
-    <div class="choose_address__right_text" ng-click="">Finish</div>
+    <div class="choose_address__right_text" ng-click="cartFinishButtonPressed()">Finish</div>
     <div class="choose_address__left_text" ng-click="cartBackButtonPressed()">Back</div>
     <div class="choose_address__cell_border"></div>
   </div>

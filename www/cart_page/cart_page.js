@@ -84,127 +84,90 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $q, fmaStack
       console.warn("Could not find item in menu!");
       console.warn(cartItem);
       console.warn(menuArr);
-    } else {
-      console.log("We found the money!");
     }
     return cartItemDetails;
   };
 
-  // Remove all the cart items that we couldn't get menu information for.
-  // This is a little sneaky in the sense that the user will have added something
-  // to the cart and then not see it ever again.
-  var removeMissingCartItemsAndSave = function(userCart, cartItemsNotFound) {
-    var userCartRet = _.reject(userCart, function(itemBeingChecked) {
-      for (var notFoundIndex = 0; notFoundIndex < cartItemsNotFound.length;
-            notFoundIndex++) {
-        var itemNotFound = cartItemsNotFound[notFoundIndex];
-        if (itemNotFound === itemBeingChecked) {
-          return true;
-        }
-      }
-      return false;
-    });
-
-    // Save the userCart, since now we know it has good items in it.
-    fmaLocalStorage.setObjectWithExpirationSeconds(
-        'userCart', userCartRet,
-        fmaSharedState.testing_invalidation_seconds);
-    return userCartRet;
-  };
-
-  var getOptionsForItem = function(singleItem) {
-    console.log('Getting options');
-    var optionsToReturn = [];
-    var requiredOptionGroups = [];
-    for (var v1 = 0; v1 < singleItem.children.length; v1++) {
-      // Find the option groups with min_selection > 0.
-      var currentChild = singleItem.children[v1];
-      if (currentChild.min_selection > 0) {
-        requiredOptionGroups.push(currentChild);
-      }
-    }
-
-    for (v1 = 0; v1 < requiredOptionGroups.length; v1++) {
-      // We shuffle the options, then sort them by price and pick the first ones
-      // until we have enough to satisfy min_selection. Works because sort is
-      // stable.
-      var requiredOG = requiredOptionGroups[v1];
-      requiredOG.children = _.shuffle(requiredOG.children);
-      requiredOG.children.sort(function(option1, option2) {
-        return option1.price - option2.price;
-      });
-      for (v2 = 0; v2 < requiredOG.min_selection; v2++) {
-        var chosenOption = requiredOG.children[v2];
-        optionsToReturn.push(chosenOption);
-        if (chosenOption.children.length > 0) {
-          // This is weird to me but options can have their own option groups, so
-          // we have to recurse on the option's children to add more possible
-          // options.
-          console.log("Recurring.");
-          var optionsForOption = getOptionsForItem(chosenOption);          
-          optionsToReturn = optionsToReturn.concat(optionsForOption);
-        }
-      }
-    }
-    return optionsToReturn;
-  };
-
-  var constructRequestFromOptions = function(optionsForItem) {
-    requestObj = {};
-    for (var v1 = 0; v1 < optionsForItem.length; v1++) {
-      var currentOption = optionsForItem[v1];
-      var amount = 1;
-      if (currentOption.increment != null) {
-        amount = currentOption.increment;
-      }
-      // Set the minimum amount necessary to make this order work.
-      requestObj[currentOption.id] = amount;
-    }
-    return requestObj;
-  };
-
-  // Takes all of the menu items (cartItemsFound), looks at their options, and
-  // constructs "proper" Item objects that we can then pass to the delivery.com
-  // cart API.
-  //
-  // https://developers.delivery.com/customer-cart/#item-object
-  var createRequestsFromItems = function(cartItemsFound) {
-    // One request object for each thing in cartItemsFound.
-    var finalItemRequestObjects = [];
-    for (var v1 = 0; v1 < cartItemsFound.length; v1++) {
-      var currentItem = cartItemsFound[v1];
-      var optionsForItem = getOptionsForItem(currentItem);
-      // Add the selected options to the currentItem for fun.
-      currentItem.selectedOptions = optionsForItem;
-
-      // Create the actual request object.
-      var optionRequestObject = constructRequestFromOptions(optionsForItem);
-      var itemRequestObject = {
-        item_id: currentItem.navigation_id,
-        item_qty: 1,
-        // TODO(daddy): Make it so user can add instructions.
-        instructions: "",
-        option_qty: optionRequestObject,
-      };
-      var finalRequestObject = {
-        order_type: "delivery",
-        client_id: fmaSharedState.client_id,
-        item: itemRequestObject,
-      };
-      // Add the request object to our list.
-      finalItemRequestObjects.push(finalRequestObject);
-    }
-    return finalItemRequestObjects;
-  };
-
   $scope.removeFromCart = function(index) {
     console.log("Removing item " + index);
-    // If we're using a fake token, we don't confirm.
     $scope.userCart.splice(index, 1);
     fmaLocalStorage.setObjectWithExpirationSeconds(
         'userCart', $scope.userCart,
         fmaSharedState.testing_invalidation_seconds);
+    // Remember itemDetailsFound is just a more detailed version of the userCart and
+    // we keep both in sync.
+    // Yes, I know this is shitty -- sue me.
+    $scope.itemDetailsFound.splice(index, 1);
   };
+
+  // ------------------------------------------------------------------------ //
+  // TODO(daddy): Code between these dashes is toxic and should be moved and/or
+  // removed.
+
+  // TODO(daddy): I can hear this function softly crying "killll meeeeee!"
+  var getOpenSchedules = function(scheduleArr) {
+    currentDay = fmaSharedState.getDayAsString();
+    if (scheduleArr != null && scheduleArr.length > 0) {
+      var validSchedules = [];
+      for (var scheduleI = 0; scheduleI < scheduleArr.length; scheduleI++) {
+        var isValidSchedule = false;
+        var currentSchedule = scheduleArr[scheduleI];
+        for (var dayI = 0; dayI < currentSchedule.times.length; dayI++) {
+          var scheduleDay = currentSchedule.times[dayI]; 
+          if (scheduleDay.day === currentDay) {
+            var from = new Date(scheduleDay.from);
+            var to = new Date(scheduleDay.to);
+            var now = new Date();
+            if (now > from && now < to) {
+              isValidSchedule = true;
+              break;
+            }
+          }
+        }
+        if (isValidSchedule) {
+          validSchedules.push(currentSchedule);
+        }
+      }
+      return validSchedules;
+    }
+    return "all_valid";
+  };
+
+  var openMenus = function(menuArr, scheduleArr) {
+    var openSchedules = getOpenSchedules(scheduleArr);
+    if (openSchedules === "all_valid") {
+      return menuArr;
+    }
+
+    if (openSchedules == null || openSchedules.length === 0) {
+      return [];
+    }
+
+    var validMenus = [];
+    for (var v1 = 0; v1 < menuArr.length; v1++) {
+      var currentMenu = menuArr[v1];
+      var currentSchedules = currentMenu.schedule;
+      if (currentSchedules == null || currentSchedules.length === 0) {
+        continue;
+      }
+      var schedulesOverlap = false;
+      for (var v2 = 0; v2 < currentSchedules.length; v2++) {
+        for (var v3 = 0; v3 < openSchedules.length; v3++) {
+          if (currentSchedules[v2] === openSchedules[v3].id) {
+            schedulesOverlap = true;
+            break;
+          }
+        }
+      }
+      if (schedulesOverlap) {
+        validMenus.push(currentMenu);
+      }
+    }
+    return validMenus;
+  };
+
+  // -------------------------------------------------------------------------//
+  // ------------------------------------------------------------------------ //
 
   var setCartTotal = function() {
     var total = 0.0;
@@ -226,9 +189,9 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $q, fmaStack
 
   if ($scope.userCart.length > 0) {
     // Run the heavy stuff after the view has rendered.
-    $scope.cartItemsFound = [];
     $scope.isLoading = true;
     $scope.cartItemsNotFound = [];
+    $scope.itemDetailsFound = [];
     var loadStartTime = (new Date()).getTime();
     $scope.isLoading = true;
     $timeout(function() {
@@ -239,24 +202,43 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $q, fmaStack
           .then(
             function(res) {
               var menuArr = res.data.menu;
+              // TODO(daddy): Culling down the menus like this is necessary for
+              // now, but in the long run the food should be culled down before
+              // the swipe page.
+              menuArr = openMenus(menuArr, res.data.schedule);
               cartItemDetails = findMenuItem(menuArr, cartItem);
               if (cartItemDetails == null) {
+                // This isn't used right now other than for its length property below.
                 $scope.cartItemsNotFound.push(cartItem);
               } else {
-                $scope.cartItemsFound.push(cartItemDetails);
+                $scope.itemDetailsFound.push({
+                  cart_item: cartItem,
+                  item_details: cartItemDetails,
+                });
               }
               if ($scope.cartItemsNotFound.length +
-                  $scope.cartItemsFound.length == $scope.userCart.length) {
-                // Now we've attempted to load all the items. Set the options for
-                // all the ones we got back and remove all the ones we couldn't
-                // load from the cart surreptitiously...
-                $scope.userCart = removeMissingCartItemsAndSave($scope.userCart, $scope.cartItemsNotFound);
+                  $scope.itemDetailsFound.length == $scope.userCart.length) {
+                if ($scope.cartItemsNotFound.length > 0) {
+                  alert("Doh! Some of the items in your cart were actually unavailable " +
+                        "when we checked  the merchant's menu. This can happen occasionally " +
+                        "but will be fixed in the next release. You can get around it for now by swiping " +
+                        "right on more than one thing before heading to your cart. Fun fact: food is " +
+                        "polygamous.");
+                }
+                // Sync the userCart with the itemDetailsFound. This is a little sneaky
+                // because it will surreptitiously drop items that we didn't find above.
+                // Note that the userCart is basically a shittier version of itemDetailsFound
+                // at this point. We keep the two in sync but the itemDetailsFound is really
+                // a strictly more detailed version of the userCart.
+                $scope.userCart = [];
+                for (var v1 = 0; v1 < $scope.itemDetailsFound.length; v1++) {
+                  $scope.userCart.push($scope.itemDetailsFound[v1].cart_item);
+                }
+                // Save the userCart, since now we know it has good items in it.
+                fmaLocalStorage.setObjectWithExpirationSeconds(
+                    'userCart', $scope.userCart,
+                    fmaSharedState.testing_invalidation_seconds);
 
-                // At this point, userCart should have the same items as cartItemsFound, but
-                // with cartItemsFound having more information.
-                $scope.itemRequestObjects = createRequestsFromItems($scope.cartItemsFound);
-                console.log($scope.userCart);
-                console.log($scope.itemRequestObjects);
                 console.log('Done!');
                 // Make the loading last at least a second.
                 var timePassedMs = (new Date()).getTime() - loadStartTime;
@@ -283,12 +265,43 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $q, fmaStack
     $location.path('/swipe_page');
   };
 
+  $scope.cartFinishButtonPressed = function() {
+    if ($scope.userCart.length === 0) {
+      alert('Bro, you need SOMETHING in your cart first. ' +
+            'Go back and swipe-- the food loves you.');
+      return;
+    }
+    // Cull down $scope.itemRequestObjects to get it in line with cartItems.
+    // Save cartItems
+    // Save itemRequestObjects
+    console.log('Finish button pressed.');
+    // First thing's first. Save the cart.
+    fmaLocalStorage.setObjectWithExpirationSeconds(
+        'userCart', $scope.userCart,
+        fmaSharedState.testing_invalidation_seconds);
+
+    // Here is where we finally actually save itemDetailsFound. We will use
+    // it in the cards page to actually update the delivery.com cart.
+    fmaLocalStorage.setObjectWithExpirationSeconds(
+        'itemDetailsFound', $scope.itemDetailsFound,
+        fmaSharedState.testing_invalidation_seconds);
+
+    console.log('Back button pressed.');
+    mainViewObj.removeClass();
+    mainViewObj.addClass('slide-left');
+    $location.path('/choose_card');
+  };
+
   $scope.cartPageClearCartPressed = function() {
     console.log('Clear cart pressed.');
     $scope.userCart = [];
     fmaLocalStorage.setObjectWithExpirationSeconds(
         'userCart', [],
         fmaSharedState.testing_invalidation_seconds);
+    // Remember itemDetailsFound is just a more detailed version of the userCart and
+    // we keep both in sync.
+    // Yes, I know this is shitty -- sue me.
+    $scope.itemDetailsFound.splice(index, 1);
   };
   
 }]);
