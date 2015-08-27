@@ -39,7 +39,7 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
   $scope.selectedLocationIndex = { value: null };
   $scope.locationList = {};
   $http.defaults.headers.common.Authorization = $scope.rawAccessToken;
-  $http.get('https://api.delivery.com/customer/location?client_id=' + fmaSharedState.client_id).then(
+  $http.get(fmaSharedState.endpoint+'/customer/location?client_id=' + fmaSharedState.client_id).then(
     function(res) {
       $scope.locationList = res.data.locations;
       console.log(JSON.stringify($scope.locationList));

@@ -18,7 +18,7 @@ function(fmaLocalStorage, $http, fmaSharedState, $q) {
     // HTTP request to get all the stuff, then process it into a list of food.
     return $q(function(resolve, reject) {
       $http.defaults.headers.common.Authorization = token;
-      $http.get('https://api.delivery.com/merchant/search/delivery?' + 
+      $http.get(fmaSharedState.endpoint + '/merchant/search/delivery?' + 
                 'client_id=' + fmaSharedState.client_id + '&' +
                 'latitude=' + latitude + '&' +
                 'longitude=' + longitude + '&' +

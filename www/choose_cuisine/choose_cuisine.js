@@ -69,7 +69,7 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
   var loadStartTime = (new Date()).getTime();
   console.log(JSON.stringify($scope.userAddress));
   $http.defaults.headers.common.Authorization = $scope.rawAccessToken;
-  $http.get('https://api.delivery.com/merchant/search/delivery?' + 
+  $http.get(fmaSharedState.endpoint+'/merchant/search/delivery?' + 
             'client_id=' + fmaSharedState.client_id + '&' +
             'latitude=' + $scope.userAddress.latitude + '&' +
             'longitude=' + $scope.userAddress.longitude + '&' +

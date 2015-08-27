@@ -104,7 +104,7 @@ function($scope, $location, $http, fmaLocalStorage, fmaSharedState, $rootScope) 
   // This URL gives us back an access code, which we can then exchange for an
   // access token. What follows is a dance between us and delivery.com to get
   // the sweet, sweet access token that we need to do everything.
-  $scope.oauthUrl = 'https://api.delivery.com/third_party/account/create?' +
+  $scope.oauthUrl = fmaSharedState.endpoint+'/third_party/account/create?' +
                     'client_id=' + fmaSharedState.client_id + '&' +
                     'redirect_uri=' + fmaSharedState.redirect_uri + '&' +
                     'response_type=code&' +
@@ -134,8 +134,8 @@ function($scope, $location, $http, fmaLocalStorage, fmaSharedState, $rootScope) 
         // of the controller. Note that this is obviously super insecure.
         $http({
           method: "post",
-          url: "https://api.delivery.com/third_party/access_token",
-          data: 'client_id=NDIyZDg1MjA0M2M4Y2NhYzgxOGY1NDhjMmE0YTIwMTJh&' +
+          url: fmaSharedState.endpoint+'/third_party/access_token',
+          data: 'client_id='+fmaSharedState.client_id+'&' +
                 'redirect_uri=http://localhost:3000&' +
                 'grant_type=authorization_code&' +
                 'client_secret=' + fmaSharedState.client_secret + '&' +

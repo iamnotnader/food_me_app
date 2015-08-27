@@ -195,7 +195,7 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
       for (var v1 = 0; v1 < itemDetails.length; v1++) {
         $http({
           method: 'DELETE',
-          url: 'https://api.delivery.com/customer/cart/'+itemDetails[v1].cart_item.merchantId+'?client_id=' + fmaSharedState.client_id,
+          url: fmaSharedState.endpoint+'/customer/cart/'+itemDetails[v1].cart_item.merchantId+'?client_id=' + fmaSharedState.client_id,
           headers: {
             "Authorization": $scope.rawAccessToken,
             "Content-Type": "application/json",
@@ -230,7 +230,7 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
           // Add all items to the user's delivery.com cart.
           $http({
             method: 'POST',
-            url: 'https://api.delivery.com/customer/cart/'+itemDetails[x1].cart_item.merchantId+'?client_id=' + fmaSharedState.client_id,
+            url: fmaSharedState.endpoint+'/customer/cart/'+itemDetails[x1].cart_item.merchantId+'?client_id=' + fmaSharedState.client_id,
             data: $scope.itemRequestObjects[x1],
             headers: {
               "Authorization": $scope.rawAccessToken,

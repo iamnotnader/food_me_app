@@ -198,7 +198,7 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $q, fmaStack
       for (var x = 0; x < $scope.userCart.length; x++) {
         (function(cartIndex) {
           var cartItem = $scope.userCart[cartIndex];
-          $http.get('https://api.delivery.com/merchant/'+cartItem.merchantId+'/menu?client_id=' + fmaSharedState.client_id)
+          $http.get(fmaSharedState.endpoint+'/merchant/'+cartItem.merchantId+'/menu?client_id=' + fmaSharedState.client_id)
           .then(
             function(res) {
               var menuArr = res.data.menu;

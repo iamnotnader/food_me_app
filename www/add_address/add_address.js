@@ -55,7 +55,7 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState) {
     console.log($scope.rawAccessToken);
     $http({
       method: 'POST',
-      url: 'https://api.delivery.com/customer/location?client_id=' + fmaSharedState.client_id,
+      url: fmaSharedState.endpoint + '/customer/location?client_id=' + fmaSharedState.client_id,
       data: dataObj,
       headers: {
         "Authorization": $scope.rawAccessToken,
