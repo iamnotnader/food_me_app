@@ -1,4 +1,24 @@
-angular.module('foodMeApp.chooseCard', ['ngRoute', 'ngTouch', 'foodmeApp.localStorage', 'foodmeApp.sharedState'])
+//----------------------------------------------------------------------------------
+// The following is the list of steps we take in this controller.
+//
+// Asynchronously:
+//   Get the itemDetailsFound
+//   Make sure it matches up exactly with the userCart (if they don't, reset both
+//   and return to the cart page or something.)
+//   If they match, construct a request object for each item consisting of a link and an object
+//   Clear the old cart
+//   Send all the request objects
+//
+// What the user sees:
+//   Get the credit cards
+//   Make them pick one
+//   Potentially add one
+//   Send the transaction through when they hit finish.
+//
+//----------------------------------------------------------------------------------
+
+
+angular.module('foodMeApp.chooseCard', ['ngRoute', 'ngTouch', 'foodmeApp.localStorage', 'foodmeApp.sharedState', 'foodmeApp.cartHelper'])
 
 .config(['$routeProvider', function($routeProvider) {
   $routeProvider.when('/choose_card', {
@@ -7,8 +27,8 @@ angular.module('foodMeApp.chooseCard', ['ngRoute', 'ngTouch', 'foodmeApp.localSt
   });
 }])
 
-.controller('ChooseCardCtrl', ["$scope", "$location", "fmaLocalStorage", "$http", "fmaSharedState", "$rootScope", "$timeout", "$q",
-function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, $timeout, $q) {
+.controller('ChooseCardCtrl', ["$scope", "$location", "fmaLocalStorage", "$http", "fmaSharedState", "$rootScope", "$timeout", "$q", "fmaCartHelper", "$route",
+function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, $timeout, $q, fmaCartHelper, $route) {
   var mainViewObj = $('#main_view_container');
 
   // On this screen, we need a valid user token. If we are missing one, we need
@@ -55,129 +75,35 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
   // If we get here, we have a valid user token AND userCart is nonempty AND
   // itemDetailsFound matches up with userCart. Woohoo!
 
-//----------------------------------------------------------------------------------
-//TODO(daddy): Either delete or use the code below.
-
-  // Get the itemDetailsFound
-  // Make sure it matches up exactly with the userCart (if they don't, reset both and return to the cart page or something.)
-  // --
-  // If they match, construct a request object for each item consisting of a link and an object
-  // Clear the old cart
-  // Send all the request objects
-  // Check that it updated the cart on delivery.com
-  // Get the credit cards
-  // Make them pick one
-  // Potentially add one
-  // Send the transaction through.
-
-
-  //$scope.selectedCardIndex = { value: null };
-
-  //// Set the selected location index when a user taps a cell.
-  //$scope.cellSelected = function(indexSelected) {
-    //console.log('Cell selected: ' + indexSelected);
-    //$scope.selectedLocationIndex.value = indexSelected;
-  //};
-
-
-  //$scope.cardList = [];
-
-                //// At this point, userCart should have the same items as itemDetailsFound, but
-                //// with itemDetailsFound having strictly more information per entry. They should
-                //// also be in the same order.
-                //$scope.itemRequestObjects = createRequestsFromItems($scope.itemDetailsFound);
-                //console.log($scope.userCart);
-                //console.log($scope.itemRequestObjects);
-
-    //// At this point, userCart should have the same items as cartItemsFound, but
-    //// with cartItemsFound having more information.
-    //$scope.itemRequestObjects = createRequestsFromItems($scope.userCart);
-
-//----------------------------------------------------------------------------------
-
-  var getOptionsForItem = function(singleItem) {
-    console.log('Getting options');
-    var optionsToReturn = [];
-    var requiredOptionGroups = [];
-    for (var v1 = 0; v1 < singleItem.children.length; v1++) {
-      // Find the option groups with min_selection > 0.
-      var currentChild = singleItem.children[v1];
-      if (currentChild.min_selection > 0) {
-        requiredOptionGroups.push(currentChild);
-      }
-    }
-
-    for (v1 = 0; v1 < requiredOptionGroups.length; v1++) {
-      // We shuffle the options, then sort them by price and pick the first ones
-      // until we have enough to satisfy min_selection. Works because sort is
-      // stable.
-      var requiredOG = requiredOptionGroups[v1];
-      requiredOG.children = _.shuffle(requiredOG.children);
-      requiredOG.children.sort(function(option1, option2) {
-        return option1.price - option2.price;
-      });
-      for (v2 = 0; v2 < requiredOG.min_selection; v2++) {
-        var chosenOption = requiredOG.children[v2];
-        optionsToReturn.push(chosenOption);
-        if (chosenOption.children.length > 0) {
-          // This is weird to me but options can have their own option groups, so
-          // we have to recurse on the option's children to add more possible
-          // options.
-          console.log("Recurring.");
-          var optionsForOption = getOptionsForItem(chosenOption);          
-          optionsToReturn = optionsToReturn.concat(optionsForOption);
+  $scope.isLoading = true;
+  var loadStartTime = (new Date()).getTime();
+  $scope.cardList = [];
+  $scope.selectedCardIndex = { value: null };
+  $http.defaults.headers.common.Authorization = $scope.rawAccessToken;
+  $http.get(fmaSharedState.endpoint+'/customer/cc?client_id=' + fmaSharedState.client_id)
+  .then(
+    function(res) {
+      $scope.cardList = res.data.cards;
+      var currentCard = fmaLocalStorage.getObject('userCreditCard');
+      if (currentCard != null) {
+        for (var i = 0; i < $scope.cardList.length; i++) {
+          if ($scope.cardList[i].cc_id === currentAddress.cc_id) {
+            $scope.selectedCardIndex.value = i;
+            break;
+          }
         }
       }
-    }
-    return optionsToReturn;
-  };
-
-  var constructRequestFromOptions = function(optionsForItem) {
-    requestObj = {};
-    for (var v1 = 0; v1 < optionsForItem.length; v1++) {
-      var currentOption = optionsForItem[v1];
-      var amount = 1;
-      if (currentOption.increment != null) {
-        amount = currentOption.increment;
-      }
-      // Set the minimum amount necessary to make this order work.
-      requestObj[currentOption.id] = amount;
-    }
-    return requestObj;
-  };
-
-  // Takes all of the menu items (cartItemsFound), looks at their options, and
-  // constructs "proper" Item objects that we can then pass to the delivery.com
-  // cart API.
-  //
-  // https://developers.delivery.com/customer-cart/#item-object
-  var createRequestsFromItems = function(itemDetails) {
-    // One request object for each thing in itemDetails.
-    var finalItemRequestObjects = [];
-    for (var v1 = 0; v1 < itemDetails.length; v1++) {
-      var currentItem = itemDetails[v1].item_details;
-      var optionsForItem = getOptionsForItem(currentItem);
-      // Add the selected options to the currentItem for fun.
-      currentItem.selectedOptions = optionsForItem;
-
-      // Create the actual request object.
-      var optionRequestObject = constructRequestFromOptions(optionsForItem);
-      var itemRequestObject = {
-        item_id: currentItem.id,
-        item_qty: 1,
-        instructions: "Nader Al-Naji is GOD!",
-        option_qty: optionRequestObject,
-      };
-      var finalRequestObject = {
-        order_type: "delivery",
-        client_id: fmaSharedState.client_id,
-        item: itemRequestObject,
-      };
-      // Add the request object to our list.
-      finalItemRequestObjects.push(finalRequestObject);
-    }
-    return finalItemRequestObjects;
-  };
+      // Make the loading last at least a second.
+      var timePassedMs = (new Date()).getTime() - loadStartTime;
+      $timeout(function() {
+        $scope.isLoading = false;
+      }, Math.max(fmaSharedState.minLoadingMs - timePassedMs, 0));
+    },
+    function(err) {
+      alert('Error fetching cards: ' + err.statusText);
+      console.log(err);
+      return;
+  });
 
 
   $scope.chooseCardBackPressed = function() {
@@ -188,116 +114,86 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
     return;
   };
 
-  var clearCartsPromise = function(itemDetails) {
-    return $q(function(resolve, reject) {
-      var successfulPromisesReturned = 0;
-      var failedPromisesReturned = 0;
-      for (var v1 = 0; v1 < itemDetails.length; v1++) {
-        $http({
-          method: 'DELETE',
-          url: fmaSharedState.endpoint+'/customer/cart/'+itemDetails[v1].cart_item.merchantId+'?client_id=' + fmaSharedState.client_id,
-          headers: {
-            "Authorization": $scope.rawAccessToken,
-            "Content-Type": "application/json",
-          }
-        }).then(
-          function(res) {
-            successfulPromisesReturned++;
-            if (successfulPromisesReturned +
-                failedPromisesReturned === itemDetails.length) {
-              resolve();
-            }
-          },
-          function(err) {
-            console.log(err);
-            failedPromisesReturned++;
-            if (successfulPromisesReturned +
-                failedPromisesReturned === itemDetails.length) {
-              resolve();
-            }
-          }
-        );
-      }
-    });
-  }
+  $scope.chooseCardFinishPressed = function() {
+    console.log('Finish button pressed.');
 
-  var addCartsPromise = function(itemDetails, itemRequestObjects) {
-    return $q(function(resolve, reject) {
-      var successfulPromisesReturned = 0;
-      var failedPromisesReturned = 0;
-      for (var v1 = 0; v1 < itemDetails.length; v1++) {
-        (function (x1) {
-          // Add all items to the user's delivery.com cart.
-          $http({
-            method: 'POST',
-            url: fmaSharedState.endpoint+'/customer/cart/'+itemDetails[x1].cart_item.merchantId+'?client_id=' + fmaSharedState.client_id,
-            data: $scope.itemRequestObjects[x1],
-            headers: {
-              "Authorization": $scope.rawAccessToken,
-              "Content-Type": "application/json",
-            }
-          }).then(
-            function(res) {
-              successfulPromisesReturned++;
-              if (successfulPromisesReturned +
-                  failedPromisesReturned === itemDetails.length) {
-                resolve();
-              }
-            },
-            function(err) {
-              alert("Doh! One of the items in your cart couldn't actually be " +
-                    "bought. This should never happen-- call me: 212-729-6389.");
-              console.log("One item couldn't be added to cart.");
-              console.log(err);
-              failedPromisesReturned++;
-              if (successfulPromisesReturned +
-                  failedPromisesReturned === itemDetails.length) {
-                resolve();
-              }
-            }
-          );
-        })(v1);
+    // WE NEED TO CHECKK finishedUploadingCartItems here!!!
+    if (!$scope.finishedUploadingCartItems) {
+      alert("Wait! I'm still uploading some of your information " +
+            "in the background. Give me like ten seconds tops.");
+      return;
+    }
+
+    if ($scope.selectedCardIndex.value == null) {
+      alert("SELECT A CARD. DO AS I SAY. I AM GOD.");
+      return;
+    }
+
+    var foodNames = [];
+    var sum = 0.0;
+    for (var v1 = 0; v1 < $scope.userCart.length; v1++) {
+      foodNames.push($scope.userCart[v1].name + ': $' + $scope.userCart[v1].price);
+      sum += parseFloat($scope.userCart[v1].price);
+    }
+    confirm("Ready to order the following?\n\n" + foodNames.join('\n') +
+            '\n\nFor a total of: $' + sum.toFixed(2) + '?',
+      function(index) {
+        if (index === 1) {
+          // Dude.. this is the money.
+          alert("Thanks! I just took your money and your order will arrive in less " +
+                "than half an hour. Unless it doesn't. It probably will, though, " +
+                "maybe.");
+        }
+      }
+    )
+    return;
+  };
+
+  // Set the selected location index when a user taps a cell.
+  $scope.cellSelected = function(indexSelected) {
+    console.log('Cell selected: ' + indexSelected);
+    $scope.selectedCardIndex.value = indexSelected;
+  };
+
+  $scope.addCardButtonPressed = function() {
+    console.log('Add card pressed!');
+    var addCardUrl = fmaSharedState.endpoint+'/third_party/credit_card/add?' +
+                    'client_id=' + fmaSharedState.client_id + '&' +
+                    'redirect_uri=' + fmaSharedState.redirect_uri + '&' +
+                    'response_type=code&' +
+                    'scope=global&';
+
+    var ref = window.open(addCardUrl, '_blank',
+        'location=yes,transitionstyle=crossdissolve');
+    ref.addEventListener('loadstart', function(event) {
+      var url = event.url;
+      if (url.indexOf(fmaSharedState.redirect_uri) === 0) {
+        // We use $route.reload to force a reload of the card list.
+        mainViewObj.removeClass();
+        $route.reload();
+
+        ref.close();
+        return;
       }
     });
   };
 
-  // Actual init.
-  $scope.itemRequestObjects = createRequestsFromItems($scope.itemDetailsFound);
-  var very_sorry =
-    "One or more of the items in your cart aren't actually available " +
-    "right now because it's dinner time and they're lunch-only items or " +
-    "something like that. Go back to the cart page and try removing the " +
-    "offending item :*( I promise this will be fixed soon!!!";
-  // Clear the user's cart.
-  clearCartsPromise($scope.itemDetailsFound)
+  // We need to upload all the cart items in the background.
+  $scope.finishedUploadingCartItems = false;
+  fmaCartHelper.clearCartThenUpdateCartPromise($scope.itemDetailsFound, $scope.rawAccessToken)
   .then(
-    // At this point the cart should be cleared.
     function(res) {
-      addCartsPromise($scope.itemDetailsFound, $scope.itemRequestObjects)
-      .then(
-        function(res) {
-          // Cleared the cart and refreshed it with all our new items
-          // YAY!
-          // 
-          // TODO(daddy): Card-related stuff goes here maybe. Actually we can
-          // get it while we're getting the details maybe.
-        },
-        function(err) {
-          alert(very_sorry);
-          mainViewObj.removeClass();
-          mainViewObj.addClass('slide-right');
-          $location.path('/cart_page');
-          return;
-        }
-      )
+      // In this case, we uploaded all the cart items to delivery.com successfully.
+      $scope.finishedUploadingCartItems = true;
     },
     function(err) {
-      // We can't ever get here because clearCartsPromise always resolves.
-      alert(very_sorry);
+      // In this, someof the items in the cart didn't get uploaded, which is very
+      // bad and should never happen.
       mainViewObj.removeClass();
       mainViewObj.addClass('slide-right');
       $location.path('/cart_page');
       return;
     }
   );
+
 }]);

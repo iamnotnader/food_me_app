@@ -56,8 +56,9 @@ function(fmaLocalStorage, $http, fmaSharedState, $q) {
           var recommendedItemObj = currentMerchant.summary.recommended_items;
           var recommendedItemIds = Object.keys(recommendedItemObj);
           for (var itemI = 0; itemI < recommendedItemIds.length; itemI++) {
-            // Add a few extra details we want to show.
             var currentItem = recommendedItemObj[recommendedItemIds[itemI]];
+
+            // Add a few extra details we want to show.
             currentItem.id = recommendedItemIds[itemI];
             currentItem.name = he.decode(currentItem.name);
             currentItem.merchantName = he.decode(currentMerchant.summary.name);
@@ -65,6 +66,11 @@ function(fmaLocalStorage, $http, fmaSharedState, $q) {
             currentItem.merchantLogo = currentMerchant.summary.merchant_logo;
             currentItem.merchantId = currentMerchant.id;
             currentItem.merchantCuisines = currentMerchant.summary.cuisines;
+
+            if (currentItem.name == null || currentItem.merchantName == null ||
+                currentItem.price == null) {
+              continue;
+            }
 
             // Add the processed item to our foodData list!
             foodData.push(currentItem);
@@ -96,6 +102,11 @@ function(fmaLocalStorage, $http, fmaSharedState, $q) {
   // foodData.
   var asyncGetFoodImageLinks = function(foodData, foodDataCursor, numPicsToFetch) {
     console.log('Asynchronously getting all the image data.');
+
+    if (numPicsToFetch === 0) {
+      return {foodImageLinks: []};
+    }
+
     // Sorry the below code is a little confusing-- I'm not a huge fan of
     // Google's API. We actually process the images in searchComplete.
     return $q(function(resolve, reject) { 

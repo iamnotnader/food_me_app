@@ -23,7 +23,7 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
   } else if ($scope.userToken != null && _.has($scope.userToken, 'access_token')) {
     $scope.rawAccessToken = $scope.userToken.access_token;
   }
-  if ($scope.rawAccessToken === null) {
+  if ($scope.rawAccessToken == null) {
     alert('In order to choose an address, we need you to log in first.');
     mainViewObj.removeClass();
     mainViewObj.addClass('slide-right');
@@ -42,7 +42,6 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
   $http.get(fmaSharedState.endpoint+'/customer/location?client_id=' + fmaSharedState.client_id).then(
     function(res) {
       $scope.locationList = res.data.locations;
-      console.log(JSON.stringify($scope.locationList));
       var currentAddress = fmaLocalStorage.getObject('userAddress');
       if (currentAddress != null) {
         for (var i = 0; i < $scope.locationList.length; i++) {

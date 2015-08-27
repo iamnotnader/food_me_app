@@ -1,7 +1,7 @@
 // This is the most important variable in the whole codebase. If it's set
 // to true, we're in testing mode, which means we hit sandbox.delivery.com.
 // Otherwise, we're in prod mode, which means we hit api.delivery.com.
-var testModeEnabled = true;
+var testModeEnabled = false;
 
 angular.module('foodmeApp.sharedState', [])
 
@@ -61,7 +61,7 @@ angular.module('foodmeApp.sharedState', [])
 
     // Testing
     stateObj.testing_invalidation_seconds = 60 * 60;
-    stateObj.fake_token = 'NfBks3s3F7CyCA1QMIzvHVZF5EvZ1h3Xqez3xvCg';
+    stateObj.fake_token = 'R1Ooz3vPDIzDWbQ1q4pNyrRgNn3c0Leax2ebtH6a';
   };
 
   return stateObj;

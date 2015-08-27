@@ -72,7 +72,16 @@ var app = {
       }, 1500);
       window.alert = function (txt) {
           navigator.notification.alert(txt, function(){
-          }, "Burgie says..", "hush");
+          }, "Burgie says..", "hush, burgie");
+      };
+      window.confirm = function(txt, callback) {
+        navigator.notification.confirm(
+          txt,   // message
+          callback,    // callback to invoke with index of button pressed
+          'Burgie wants to know..',           // title
+          ['Sounds chill.', "No thanks, I hate food."]         // buttonLabels
+        );
+        return ret;
       };
     }
 };

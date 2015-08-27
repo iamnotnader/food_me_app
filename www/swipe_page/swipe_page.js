@@ -172,7 +172,6 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $q, fmaStack
 
   // After loading all the data variables, we do some more setup.
   $scope.isLoading = true;
-  var loadStartTime = (new Date()).getTime();
   fmaStackHelper.setUpDataVariables(
       $scope.userAddress.latitude, $scope.userAddress.longitude,
       $scope.rawAccessToken, $scope.userCuisines, $scope.numPicsInStack, false).then(
@@ -181,14 +180,8 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $q, fmaStack
       $scope.foodData = retVars.foodData;
       $scope.foodImageLinks = retVars.foodImageLinks;
 
-      computeJoinedFoodDataImageList($scope.foodDataCursor);
-      
       $scope.isLoading = false;
-      // Make the loading last at least a second.
-      var timePassedMs = (new Date()).getTime() - loadStartTime;
-      $timeout(function() {
-        $scope.isLoading = false;
-      }, Math.max(fmaSharedState.minLoadingMs - timePassedMs, 0));
+      computeJoinedFoodDataImageList($scope.foodDataCursor);
     },
     function(err) {
       // Not really sure what to do here.
