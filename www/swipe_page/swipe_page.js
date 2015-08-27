@@ -63,6 +63,24 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $q, fmaStack
 
   $scope.settingsButtonPressed = function() {
     console.log('settings pressed!');
+    fmaLocalStorage.setObjectWithExpirationSeconds(
+        'userCart', null,
+        fmaSharedState.testing_invalidation_seconds);
+    fmaLocalStorage.setObjectWithExpirationSeconds(
+        'userToken', null,
+        fmaSharedState.testing_invalidation_seconds);
+    fmaLocalStorage.setObjectWithExpirationSeconds(
+        'userCart', null,
+        fmaSharedState.testing_invalidation_seconds);
+    fmaLocalStorage.setObjectWithExpirationSeconds(
+        'userAddress', null,
+        fmaSharedState.testing_invalidation_seconds);
+    fmaLocalStorage.setObjectWithExpirationSeconds(
+        'userCuisines', null,
+        fmaSharedState.testing_invalidation_seconds);
+    fmaLocalStorage.setObjectWithExpirationSeconds(
+        'foodData', null,
+        fmaSharedState.testing_invalidation_seconds);
   };
 
   // foodData is like a lot of food objects. Like > 100. But the stack consists

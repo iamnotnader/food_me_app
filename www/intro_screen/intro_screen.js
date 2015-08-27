@@ -109,7 +109,7 @@ function($scope, $location, $http, fmaLocalStorage, fmaSharedState, $rootScope) 
                     'redirect_uri=' + fmaSharedState.redirect_uri + '&' +
                     'response_type=code&' +
                     'scope=global&' +
-                    'state=""';
+                    'state=';
   $scope.token_data = null;
   $scope.signInButtonClicked = function() {
     console.log("Delivery button clicked!");
@@ -124,11 +124,9 @@ function($scope, $location, $http, fmaLocalStorage, fmaSharedState, $rootScope) 
     //      webview.
     var ref = window.open($scope.oauthUrl, '_blank',
         'location=yes,transitionstyle=crossdissolve');
-    var got_token = false;
     ref.addEventListener('loadstart', function(event) {
       var url = event.url;
       if (url.indexOf(fmaSharedState.redirect_uri) === 0) {
-        got_token = true;
         var code = /\?code=(.+)[&|$]/.exec(url);
         var error = /\?error=(.+)[&|$]/.exec(url);
         // We have to send like this instead of just doing $http.post because
@@ -149,14 +147,11 @@ function($scope, $location, $http, fmaLocalStorage, fmaSharedState, $rootScope) 
           $location.path('/choose_address');
           return;
         }, function(error) {
-          // TODO(daddy): Should really alert here or something.
+          // TODO(daddy): Change this to something more user-friendly.
+          alert('Post to get token failed with response: ' + error.statusText);
         });
-        // TODO(daddy): Initiate some loading animation maybe.
-      }
-    });
-    ref.addEventListener('loadstop', function(event) {
-      if (got_token) {
         ref.close();
+        // TODO(daddy): Initiate some loading animation maybe.
       }
     });
   };
