@@ -89,7 +89,7 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $q, fmaStack
   // index into the gigantic foodData array. That index is $scope.foodDataCursor.
   $scope.foodDataCursor = 0;
   $scope.numPicsInStack = 3;
-  $scope.numMerchantsToFetch = 20;
+  $scope.numMerchantsToFetch = 10;
   $scope.showFoodInfo = true;
   $scope.maybeRefreshStack = function() {
     if ($scope.foodDataCursor % $scope.numPicsInStack !== 0) {
@@ -119,7 +119,7 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $q, fmaStack
       // Add the swiped food to the cart and save the cart to localStorage.
       $scope.userCart.push($scope.foodData[$scope.foodDataCursor]);
       $scope.userCart = _.uniq($scope.userCart, function(item) {
-        return item.name;
+        return item.unique_key;
       });
       fmaLocalStorage.setObjectWithExpirationSeconds(
           'userCart', $scope.userCart,

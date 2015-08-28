@@ -183,7 +183,6 @@ function(fmaLocalStorage, $http, fmaSharedState, $q) {
           }
           (function(merchIndex) {
             var innerCurrentMerchant = merchants[merchIndex];
-
             getOpenDishesForMerchantPromise(innerCurrentMerchant.id)
             .then(
               function(menuItemsFound) {
@@ -194,6 +193,8 @@ function(fmaLocalStorage, $http, fmaSharedState, $q) {
                   currentItem.merchantLogo = innerCurrentMerchant.summary.merchant_logo;
                   currentItem.merchantId = innerCurrentMerchant.id;
                   currentItem.merchantCuisines = innerCurrentMerchant.summary.cuisines;
+                  // We use this to avoid duplicates in ng-repeat.
+                  currentItem.unique_key = currentItem.merchantId + currentItem.id;
                   if (currentItem.name == null || currentItem.merchantName == null ||
                       currentItem.price == null) {
                     continue;
@@ -218,7 +219,7 @@ function(fmaLocalStorage, $http, fmaSharedState, $q) {
                 numMerchantsFetched++;
               }
             );
-          })(merchantsBeingFetched);
+          })(merchantIndex);
           merchantIndex++;
           merchantsBeingFetched++;
         }
@@ -258,11 +259,8 @@ function(fmaLocalStorage, $http, fmaSharedState, $q) {
           // We try to detect "double encoding" by looking for %2520, which is
           // what you get when you try to double-encode a space character.
           var nameToUse = escape(foodDataObj.name);
-          if (nameToUse.indexOf("%2520") !== -1) {
-            nameToUse = foodDataObj.name;
-          }
-          $http.get('https://ajax.googleapis.com/ajax/services/search/images?v=1.0&q=' +
-                    escape(foodDataObj.name) + '&' +
+          $http.get('https://ajax.googleapis.com/ajax/services/search/images?v=1.0&q="' +
+                    nameToUse + '"&' +
                     'imgsz=medium')
           .then(
             function(res) {

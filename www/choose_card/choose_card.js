@@ -1,3 +1,4 @@
+/*jshint eqnull: true */
 angular.module('foodMeApp.chooseCard', ['ngRoute', 'ngTouch', 'foodmeApp.localStorage', 'foodmeApp.sharedState', 'foodmeApp.cartHelper'])
 
 .config(['$routeProvider', function($routeProvider) {
@@ -82,15 +83,50 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
     return;
   };
 
+  // This is probably the most critical piece of code in the whole app.
+  // It's where we place an order and charge the card.
+  var processPaymentPromise = function() {
+    console.log('About to take money!');
+    return $q(function(resolve, reject) {
+      resolve('woohoo!');
+    });
+  };
+
+  var takeMoneyAndFinish = function() {
+    // Dude.. this is the money.
+    $scope.isLoading = true;
+    var loadStartTime = (new Date()).getTime();
+    processPaymentPromise()
+    .then(
+      function(res) {
+        // We were successful in processing the payment!
+        console.log('Successfully processed order!');
+
+        // Make the loading last at least a second.
+        var timePassedMs = (new Date()).getTime() - loadStartTime;
+        $timeout(function() {
+          $scope.isLoading = false;
+          alert("Thanks! I just took your money and your order will arrive in less " +
+                "than half an hour. Unless it doesn't. It probably will, though, " +
+                "maybe.");
+          mainViewObj.removeClass();
+          mainViewObj.addClass('slide-left');
+          $location.path('/swipe-page');
+        }, Math.max(fmaSharedState.minLoadingMs - timePassedMs, 0));
+      },
+      function() {
+        // Make the loading last at least a second.
+        var timePassedMs = (new Date()).getTime() - loadStartTime;
+        $timeout(function() {
+          $scope.isLoading = false;
+        }, Math.max(fmaSharedState.minLoadingMs - timePassedMs, 0));
+        alert("Huh.. There was a problem taking your payment.");
+      }
+    );
+  };
+
   $scope.chooseCardFinishPressed = function() {
     console.log('Finish button pressed.');
-
-    // WE NEED TO CHECKK finishedUploadingCartItems here!!!
-    if (!$scope.finishedUploadingCartItems) {
-      alert("Wait! I'm still uploading some of your information " +
-            "in the background. Give me like ten seconds tops.");
-      return;
-    }
 
     if ($scope.selectedCardIndex.value == null) {
       alert("SELECT A CARD. DO AS I SAY. I AM GOD.");
@@ -107,10 +143,7 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
             '\n\nFor a total of: $' + sum.toFixed(2) + '?',
       function(index) {
         if (index === 1) {
-          // Dude.. this is the money.
-          alert("Thanks! I just took your money and your order will arrive in less " +
-                "than half an hour. Unless it doesn't. It probably will, though, " +
-                "maybe.");
+          takeMoneyAndFinish();
         }
       }
     );
