@@ -70,9 +70,6 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $q, fmaStack
         'userToken', null,
         fmaSharedState.testing_invalidation_seconds);
     fmaLocalStorage.setObjectWithExpirationSeconds(
-        'userCart', null,
-        fmaSharedState.testing_invalidation_seconds);
-    fmaLocalStorage.setObjectWithExpirationSeconds(
         'userAddress', null,
         fmaSharedState.testing_invalidation_seconds);
     fmaLocalStorage.setObjectWithExpirationSeconds(

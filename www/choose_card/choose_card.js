@@ -109,9 +109,18 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
           alert("Thanks! I just took your money and your order will arrive in less " +
                 "than half an hour. Unless it doesn't. It probably will, though, " +
                 "maybe.");
+          // Clear the user's cart.
+          fmaLocalStorage.setObjectWithExpirationSeconds(
+              'userCart', null,
+              fmaSharedState.testing_invalidation_seconds);
+          fmaLocalStorage.setObjectWithExpirationSeconds(
+              'foodData', null,
+              fmaSharedState.testing_invalidation_seconds);
+          
+          // Go back to the address page.
           mainViewObj.removeClass();
-          mainViewObj.addClass('slide-left');
-          $location.path('/swipe-page');
+          mainViewObj.addClass('slide-right');
+          $location.path('/choose_address');
         }, Math.max(fmaSharedState.minLoadingMs - timePassedMs, 0));
       },
       function() {
