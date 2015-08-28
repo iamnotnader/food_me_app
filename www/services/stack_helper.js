@@ -12,8 +12,131 @@ angular.module('foodMeApp.stackHelper', ['foodmeApp.localStorage', 'foodmeApp.sh
 
 .factory('fmaStackHelper', ["fmaLocalStorage", "$http", "fmaSharedState", "$q",
 function(fmaLocalStorage, $http, fmaSharedState, $q) {
+  // Go through the a schedule array and return the ones that are open right now.
+  // TODO(daddy): I can hear this function softly crying "killll meeeeee!"
+  var getOpenSchedules = function(scheduleArr) {
+    currentDay = fmaSharedState.getDayAsString();
+    if (scheduleArr != null && scheduleArr.length > 0) {
+      var validSchedules = [];
+      for (var scheduleI = 0; scheduleI < scheduleArr.length; scheduleI++) {
+        var isValidSchedule = false;
+        var currentSchedule = scheduleArr[scheduleI];
+        for (var dayI = 0; dayI < currentSchedule.times.length; dayI++) {
+          var scheduleDay = currentSchedule.times[dayI]; 
+          if (scheduleDay.day === currentDay) {
+            var from = new Date(scheduleDay.from);
+            var to = new Date(scheduleDay.to);
+            var now = new Date();
+            if (now > from && now < to) {
+              isValidSchedule = true;
+              break;
+            }
+          }
+        }
+        if (isValidSchedule) {
+          validSchedules.push(currentSchedule);
+        }
+      }
+      return validSchedules;
+    }
+    return "all_valid";
+  };
+
+  // Go through an array of menus and only returns the ones that correspond
+  // to schedules that are open.
+  var openMenus = function(menuArr, scheduleArr) {
+    var openSchedules = getOpenSchedules(scheduleArr);
+    if (openSchedules === "all_valid") {
+      return menuArr;
+    }
+
+    if (openSchedules == null || openSchedules.length === 0) {
+      return [];
+    }
+
+    var validMenus = [];
+    for (var v1 = 0; v1 < menuArr.length; v1++) {
+      var currentMenu = menuArr[v1];
+      var currentSchedules = currentMenu.schedule;
+      if (currentSchedules == null || currentSchedules.length === 0) {
+        continue;
+      }
+      var schedulesOverlap = false;
+      for (var v2 = 0; v2 < currentSchedules.length; v2++) {
+        for (var v3 = 0; v3 < openSchedules.length; v3++) {
+          if (currentSchedules[v2] === openSchedules[v3].id) {
+            schedulesOverlap = true;
+            break;
+          }
+        }
+      }
+      if (schedulesOverlap) {
+        validMenus.push(currentMenu);
+      }
+    }
+    return validMenus;
+  };
+
+  // Finds all of the "item" subobjects in the menuObj passed in. See
+  // findMenuItems for more details.
+  //
+  // TODO(daddy): We should be mindful of the schedule. If a restaurant only
+  // serves our item during breakfast but it's dinner time, that's no good...
+  var findMenuItemsRecursive = function(menuObj, menuItemList) {
+    if (menuObj.type === "item") {
+      menuItemList.push(menuObj);
+      return;
+    }
+    // If we're here, menuObj is a menu, not an item.
+    for (var menuIndex = 0; menuIndex < menuObj.children.length; menuIndex++) {
+      var menuSubObj = menuObj.children[menuIndex];
+      findMenuItemsRecursive(menuSubObj, menuItemList);
+    } 
+    return menuItemList;
+  };
+
+  var findMenuItems = function(menuArr) {
+    // menuArr is a list of objects of type "menu." An  object of type "menu" has children
+    // that are either of type "menu" OR of type "item." If they're of type "item," we want
+    // to return them.
+    //
+    // Because menuArr is not itself a menu, we cannot call findMenuItemRecursive on it directly.
+    // That would have been nice because we would have had one line here.
+    // Instead, we have to have this for loop here to pull out the actual menu objects and
+    // call the function on them individually.
+    var menuItemList = [];
+    for (var menuIndex = 0; menuIndex < menuArr.length; menuIndex++) {
+      findMenuItemsRecursive(menuArr[menuIndex], menuItemList);
+    }
+    return menuItemList;
+  };
+
+  // Resolves to an array of dishes!
+  var getOpenDishesForMerchantPromise = function(merchant_id) {
+    return $q(function(resolve, reject) {
+      $http.get(fmaSharedState.endpoint+'/merchant/'+merchant_id+'/menu?client_id=' + fmaSharedState.client_id)
+      .then(
+        function(res) {
+          var menuArr = res.data.menu;
+          // TODO(daddy): Culling down the menus like this is necessary for
+          // now, but in the long run the food should be culled down before
+          // the swipe page.
+          menuArr = openMenus(menuArr, res.data.schedule);
+          menuItemsFound = findMenuItems(menuArr);
+
+          resolve(menuItemsFound);
+        },
+        function(err) {
+          // Messed up response???
+          console.warn("Problem getting menu.");
+          reject(err);
+        }
+      );
+    });
+  };
+
   // This is called if we don't find the merchant and food data in our localStorage.
-  var asyncGetMerchantAndFoodData = function(latitude, longitude, token, cuisines) {
+  var asyncGetMerchantAndFoodData = function(latitude, longitude, token, cuisines, numMerchantsToFetch) {
     console.log('Asynchronously getting merchant data.');
     // HTTP request to get all the stuff, then process it into a list of food.
     return $q(function(resolve, reject) {
@@ -28,7 +151,6 @@ function(fmaLocalStorage, $http, fmaSharedState, $q) {
       .then(
       function(res) {
         var allNearbyMerchantData = res.data;
-        var foodData = [];
         var merchants = allNearbyMerchantData.merchants;
         var cuisinesOverlap = function(merchantCuisines, cuisines) {
           for (var mCuis = 0; mCuis < merchantCuisines.length; mCuis++) {
@@ -39,52 +161,70 @@ function(fmaLocalStorage, $http, fmaSharedState, $q) {
             }
           }
         };
-        for (var merchId = 0; merchId < merchants.length; merchId++) {
-          var currentMerchant = merchants[merchId];
-          if (!currentMerchant.ordering.is_open) {
+        var foodData = [];
+        var currentNumMerchantsToFetch = Math.min(merchants.length, numMerchantsToFetch);
+        console.log(currentNumMerchantsToFetch);
+        var merchantsBeingFetched = 0;
+        var merchantIndex = 0;
+        var numMerchantsFetched = 0;
+        while (merchantsBeingFetched < currentNumMerchantsToFetch &&
+               merchantIndex < merchants.length) {
+          var outerCurrentMerchant = merchants[merchantIndex];
+          if (!outerCurrentMerchant.ordering.is_open) {
+            merchantIndex++;
             continue;
           }
           // TODO(securitythreat): Sigh.. this loop is O(mn) where m = merchant
           // cuisines and n = selected cuisines.
-          var merchantCuisines = currentMerchant.summary.cuisines;
+          var merchantCuisines = outerCurrentMerchant.summary.cuisines;
           if (!cuisinesOverlap(merchantCuisines, cuisines)) {
+            merchantIndex++;
             continue;
           }
+          (function(merchIndex) {
+            var innerCurrentMerchant = merchants[merchIndex];
 
-          // If we get here, the merchant matches our filters. So we add all of
-          // their recommended items to our list of foodData.
-          var recommendedItemObj = currentMerchant.summary.recommended_items;
-          var recommendedItemIds = Object.keys(recommendedItemObj);
-          for (var itemI = 0; itemI < recommendedItemIds.length; itemI++) {
-            var currentItem = recommendedItemObj[recommendedItemIds[itemI]];
-
-            // Add a few extra details we want to show.
-            currentItem.id = recommendedItemIds[itemI];
-            currentItem.name = he.decode(currentItem.name);
-            currentItem.merchantName = he.decode(currentMerchant.summary.name);
-            currentItem.merchantDescription = currentMerchant.summary.description;
-            currentItem.merchantLogo = currentMerchant.summary.merchant_logo;
-            currentItem.merchantId = currentMerchant.id;
-            currentItem.merchantCuisines = currentMerchant.summary.cuisines;
-
-            if (currentItem.name == null || currentItem.merchantName == null ||
-                currentItem.price == null) {
-              continue;
-            }
-
-            // Add the processed item to our foodData list!
-            foodData.push(currentItem);
-          }
+            getOpenDishesForMerchantPromise(innerCurrentMerchant.id)
+            .then(
+              function(menuItemsFound) {
+                for (var v1 = 0; v1 < menuItemsFound.length; v1++) {
+                  var currentItem = menuItemsFound[v1];
+                  currentItem.merchantName = he.decode(innerCurrentMerchant.summary.name);
+                  currentItem.merchantDescription = innerCurrentMerchant.summary.description;
+                  currentItem.merchantLogo = innerCurrentMerchant.summary.merchant_logo;
+                  currentItem.merchantId = innerCurrentMerchant.id;
+                  currentItem.merchantCuisines = innerCurrentMerchant.summary.cuisines;
+                  if (currentItem.name == null || currentItem.merchantName == null ||
+                      currentItem.price == null) {
+                    continue;
+                  }
+                  foodData.push(currentItem);
+                }
+                numMerchantsFetched++;
+                console.log(numMerchantsFetched);
+                if (numMerchantsFetched === currentNumMerchantsToFetch) {
+                  // Shuffle up the dishes for fun.
+                  foodData = _.shuffle(foodData);
+                  console.log(foodData);
+                  resolve({
+                    allNearbyMerchantData: allNearbyMerchantData,
+                    foodData: foodData
+                  });
+                }
+              },
+              function(err) {
+                console.warn("Problem fetching data for one of the merchants.");
+                console.warn(err);
+                numMerchantsFetched++;
+              }
+            );
+          })(merchantsBeingFetched);
+          merchantIndex++;
+          merchantsBeingFetched++;
         }
 
-        // Shuffle up the dishes for fun.
-        foodData = _.shuffle(foodData);
 
         // Return all the data (woo!)
-        resolve({
-          allNearbyMerchantData: allNearbyMerchantData,
-          foodData: foodData
-        });
       },
       function(err) {
         console.log('Error occurred getting allNearbyMerchantData.');
@@ -115,9 +255,15 @@ function(fmaLocalStorage, $http, fmaSharedState, $q) {
         // Need a closure to preserve the loop index.
         (function(index) {
           var foodDataObj = foodData[foodDataCursor + index];
+          // We try to detect "double encoding" by looking for %2520, which is
+          // what you get when you try to double-encode a space character.
+          var nameToUse = escape(foodDataObj.name);
+          if (nameToUse.indexOf("%2520") !== -1) {
+            nameToUse = foodDataObj.name;
+          }
           $http.get('https://ajax.googleapis.com/ajax/services/search/images?v=1.0&q=' +
                     escape(foodDataObj.name) + '&' +
-                    'imgsz=small|medium')
+                    'imgsz=medium')
           .then(
             function(res) {
               var imageDataList = res.data.responseData.results; 
@@ -150,18 +296,16 @@ function(fmaLocalStorage, $http, fmaSharedState, $q) {
     });
   };
 
-  // Called after we get all of the merchant data AND all of the image data.
-  var setUpDataVariables = function(latitude, longitude, token, cuisines, numPicsToFetch, forceRefresh) {
+  var setUpDataVariables = function(latitude, longitude, token, cuisines, numPicsToFetch, numMerchantsToFetch, forceRefresh) {
     var retVars = {};
     return $q(function(resolve, reject) {
+      // If we're missing any of the necessary data just refetch errything.
       if (forceRefresh ||
           !fmaLocalStorage.isSet('allNearbyMerchantData') ||
           !fmaLocalStorage.isSet('foodData') ||
           !fmaLocalStorage.isSet('foodImageLinks')) {
-        console.log('We need to fetch our data (sadly)');
-        // If we're missing any of the necessary data we need to show the cards,
-        // just fetch errything.
-        asyncGetMerchantAndFoodData(latitude, longitude, token, cuisines).then(
+        console.log('We need to refetch food data (sadly)');
+        asyncGetMerchantAndFoodData(latitude, longitude, token, cuisines, numMerchantsToFetch).then(
           function(allData) {
             console.log('Got all the merchant and food data!');
             // This is the giant response we get back from delivery.com.
@@ -222,5 +366,6 @@ function(fmaLocalStorage, $http, fmaSharedState, $q) {
   return {
     setUpDataVariables: setUpDataVariables,
     asyncGetFoodImageLinks: asyncGetFoodImageLinks,
+    getOpenDishesForMerchantPromise: getOpenDishesForMerchantPromise,
   };
 }]);

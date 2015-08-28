@@ -89,6 +89,7 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $q, fmaStack
   // index into the gigantic foodData array. That index is $scope.foodDataCursor.
   $scope.foodDataCursor = 0;
   $scope.numPicsInStack = 3;
+  $scope.numMerchantsToFetch = 20;
   $scope.showFoodInfo = true;
   $scope.maybeRefreshStack = function() {
     if ($scope.foodDataCursor % $scope.numPicsInStack !== 0) {
@@ -189,10 +190,13 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $q, fmaStack
   };
 
   // After loading all the data variables, we do some more setup.
+  // TODO(daddy): Evaluate the ramifications of making the last argument force=true.
+  // so we never used cached food data.
   $scope.isLoading = true;
   fmaStackHelper.setUpDataVariables(
       $scope.userAddress.latitude, $scope.userAddress.longitude,
-      $scope.rawAccessToken, $scope.userCuisines, $scope.numPicsInStack, false).then(
+      $scope.rawAccessToken, $scope.userCuisines, $scope.numPicsInStack,
+      $scope.numMerchantsToFetch, false).then(
     function(retVars) {
       $scope.allNearbyMerchantData = retVars.allNearbyMerchantData;
       $scope.foodData = retVars.foodData;

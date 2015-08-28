@@ -1,23 +1,3 @@
-//----------------------------------------------------------------------------------
-// The following is the list of steps we take in this controller.
-//
-// Asynchronously:
-//   Get the itemDetailsFound
-//   Make sure it matches up exactly with the userCart (if they don't, reset both
-//   and return to the cart page or something.)
-//   If they match, construct a request object for each item consisting of a link and an object
-//   Clear the old cart
-//   Send all the request objects
-//
-// What the user sees:
-//   Get the credit cards
-//   Make them pick one
-//   Potentially add one
-//   Send the transaction through when they hit finish.
-//
-//----------------------------------------------------------------------------------
-
-
 angular.module('foodMeApp.chooseCard', ['ngRoute', 'ngTouch', 'foodmeApp.localStorage', 'foodmeApp.sharedState', 'foodmeApp.cartHelper'])
 
 .config(['$routeProvider', function($routeProvider) {
@@ -27,8 +7,8 @@ angular.module('foodMeApp.chooseCard', ['ngRoute', 'ngTouch', 'foodmeApp.localSt
   });
 }])
 
-.controller('ChooseCardCtrl', ["$scope", "$location", "fmaLocalStorage", "$http", "fmaSharedState", "$rootScope", "$timeout", "$q", "fmaCartHelper", "$route",
-function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, $timeout, $q, fmaCartHelper, $route) {
+.controller('ChooseCardCtrl', ["$scope", "$location", "fmaLocalStorage", "$http", "fmaSharedState", "$rootScope", "$timeout", "$q", "$route",
+function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, $timeout, $q, $route) {
   var mainViewObj = $('#main_view_container');
 
   // On this screen, we need a valid user token. If we are missing one, we need
@@ -54,7 +34,6 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
     return;
   }
   $scope.userCart = fmaLocalStorage.getObject('userCart');
-  $scope.itemDetailsFound = fmaLocalStorage.getObject('itemDetailsFound');
   if ($scope.userCart == null || $scope.userCart.length === 0) {
     // We redirect to the cart page if the cart is empty.
     alert('We need something in your cart first.');
@@ -63,17 +42,7 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
     $location.path('/cart_page');
     return;
   }
-  if ($scope.itemDetailsFound == null ||
-      $scope.userCart.length !== $scope.itemDetailsFound.length) {
-    alert('Something really weird happened-- tell me: 212-729-6389. ' +
-          'Also give me this code: fucked_up_item_details');
-    mainViewObj.removeClass();
-    mainViewObj.addClass('slide-right');
-    $location.path('/cart_page');
-    return;
-  }
-  // If we get here, we have a valid user token AND userCart is nonempty AND
-  // itemDetailsFound matches up with userCart. Woohoo!
+  // If we get here, we have a valid user token AND userCart is nonempty.
 
   $scope.isLoading = true;
   var loadStartTime = (new Date()).getTime();
@@ -104,7 +73,6 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
       console.log(err);
       return;
   });
-
 
   $scope.chooseCardBackPressed = function() {
     console.log('Back button pressed.');
@@ -145,7 +113,7 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
                 "maybe.");
         }
       }
-    )
+    );
     return;
   };
 
@@ -177,23 +145,5 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
       }
     });
   };
-
-  // We need to upload all the cart items in the background.
-  $scope.finishedUploadingCartItems = false;
-  fmaCartHelper.clearCartThenUpdateCartPromise($scope.itemDetailsFound, $scope.rawAccessToken)
-  .then(
-    function(res) {
-      // In this case, we uploaded all the cart items to delivery.com successfully.
-      $scope.finishedUploadingCartItems = true;
-    },
-    function(err) {
-      // In this, someof the items in the cart didn't get uploaded, which is very
-      // bad and should never happen.
-      mainViewObj.removeClass();
-      mainViewObj.addClass('slide-right');
-      $location.path('/cart_page');
-      return;
-    }
-  );
 
 }]);

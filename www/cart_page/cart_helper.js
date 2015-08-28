@@ -59,11 +59,11 @@ angular.module('foodmeApp.cartHelper', [])
   // cart API.
   //
   // https://developers.delivery.com/customer-cart/#item-object
-  var createCartRequestsFromItems = function(itemDetails) {
-    // One request object for each thing in itemDetails.
+  var createCartRequestsFromItems = function(cartItems) {
+    // One request object for each thing in cartItems.
     var finalItemRequestObjects = [];
-    for (var v1 = 0; v1 < itemDetails.length; v1++) {
-      var currentItem = itemDetails[v1].item_details;
+    for (var v1 = 0; v1 < cartItems.length; v1++) {
+      var currentItem = cartItems[v1];
       var optionsForItem = getOptionsForItem(currentItem);
       // Add the selected options to the currentItem for fun.
       currentItem.selectedOptions = optionsForItem;
@@ -87,14 +87,14 @@ angular.module('foodmeApp.cartHelper', [])
     return finalItemRequestObjects;
   };
 
-  var clearCartsPromise = function(itemDetails, rawAccessToken) {
+  var clearCartsPromise = function(cartItems, rawAccessToken) {
     return $q(function(resolve, reject) {
       var successfulPromisesReturned = 0;
       var failedPromisesReturned = 0;
-      for (var v1 = 0; v1 < itemDetails.length; v1++) {
+      for (var v1 = 0; v1 < cartItems.length; v1++) {
         $http({
           method: 'DELETE',
-          url: fmaSharedState.endpoint+'/customer/cart/'+itemDetails[v1].cart_item.merchantId+'?client_id=' + fmaSharedState.client_id,
+          url: fmaSharedState.endpoint+'/customer/cart/'+cartItems[v1].merchantId+'?client_id=' + fmaSharedState.client_id,
           headers: {
             "Authorization": rawAccessToken,
             "Content-Type": "application/json",
@@ -103,7 +103,7 @@ angular.module('foodmeApp.cartHelper', [])
           function(res) {
             successfulPromisesReturned++;
             if (successfulPromisesReturned +
-                failedPromisesReturned === itemDetails.length) {
+                failedPromisesReturned === cartItems.length) {
               resolve();
             }
           },
@@ -111,7 +111,7 @@ angular.module('foodmeApp.cartHelper', [])
             console.log(err);
             failedPromisesReturned++;
             if (successfulPromisesReturned +
-                failedPromisesReturned === itemDetails.length) {
+                failedPromisesReturned === cartItems.length) {
               resolve();
             }
           }
@@ -120,16 +120,17 @@ angular.module('foodmeApp.cartHelper', [])
     });
   };
 
-  var addCartsPromise = function(itemDetails, itemRequestObjects, rawAccessToken) {
+  var addCartsPromise = function(cartItems, itemRequestObjects, rawAccessToken) {
     return $q(function(resolve, reject) {
-      var successfulPromisesReturned = 0;
-      var failedPromisesReturned = 0;
-      for (var v1 = 0; v1 < itemDetails.length; v1++) {
+      var cartItemsAdded = [];
+      var cartItemsNotAdded = [];
+      for (var v1 = 0; v1 < cartItems.length; v1++) {
         (function (x1) {
+          var currentCartItem = cartItems[x1];
           // Add all items to the user's delivery.com cart.
           $http({
             method: 'POST',
-            url: fmaSharedState.endpoint+'/customer/cart/'+itemDetails[x1].cart_item.merchantId+'?client_id=' + fmaSharedState.client_id,
+            url: fmaSharedState.endpoint+'/customer/cart/'+currentCartItem.merchantId+'?client_id=' + fmaSharedState.client_id,
             data: itemRequestObjects[x1],
             headers: {
               "Authorization": rawAccessToken,
@@ -137,21 +138,23 @@ angular.module('foodmeApp.cartHelper', [])
             }
           }).then(
             function(res) {
-              successfulPromisesReturned++;
-              if (successfulPromisesReturned +
-                  failedPromisesReturned === itemDetails.length) {
-                resolve();
+              cartItemsAdded.push(currentCartItem);
+              if (cartItemsAdded.length +
+                  cartItemsNotAdded.length === cartItems.length) {
+                if (cartItemsNotAdded.length > 0) {
+                  reject({added: cartItemsAdded, not_added: cartItemsNotAdded});
+                }
+                resolve({added: cartItemsAdded, not_added: []});
               }
             },
             function(err) {
-              alert("Doh! One of the items in your cart couldn't actually be " +
-                    "bought. This should never happen-- call me: 212-729-6389.");
-              console.log("One item couldn't be added to cart.");
-              console.log(err);
-              failedPromisesReturned++;
-              if (successfulPromisesReturned +
-                  failedPromisesReturned === itemDetails.length) {
-                resolve();
+              cartItemsNotAdded.push(currentCartItem);
+              if (cartItemsAdded.length +
+                  cartItemsNotAdded.length === cartItems.length) {
+                if (cartItemsNotAdded.length > 0) {
+                  reject({added: cartItemsAdded, not_added: cartItemsNotAdded});
+                }
+                resolve({added: cartItemsAdded, not_added: []});
               }
             }
           );
@@ -160,21 +163,21 @@ angular.module('foodmeApp.cartHelper', [])
     });
   };
 
-  var clearCartThenUpdateCartPromise = function(itemDetails, rawAccessToken) {
+  var clearCartThenUpdateCartPromise = function(cartItems, rawAccessToken) {
     return $q(function(resolve, reject) {
       // Actual init.
-      itemRequestObjects = createCartRequestsFromItems(itemDetails);
+      itemRequestObjects = createCartRequestsFromItems(cartItems);
       var very_sorry =
         "One or more of the items in your cart aren't actually available " +
         "right now because it's dinner time and they're lunch-only items or " +
         "something like that. Go back to the cart page and try removing the " +
         "offending item :*( I promise this will be fixed soon!!!";
       // Clear the user's cart.
-      clearCartsPromise(itemDetails, rawAccessToken)
+      clearCartsPromise(cartItems, rawAccessToken)
       .then(
         // At this point the cart should be cleared.
         function(res) {
-          addCartsPromise(itemDetails, itemRequestObjects, rawAccessToken)
+          addCartsPromise(cartItems, itemRequestObjects, rawAccessToken)
           .then(
             function(res) {
               // Cleared the cart and refreshed it with all our new items
