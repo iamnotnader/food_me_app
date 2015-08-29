@@ -7,47 +7,11 @@ angular.module('foodMeApp.introScreen', ['ngRoute', 'ngTouch', 'foodmeApp.localS
   });
 }])
 
-.controller('IntroScreenCtrl', ["$scope", "$location", "$http", "fmaLocalStorage", 'fmaSharedState', '$rootScope',
-function($scope, $location, $http, fmaLocalStorage, fmaSharedState, $rootScope) {
+.controller('IntroScreenCtrl', ["$scope", "$location", "$http", "fmaLocalStorage", 'fmaSharedState', '$rootScope', '$timeout',
+function($scope, $location, $http, fmaLocalStorage, fmaSharedState, $rootScope, $timeout) {
   // Capture the main view container so we can add/remove animations.
   var mainViewObj = $('#main_view_container');
   mainViewObj.removeClass();
-
-  // This is the first screen our app hits when it restarts, so we put some custom
-  // logic in to redirect if the user is already signed in, has already entered
-  // an address, etc...
-  console.log('In intro controller.');
-  $scope.userToken = fmaLocalStorage.getObject('userToken');
-  $scope.rawAccessToken = null;
-  if (fmaSharedState.fake_token) {
-    alert('Warning-- you are using a fake access token.');
-    console.log('Fake access token being used.');
-    $scope.rawAccessToken = fmaSharedState.fake_token;
-  } else if (_.has($scope.userToken, 'access_token')) {
-    console.log('Stored access token being used.');
-    $scope.rawAccessToken = $scope.userToken.access_token;
-  }
-  if ($scope.rawAccessToken !== null) {
-    // Getting here implies user has logged in already.
-    if (fmaLocalStorage.isSet('userAddress')) {
-      if (fmaLocalStorage.isSet('userCuisines')) {
-        // Logged in with a chosen address and cuisines implies we go to the swipe page.
-        console.log('We have token, address, and cuisines so go to the swipe page.');
-        $location.path('/swipe_page');
-        return;
-      }
-      // If we have a token and an address but no cuisines, we have to choose some.
-      console.log('We have token, address but missing cuisines.');
-      $location.path('/choose_cuisine');
-      return;
-    } else {
-      // Logged in without an address implies we need to choose one.
-      console.log('We have token but no address.');
-      $location.path('/choose_address');
-      return;
-    }
-  }
-  // We get here only if the user doesn't have an access token.
 
   // Default to sliding left.
   mainViewObj.addClass('slide-left');
@@ -123,7 +87,7 @@ function($scope, $location, $http, fmaLocalStorage, fmaSharedState, $rootScope) 
     //   4) We grab the value of code in the start listener then kill the
     //      webview.
     var ref = window.open($scope.oauthUrl, '_blank',
-        'location=yes,transitionstyle=crossdissolve');
+        'location=yes,transitionstyle=crossdissolve,clearcache=yes');
     ref.addEventListener('loadstart', function(event) {
       var url = event.url;
       if (url.indexOf(fmaSharedState.redirect_uri) === 0) {
@@ -144,7 +108,9 @@ function($scope, $location, $http, fmaLocalStorage, fmaSharedState, $rootScope) 
           $scope.token_data = response.data;
           fmaLocalStorage.setObjectWithExpirationSeconds('userToken', $scope.token_data,
               fmaSharedState.testing_invalidation_seconds);
-          $location.path('/choose_address');
+          $timeout(function() {
+            $location.path('/choose_address');
+          }, 500);
           return;
         }, function(error) {
           // TODO(daddy): Change this to something more user-friendly.

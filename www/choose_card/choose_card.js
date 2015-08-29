@@ -96,7 +96,6 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
     
     console.log('About to take money!');
     return $q(function(resolve, reject) {
-      alert('Last chance-- you sure you want to do this?');
       resolve('TAKING PAYMENT.');
     });
   };
