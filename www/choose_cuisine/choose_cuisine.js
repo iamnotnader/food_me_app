@@ -78,17 +78,50 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
   )
   .then(
   function(res) {
-    // Set the merchant data and reinitialize the chosen cuisines.
-    res.data.cuisines.sort(function(a, b) {
+    // We only want cuisines from places that are open right now.
+    var cuisinesByCount = {};
+    var merchants = res.data.merchants;
+    for (var v1 = 0; v1 < merchants.length; v1++) {
+      var currentMerchant = merchants[v1];
+      if (currentMerchant.ordering != null && currentMerchant.ordering.is_open) {
+        if (currentMerchant.summary.cuisines == null) {
+          continue;
+        }
+        var merchantCuisines = currentMerchant.summary.cuisines;        
+        for (var v2 = 0; v2 < merchantCuisines.length; v2++) {
+          var currentCuisine = merchantCuisines[v2];
+          if (cuisinesByCount[currentCuisine] == null) {
+            cuisinesByCount[currentCuisine] = 0;
+            continue;
+          }
+          cuisinesByCount[currentCuisine]++;
+        }
+      }
+    }
+    // Convert the cuisinesByCount into an array of counts.
+    $scope.all_cuisines = [];
+    for (var cuisineName in cuisinesByCount) {
+      $scope.all_cuisines.push({
+        name: cuisineName,
+        count: cuisinesByCount[cuisineName]
+      });
+    }
+
+    // Sort and set the cuisines.
+    $scope.all_cuisines.sort(function(a, b) {
       return b.count - a.count;
     });
+    fmaLocalStorage.setObject('userCuisines', {});
+    $scope.all_cuisines = $scope.all_cuisines.slice(0, 30);
+    // Note that we need to set it on our res because we then store
+    // res.data.
+    res.data.cuisines = $scope.all_cuisines;
+    $scope.selectedCuisineIndices = { value: _.range(30) };
+
+    // Set the merchant data and reinitialize the chosen cuisines.
     fmaLocalStorage.setObjectWithExpirationSeconds(
         'allNearbyMerchantData', res.data,
         fmaSharedState.testing_invalidation_seconds);
-    fmaLocalStorage.setObject('userCuisines', {});
-    $scope.all_cuisines = res.data.cuisines;
-    $scope.all_cuisines = $scope.all_cuisines.slice(0, 30);
-    $scope.selectedCuisineIndices = { value: _.range(30) };
     // Make the loading last at least a second.
     var timePassedMs = (new Date()).getTime() - loadStartTime;
     $timeout(function() {
@@ -98,6 +131,7 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
   function(err) {
     console.log('Error occurred.');
     console.log(JSON.stringify(err));
+    $scope.isLoading = false;
   });
 
   $scope.chooseCuisineBackPressed = function() {
