@@ -3,12 +3,19 @@
 // Otherwise, we're in prod mode, which means we hit api.delivery.com.
 var testModeEnabled = false;
 
+// Even if testModeEnabled = false, it's nice to have a flag we can use to
+// turn payment on/off.
+var takePayment = true;
+
 angular.module('foodmeApp.sharedState', [])
 
 // Just holds some global configuration variables that we can set to whatever
 // we need.
 .factory('fmaSharedState', [function() {
   var stateObj = {
+    testModeEnabled: testModeEnabled,
+    takePayment: takePayment,
+
     // These are the credentials we need to interact with delivery.com's API
     client_id: 'NDIyZDg1MjA0M2M4Y2NhYzgxOGY1NDhjMmE0YTIwMTJh',
     client_secret: 'YEQZ54Wvth4TDtpNclTxOolRVgX6UK79pNw82O1s',

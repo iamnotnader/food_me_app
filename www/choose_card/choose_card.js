@@ -54,14 +54,14 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
   .then(
     function(res) {
       $scope.cardList = res.data.cards;
-      var currentCard = fmaLocalStorage.getObject('userCreditCard');
-      if (currentCard != null) {
-        for (var i = 0; i < $scope.cardList.length; i++) {
-          if ($scope.cardList[i].cc_id === currentAddress.cc_id) {
-            $scope.selectedCardIndex.value = i;
-            break;
-          }
+      // Go through and fix up all of the exp_months to add padding.
+      for (var i = 0; i < $scope.cardList.length; i++) {
+        var cardInList = $scope.cardList[i];
+        var pretty_exp_month = '' + cardInList.exp_month;
+        if (pretty_exp_month.length === 1) {
+          pretty_exp_month = '0' + pretty_exp_month;
         }
+        cardInList.pretty_exp_month = pretty_exp_month;
       }
       // Make the loading last at least a second.
       var timePassedMs = (new Date()).getTime() - loadStartTime;
@@ -86,14 +86,22 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
   // This is probably the most critical piece of code in the whole app.
   // It's where we place an order and charge the card.
   var processPaymentPromise = function() {
+    if (!fmaSharedState.takePayment) {
+      return $q(function(resolve, reject) {
+        alert('NOT ACTUALLY TAKING YOUR MONEY.');
+        resolve('NOT TAKING PAYMENT.');
+      });
+    }
+    // Everything below here only executes if fmaSharedState.takePayment = true.
+    
     console.log('About to take money!');
     return $q(function(resolve, reject) {
-      resolve('woohoo!');
+      alert('Last chance-- you sure you want to do this?');
+      resolve('TAKING PAYMENT.');
     });
   };
 
   var takeMoneyAndFinish = function() {
-    // Dude.. this is the money.
     $scope.isLoading = true;
     var loadStartTime = (new Date()).getTime();
     processPaymentPromise()
@@ -109,6 +117,7 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
           alert("Thanks! I just took your money and your order will arrive in less " +
                 "than half an hour. Unless it doesn't. It probably will, though, " +
                 "maybe.");
+
           // Clear the user's cart.
           fmaLocalStorage.setObjectWithExpirationSeconds(
               'userCart', null,

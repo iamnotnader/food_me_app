@@ -94,6 +94,9 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $q, fmaStack
           fmaLocalStorage.setObjectWithExpirationSeconds(
               'userCart', $scope.userCart,
               fmaSharedState.testing_invalidation_seconds);
+          fmaLocalStorage.setObjectWithExpirationSeconds(
+              'foodData', null,
+              fmaSharedState.testing_invalidation_seconds);
 
 
           // In this, someof the items in the cart didn't get uploaded. This is usually because
