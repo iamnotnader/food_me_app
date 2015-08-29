@@ -16,6 +16,7 @@ angular.module('foodmeApp.localStorage', [])
 
     return value;
   };
+
   return {
     setObject: function(key, value) {
       $window.localStorage[key] = JSON.stringify({
@@ -33,6 +34,9 @@ angular.module('foodmeApp.localStorage', [])
     getObject: getObjectFunc,
     isSet: function(key) {
       return getObjectFunc(key) != null;
-    }
+    },
+    clear: function() {
+      $window.localStorage.clear();
+    },
   };
 }]);

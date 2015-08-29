@@ -9,6 +9,14 @@ angular.module('foodMeApp.introScreen', ['ngRoute', 'ngTouch', 'foodmeApp.localS
 
 .controller('IntroScreenCtrl', ["$scope", "$location", "$http", "fmaLocalStorage", 'fmaSharedState', '$rootScope', '$timeout',
 function($scope, $location, $http, fmaLocalStorage, fmaSharedState, $rootScope, $timeout) {
+  if (fmaSharedState.testModeEnabled) {
+    // Skip the login in test mode.
+    $location.path('/choose_address');
+  }
+
+  // Clear all the user data and start fresh.
+  fmaLocalStorage.clear();
+
   // Capture the main view container so we can add/remove animations.
   var mainViewObj = $('#main_view_container');
   mainViewObj.removeClass();
@@ -108,9 +116,7 @@ function($scope, $location, $http, fmaLocalStorage, fmaSharedState, $rootScope, 
           $scope.token_data = response.data;
           fmaLocalStorage.setObjectWithExpirationSeconds('userToken', $scope.token_data,
               fmaSharedState.testing_invalidation_seconds);
-          $timeout(function() {
-            $location.path('/choose_address');
-          }, 500);
+          $location.path('/choose_address');
           return;
         }, function(error) {
           // TODO(daddy): Change this to something more user-friendly.

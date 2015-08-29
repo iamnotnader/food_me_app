@@ -304,14 +304,24 @@ h1 {
   top: 50%;
   -webkit-transform: translateY(-50%);
   right: 0.5em;
-  color: #464646; }
+  color: #464646;
+  height: 100%;
+  width: 4.6rem;
+  text-align: center;
+  margin-right: 0;
+  right: 0; }
 
 .choose_address__left_text {
   position: absolute;
   top: 50%;
   -webkit-transform: translateY(-50%);
   left: 0.5em;
-  color: #464646; }
+  color: #464646;
+  height: 100%;
+  width: 4.6rem;
+  text-align: center;
+  margin-right: 0;
+  left: 0; }
 
 .choose_address__list_cell {
   padding: 1rem 1rem;

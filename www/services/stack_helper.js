@@ -1,3 +1,5 @@
+/*jshint loopfunc: true, eqnull: true */
+
 // A utility that fetches data to be shown in the stack. Fetches
 // the following things:
 //  - allNearbyMerchantData: Basically a response that contains
@@ -7,7 +9,6 @@
 //  - foodImageLinks: An object full of links, one for each foodData.
 //    Might contain fewer elements than foodData.
 
-/*jshint loopfunc: true */
 angular.module('foodMeApp.stackHelper', ['foodmeApp.localStorage', 'foodmeApp.sharedState'])
 
 .factory('fmaStackHelper', ["fmaLocalStorage", "$http", "fmaSharedState", "$q",
@@ -199,6 +200,8 @@ function(fmaLocalStorage, $http, fmaSharedState, $q) {
                       currentItem.price == null) {
                     continue;
                   }
+                  // Get rid of number like "55. Turkey Sandwich" -> "Turkey Sandwich"
+                  currentItem.name = currentItem.name.replace(/[0-9a-zA-z]+\.\s+/, '').replace(/\s+-\s+/, ' ').replace(/\s*choose\s+[0-9]+/i, '');
                   foodData.push(currentItem);
                 }
                 numMerchantsFetched++;
@@ -248,6 +251,35 @@ function(fmaLocalStorage, $http, fmaSharedState, $q) {
       return {foodImageLinks: []};
     }
 
+    // Remove the images that 404.
+    var cleanImagesPromise = function(imageUrls) {
+      var numImagesReturned = 0;
+      var goodUrls = [];
+      return $q(function(resolve, reject) {
+        for (var v1 = 0; v1 < imageUrls.length; v1++) {
+          (function(imageIndex) {
+            $http.get(imageUrls[imageIndex]).then(
+              function(res) {
+                numImagesReturned++;
+                goodUrls.push(imageUrls[imageIndex]);
+                // Comment this in if you want to get as many images as possible.
+                // Right now we prefer to only fetch one and not wait for the others.
+                //if (numImagesReturned === imageUrls.length) {
+                  resolve(goodUrls);
+                //}
+              },
+              function(err) {
+                numImagesReturned++;
+                if (numImagesReturned === imageUrls.length) {
+                  resolve(goodUrls);
+                }
+              }
+            );
+          })(v1);
+        }
+      });
+    };
+
     // Sorry the below code is a little confusing-- I'm not a huge fan of
     // Google's API. We actually process the images in searchComplete.
     return $q(function(resolve, reject) { 
@@ -258,10 +290,9 @@ function(fmaLocalStorage, $http, fmaSharedState, $q) {
           var foodDataObj = foodData[foodDataCursor + index];
           // We try to detect "double encoding" by looking for %2520, which is
           // what you get when you try to double-encode a space character.
-          var nameToUse = escape(foodDataObj.name);
-          $http.get('https://ajax.googleapis.com/ajax/services/search/images?v=1.0&q="' +
-                    nameToUse + '"&' +
-                    'imgsz=medium')
+          var urlToFetch = 'https://ajax.googleapis.com/ajax/services/search/images?v=1.0&q=' +
+              foodDataObj.name.split(' ').join('+');
+          $http.get(urlToFetch)
           .then(
             function(res) {
               var imageDataList = res.data.responseData.results; 
@@ -272,13 +303,21 @@ function(fmaLocalStorage, $http, fmaSharedState, $q) {
               for (var y = 0; y < imageDataList.length; y++) {
                 currentLinkObj.urls.push(unescape(imageDataList[y].url)); 
               } 
-              foodImageLinks.push(currentLinkObj);
-              if (foodImageLinks.length == numPicsToFetch) {
-                foodImageLinks.sort(function(a, b) {
-                  return a.index - b.index;
+              cleanImagesPromise(currentLinkObj.urls).then(
+                function(res) {
+                  currentLinkObj.urls = res;
+                  foodImageLinks.push(currentLinkObj);
+                  if (foodImageLinks.length == numPicsToFetch) {
+                    foodImageLinks.sort(function(a, b) {
+                      return a.index - b.index;
+                    });
+                    resolve({foodImageLinks: foodImageLinks});
+                  }
+                },
+                function(err) {
+                  // cleanImages can never err.
+                  console.warn('cleanImages should never ERR.');
                 });
-                resolve({foodImageLinks: foodImageLinks});
-              }
             },
             function(err) {
               var currentLinkObj = {};

@@ -61,30 +61,14 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $q, fmaStack
     $location.path('/cart_page');
   };
 
-  $scope.settingsButtonPressed = function() {
-    console.log('settings pressed!');
-    fmaLocalStorage.setObjectWithExpirationSeconds(
-        'userCart', null,
-        fmaSharedState.testing_invalidation_seconds);
-    fmaLocalStorage.setObjectWithExpirationSeconds(
-        'userToken', null,
-        fmaSharedState.testing_invalidation_seconds);
-    fmaLocalStorage.setObjectWithExpirationSeconds(
-        'userAddress', null,
-        fmaSharedState.testing_invalidation_seconds);
-    fmaLocalStorage.setObjectWithExpirationSeconds(
-        'userCuisines', null,
-        fmaSharedState.testing_invalidation_seconds);
-    fmaLocalStorage.setObjectWithExpirationSeconds(
-        'foodData', null,
-        fmaSharedState.testing_invalidation_seconds);
-  };
-
   // foodData is like a lot of food objects. Like > 100. But the stack consists
   // of fewer-- a max of $scope.numPicsInStack to be exact. In order to avoid
   // refetching foodData every time we want to refresh the stack, we keep an
   // index into the gigantic foodData array. That index is $scope.foodDataCursor.
   $scope.foodDataCursor = 0;
+  // This contains all the images we've fetched. When we update the stack, we
+  // get the next three images we have available from here.
+  $scope.allImageLinks = [];
   $scope.numPicsInStack = 3;
   $scope.numMerchantsToFetch = 10;
   $scope.showFoodInfo = true;
@@ -92,27 +76,20 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $q, fmaStack
     if ($scope.foodDataCursor % $scope.numPicsInStack !== 0) {
       return;
     }
-    $scope.showFoodInfo = false;
-    var foodFetchStartTime = (new Date()).getTime();
+    // WARNING: We basically assume allImageLinks has at least three images
+    // in it at all times-- this might not be the case, say, at the end of
+    // the stack.
     numPicsToFetch = Math.min(
-        $scope.numPicsInStack, $scope.foodData.length - $scope.foodDataCursor);
-    fmaStackHelper.asyncGetFoodImageLinks($scope.foodData, $scope.foodDataCursor, numPicsToFetch)
-    .then(
-      function(retVars) {
-        // Wait at least 150ms to bring the cards back.
-        var timePassedMs = (new Date()).getTime() - foodFetchStartTime;
-        $timeout(function() {
-          $scope.foodImageLinks = retVars.foodImageLinks;
-          computeJoinedFoodDataImageList($scope.foodDataCursor);
-          $scope.showFoodInfo = true;
-        }, Math.max(1000 - timePassedMs, 0));
-      },
-      function(err) {
-    });
+        $scope.numPicsInStack, $scope.allImageLinks.length - $scope.foodDataCursor);
+    $scope.imagesToShow = $scope.allImageLinks.slice(
+        $scope.foodDataCursor,
+        $scope.foodDataCursor + numPicsToFetch);
+    computeJoinedFoodDataImageList($scope.foodDataCursor);
   };
   $scope.userLikedDish = function(item) {
     $scope.$apply(function() {
       console.log('liked!');
+      
       // Add the swiped food to the cart and save the cart to localStorage.
       $scope.userCart.push($scope.foodData[$scope.foodDataCursor]);
       $scope.userCart = _.uniq($scope.userCart, function(item) {
@@ -143,21 +120,21 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $q, fmaStack
   // By the time we reach this function, we are guaranteed to haeve set:
   //  - $scope.allNearbyMerchantData
   //  - $scope.foodData
-  //  - $scope.foodImageLinks
+  //  - $scope.imagesToShow
   //
-  // Furthermore, foodImageLinks will be shorter than foodData, because we only
+  // Furthermore, imagesToShow will be shorter than foodData, because we only
   // fetch a maximum of 10 sets of images. We do some joining in this function
   // to make it easier to display the results.
   //
   // foodDataCursor is the index into foodData where our images start. The stack
   // and all the images in imageData represent the food in
-  //   - foodData[foodDataCursor:foodDataCursor + $scope.foodImageLinks.length]
+  //   - foodData[foodDataCursor:foodDataCursor + $scope.imagesToShow.length]
   var computeJoinedFoodDataImageList = function(foodDataCursor) {
     console.log('Joining foodData and imageLinks!');
     $scope.joinedFoodInfo = [];
-    // Note that foodImageLinks always has fewer items than foodData because we
+    // Note that imagesToShow always has fewer items than foodData because we
     // populate it conservatively.
-    for (var x = 0; x < $scope.foodImageLinks.length; x++) {
+    for (var x = 0; x < $scope.imagesToShow.length; x++) {
       var foodDataObj = $scope.foodData[foodDataCursor + x];
       if (isBadDescription(foodDataObj.description) &&
           isBadDescription(foodDataObj.merchantDescription)) {
@@ -165,7 +142,7 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $q, fmaStack
       }
       $scope.joinedFoodInfo.push({
         foodData: foodDataObj,
-        imageLinks: $scope.foodImageLinks[x],
+        imagesToShow: $scope.imagesToShow[x],
       });
     }
     // We need to reverse the list we show.
@@ -186,6 +163,27 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $q, fmaStack
     }, 0);
   };
 
+  var getRemainingImages = function(startIndex, picsToFetchEachTime) {
+    // If we have cached a sufficient number of cards, don't fetch anything.
+    if ($scope.allImageLinks.length - $scope.foodDataCursor >= 10) {
+      $timeout(function() {
+        getRemainingImages(startIndex, picsToFetchEachTime);
+      }, 1000);
+      return;
+    }
+    fmaStackHelper.asyncGetFoodImageLinks(
+        $scope.foodData, startIndex, picsToFetchEachTime)
+    .then(
+      function(retVars) {
+        // Wait at least 150ms to bring the cards back.
+        $scope.allImageLinks = $scope.allImageLinks.concat(retVars.foodImageLinks);
+        getRemainingImages(startIndex + picsToFetchEachTime, picsToFetchEachTime);
+      },
+      function(err) {
+      }
+    );
+  };
+
   // After loading all the data variables, we do some more setup.
   // TODO(daddy): Evaluate the ramifications of making the last argument force=true.
   // so we never used cached food data.
@@ -197,10 +195,13 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $q, fmaStack
     function(retVars) {
       $scope.allNearbyMerchantData = retVars.allNearbyMerchantData;
       $scope.foodData = retVars.foodData;
-      $scope.foodImageLinks = retVars.foodImageLinks;
+      $scope.imagesToShow = retVars.foodImageLinks;
 
       $scope.isLoading = false;
       computeJoinedFoodDataImageList($scope.foodDataCursor);
+      // Get the rest of the images three at a time.
+      var picFetchInterval = 10;
+      getRemainingImages($scope.foodDataCursor, 10);
     },
     function(err) {
       // Not really sure what to do here.
