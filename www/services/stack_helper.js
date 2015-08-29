@@ -154,6 +154,9 @@ function(fmaLocalStorage, $http, fmaSharedState, $q) {
         var allNearbyMerchantData = res.data;
         var merchants = allNearbyMerchantData.merchants;
         var cuisinesOverlap = function(merchantCuisines, cuisines) {
+          if (merchantCuisines == null) {
+            return false;
+          }
           for (var mCuis = 0; mCuis < merchantCuisines.length; mCuis++) {
             for (var uCuis = 0; uCuis < cuisines.length; uCuis++) {
               if (merchantCuisines[mCuis] == cuisines[uCuis].name) {
@@ -168,8 +171,12 @@ function(fmaLocalStorage, $http, fmaSharedState, $q) {
         var merchantsBeingFetched = 0;
         var merchantIndex = 0;
         var numMerchantsFetched = 0;
-        while (merchantsBeingFetched < currentNumMerchantsToFetch &&
-               merchantIndex < merchants.length) {
+        while (merchantIndex < merchants.length) {
+          if (merchantsBeingFetched > currentNumMerchantsToFetch) {
+            // If we're fetching enough merchants, no need to keep going.
+            break;
+          }
+               
           var outerCurrentMerchant = merchants[merchantIndex];
           if (!outerCurrentMerchant.ordering.is_open) {
             merchantIndex++;
@@ -226,6 +233,9 @@ function(fmaLocalStorage, $http, fmaSharedState, $q) {
           merchantIndex++;
           merchantsBeingFetched++;
         }
+        // This line makes it so that if we have fewer than currentNumMerchantsToFetch,
+        // we still break out of the promise.
+        currentNumMerchantsToFetch = merchantsBeingFetched;
 
 
         // Return all the data (woo!)
@@ -300,6 +310,7 @@ function(fmaLocalStorage, $http, fmaSharedState, $q) {
               currentLinkObj.index = index;
               currentLinkObj.foodDataId = foodDataObj.id;
               currentLinkObj.urls = [];
+              currentLinkObj.name = foodDataObj.name;
               for (var y = 0; y < imageDataList.length; y++) {
                 currentLinkObj.urls.push(unescape(imageDataList[y].url)); 
               } 

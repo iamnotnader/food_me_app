@@ -1,3 +1,5 @@
+/* jshint eqnull: true */
+
 angular.module('foodMeApp.chooseCuisine', ['ngRoute', 'ngTouch', 'foodmeApp.localStorage', 'foodmeApp.sharedState'])
 
 .config(['$routeProvider', function($routeProvider) {
@@ -155,9 +157,9 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
   
   $scope.chooseCuisineDonePressed = function() {
     console.log('Done button pressed.');
-    if ($scope.selectedCuisineIndices.value.length < 3) {
+    if ($scope.selectedCuisineIndices.value.length <= 0) {
       console.log('No cuisines selected.');
-      alert('You must select at least three cuisines or no food.');
+      alert('You must select at least one cuisine.');
       return;
     }
     var cuisineIndices = $scope.selectedCuisineIndices.value;
@@ -170,6 +172,14 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
     fmaLocalStorage.setObjectWithExpirationSeconds(
         'userCuisines', userCuisines,
         fmaSharedState.testing_invalidation_seconds);
+    // Clear the stack.
+    fmaLocalStorage.setObjectWithExpirationSeconds(
+        'foodData', null,
+        fmaSharedState.testing_invalidation_seconds);
+    fmaLocalStorage.setObjectWithExpirationSeconds(
+        'allImageLinks', null,
+        fmaSharedState.testing_invalidation_seconds);
+    
     mainViewObj.removeClass();
     mainViewObj.addClass('slide-left');
     $location.path('/swipe_page');

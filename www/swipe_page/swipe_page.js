@@ -54,6 +54,13 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $q, fmaStack
     $scope.userCart = fmaLocalStorage.getObject('userCart');
   }
 
+  $scope.backButtonPressed = function() {
+    console.log('back pressed!');
+    mainViewObj.removeClass();
+    mainViewObj.addClass('slide-left');
+    $location.path('/choose_cuisine');
+  };
+
   $scope.cartButtonPressed = function() {
     console.log('cart pressed!');
     mainViewObj.removeClass();

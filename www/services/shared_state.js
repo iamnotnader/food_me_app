@@ -43,7 +43,7 @@ angular.module('foodmeApp.sharedState', [])
     // Controls how long the loading screen shows for. If you make this too small,
     // the app looks buggy because the loading screen snaps away in the middle of
     // screen transitions.
-    minLoadingMs: 600,
+    minLoadingMs: 1500,
 
     // Controls how long the loading screen shows for. If you make this too small,
     // the app looks buggy because the loading screen snaps away in the middle of
@@ -68,8 +68,8 @@ angular.module('foodmeApp.sharedState', [])
 
     // Testing
     stateObj.testing_invalidation_seconds = 60 * 60;
-    stateObj.fake_token = 'R1Ooz3vPDIzDWbQ1q4pNyrRgNn3c0Leax2ebtH6a';
-  };
+    stateObj.fake_token = 's5XfkXRCxWtTZ3KrmX4KxCHafEnrM6fnicaSQKlZ';
+  }
 
   return stateObj;
 }]);
