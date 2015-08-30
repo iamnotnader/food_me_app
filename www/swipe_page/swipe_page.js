@@ -170,18 +170,17 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $q, fmaStack
   };
 
   var maybeGetNextImages = function(picsToFetchEachTime) {
-    console.log('check');
     // If we have cached a sufficient number of cards, don't fetch anything.
     if ($scope.allImageLinks.length - $scope.foodDataCursor >= 10) {
       return;
     }
+    var picsToFetch = Math.min($scope.foodData.length - $scope.foodDataCursor, picsToFetchEachTime);
     fmaStackHelper.asyncGetFoodImageLinks(
-        $scope.foodData, $scope.allImageLinks.length, picsToFetchEachTime)
+        $scope.foodData, $scope.allImageLinks.length, picsToFetch)
     .then(
       function(retVars) {
         // Wait at least 150ms to bring the cards back.
         $scope.allImageLinks = $scope.allImageLinks.concat(retVars.foodImageLinks);
-        console.log($scope.allImageLinks);
       },
       function(err) {
       }
@@ -206,7 +205,7 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $q, fmaStack
     fmaStackHelper.setUpDataVariables(
         $scope.userAddress.latitude, $scope.userAddress.longitude,
         $scope.rawAccessToken, $scope.userCuisines, $scope.numPicsInStack,
-        $scope.numMerchantsToFetch, false).then(
+        $scope.numMerchantsToFetch, true).then(
       function(retVars) {
         $scope.allNearbyMerchantData = retVars.allNearbyMerchantData;
         $scope.foodData = retVars.foodData;

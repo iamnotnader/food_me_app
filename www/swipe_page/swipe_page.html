@@ -31,6 +31,11 @@
           </li>
         </ul>
     </div>
+
+    <div class="swipe_page__empty_stack fade-in-slow" ng-if="foodData.length === foodDataCursor">
+      Sad, your stack is empty. Try refreshing a few times or widening your cusine preferences.
+    </div>
+    <!--<div class="swipe_page__loading_pusheen fade-in-300ms fade-out-300ms" src="img/pusheen_eating.gif" alt="" ng-if="foodDataCursor % numPicsInStack === 0"></div>-->
   </div>
   <div class="swipe_page__bottom_menu">
     <div ng-click="backButtonPressed()" class="swipe_page__bottom_button" style="border-right: 1px solid #6E6666;">

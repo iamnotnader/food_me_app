@@ -206,7 +206,7 @@ function(fmaLocalStorage, $http, fmaSharedState, $q) {
                   // We use this to avoid duplicates in ng-repeat.
                   currentItem.unique_key = currentItem.merchantId + currentItem.id;
                   if (currentItem.name == null || currentItem.merchantName == null ||
-                      currentItem.price == null) {
+                      currentItem.price == null || currentItem.price < fmaSharedState.minPrice) {
                     continue;
                   }
                   // Get rid of number like "55. Turkey Sandwich" -> "Turkey Sandwich"
@@ -260,8 +260,10 @@ function(fmaLocalStorage, $http, fmaSharedState, $q) {
     console.log('Asynchronously getting all the image data.');
 
     if (numPicsToFetch === 0) {
-      return {foodImageLinks: []};
-    }
+      return $q(function(resolve, reject) {
+        resolve({ foodImageLinks: [] })
+      });
+    };
 
     // Remove the images that 404.
     var cleanImagesPromise = function(imageUrls) {

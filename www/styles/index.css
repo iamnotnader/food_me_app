@@ -485,6 +485,15 @@ h1 {
   background-position: center center;
   background-repeat: no-repeat; }
 
+.swipe_page__empty_stack {
+  font-family: TitleFont;
+  text-transform: none;
+  position: absolute;
+  top: 10%;
+  font-size: 2.0rem;
+  text-align: center;
+  color: #464646; }
+
 .swipe_page__vertically_center {
   position: absolute;
   top: 50%;
@@ -757,13 +766,15 @@ h1 {
   max-height: 0rem;
   opacity: 0; }
 
-.cart_page__empty_cart.ng-enter {
+.cart_page__empty_cart.ng-enter,
+.swipe_page__empty_stack.ng-enter {
   ms-transition: 5s ease-in-out;
   webkit-transition: 5s ease-in-out;
   transition: 5s ease-in-out;
   opacity: 0; }
 
-.cart_page__empty_cart.ng-enter.ng-enter-active {
+.cart_page__empty_cart.ng-enter.ng-enter-active,
+.swipe_page__empty_stack.ng-enter.ng-enter-active {
   opacity: 1; }
 
 .fade-in-300ms.ng-enter {

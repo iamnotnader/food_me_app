@@ -43,6 +43,14 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
     $location.path('/cart_page');
     return;
   }
+  $scope.userAddress = fmaLocalStorage.getObject('userAddress');
+  if ($scope.userAddress == null) {
+    alert('We need to get an address from you first.');
+    mainViewObj.removeClass();
+    mainViewObj.addClass('slide-right');
+    $location.path('/choose_address');
+    return;
+  }
   // If we get here, we have a valid user token AND userCart is nonempty.
 
   $scope.isLoading = true;
@@ -88,15 +96,45 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
   var processPaymentPromise = function() {
     if (!fmaSharedState.takePayment) {
       return $q(function(resolve, reject) {
-        alert('NOT ACTUALLY TAKING YOUR MONEY.');
-        resolve('NOT TAKING PAYMENT.');
+        alert('Not actually taking your money.');
+        resolve('Not actually taking money');
       });
     }
     // Everything below here only executes if fmaSharedState.takePayment = true.
     
     console.log('About to take money!');
     return $q(function(resolve, reject) {
-      resolve('TAKING PAYMENT.');
+      for (var v1 = 0; v1 < $scope.userCart.length; v1++) {
+        var cartItem = $scope.userCart[v1];
+        var cardSelected = $scope.cardList[$scope.selectedCardIndex.value];
+        var dataObj = {
+          tip: 1.0,
+          location_id: $scope.userAddress.location_id,
+          instructions: "Please call me when you arrive. Nader Al-Naji is GOD.",
+          payments: [{
+            type: "credit_card",
+            id: cardSelected.cc_id,
+          }],
+          order_type: "delivery",
+          order_time: new Date().toISOString(),
+        };
+        $http({
+          method: 'POST',
+          url: fmaSharedState.endpoint + '/customer/cart/'+cartItem.merchantId+'/checkout?client_id=' + fmaSharedState.client_id,
+          data: dataObj,
+          headers: {
+            "Authorization": $scope.rawAccessToken,
+            "Content-Type": "application/json",
+          }
+        }).then(
+          function(res) {
+            resolve(res);
+          },
+          function(err) {
+            reject(err);
+          }
+        );
+      }
     });
   };
 
@@ -131,13 +169,15 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
           $location.path('/choose_address');
         }, Math.max(fmaSharedState.minLoadingMs - timePassedMs, 0));
       },
-      function() {
+      function(err) {
         // Make the loading last at least a second.
         var timePassedMs = (new Date()).getTime() - loadStartTime;
         $timeout(function() {
           $scope.isLoading = false;
+          alert("Huh.. we had a problem with your payment: " + err.data.message[0].user_msg +
+                " The best thing to do is probably just to clear out your " +
+                "cart and try again. It shouldn't happen twice.");
         }, Math.max(fmaSharedState.minLoadingMs - timePassedMs, 0));
-        alert("Huh.. There was a problem taking your payment.");
       }
     );
   };
@@ -156,14 +196,20 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
       foodNames.push($scope.userCart[v1].name + ': $' + $scope.userCart[v1].price);
       sum += parseFloat($scope.userCart[v1].price);
     }
-    confirm("Ready to order the following?\n\n" + foodNames.join('\n') +
-            '\n\nFor a total of: $' + sum.toFixed(2) + '?',
-      function(index) {
-        if (index === 1) {
-          takeMoneyAndFinish();
+    if (fmaSharedState.testModeEnabled) {
+      // In test mode, take the money without confirmation so we can test in the
+      // browser.
+      takeMoneyAndFinish();
+    } else {
+      confirm("Ready to order the following?\n\n" + foodNames.join('\n') +
+              '\n\nFor a total of: $' + sum.toFixed(2) + '?',
+        function(index) {
+          if (index === 1) {
+            takeMoneyAndFinish();
+          }
         }
-      }
-    );
+      );
+    }
     return;
   };
 

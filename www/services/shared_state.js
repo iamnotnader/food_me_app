@@ -1,7 +1,7 @@
 // This is the most important variable in the whole codebase. If it's set
 // to true, we're in testing mode, which means we hit sandbox.delivery.com.
 // Otherwise, we're in prod mode, which means we hit api.delivery.com.
-var testModeEnabled = true;
+var testModeEnabled = false;
 
 // Even if testModeEnabled = false, it's nice to have a flag we can use to
 // turn payment on/off.
@@ -39,6 +39,8 @@ angular.module('foodmeApp.sharedState', [])
       var days = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
       return days[new Date().getDay()];
     },
+
+    minPrice: 8,
 
     // Controls how long the loading screen shows for. If you make this too small,
     // the app looks buggy because the loading screen snaps away in the middle of
