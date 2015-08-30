@@ -108,9 +108,9 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
         var cartItem = $scope.userCart[v1];
         var cardSelected = $scope.cardList[$scope.selectedCardIndex.value];
         var dataObj = {
-          tip: 1.0,
+          tip: fmaSharedState.tipAmount,
           location_id: $scope.userAddress.location_id,
-          instructions: "Please call me when you arrive. Nader Al-Naji is GOD.",
+          instructions: "Tell people to download the FoodMe app and you'll get more orders!",
           payments: [{
             type: "credit_card",
             id: cardSelected.cc_id,

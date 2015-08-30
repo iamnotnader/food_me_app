@@ -206,9 +206,15 @@ function(fmaLocalStorage, $http, fmaSharedState, $q) {
                   // We use this to avoid duplicates in ng-repeat.
                   currentItem.unique_key = currentItem.merchantId + currentItem.id;
                   if (currentItem.name == null || currentItem.merchantName == null ||
-                      currentItem.price == null || currentItem.price < fmaSharedState.minPrice) {
+                      currentItem.price == null ||
+                      (innerCurrentMerchant.ordering.minimum != null &&
+                       currentItem.price < innerCurrentMerchant.ordering.minimum)) {
                     continue;
                   }
+                  // Add the tax and tip to make it accurate.
+                  currentItem.price = currentItem.price * (1 + fmaSharedState.taxRate) + fmaSharedState.tipAmount;
+                  currentItem.price = currentItem.price.toFixed(2);
+
                   // Get rid of number like "55. Turkey Sandwich" -> "Turkey Sandwich"
                   currentItem.name = currentItem.name.replace(/[0-9a-zA-z]+\.\s+/, '').replace(/\s+-\s+/, ' ').replace(/\s*choose\s+[0-9]+/i, '');
                   foodData.push(currentItem);

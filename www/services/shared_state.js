@@ -40,7 +40,9 @@ angular.module('foodmeApp.sharedState', [])
       return days[new Date().getDay()];
     },
 
-    minPrice: 8,
+    taxRate: .09,
+
+    tipAmount: 1.0,
 
     // Controls how long the loading screen shows for. If you make this too small,
     // the app looks buggy because the loading screen snaps away in the middle of

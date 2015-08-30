@@ -82,15 +82,32 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $q, fmaStack
     if ($scope.foodDataCursor % $scope.numPicsInStack !== 0) {
       return;
     }
-    // WARNING: We basically assume allImageLinks has at least three images
-    // in it at all times-- this might not be the case, say, at the end of
-    // the stack.
-    numPicsToFetch = Math.min(
-        $scope.numPicsInStack, $scope.allImageLinks.length - $scope.foodDataCursor);
-    $scope.imagesToShow = $scope.allImageLinks.slice(
-        $scope.foodDataCursor,
-        $scope.foodDataCursor + numPicsToFetch);
-    computeJoinedFoodDataImageList($scope.foodDataCursor);
+    if ($scope.allImageLinks.length - $scope.foodDataCursor >= $scope.numPicsInStack) {
+      // Here we have an ample buffer so don't get more images.
+      $scope.imagesToShow = $scope.allImageLinks.slice(
+          $scope.foodDataCursor,
+          $scope.foodDataCursor + $scope.numPicsInStack);
+      computeJoinedFoodDataImageList($scope.foodDataCursor);
+      return;
+    }
+    // Otherwise, we need to get more images.
+    var picsToFetch = Math.min($scope.foodData.length - $scope.foodDataCursor, 3*$scope.numPicsInStack);
+    fmaStackHelper.asyncGetFoodImageLinks(
+        $scope.foodData, $scope.allImageLinks.length, picsToFetch)
+    .then(
+      function(retVars) {
+        // Wait at least 150ms to bring the cards back.
+        $scope.allImageLinks = $scope.allImageLinks.concat(retVars.foodImageLinks);
+        numPicsToFetch = Math.min(
+            $scope.numPicsInStack, $scope.allImageLinks.length - $scope.foodDataCursor);
+        $scope.imagesToShow = $scope.allImageLinks.slice(
+            $scope.foodDataCursor,
+            $scope.foodDataCursor + numPicsToFetch);
+        computeJoinedFoodDataImageList($scope.foodDataCursor);
+      },
+      function(err) {
+      }
+    );
   };
   $scope.userLikedDish = function(item) {
     $scope.$apply(function() {
@@ -169,24 +186,6 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $q, fmaStack
     }, 0);
   };
 
-  var maybeGetNextImages = function(picsToFetchEachTime) {
-    // If we have cached a sufficient number of cards, don't fetch anything.
-    if ($scope.allImageLinks.length - $scope.foodDataCursor >= 10) {
-      return;
-    }
-    var picsToFetch = Math.min($scope.foodData.length - $scope.foodDataCursor, picsToFetchEachTime);
-    fmaStackHelper.asyncGetFoodImageLinks(
-        $scope.foodData, $scope.allImageLinks.length, picsToFetch)
-    .then(
-      function(retVars) {
-        // Wait at least 150ms to bring the cards back.
-        $scope.allImageLinks = $scope.allImageLinks.concat(retVars.foodImageLinks);
-      },
-      function(err) {
-      }
-    );
-  };
-
   $scope.initEverything = function() {
     // foodData is like a lot of food objects. Like > 100. But the stack consists
     // of fewer-- a max of $scope.numPicsInStack to be exact. In order to avoid
@@ -210,14 +209,10 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $q, fmaStack
         $scope.allNearbyMerchantData = retVars.allNearbyMerchantData;
         $scope.foodData = retVars.foodData;
         $scope.imagesToShow = retVars.foodImageLinks;
+        $scope.allImageLinks = $scope.imagesToShow;
 
         $scope.isLoading = false;
         computeJoinedFoodDataImageList($scope.foodDataCursor);
-        // Get the rest of the images three at a time.
-        var picFetchInterval = 10;
-        $scope.imageUpdateInterval = $interval(function() {
-          maybeGetNextImages(picFetchInterval);
-        }, 1000);
       },
       function(err) {
         // Not really sure what to do here.
