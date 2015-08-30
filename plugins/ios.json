@@ -55,25 +55,25 @@
     },
     "installed_plugins": {
         "cordova-plugin-console": {
-            "PACKAGE_NAME": "com.phonegap.helloworld"
+            "PACKAGE_NAME": "io.foodme"
         },
         "cordova-plugin-device": {
-            "PACKAGE_NAME": "com.phonegap.helloworld"
+            "PACKAGE_NAME": "io.foodme"
         },
         "cordova-plugin-splashscreen": {
-            "PACKAGE_NAME": "com.phonegap.helloworld"
+            "PACKAGE_NAME": "io.foodme"
         },
         "cordova-plugin-whitelist": {
-            "PACKAGE_NAME": "com.phonegap.helloworld"
+            "PACKAGE_NAME": "io.foodme"
         },
         "org.apache.cordova.inappbrowser": {
-            "PACKAGE_NAME": "com.phonegap.helloworld"
+            "PACKAGE_NAME": "io.foodme"
         },
         "org.apache.cordova.dialogs": {
-            "PACKAGE_NAME": "com.phonegap.helloworld"
+            "PACKAGE_NAME": "io.foodme"
         },
         "org.apache.cordova.vibration": {
-            "PACKAGE_NAME": "com.phonegap.helloworld"
+            "PACKAGE_NAME": "io.foodme"
         }
     },
     "dependent_plugins": {}
