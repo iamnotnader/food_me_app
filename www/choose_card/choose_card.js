@@ -218,14 +218,14 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
     console.log('Cell selected: ' + indexSelected);
     $scope.selectedCardIndex.value = indexSelected;
   };
+  var addCardUrl = fmaSharedState.endpoint+'/third_party/credit_card/add?' +
+                  'client_id=' + fmaSharedState.client_id + '&' +
+                  'redirect_uri=' + fmaSharedState.redirect_uri + '&' +
+                  'response_type=code&' +
+                  'scope=global&';
 
   $scope.addCardButtonPressed = function() {
     console.log('Add card pressed!');
-    var addCardUrl = fmaSharedState.endpoint+'/third_party/credit_card/add?' +
-                    'client_id=' + fmaSharedState.client_id + '&' +
-                    'redirect_uri=' + fmaSharedState.redirect_uri + '&' +
-                    'response_type=code&' +
-                    'scope=global&';
 
     var ref = window.open(addCardUrl, '_blank',
         'location=yes,transitionstyle=crossdissolve');
@@ -238,6 +238,21 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
 
         ref.close();
         return;
+      }
+    });
+    ref.addEventListener('loadstop', function(event) {
+      var url = event.url;
+      if (url.indexOf(fmaSharedState.redirect_uri) > 0) {
+        // We only execute this block if the redirect_uri appears as a
+        // parameter in the URL.
+        var codeToRemoveLogoutButton = (
+          "var footer = document.querySelector('footer');" +
+          "footer.style.visibility = 'hidden';"
+        );
+        ref.executeScript({
+            code: codeToRemoveLogoutButton,
+        }, function() {
+        });
       }
     });
   };
