@@ -55,8 +55,8 @@ angular.module('foodmeApp.sharedState', [])
     minSwipeLoadingMs: 1000,
 
     // Prod
-    // Invalidate everything in localStorage after this amount of time for now.
-    testing_invalidation_seconds: 60 * 100,
+    // Basically never invalidate the cache.
+    testing_invalidation_seconds: 60 * 60 * 24 * 365 * 10,
     fake_token: null,
 
   };
