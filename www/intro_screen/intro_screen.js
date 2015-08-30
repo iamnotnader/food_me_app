@@ -135,12 +135,16 @@ function($scope, $location, $http, fmaLocalStorage, fmaSharedState, $rootScope, 
           "var footer = document.querySelector('footer');" +
           "var header=document.querySelector('header > h1'); " +
           "header.innerHTML = header.innerHTML + '<br>By logging in " +
-              "you also agree to the FoodMe " +
+              "you agree to the FoodMe " +
               "<a href=\"http://www.foodme.io/#/privacy_page#topOfPage\">Privacy Policy</a>.<br><br>' + " +
               "footer.innerHTML; " +
           "footer.style.visibility = 'hidden';" +
           "header.style.lineHeight = '20px'; " +
-          "header.style.margin = '15px 10px'"
+          "header.style.margin = '15px 10px';" +
+          "var disclaimer = document.querySelector('.disclaimer');" +
+          "if (disclaimer != null) {" +
+            "disclaimer.style.display = 'none';" +
+          "}"
         );
         ref.executeScript({
             code: codeToAddFoodMePrivacyPolicy,
