@@ -242,18 +242,22 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
     });
     ref.addEventListener('loadstop', function(event) {
       var url = event.url;
-      if (url.indexOf(fmaSharedState.redirect_uri) > 0) {
-        // We only execute this block if the redirect_uri appears as a
-        // parameter in the URL.
-        var codeToRemoveLogoutButton = (
-          "var footer = document.querySelector('footer');" +
-          "footer.style.visibility = 'hidden';"
-        );
-        ref.executeScript({
-            code: codeToRemoveLogoutButton,
-        }, function() {
-        });
-      }
+      var codeToRemoveLogoutButton = (
+        "var footer = document.querySelector('footer');" +
+        "if (footer != null) {" +
+          "footer.style.visibility = 'hidden';" +
+        "}" +
+        "var container = document.querySelector('#container');" +
+        "if (container != null && container.innerText.indexOf('Please log in.') >= 0) {" +
+          "container.innerText = 'Your session expired. This happens rarely--' + " +
+              "'just restart the app and login again and everything will work.';" +
+          "container.style.textAlign = 'center';" +
+        "}"
+      );
+      ref.executeScript({
+          code: codeToRemoveLogoutButton,
+      }, function() {
+      });
     });
   };
 
