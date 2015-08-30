@@ -119,11 +119,33 @@ function($scope, $location, $http, fmaLocalStorage, fmaSharedState, $rootScope, 
           $location.path('/choose_address');
           return;
         }, function(error) {
-          // TODO(daddy): Change this to something more user-friendly.
-          alert('Post to get token failed with response: ' + error.statusText);
+          alert('Whoops! Something went wrong when logging in. ' +
+                'Just restart the app and login again and it should ' +
+                'work-- promise.');
         });
         ref.close();
-        // TODO(daddy): Initiate some loading animation maybe.
+      }
+    });
+    ref.addEventListener('loadstop', function(event) {
+      var url = event.url;
+      if (url.indexOf(fmaSharedState.redirect_uri) > 0) {
+        // We only execute this block if the redirect_uri appears as a
+        // parameter in the URL.
+        var codeToAddFoodMePrivacyPolicy = (
+          "var footer = document.querySelector('footer');" +
+          "var header=document.querySelector('header > h1'); " +
+          "header.innerHTML = header.innerHTML + '<br>By logging in " +
+              "you also agree to the FoodMe " +
+              "<a href=\"http://www.foodme.io/#/privacy_page#topOfPage\">Privacy Policy</a>.<br><br>' + " +
+              "footer.innerHTML; " +
+          "footer.style.visibility = 'hidden';" +
+          "header.style.lineHeight = '20px'; " +
+          "header.style.margin = '15px 10px'"
+        );
+        ref.executeScript({
+            code: codeToAddFoodMePrivacyPolicy,
+        }, function() {
+        });
       }
     });
   };
