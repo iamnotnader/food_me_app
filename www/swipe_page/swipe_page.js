@@ -109,6 +109,8 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $q, fmaStack
         computeJoinedFoodDataImageList($scope.foodDataCursor);
       },
       function(err) {
+        // If we got an error, that's the end of the stack.
+        $scope.foodDataCursor = $scope.foodData.length;
       }
     );
   };
@@ -220,6 +222,11 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $q, fmaStack
       function(err) {
         // Not really sure what to do here.
         $scope.isLoading = false;
+        $scope.foodData = [];
+        $scope.imagesToShow = [];
+        $scope.allImageLinks = [];
+        $scope.foodDataCursor = 0;
+        computeJoinedFoodDataImageList($scope.foodDataCursor);
       } 
     );
   };
