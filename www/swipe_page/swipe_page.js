@@ -79,6 +79,9 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $q, fmaStack
   $scope.numPicsInStack = 3;
   $scope.numMerchantsToFetch = 10;
   $scope.maybeRefreshStack = function() {
+    console.log('foodDataCursor: ' + $scope.foodDataCursor);
+    console.log('foodData.length: ' + $scope.foodData.length);
+    console.log('allImageLinks.length: ' + $scope.foodData.length);
     if ($scope.foodDataCursor % $scope.numPicsInStack !== 0) {
       return;
     }
@@ -216,6 +219,7 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $q, fmaStack
       },
       function(err) {
         // Not really sure what to do here.
+        $scope.isLoading = false;
       } 
     );
   };
