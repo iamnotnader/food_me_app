@@ -113,6 +113,10 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $q, fmaStack
   // A little more setup.
   $scope.cartBackButtonPressed = function() {
     console.log('Cart back button pressed.');
+    // Clear the stack.
+    fmaLocalStorage.setObjectWithExpirationSeconds(
+        'foodData', null,
+        fmaSharedState.testing_invalidation_seconds);
     mainViewObj.removeClass();
     mainViewObj.addClass('slide-right');
     $location.path('/swipe_page');

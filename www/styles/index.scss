@@ -691,7 +691,7 @@ $sp_bottom_offset: 4%;
 
 .swipe_page__bottom_button {
   display: inline-block;
-  width: 50%;
+  width: 33.33333%;
   height: 75%;
   position: relative;
 }
@@ -733,6 +733,13 @@ $sp_bottom_offset: 4%;
   -webkit-backface-visibility: hidden;
   -webkit-transform: translate3d(0, -50%, 0);  
   transform: translate3d(0, -50%, 0); 
+}
+.cart_page__invisible_cart_remove_button {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 3rem;
 }
 
 .cart_page__cell_text_container {

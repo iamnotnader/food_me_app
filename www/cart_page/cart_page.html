@@ -4,8 +4,9 @@
       <div ng-repeat="cartItem in userCart" class="cart_page__repeated_cell_animated fade-out-500ms">
         <div class="choose_address__list_cell">
           <div class="swipe_page__vertically_center">
-            <img ng-cloak src="img/delete.png" alt="" class="cart_page__delete_icon swipe_page__vertically_center" ng-click="removeFromCart($index)">
+            <img ng-cloak src="img/delete.png" alt="" class="cart_page__delete_icon swipe_page__vertically_center">
           </div>
+          <div class="cart_page__invisible_cart_remove_button" ng-click="removeFromCart($index)"></div>
           <div class="cart_page__cell_text_container">
             <div class="choose_address__cell_top_row">
               {{cartItem.name}}

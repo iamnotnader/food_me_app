@@ -153,6 +153,8 @@ function(fmaLocalStorage, $http, fmaSharedState, $q) {
       function(res) {
         var allNearbyMerchantData = res.data;
         var merchants = allNearbyMerchantData.merchants;
+        // Shuffle up the merchants for fun.
+        merchants = _.shuffle(merchants);
         var cuisinesOverlap = function(merchantCuisines, cuisines) {
           if (merchantCuisines == null) {
             return false;

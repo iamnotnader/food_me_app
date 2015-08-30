@@ -176,9 +176,6 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
     fmaLocalStorage.setObjectWithExpirationSeconds(
         'foodData', null,
         fmaSharedState.testing_invalidation_seconds);
-    fmaLocalStorage.setObjectWithExpirationSeconds(
-        'allImageLinks', null,
-        fmaSharedState.testing_invalidation_seconds);
     
     mainViewObj.removeClass();
     mainViewObj.addClass('slide-left');

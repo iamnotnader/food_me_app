@@ -1,7 +1,7 @@
 // This is the most important variable in the whole codebase. If it's set
 // to true, we're in testing mode, which means we hit sandbox.delivery.com.
 // Otherwise, we're in prod mode, which means we hit api.delivery.com.
-var testModeEnabled = false;
+var testModeEnabled = true;
 
 // Even if testModeEnabled = false, it's nice to have a flag we can use to
 // turn payment on/off.

@@ -4,7 +4,7 @@
       Swipe your destiny.  
     </div>
   </div>
-  <div class="swipe_page__jtinder_container">
+  <div class="swipe_page__jtinder_container" ng-if="!isLoading">
     <div id="tinderslide" class="swipe_page__tinderslide">
         <ul>
           <li class="pane1 fade-in-300ms" ng-repeat="foodInfo in joinedFoodInfo">
@@ -31,12 +31,13 @@
           </li>
         </ul>
     </div>
-
-    <div class="swipe_page__loading_pusheen fade-in-300ms fade-out-300ms" src="img/pusheen_eating.gif" alt="" ng-if="!showFoodInfo"></div>
   </div>
   <div class="swipe_page__bottom_menu">
     <div ng-click="backButtonPressed()" class="swipe_page__bottom_button" style="border-right: 1px solid #6E6666;">
-      <img style="height: 100%;" class="swipe_page__vertically_center" src="img/gear.png" alt="">
+      <img style="height: 100%;" class="swipe_page__vertically_center" src="img/back.png" alt="">
+    </div>
+    <div ng-click="refreshButtonPressed()" class="swipe_page__bottom_button" style="border-right: 1px solid #6E6666;">
+      <img style="height: 100%;" class="swipe_page__vertically_center" src="img/refresh.png" alt="">
     </div>
     <div ng-click="cartButtonPressed()" class="swipe_page__bottom_button">
       <!--We use the onload method to set the little badge-->
