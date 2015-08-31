@@ -40,6 +40,8 @@ angular.module('foodmeApp.sharedState', [])
       return days[new Date().getDay()];
     },
 
+    instructions: 'Tell people to download the FoodMe app and get more orders!',
+
     taxRate: .09,
 
     tipAmount: 1.0,

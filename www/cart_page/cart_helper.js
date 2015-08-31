@@ -73,7 +73,7 @@ angular.module('foodmeApp.cartHelper', [])
       var itemRequestObject = {
         item_id: currentItem.id,
         item_qty: 1,
-        instructions: "Nader Al-Naji is GOD!",
+        instructions: fmaSharedState.instructions,
         option_qty: optionRequestObject,
       };
       var finalRequestObject = {
