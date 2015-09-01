@@ -168,11 +168,6 @@ angular.module('foodmeApp.cartHelper', [])
     return $q(function(resolve, reject) {
       // Actual init.
       itemRequestObjects = createCartRequestsFromItems(cartItems);
-      var very_sorry =
-        "One or more of the items in your cart aren't actually available " +
-        "right now because it's dinner time and they're lunch-only items or " +
-        "something like that. Go back to the cart page and try removing the " +
-        "offending item :*( I promise this will be fixed soon!!!";
       // Clear the user's cart.
       clearCartsPromise(cartItems, rawAccessToken)
       .then(
@@ -186,14 +181,12 @@ angular.module('foodmeApp.cartHelper', [])
               resolve(res);
             },
             function(err) {
-              alert(very_sorry);
               reject(err);
             }
           );
         },
         function(err) {
           // We can't ever get here because clearCartsPromise always resolves.
-          alert(very_sorry);
           reject(err);
         }
       );
