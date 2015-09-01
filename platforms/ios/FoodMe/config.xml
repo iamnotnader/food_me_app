@@ -44,9 +44,10 @@
     </author>
     <content src="index.html" />
     <preference name="permissions" value="none" />
-    <preference name="orientation" value="default" />
+    <preference name="orientation" value="portrait" />
     <preference name="target-device" value="universal" />
     <preference name="fullscreen" value="true" />
+    <preference name="Fullscreen" value="true" />
     <preference name="webviewbounce" value="true" />
     <preference name="prerendered-icon" value="true" />
     <preference name="stay-in-webview" value="false" />
@@ -58,7 +59,7 @@
     <preference name="auto-hide-splash-screen" value="false" />
     <preference name="AutoHideSplashScreen" value="false" />
     <preference name="disable-cursor" value="false" />
-    <preference name="android-minSdkVersion" value="10" />
+    <preference name="android-minSdkVersion" value="11" />
     <preference name="android-installLocation" value="auto" />
     <preference name="BackupWebStorage" value="none" />
     <preference name="DisallowOverscroll" value="true" />
@@ -81,10 +82,6 @@
     <gap:plugin name="org.apache.cordova.splashscreen" />
     <gap:plugin name="org.apache.cordova.vibration" />
     <icon src="icon.png" />
-    <icon gap:platform="android" gap:qualifier="ldpi" src="www/res/icon/android/icon_36.png" />
-    <icon gap:platform="android" gap:qualifier="mdpi" src="www/res/icon/android/icon_48.png" />
-    <icon gap:platform="android" gap:qualifier="hdpi" src="www/res/icon/android/icon_72.png" />
-    <icon gap:platform="android" gap:qualifier="xhdpi" src="www/res/icon/android/icon_96.png" />
     <icon gap:platform="ios" height="57" src="www/res/icon/ios/icon_57.png" width="57" />
     <icon gap:platform="ios" height="72" src="www/res/icon/ios/icon_72.png" width="72" />
     <icon gap:platform="ios" height="114" src="www/res/icon/ios/icon_114.png" width="114" />
