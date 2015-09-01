@@ -240,6 +240,7 @@ h1 {
   height: 15px;
   display: inline-block;
   border-radius: 50%;
+  -webkit-border-radius: 50%;
   background-color: none;
   margin: 0 4px;
   vertical-align: middle; }
@@ -432,6 +433,7 @@ h1 {
   margin-left: auto;
   margin-right: auto;
   border-radius: 100%;
+  -webkit-border-radius: 100%;
   border: 5px solid #464646;
   height: 50%;
   -webkit-background-size: cover;
@@ -476,6 +478,7 @@ h1 {
   margin-right: auto;
   margin-left: auto;
   border-radius: 100%;
+  -webkit-border-radius: 100%;
   border: 5px solid #464646;
   height: 50%;
   -webkit-background-size: cover;
@@ -526,6 +529,7 @@ h1 {
   left: 10%;
   background-size: contain;
   border-radius: 100%;
+  -webkit-border-radius: 100%;
   border: 3px solid #6E6666; }
 
 .swipe_page__food_text_container {
@@ -605,6 +609,7 @@ h1 {
   width: 1.3rem;
   background-color: #FFB2B2;
   border-radius: 100%;
+  -webkit-border-radius: 100%;
   border: 1px solid #6E6666;
   position: absolute;
   text-align: center;
