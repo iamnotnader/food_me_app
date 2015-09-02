@@ -22,7 +22,7 @@ function($scope, $location, $http, fmaLocalStorage, fmaSharedState, $rootScope, 
   mainViewObj.removeClass();
 
   // Default to sliding left.
-  mainViewObj.addClass('slide-left-out');
+  mainViewObj.addClass('slide-left-in slide-left-out');
 
   // This line is necessary in order to make Angular $http post requests behave
   // like jQuery $.post requests. Namely, it makes it so the params are added
@@ -116,7 +116,6 @@ function($scope, $location, $http, fmaLocalStorage, fmaSharedState, $rootScope, 
           $scope.token_data = response.data;
           fmaLocalStorage.setObjectWithExpirationSeconds('userToken', $scope.token_data,
               fmaSharedState.testing_invalidation_seconds);
-          mainViewObj.addClass('slide-left-in');
           $location.path('/choose_address');
           return;
         }, function(error) {
