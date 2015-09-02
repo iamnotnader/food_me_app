@@ -12,3 +12,5 @@ platforms/android/CordovaLib/build/
 platforms/browser
 plugins/browser.json
 .class
+.idea
+.iml
