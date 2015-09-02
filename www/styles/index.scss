@@ -826,7 +826,11 @@ $sp_bottom_offset: 4%;
 .slide-left > .ng-enter,  
 .slide-left > .ng-leave,  
 .slide-right > .ng-enter,  
-.slide-right > .ng-leave {  
+.slide-right > .ng-leave,
+.slide-left-in > .ng-enter,  
+.slide-left-out > .ng-leave,  
+.slide-right-in > .ng-enter,  
+.slide-right-out > .ng-leave {  
     position: absolute;  
     top: 0; right: 0; bottom: 0; left: 0;  
     background: inherit;  
@@ -851,7 +855,28 @@ $sp_bottom_offset: 4%;
 .slide-left > .ng-leave.ng-leave-active {  
     -webkit-transform: translateX(-100%);  
     transform: translateX(-100%);  
+}
+
+// Break slide-left into enter and leave.
+.slide-left-in > .ng-enter {  
+    z-index: 101; 
+    -webkit-transform: translateX(100%); 
+    transform: translateX(100%);  
 }  
+.slide-left-in > .ng-enter.ng-enter-active {  
+    -webkit-transform: translateX(0);  
+    transform: translateX(0);  
+}  
+.slide-left-out > .ng-leave {  
+    z-index: 100;  
+    -webkit-transform: translateX(0);  
+    transform: translateX(0);  
+}  
+.slide-left-out > .ng-leave.ng-leave-active {  
+    -webkit-transform: translateX(-100%);  
+    transform: translateX(-100%);  
+}  
+
 .slide-right > .ng-enter {  
     z-index: 100;  
     -webkit-transform: translateX(-100%);  
@@ -870,6 +895,7 @@ $sp_bottom_offset: 4%;
     -webkit-transform: translateX(100%);  
     transform: translateX(100%);  
 }
+
 // Things that fade out, like the loading screen.
 .fade-me.ng-leave {
   transition:0.25s linear all;

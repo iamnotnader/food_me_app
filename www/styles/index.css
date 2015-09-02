@@ -700,7 +700,11 @@ h1 {
 .slide-left > .ng-enter,
 .slide-left > .ng-leave,
 .slide-right > .ng-enter,
-.slide-right > .ng-leave {
+.slide-right > .ng-leave,
+.slide-left-in > .ng-enter,
+.slide-left-out > .ng-leave,
+.slide-right-in > .ng-enter,
+.slide-right-out > .ng-leave {
   position: absolute;
   top: 0;
   right: 0;
@@ -726,6 +730,24 @@ h1 {
   transform: translateX(0); }
 
 .slide-left > .ng-leave.ng-leave-active {
+  -webkit-transform: translateX(-100%);
+  transform: translateX(-100%); }
+
+.slide-left-in > .ng-enter {
+  z-index: 101;
+  -webkit-transform: translateX(100%);
+  transform: translateX(100%); }
+
+.slide-left-in > .ng-enter.ng-enter-active {
+  -webkit-transform: translateX(0);
+  transform: translateX(0); }
+
+.slide-left-out > .ng-leave {
+  z-index: 100;
+  -webkit-transform: translateX(0);
+  transform: translateX(0); }
+
+.slide-left-out > .ng-leave.ng-leave-active {
   -webkit-transform: translateX(-100%);
   transform: translateX(-100%); }
 
