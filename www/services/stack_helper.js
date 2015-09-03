@@ -11,8 +11,8 @@
 
 angular.module('foodMeApp.stackHelper', ['foodmeApp.localStorage', 'foodmeApp.sharedState'])
 
-.factory('fmaStackHelper', ["fmaLocalStorage", "$http", "fmaSharedState", "$q",
-function(fmaLocalStorage, $http, fmaSharedState, $q) {
+.factory('fmaStackHelper', ["fmaLocalStorage", "$http", "fmaSharedState", "$q", "$timeout",
+function(fmaLocalStorage, $http, fmaSharedState, $q, $timeout) {
   // Go through the a schedule array and return the ones that are open right now.
   // TODO(daddy): I can hear this function softly crying "killll meeeeee!"
   var getOpenSchedules = function(scheduleArr) {
@@ -161,7 +161,8 @@ function(fmaLocalStorage, $http, fmaSharedState, $q) {
           }
           for (var mCuis = 0; mCuis < merchantCuisines.length; mCuis++) {
             for (var uCuis = 0; uCuis < cuisines.length; uCuis++) {
-              if (merchantCuisines[mCuis] == cuisines[uCuis].name) {
+              if (cuisines[uCuis] !== null &&
+                  merchantCuisines[mCuis] === cuisines[uCuis].name) {
                   return true;
               }
             }
@@ -246,7 +247,9 @@ function(fmaLocalStorage, $http, fmaSharedState, $q) {
         // This line makes it so that if we have fewer than currentNumMerchantsToFetch,
         // we still break out of the promise.
         currentNumMerchantsToFetch = merchantsBeingFetched;
-
+        if (merchantsBeingFetched === 0) {
+          reject('No merchants to fetch.');
+        }
 
         // Return all the data (woo!)
       },
@@ -278,6 +281,9 @@ function(fmaLocalStorage, $http, fmaSharedState, $q) {
       var numImagesReturned = 0;
       var goodUrls = [];
       return $q(function(resolve, reject) {
+        if (imageUrls.length === 0) {
+          reject('no pics.');
+        }
         for (var v1 = 0; v1 < imageUrls.length; v1++) {
           (function(imageIndex) {
             $http.get(imageUrls[imageIndex]).then(
@@ -338,8 +344,8 @@ function(fmaLocalStorage, $http, fmaSharedState, $q) {
                   }
                 },
                 function(err) {
-                  // cleanImages can never err.
                   console.warn('cleanImages should never ERR.');
+                  reject(err);
                 });
             },
             function(err) {
@@ -359,6 +365,13 @@ function(fmaLocalStorage, $http, fmaSharedState, $q) {
   var setUpDataVariables = function(latitude, longitude, token, cuisines, numPicsToFetch, numMerchantsToFetch, forceRefresh) {
     var retVars = {};
     return $q(function(resolve, reject) {
+      // This is a hack but if we're loading for more than some amount of time
+      // we need to gtfo.
+      $timeout(function() {
+        console.log('loading timed out.');
+        reject('timed out.');
+      }, fmaSharedState.promiseTimeoutMs);
+
       // If we're missing any of the necessary data just refetch errything.
       if (forceRefresh ||
           !fmaLocalStorage.isSet('allNearbyMerchantData') ||

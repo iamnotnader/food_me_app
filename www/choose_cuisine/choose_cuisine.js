@@ -62,7 +62,7 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
       $scope.selectedCuisineIndices = { value: [] };
     } else {
       $scope.selectAllText = "deselect all cuisines";
-      $scope.selectedCuisineIndices = { value: _.range(30) };
+      $scope.selectedCuisineIndices = { value: _.range(fmaSharedState.numCuisinesToShow) };
     }
   };
   $scope.toggleSelectAll();
@@ -114,11 +114,11 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
       return b.count - a.count;
     });
     fmaLocalStorage.setObject('userCuisines', {});
-    $scope.all_cuisines = $scope.all_cuisines.slice(0, 30);
+    $scope.all_cuisines = $scope.all_cuisines.slice(0, fmaSharedState.numCuisinesToShow);
     // Note that we need to set it on our res because we then store
     // res.data.
     res.data.cuisines = $scope.all_cuisines;
-    $scope.selectedCuisineIndices = { value: _.range(30) };
+    $scope.selectedCuisineIndices = { value: _.range(fmaSharedState.numCuisinesToShow) };
 
     // Set the merchant data and reinitialize the chosen cuisines.
     fmaLocalStorage.setObjectWithExpirationSeconds(
@@ -165,7 +165,11 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
     var cuisineIndices = $scope.selectedCuisineIndices.value;
     var userCuisines = [];
     for (var x = 0; x < cuisineIndices.length; x++) {
-      userCuisines.push($scope.all_cuisines[cuisineIndices[x]]);
+      // Just in case-- check to make sure we're not out of bounds.
+      var currentIndex = cuisineIndices[x];
+      if (currentIndex < $scope.all_cuisines.length) {
+        userCuisines.push($scope.all_cuisines[cuisineIndices[x]]);
+      }
     }
     // These correspond directly to values in allNearbyMerchantData.cuisines.
     console.log(userCuisines);
