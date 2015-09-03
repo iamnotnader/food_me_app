@@ -42,7 +42,7 @@ angular.module('foodmeApp.sharedState', [])
 
     instructions: 'Tell people to download the FoodMe app and get more orders!',
 
-    taxRate: .09,
+    taxRate: 0.09,
 
     tipAmount: 1.0,
 

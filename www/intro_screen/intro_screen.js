@@ -38,7 +38,7 @@ function($scope, $location, $http, fmaLocalStorage, fmaSharedState, $rootScope, 
   // We have a single giant png that contains all of the app intro screens. Its
   // width should be screenshotWidth * numPhotos so we can slide through it
   // properly.
-  $scope.numPhotos = 4;
+  $scope.numPhotos = 5;
   // The list of background colors for our intro screen. You should be able to
   // add more without anything breaking, but you won't see them unless you make
   // numPhotos bigger above to correspond. Note that you can have fewer colors
@@ -167,10 +167,11 @@ function($scope, $location, $http, fmaLocalStorage, fmaSharedState, $rootScope, 
               //screenshot. This is shitty and I wanted to bind the actual
               //screenshot element with the width variable but it didn't work.
               scope.screenshotWidth = scope.phoneWidth * (150.0/175);
-              $('.intro_screen__screenshot_container').width(scope.screenshotWidth);
+              $('.intro_screen__outer_screenshot_container').width(scope.screenshotWidth);
   
               scope.textWidth =  $('.intro_screen__overall_text_container').width();
-              $('.intro_screen__screenshot_container').show();
+              $('.intro_screen__outer_screenshot_container').show();
+              scope.innerScreenshotContainer = $('.intro_screen__inner_screenshot_container');
 
               scope.setActiveDot(0);
               
@@ -207,6 +208,8 @@ function($scope, $location, $http, fmaLocalStorage, fmaSharedState, $rootScope, 
         scope.textOffset =
             Math.min(scope.textOffset, 0);
         textObject.css({left: scope.textOffset});
+        var leftPercent = Math.floor(scope.textOffset * 100.0 / scope.textWidth) + '%';
+        scope.innerScreenshotContainer.css({left: leftPercent});
       }
 
       function touchend() {
@@ -226,7 +229,8 @@ function($scope, $location, $http, fmaLocalStorage, fmaSharedState, $rootScope, 
         scope.textOffset = finalTextOffset;
         textObject.animate(
             {left: finalTextOffset}, 200);
-        console.log(scope.textOffset);
+        var leftPercent = Math.floor(scope.textOffset * 100.0 / scope.textWidth) + '%';
+        scope.innerScreenshotContainer.animate({left: leftPercent}, 200);
 
         // Compute the color we want the background to end up at.
         scope.colorIndex = screenIndex % scope.colorList.length;

@@ -165,7 +165,7 @@ h1 {
 
 /*We place the screenshot image inside the phone. To do this we take where the*/
 /*phone is relative to the outer div, and add the offset of the screenshot to it.*/
-.intro_screen__screenshot_container {
+.intro_screen__outer_screenshot_container {
   position: absolute;
   top: 0;
   bottom: 0;
@@ -177,7 +177,44 @@ h1 {
 
 .intro_screen__all_intro_screenshots {
   height: 100%;
-  position: absolute; }
+  position: absolute;
+  width: 100%; }
+
+.intro_screen__enjoy_page {
+  background-color: #E4CDCD; }
+
+.overall__attribution {
+  position: absolute;
+  bottom: 4%;
+  left: 0;
+  right: 0;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+  font-size: 0.5rem;
+  text-transform: none;
+  color: black;
+  font-family: TitleFont; }
+
+.intro_screen__enjoy_img {
+  background: url("../img/pusheen_eat_everything.gif") no-repeat center center;
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 50%;
+  width: 80%;
+  margin-left: auto;
+  margin-right: auto;
+  top: 50%;
+  transform: translateY(-50%);
+  -webkit-transform: translateY(-50%);
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+  border-radius: 100%;
+  -webkit-border-radius: 100%;
+  border: 5px solid #464646; }
 
 .intro_screen__text_container {
   position: absolute;

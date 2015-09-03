@@ -9,7 +9,9 @@
         <ul>
           <li class="pane1 fade-in-300ms" ng-repeat="foodInfo in joinedFoodInfo">
             <div class= "swipe_page__food_image_container">
-              <div class="swipe_page__food_image" fma-back-img="{{foodInfo.imagesToShow.urls[0]}}"></div>
+              <div class="swipe_page__food_image" fma-back-img="{{foodInfo.imagesToShow.urls[0]}}">
+                <div class="overall__attribution" style="bottom: 1%;">Powered by Google</div>
+              </div>
             </div>
             <div class="like"></div>
             <div class="dislike"></div>
@@ -35,7 +37,9 @@
     <div class="swipe_page__empty_stack fade-in-slow" ng-if="foodData.length === foodDataCursor">
       Sad, your stack is empty. Try refreshing a few times or widening your cusine preferences.
     </div>
-    <div class="swipe_page__loading_pusheen fade-in-300ms fade-out-300ms" alt="" ng-if="(allImageLinks.length - foodDataCursor <= 0) && (foodDataCursor !== foodData.length)"></div>
+    <div class="swipe_page__loading_pusheen fade-in-300ms fade-out-300ms" alt="" ng-if="(allImageLinks.length - foodDataCursor <= 0) && (foodDataCursor !== foodData.length)">
+      <div class="overall__attribution">Pusheen.com</div>
+    </div>
   </div>
   <div class="swipe_page__bottom_menu">
     <div ng-click="backButtonPressed()" class="swipe_page__bottom_button" style="border-right: 1px solid #6E6666;">

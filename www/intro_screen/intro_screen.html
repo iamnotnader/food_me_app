@@ -1,8 +1,20 @@
 <div intro-screen-swipe-through class="intro_screen_container">
     <div class="intro_screen__upper_container">
       <img intro-screen-image-onload class="intro_screen__phone" ng-src="img/phone.png" alt="">
-      <div style="display: none;" class="intro_screen__screenshot_container">
-        <img class="intro_screen__all_intro_screenshots" ng-src="img/introgif.gif" alt="">
+      <div style="display: none;" class="intro_screen__outer_screenshot_container">
+        <div style="position: relative; height: 100%;" class="intro_screen__inner_screenshot_container">
+          <!--Ugh.-->
+          <!--Everything about this is horrible but I couldn't get it to work any other way.-->
+          <div class="intro_screen__all_intro_screenshots" style="background: url('img/introgif_fast.gif'); background-size: cover; background-position: center center;" > </div>
+          <div class="intro_screen__all_intro_screenshots" style="position: absolute; left: 100%; background: url('img/cart_page.png'); background-size: cover; background-position: center center;" > </div>
+          <div class="intro_screen__all_intro_screenshots" style="position: absolute; left: 200%; background: url('img/choose_address.png'); background-size: cover; background-position: center center;" > </div>
+          <div class="intro_screen__all_intro_screenshots" style="position: absolute; left: 300%; background: url('img/choose_card.png'); background-size: cover; background-position: center center;" > </div>
+          <div class="intro_screen__all_intro_screenshots intro_screen__enjoy_page" style="position: absolute; left: 400%;" >
+            <div class="intro_screen__enjoy_img">
+              <div class="overall__attribution">Pusheen.com</div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
     <div class="intro_screen__lower_container">
@@ -14,43 +26,26 @@
         <div class="intro_screen__dot_indicator intro_screen__dot-1"></div>
         <div class="intro_screen__dot_indicator intro_screen__dot-2"></div>
         <div class="intro_screen__dot_indicator intro_screen__dot-3"></div>
+        <div class="intro_screen__dot_indicator intro_screen__dot-4"></div>
       </div>
       <!--This div has a total width of 300% because it contains three pieces of
           text that will be swiped through. The number of divs in this container
           must equal numPhotos in the intro_screen.js file.-->
       <div class="intro_screen__overall_text_container">
         <div class="intro_screen__text_container">
-          <p class="intro_screen__main_text">It's Tinder for food!</p>
-          <!--<p class="intro_screen__description_text">-->
-            <!--Stop sifting through restaurants and<br>-->
-            <!--menus and start ordering food<br>-->
-            <!--the way you date!-->
-          <!--</p>-->
-          
+          <p class="intro_screen__main_text">Swipe right to add to cart.</p>
         </div>
         <div class="intro_screen__text_container" style="left: 100%;">
-          <p class="intro_screen__main_text">It learns your preferences.</p>
-          <!--<p class="intro_screen__description_text">-->
-            <!--We use advanced neural network<br>-->
-            <!--algorithms to learn from your swipes.<br>-->
-            <!--So your stack gets better over time!-->
-          <!--</p>-->
+          <p class="intro_screen__main_text">Add or remove items.</p>
         </div>
         <div class="intro_screen__text_container" style="left: 200%;">
-          <p class="intro_screen__main_text">Why am I even explaining this?</p>
-          <!--<p class="intro_screen__description_text">-->
-            <!--Customize your meal and enter<br>-->
-            <!--payment info— or just hang with<br>-->
-            <!--the defaults.-->
-          <!--</p>-->
+          <p class="intro_screen__main_text">Choose an address.</p>
         </div>
         <div class="intro_screen__text_container" style="left: 300%;">
-          <p class="intro_screen__main_text">Dude, it's TINDER FOR FOOD!</p>
-          <!--<p class="intro_screen__description_text">-->
-            <!--After submitting, your order will be<br>-->
-            <!--delivered to you. So simple, right?<br>-->
-            <!--NOW GIVE IT A TRY.-->
-          <!--</p>-->
+          <p class="intro_screen__main_text">Choose a credit card.</p>
+        </div>
+        <div class="intro_screen__text_container" style="left: 400%;">
+          <p class="intro_screen__main_text">Enjoy your delivery!</p>
         </div>
       </div>
       <img class="intro_screen__sign_in_button" ng-src="img/sign_in_button.png" alt="" ng-click="signInButtonClicked()">
