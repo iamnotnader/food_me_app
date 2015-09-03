@@ -50,6 +50,10 @@ angular.module('foodmeApp.sharedState', [])
 
     numMerchantsToFetch: 10,
 
+    promiseTimeoutMs: 15000,
+
+    numCuisinesToShow: 30,
+
     // Controls how long the loading screen shows for. If you make this too small,
     // the app looks buggy because the loading screen snaps away in the middle of
     // screen transitions.

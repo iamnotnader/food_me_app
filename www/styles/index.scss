@@ -211,6 +211,7 @@ $intro_screen__screenshot_height: (260 / 350) * $intro_screen__phone_height;
   margin: auto;
   height: $intro_screen__screenshot_height;
   overflow: hidden;
+  border: 1px solid #D8D8D8;
 }
 
 .intro_screen__all_intro_screenshots {

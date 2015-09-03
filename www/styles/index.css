@@ -173,7 +173,8 @@ h1 {
   right: 0;
   margin: auto;
   height: 66.85714%;
-  overflow: hidden; }
+  overflow: hidden;
+  border: 1px solid #D8D8D8; }
 
 .intro_screen__all_intro_screenshots {
   height: 100%;
