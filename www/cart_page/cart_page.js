@@ -86,8 +86,9 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $q, fmaStack
         },
         function(newCartItems) {
           console.log('Had to drop some cart items.');
-          alert("Doh! Some of the items in your cart expired. This is rare but usually " +
-                "happens when a store closes before you can check out. Just go swipe some " +
+          alert("Doh! One of the places you chose to order from just closed and we had to " +
+                "remove their items from your cart :( " +
+                "Just go back, hit refresh, and swipe some " +
                 "more-- and be quicker this time!");
           // No need to update $scope.userCart because some items expired.
           $scope.userCart = newCartItems.added;

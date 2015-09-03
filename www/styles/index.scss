@@ -255,6 +255,7 @@ $intro_screen__screenshot_height: (260 / 350) * $intro_screen__phone_height;
   border-radius: 100%;
   -webkit-border-radius: 100%;
   border: 5px solid #464646;
+  overflow: hidden;
 }
 
 .intro_screen__text_container {

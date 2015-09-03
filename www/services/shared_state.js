@@ -46,6 +46,10 @@ angular.module('foodmeApp.sharedState', [])
 
     tipAmount: 1.0,
 
+    maxDishesToReturn: 400,
+
+    numMerchantsToFetch: 10,
+
     // Controls how long the loading screen shows for. If you make this too small,
     // the app looks buggy because the loading screen snaps away in the middle of
     // screen transitions.

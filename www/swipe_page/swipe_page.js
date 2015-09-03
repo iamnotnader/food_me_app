@@ -77,7 +77,7 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $q, fmaStack
   };
 
   $scope.numPicsInStack = 3;
-  $scope.numMerchantsToFetch = 10;
+  $scope.numMerchantsToFetch = fmaSharedState.numMerchantsToFetch;
   $scope.maybeRefreshStack = function() {
     console.log('foodDataCursor: ' + $scope.foodDataCursor);
     console.log('foodData.length: ' + $scope.foodData.length);

@@ -224,6 +224,8 @@ function(fmaLocalStorage, $http, fmaSharedState, $q) {
                 if (numMerchantsFetched === currentNumMerchantsToFetch) {
                   // Shuffle up the dishes for fun.
                   foodData = _.shuffle(foodData);
+                  // Limit the number of dishes we return to prevent oom. 
+                  foodData = foodData.slice(0, fmaSharedState.maxDishesToReturn);
                   console.log(foodData);
                   resolve({
                     allNearbyMerchantData: allNearbyMerchantData,
