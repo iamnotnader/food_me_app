@@ -311,7 +311,7 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
     console.log('Add card pressed!');
 
     var ref = window.open(addCardUrl, '_blank',
-        'location=yes,transitionstyle=crossdissolve');
+        'location=yes,transitionstyle=crossdissolve,clearcache=no,clearsessioncache=no');
     ref.addEventListener('loadstart', function(event) {
       var url = event.url;
       if (url.indexOf(fmaSharedState.redirect_uri) === 0) {
@@ -333,7 +333,9 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
         "var container = document.querySelector('#container');" +
         "if (container != null && container.innerText.indexOf('Please log in.') >= 0) {" +
           "container.innerText = 'Your session expired. This happens rarely--' + " +
-              "'just restart the app and login again and everything will work.';" +
+              "'just restart the app and login again and everything will work. If that fails, " +
+              "you can always add a card on delivery.com and then select it from the list on " +
+              "the last screen.';" +
           "container.style.textAlign = 'center';" +
         "}"
       );
