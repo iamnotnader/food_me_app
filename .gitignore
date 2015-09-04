@@ -11,6 +11,8 @@ platforms/android/.gradle/
 platforms/android/CordovaLib/build/
 platforms/browser
 plugins/browser.json
-.class
-.idea
-.iml
+*.class
+*.idea
+*.iml
+*.apk
+platforms/android/manifest-merger-release-report.txt
