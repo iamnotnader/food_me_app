@@ -17,20 +17,7 @@
  * under the License.
  */
 
-var setupAnalytics = function(analytics_id) {
-  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-
-  ga('create', analytics_id, 'auto');
-  ga('set', {
-    page: '/init',
-    title: 'Initializing the app.'
-  });
-  ga('send', 'pageview');
-}
-
+var ga_id = null;
 //Set up the main app module and pull in all the dependencies.
 var initAngularStuff = function() {
   // Declare app level module which depends on views, and components
@@ -54,7 +41,18 @@ var initAngularStuff = function() {
       .otherwise({redirectTo: '/intro_screen'});
   }]).
   run(['$rootScope', 'fmaSharedState', function($rootScope, fmaSharedState) {
-    setupAnalytics(fmaSharedState.ga_id);
+    ga_id = fmaSharedState.ga_id;
+    window.analytics = {
+      trackEvent: function () {
+        console.log('Tried to track event but not loaded yet.');
+      },
+      trackView: function() {
+        console.log('Tried to track view but not loaded yet.');
+      },
+      trackTiming: function() {
+        console.log('Tried to track timing but not loaded yet.');
+      },
+    };
   }]);
 };
 
@@ -99,5 +97,7 @@ var app = {
         );
         return ret;
       };
+      // The ga_id is set in intitAngular
+      window.analytics.startTrackerWithId(ga_id)
     }
 };

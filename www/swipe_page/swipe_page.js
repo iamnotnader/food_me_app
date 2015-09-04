@@ -26,7 +26,7 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $q, fmaStack
     $scope.rawAccessToken = $scope.userToken.access_token;
   }
   if ($scope.rawAccessToken === null) {
-    ga('send', 'event', 'reroute', 'swipe_page__intro_screen');
+    analytics.trackEvent('reroute', 'swipe_page__intro_screen');
 
     alert('In order to swipe, we need you to log in first.');
     console.log('No token found-- go back to intro_screen.');
@@ -34,7 +34,7 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $q, fmaStack
     return;
   }
   if (!fmaLocalStorage.isSet('userAddress')) {
-    ga('send', 'event', 'reroute', 'swipe_page__choose_address');
+    analytics.trackEvent('reroute', 'swipe_page__choose_address');
 
     alert("In order to swipe, we need an address and some cuisines first.");
     console.log('No address found-- go back to choose_address to get it.');
@@ -42,7 +42,7 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $q, fmaStack
     return;
   }
   if (!fmaLocalStorage.isSet('userCuisines')) {
-    ga('send', 'event', 'reroute', 'swipe_page__choose_cuisine');
+    analytics.trackEvent('reroute', 'swipe_page__choose_cuisine');
 
     alert("In order to swipe, we need some cuisines first.");
     console.log('No cuisines. Go back to choose_cuisine.');
@@ -53,7 +53,7 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $q, fmaStack
   $scope.userCuisines = fmaLocalStorage.getObject('userCuisines');
   // If we get here, we have a token, an address, and some chosen cuisines.
 
-  ga('send', 'pageview', '/swipe_page');
+  analytics.trackView('/swipe_page');
 
   // If this is the first time loading the swipe page, tell the user that
   // their order includes tax and tip.
@@ -75,7 +75,7 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $q, fmaStack
   }
 
   $scope.refreshButtonPressed = function() {
-    ga('send', 'event', 'nav', 'swipe_page__refresh_pressed');
+    analytics.trackEvent('nav', 'swipe_page__refresh_pressed');
 
     console.log('refresh pressed.');
     fmaLocalStorage.setObjectWithExpirationSeconds(
@@ -85,7 +85,7 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $q, fmaStack
   };
 
   $scope.backButtonPressed = function() {
-    ga('send', 'event', 'nav', 'swipe_page__back_pressed');
+    analytics.trackEvent('nav', 'swipe_page__back_pressed');
 
     console.log('back pressed!');
     mainViewObj.removeClass();
@@ -94,7 +94,7 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $q, fmaStack
   };
 
   $scope.cartButtonPressed = function() {
-    ga('send', 'event', 'nav', 'swipe_page__cart_pressed');
+    analytics.trackEvent('nav', 'swipe_page__cart_pressed');
 
     console.log('cart pressed!');
     mainViewObj.removeClass();
@@ -141,7 +141,7 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $q, fmaStack
     );
   };
   $scope.userLikedDish = function(item) {
-    ga('send', 'event', 'swipe', 'swipe_page__user_liked');
+    analytics.trackEvent('swipe', 'swipe_page__user_liked');
 
     $scope.$apply(function() {
       console.log('liked!');
@@ -161,7 +161,7 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $q, fmaStack
     });
   };
   $scope.userDislikedDish = function(item) {
-    ga('send', 'event', 'swipe', 'swipe_page__user_disliked');
+    analytics.trackEvent('swipe', 'swipe_page__user_disliked');
 
     $scope.$apply(function() {
       console.log('disliked!');
@@ -249,14 +249,14 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $q, fmaStack
 
         // Log the success with google analytics.
         var timePassedMs = (new Date()).getTime() - loadStartTime;
-        ga('send', 'timing', 'loading', 'swipe_page_success', timePassedMs);
+        analytics.trackTiming('loading', timePassedMs, 'swipe_page_success');
         $scope.isLoading = false;
         computeJoinedFoodDataImageList($scope.foodDataCursor);
       },
       function(err) {
         // Log the failure with google analytics.
         var timePassedMs = (new Date()).getTime() - loadStartTime;
-        ga('send', 'timing', 'loading', 'swipe_page_failure', timePassedMs);
+        analytics.trackTiming('loading', timePassedMs, 'swipe_page_failure');
 
         // Not really sure what to do here.
         $scope.isLoading = false;

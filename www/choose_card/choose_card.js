@@ -28,7 +28,7 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
     $scope.rawAccessToken = $scope.userToken.access_token;
   }
   if ($scope.rawAccessToken === null) {
-    ga('send', 'event', 'reroute', 'choose_card__intro_screen');
+    analytics.trackEvent('reroute', 'choose_card__intro_screen');
 
     alert('In order to choose an address, we need you to log in first.');
     mainViewObj.removeClass();
@@ -38,7 +38,7 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
   }
   $scope.userCart = fmaLocalStorage.getObject('userCart');
   if ($scope.userCart == null || $scope.userCart.length === 0) {
-    ga('send', 'event', 'reroute', 'choose_card__cart_page');
+    analytics.trackEvent('reroute', 'choose_card__cart_page');
 
     // We redirect to the cart page if the cart is empty.
     alert('We need something in your cart first.');
@@ -49,7 +49,7 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
   }
   $scope.userAddress = fmaLocalStorage.getObject('userAddress');
   if ($scope.userAddress == null) {
-    ga('send', 'event', 'reroute', 'choose_card__choose_address');
+    analytics.trackEvent('reroute', 'choose_card__choose_address');
 
     alert('We need to get an address from you first.');
     mainViewObj.removeClass();
@@ -59,7 +59,7 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
   }
   // If we get here, we have a valid user token AND userCart is nonempty.
 
-  ga('send', 'pageview', '/choose_card');
+  analytics.trackView('/choose_card');
 
   // Sigh.. we have to update the cart here as well because it's really annoying to
   // update it when deleting items. This is killing our dryness, but it's pretty
@@ -79,7 +79,7 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
           var timePassedMs = (new Date()).getTime() - loadStartTime;
 
           // Log the success with google analytics.
-          ga('send', 'timing', 'loading', 'card_page__update_cart__failure', timePassedMs);
+          analytics.trackTiming('loading', timePassedMs, 'card_page__update_cart__failure');
 
           $timeout(function() {
             $scope.cartLoading = false;
@@ -88,7 +88,7 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
         function(newCartItems) {
           // Log the failure with google analytics.
           var timePassedMs = (new Date()).getTime() - loadStartTime;
-          ga('send', 'timing', 'loading', 'card_page__update_cart__failure', timePassedMs);
+          analytics.trackTiming('loading', timePassedMs, 'card_page__update_cart__failure');
 
           console.log('Had to drop some cart items.');
           alert("Doh! One of the places you chose to order from just closed and we had to " +
@@ -150,7 +150,7 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
   });
 
   $scope.chooseCardBackPressed = function() {
-    ga('send', 'event', 'nav', 'choose_card__back_pressed');
+    analytics.trackEvent('nav', 'choose_card__back_pressed');
 
     console.log('Back button pressed.');
     mainViewObj.removeClass();
@@ -213,14 +213,14 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
     processPaymentPromise()
     .then(
       function(res) {
-        ga('send', 'event', 'purchase', 'choose_card__order_success');
+        analytics.trackEvent('purchase', 'choose_card__order_success');
 
         // We were successful in processing the payment!
         console.log('Successfully processed order!');
 
         // Make the loading last at least a second.
         var timePassedMs = (new Date()).getTime() - loadStartTime;
-        ga('send', 'timing', 'purchase', 'card_page__order_success', timePassedMs);
+        analytics.trackTiming('purchase', timePassedMs, 'card_page__order_success');
         $timeout(function() {
           $scope.cardsLoaading = false;
           alert("Thanks! I just took your money and your order will arrive in less " +
@@ -242,11 +242,11 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
         }, Math.max(fmaSharedState.minLoadingMs - timePassedMs, 0));
       },
       function(err) {
-        ga('send', 'event', 'purchase', 'choose_card__order_failure');
+        analytics.trackEvent('purchase', 'choose_card__order_failure');
 
         // Make the loading last at least a second.
         var timePassedMs = (new Date()).getTime() - loadStartTime;
-        ga('send', 'timing', 'purchase', 'card_page__order_failure', timePassedMs);
+        analytics.trackTiming('purchase', timePassedMs, 'card_page__order_failure');
         $timeout(function() {
           $scope.cardsLoaading = false;
           alert("Huh.. we had a problem with your payment: " + err.data.message[0].user_msg +
@@ -258,7 +258,7 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
   };
 
   $scope.chooseCardFinishPressed = function() {
-    ga('send', 'event', 'nav', 'choose_card__finish_pressed');
+    analytics.trackEvent('nav', 'choose_card__finish_pressed');
 
     console.log('Finish button pressed.');
 
@@ -282,7 +282,7 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
               '\n\nFor a total of: $' + sum.toFixed(2) + '?',
         function(index) {
           if (index === 1) {
-            ga('send', 'event', 'purchase', 'choose_card__confirmed_purchase');
+            analytics.trackEvent('purchase', 'choose_card__confirmed_purchase');
 
             takeMoneyAndFinish();
           }
@@ -294,7 +294,7 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
 
   // Set the selected location index when a user taps a cell.
   $scope.cellSelected = function(indexSelected) {
-    ga('send', 'event', 'cell', 'choose_card__cell_selected');
+    analytics.trackEvent('cell', 'choose_card__cell_selected');
 
     console.log('Cell selected: ' + indexSelected);
     $scope.selectedCardIndex.value = indexSelected;
@@ -306,7 +306,7 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
                   'scope=global&';
 
   $scope.addCardButtonPressed = function() {
-    ga('send', 'event', 'cell', 'choose_card__add_card_pressed');
+    analytics.trackEvent('cell', 'choose_card__add_card_pressed');
 
     console.log('Add card pressed!');
 

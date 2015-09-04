@@ -24,7 +24,7 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
     $scope.rawAccessToken = $scope.userToken.access_token;
   }
   if ($scope.rawAccessToken == null) {
-    ga('send', 'event', 'reroute', 'choose_address__intro_screen');
+    analytics.trackEvent('reroute', 'choose_address__intro_screen');
 
     alert('In order to choose an address, we need you to log in first.');
     mainViewObj.removeClass();
@@ -34,7 +34,7 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
   }
   // If we get here, we have a valid user token.
 
-  ga('send', 'pageview', '/choose_address');
+  analytics.trackView('/choose_address');
 
   $scope.isLoading = true;
   var loadStartTime = (new Date()).getTime();
@@ -61,7 +61,7 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
       }
       // Make the loading last at least a second.
       var timePassedMs = (new Date()).getTime() - loadStartTime;
-      ga('send', 'timing', 'loading', 'choose_address_success', timePassedMs);
+      analytics.trackTiming('loading', timePassedMs, 'choose_address_success');
       $timeout(function() {
         $scope.isLoading = false;
       }, Math.max(fmaSharedState.minLoadingMs - timePassedMs, 0));
@@ -69,7 +69,7 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
     function(err) {
       // Log the time it took for this to happen to google analytics
       var timePassedMs = (new Date()).getTime() - loadStartTime;
-      ga('send', 'timing', 'loading', 'choose_address_failure', timePassedMs);
+      analytics.trackTiming('loading', timePassedMs, 'choose_address_failure');
 
       alert('Error fetching addresses: ' + err.statusText);
       // This is a hack since we don't refresh our token.
@@ -83,7 +83,7 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
   });
 
   $scope.doneButtonPressed = function() {
-    ga('send', 'event', 'nav', 'choose_address__done_pressed');
+    analytics.trackEvent('nav', 'choose_address__done_pressed');
 
     console.log('Done button pressed.');
     // Save the chosen address and proceed.
@@ -103,7 +103,7 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
     alert("Dude. You have to select an address.");
   };
   $scope.addAddressButtonPressed = function() {
-    ga('send', 'event', 'cell', 'choose_address__add_address_pressed');
+    analytics.trackEvent('cell', 'choose_address__add_address_pressed');
 
     console.log('Add address button pressed.');
     mainViewObj.removeClass();
@@ -114,7 +114,7 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
 
   // Set the selected location index when a user taps a cell.
   $scope.cellSelected = function(indexSelected) {
-    ga('send', 'event', 'cell', 'choose_address__cell_selected');
+    analytics.trackEvent('cell', 'choose_address__cell_selected');
 
     console.log('Cell selected: ' + indexSelected);
     $scope.selectedLocationIndex.value = indexSelected;

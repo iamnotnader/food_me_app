@@ -14,7 +14,10 @@ function($scope, $location, $http, fmaLocalStorage, fmaSharedState, $rootScope, 
     $location.path('/choose_address');
   }
 
-  ga('send', 'pageview', '/intro_screen');
+  if (window.analytics != null) {
+    // For some reason deviceready doesn't execute fast enough sometimes.
+    analytics.trackView('/intro_screen');
+  }
 
   // Clear all the user data and start fresh.
   fmaLocalStorage.clear();
@@ -86,7 +89,7 @@ function($scope, $location, $http, fmaLocalStorage, fmaSharedState, $rootScope, 
                     'state=';
   $scope.token_data = null;
   $scope.signInButtonClicked = function() {
-    ga('send', 'event', 'button', 'intro_screen__signin_pressed');
+    analytics.trackEvent('button', 'intro_screen__signin_pressed');
 
     console.log("Delivery button clicked!");
 
@@ -194,7 +197,7 @@ function($scope, $location, $http, fmaLocalStorage, fmaSharedState, $rootScope, 
       var backgroundObject = $('.intro_screen__upper_container');
 
       element.on('touchstart', function(event) {
-        ga('send', 'event', 'slide', 'intro_screen_slide_start');
+        analytics.trackEvent('slide', 'intro_screen_slide_start');
 
         // Prevent default dragging of selected content
         event.preventDefault();

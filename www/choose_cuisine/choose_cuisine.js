@@ -27,7 +27,7 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
     $scope.rawAccessToken = $scope.userToken.access_token;
   }
   if ($scope.rawAccessToken === null) {
-    ga('send', 'event', 'reroute', 'choose_cuisine__intro_screen');
+    analytics.trackEvent('reroute', 'choose_cuisine__intro_screen');
 
     alert('In order to set cuisines, we need you to log in first.');
     console.log('No token found-- go back to intro_screen.');
@@ -37,7 +37,7 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
     return;
   }
   if (!fmaLocalStorage.isSet('userAddress')) {
-    ga('send', 'event', 'reroute', 'choose_cuisine__choose_address');
+    analytics.trackEvent('reroute', 'choose_cuisine__choose_address');
 
     alert("In order to set cuisines, we need an address first. Please enter one.");
     console.log('No address found-- go back to choose_address to get it.');
@@ -49,7 +49,7 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
   $scope.userAddress = fmaLocalStorage.getObject('userAddress');
   // When we get here, we have a valid user token and a valid address.
 
-  ga('send', 'pageview', '/choose_cuisine');
+  analytics.trackView('/choose_cuisine');
 
   // The location the user wants to use when looking for restaurants. This is an
   // object so we can use it in ng-repeat without scope issues.
@@ -64,12 +64,12 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
   $scope.toggleSelectAll = function() {
     $scope.selectAllButtonSet = !$scope.selectAllButtonSet;
     if ($scope.selectAllButtonSet) {
-      ga('send', 'event', 'cell', 'choose_cuisine__select_all_off');
+      analytics.trackEvent('cell', 'choose_cuisine__select_all_off');
 
       $scope.selectAllText = "select all cuisines";
       $scope.selectedCuisineIndices = { value: [] };
     } else {
-      ga('send', 'event', 'cell', 'choose_cuisine__select_all_on');
+      analytics.trackEvent('cell', 'choose_cuisine__select_all_on');
 
       $scope.selectAllText = "deselect all cuisines";
       $scope.selectedCuisineIndices = { value: _.range(fmaSharedState.numCuisinesToShow) };
@@ -136,7 +136,7 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
         fmaSharedState.testing_invalidation_seconds);
     // Make the loading last at least a second.
     var timePassedMs = (new Date()).getTime() - loadStartTime;
-    ga('send', 'timing', 'loading', 'choose_cuisine_success', timePassedMs);
+    analytics.trackTiming('loading', timePassedMs, 'choose_cuisine_success');
     $timeout(function() {
       $scope.isLoading = false;
     }, Math.max(fmaSharedState.minLoadingMs - timePassedMs, 0));
@@ -144,7 +144,7 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
   function(err) {
     // Log this error with google analytics.
     var timePassedMs = (new Date()).getTime() - loadStartTime;
-    ga('send', 'timing', 'loading', 'choose_cuisine_error', timePassedMs);
+    analytics.trackTiming('loading', timePassedMs, 'choose_cuisine_error');
 
     console.log('Error occurred.');
     console.log(JSON.stringify(err));
@@ -152,7 +152,7 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
   });
 
   $scope.chooseCuisineBackPressed = function() {
-    ga('send', 'event', 'nav', 'choose_cuisine__back_pressed');
+    analytics.trackEvent('nav', 'choose_cuisine__back_pressed');
 
     console.log('Back button pressed.');
     mainViewObj.removeClass();
@@ -163,7 +163,7 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
 
   // Set the selected location index when a user taps a cell.
   $scope.cellTapped = function(indexTapped) {
-    ga('send', 'event', 'cell', 'choose_cuisine__cell_selected');
+    analytics.trackEvent('cell', 'choose_cuisine__cell_selected');
 
     console.log('Cell tapped: ' + indexTapped);
     var chosenIndices = $scope.selectedCuisineIndices.value;
@@ -175,7 +175,7 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
   };
   
   $scope.chooseCuisineDonePressed = function() {
-    ga('send', 'event', 'nav', 'choose_cuisine__done_pressed');
+    analytics.trackEvent('nav', 'choose_cuisine__done_pressed');
 
     console.log('Done button pressed.');
     if ($scope.selectedCuisineIndices.value.length <= 0) {

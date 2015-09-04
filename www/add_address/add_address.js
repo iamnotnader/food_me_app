@@ -21,13 +21,13 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState) {
     $scope.rawAccessToken = $scope.userToken.access_token;
   }
   if ($scope.rawAccessToken === null) {
-    ga('send', 'event', 'reroute', 'add_address__intro_screen');
+    analytics.trackEvent('reroute', 'add_address__intro_screen');
 
     $location.path('/intro_screen');
     return;
   }
 
-  ga('send', 'pageview', '/add_address');
+  analytics.trackView('/add_address');
 
   // Create a forms object that we can attach our form to in the view.
   $scope.forms = {};
@@ -45,7 +45,7 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState) {
   // When the done button is pressed, we validate all the fields, then try to
   // send them to delivery.com.
   $scope.addAddressDonePressed = function() {
-    ga('send', 'event', 'nav', 'add_address__done_pressed');
+    analytics.trackEvent('nav', 'add_address__done_pressed');
 
     console.log('Done button pressed.');
 
@@ -70,7 +70,7 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState) {
     })
     .then(
       function(res) {
-        ga('send', 'event', 'nav', 'add_address__done_pressed__success');
+        analytics.trackEvent('nav', 'add_address__done_pressed__success');
 
         console.log('Successfully added address.');
         console.log(JSON.stringify(res));
@@ -82,7 +82,7 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState) {
         console.log('Error adding address.');
         console.log(JSON.stringify(err));
         if (!err.data.message) {
-          ga('send', 'event', 'nav', 'add_address__done_pressed__failure', 'weird_failure');
+          analytics.trackEvent('nav', 'add_address__done_pressed__failure', 'weird_failure');
           alert("A weeeird error occurred. Going to be real with you here-- " +
                 "not quite sure what happened but it's probably a " +
                 "connectivity issue, which isn't my fault.");
@@ -91,9 +91,9 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState) {
         alert(err.data.message[0].user_msg);
 
         if (err.data.message.length > 0) {
-          ga('send', 'event', 'nav', 'add_address__done_pressed__failure', err.data.message[0].code);
+          analytics.trackEvent('nav', 'add_address__done_pressed__failure', err.data.message[0].code);
         } else {
-          ga('send', 'event', 'nav', 'add_address__done_pressed__failure', 'no_code');
+          analytics.trackEvent('nav', 'add_address__done_pressed__failure', 'no_code');
         }
 
         return;
