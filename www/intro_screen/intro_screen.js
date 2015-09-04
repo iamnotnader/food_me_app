@@ -43,7 +43,7 @@ function($scope, $location, $http, fmaLocalStorage, fmaSharedState, $rootScope, 
   // add more without anything breaking, but you won't see them unless you make
   // numPhotos bigger above to correspond. Note that you can have fewer colors
   // than photos and the colors will just repeat.
-  $scope.colorList = ["#8C6954", "#BFAF80", "#260126"];
+  $scope.colorList = ["rgb(154, 97, 56)", "rgb(154, 56, 84)", "rgb(62, 145, 146);"];
   // The index into colorList that determines which background color we're on
   // currently.
   $scope.colorIndex = 0;

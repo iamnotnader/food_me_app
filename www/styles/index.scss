@@ -270,6 +270,7 @@ $intro_screen__screenshot_height: (260 / 350) * $intro_screen__phone_height;
   display: block;
   top: 50%;
   transform: translateY(-50%);
+  -webkit-transform: translateY(-50%);
 }
 
 // By sliding this element, we slide all three pieces of text to create a cool
@@ -298,6 +299,7 @@ $intro_screen__screenshot_height: (260 / 350) * $intro_screen__phone_height;
   margin: 0 auto;
   top: 50%;
   transform: translateY(-50%);
+  -webkit-transform: translateY(-50%);
   font-size: 1.5rem;
   // Sigh.. increase the font-size a leetle bit on bigger screens.
   @media #{$iphone-5to6} {
@@ -334,6 +336,7 @@ $intro_screen__screenshot_height: (260 / 350) * $intro_screen__phone_height;
   font-size: 2.0rem;
   top: 50%;
   transform: translateY(-50%);
+  -webkit-transform: translateY(-50%);
   // Sigh.. increase the font-size a leetle bit on bigger screens.
   @media #{$iphone-5to6} {
     font-size: 2.4rem;
