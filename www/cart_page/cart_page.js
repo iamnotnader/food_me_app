@@ -111,6 +111,30 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $q, fmaStack
     }, 0);
   }
 
+  var hasMoreThanOneMerchant = function(cartItems) {
+    if (cartItems.length === 0) {
+      return false;
+    }
+    var firstItem = cartItems[0];
+    for (var v1 = 1; v1 < cartItems.length; v1++) {
+      if (cartItems[v1].merchantId !== firstItem.merchantId) {
+        return true;
+      }
+    }
+    return false;
+  };
+
+  // If the user has items from more than one merchant, inform them that their
+  // delivery times might be staggered.
+  if (hasMoreThanOneMerchant($scope.userCart)) {
+    console.log('More than one merchant detected.');
+    alert("Looks like you're ordering from more than one merchant. This won't " +
+          "affect the price at all, but keep in mind that you might receive " +
+          "your items at slightly different times.");
+  } else {
+    console.log('Ordering from the same merchant.');
+  }
+
   // A little more setup.
   $scope.cartBackButtonPressed = function() {
     console.log('Cart back button pressed.');
@@ -129,9 +153,6 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $q, fmaStack
             'Go back and swipe-- the food loves you.');
       return;
     }
-    // Cull down $scope.itemRequestObjects to get it in line with cartItems.
-    // Save cartItems
-    // Save itemRequestObjects
     console.log('Finish button pressed.');
     // First thing's first. Save the cart.
     fmaLocalStorage.setObjectWithExpirationSeconds(

@@ -47,6 +47,18 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $q, fmaStack
   $scope.userCuisines = fmaLocalStorage.getObject('userCuisines');
   // If we get here, we have a token, an address, and some chosen cuisines.
 
+  // If this is the first time loading the swipe page, tell the user that
+  // their order includes tax and tip.
+  if (!fmaLocalStorage.isSet('swipePageLoadedBefore')) {
+    alert("You're about to swipe! Keep in mind that all prices have tax " +
+          "and tip INCLUDED and are guaranteed to be above the " +
+          "\"delivery minimum.\" So don't worry! :)");
+    fmaLocalStorage.setObjectWithExpirationSeconds(
+        'swipePageLoadedBefore', true,
+        fmaSharedState.testing_invalidation_seconds);
+  }
+  
+
   // The items in the user's cart.
   $scope.showCartBadge = false;
   $scope.userCart = [];

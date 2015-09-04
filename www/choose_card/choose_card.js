@@ -8,8 +8,8 @@ angular.module('foodMeApp.chooseCard', ['ngRoute', 'ngTouch', 'foodmeApp.localSt
   });
 }])
 
-.controller('ChooseCardCtrl', ["$scope", "$location", "fmaLocalStorage", "$http", "fmaSharedState", "$rootScope", "$timeout", "$q", "$route",
-function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, $timeout, $q, $route) {
+.controller('ChooseCardCtrl', ["$scope", "$location", "fmaLocalStorage", "$http", "fmaSharedState", "$rootScope", "$timeout", "$q", "$route", "fmaCartHelper",
+function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, $timeout, $q, $route, fmaCartHelper) {
   var mainViewObj = $('#main_view_container');
 
   // On this screen, we need a valid user token. If we are missing one, we need
@@ -53,7 +53,58 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
   }
   // If we get here, we have a valid user token AND userCart is nonempty.
 
-  $scope.isLoading = true;
+  // Sigh.. we have to update the cart here as well because it's really annoying to
+  // update it when deleting items. This is killing our dryness, but it's pretty
+  // specific code.
+  if ($scope.userCart.length > 0) {
+    $scope.cartLoading = true;
+    var loadStartTime = (new Date()).getTime();
+    $scope.cartItemsNotFound = [];
+    $timeout(function() {
+      // We need to upload all the cart items.
+      fmaCartHelper.clearCartThenUpdateCartPromise($scope.userCart, $scope.rawAccessToken)
+      .then(
+        function(newCartItems) {
+          // No need to update $scope.userCart items here because everything was added successfully.
+          console.log('Cart updated successfully.');
+          // In this case, we uploaded all the cart items to delivery.com successfully.
+          var timePassedMs = (new Date()).getTime() - loadStartTime;
+          $timeout(function() {
+            $scope.cartLoading = false;
+          }, Math.max(fmaSharedState.minLoadingMs - timePassedMs, 0));
+        },
+        function(newCartItems) {
+          console.log('Had to drop some cart items.');
+          alert("Doh! One of the places you chose to order from just closed and we had to " +
+                "remove their items from your cart :( " +
+                "Just go back, hit refresh, and swipe some " +
+                "more-- and be quicker this time!");
+          // No need to update $scope.userCart because some items expired.
+          $scope.userCart = newCartItems.added;
+          fmaLocalStorage.setObjectWithExpirationSeconds(
+              'userCart', $scope.userCart,
+              fmaSharedState.testing_invalidation_seconds);
+          fmaLocalStorage.setObjectWithExpirationSeconds(
+              'foodData', null,
+              fmaSharedState.testing_invalidation_seconds);
+
+
+          // In this, someof the items in the cart didn't get uploaded. This is usually because
+          // a store closed in the middle of the user's swiping.
+          var timePassedMs = (new Date()).getTime() - loadStartTime;
+          $timeout(function() {
+            $scope.cartLoading = false;
+            mainViewObj.removeClass();
+            mainViewObj.addClass('slide-right');
+            $location.path('/cart_page');
+            return;
+          }, Math.max(fmaSharedState.minLoadingMs - timePassedMs, 0));
+        }
+      );
+    }, 0);
+  }
+
+  $scope.cardsLoaading = true;
   var loadStartTime = (new Date()).getTime();
   $scope.cardList = [];
   $scope.selectedCardIndex = { value: null };
@@ -74,7 +125,7 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
       // Make the loading last at least a second.
       var timePassedMs = (new Date()).getTime() - loadStartTime;
       $timeout(function() {
-        $scope.isLoading = false;
+        $scope.cardsLoaading = false;
       }, Math.max(fmaSharedState.minLoadingMs - timePassedMs, 0));
     },
     function(err) {
@@ -110,6 +161,7 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
         var dataObj = {
           tip: fmaSharedState.tipAmount,
           location_id: $scope.userAddress.location_id,
+          uhau_id: fmaSharedState.uhau_id,
           instructions: "Tell people to download the FoodMe app and you'll get more orders!",
           payments: [{
             type: "credit_card",
@@ -139,7 +191,7 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
   };
 
   var takeMoneyAndFinish = function() {
-    $scope.isLoading = true;
+    $scope.cardsLoaading = true;
     var loadStartTime = (new Date()).getTime();
     processPaymentPromise()
     .then(
@@ -150,7 +202,7 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
         // Make the loading last at least a second.
         var timePassedMs = (new Date()).getTime() - loadStartTime;
         $timeout(function() {
-          $scope.isLoading = false;
+          $scope.cardsLoaading = false;
           alert("Thanks! I just took your money and your order will arrive in less " +
                 "than half an hour. Unless it doesn't. It probably will, though, " +
                 "maybe.");
@@ -173,7 +225,7 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
         // Make the loading last at least a second.
         var timePassedMs = (new Date()).getTime() - loadStartTime;
         $timeout(function() {
-          $scope.isLoading = false;
+          $scope.cardsLoaading = false;
           alert("Huh.. we had a problem with your payment: " + err.data.message[0].user_msg +
                 " The best thing to do is probably just to clear out your " +
                 "cart and try again. It shouldn't happen twice.");

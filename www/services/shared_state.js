@@ -54,6 +54,13 @@ angular.module('foodmeApp.sharedState', [])
 
     numCuisinesToShow: 30,
 
+    // This is how we get commissions. It is the "You hear about us" ID from delivery.com.
+    // Contact baltomare@delivery.com for questions.
+    uhau_id: 50702,
+
+    // This is our Google Analytics id that we use to track events.
+    ga_id: 'UA-58354537-2',
+
     // Controls how long the loading screen shows for. If you make this too small,
     // the app looks buggy because the loading screen snaps away in the middle of
     // screen transitions.
@@ -83,6 +90,7 @@ angular.module('foodmeApp.sharedState', [])
     // Testing
     stateObj.testing_invalidation_seconds = 60 * 60;
     stateObj.fake_token = 's5XfkXRCxWtTZ3KrmX4KxCHafEnrM6fnicaSQKlZ';
+    stateObj.uhau_id = null;
   }
 
   return stateObj;
