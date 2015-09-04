@@ -1,7 +1,7 @@
 // This is the most important variable in the whole codebase. If it's set
 // to true, we're in testing mode, which means we hit sandbox.delivery.com.
 // Otherwise, we're in prod mode, which means we hit api.delivery.com.
-var testModeEnabled = false;
+var testModeEnabled = true;
 
 // Even if testModeEnabled = false, it's nice to have a flag we can use to
 // turn payment on/off.
@@ -59,7 +59,7 @@ angular.module('foodmeApp.sharedState', [])
     uhau_id: 50702,
 
     // This is our Google Analytics id that we use to track events.
-    ga_id: 'UA-58354537-2',
+    ga_id: 'UA-58354537-3',
 
     // Controls how long the loading screen shows for. If you make this too small,
     // the app looks buggy because the loading screen snaps away in the middle of

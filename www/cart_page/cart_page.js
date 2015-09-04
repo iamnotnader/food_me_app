@@ -26,12 +26,16 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $q, fmaStack
     $scope.rawAccessToken = $scope.userToken.access_token;
   }
   if ($scope.rawAccessToken === null) {
+    ga('send', 'event', 'reroute', 'cart_page__intro_screen');
+
     alert('In order to swipe, we need you to log in first.');
     console.log('No token found-- go back to intro_screen.');
     $location.path('/intro_screen');
     return;
   }
   // At this point, we have a token.
+
+  ga('send', 'pageview', '/cart_page');
 
   // Pull the cart items out of localStorage
   $scope.userCart = [];
@@ -40,6 +44,8 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $q, fmaStack
   }
 
   $scope.removeFromCart = function(index) {
+    ga('send', 'event', 'cell', 'cart_page__remove_pressed');
+
     console.log("Removing item " + index);
     $scope.userCart.splice(index, 1);
     fmaLocalStorage.setObjectWithExpirationSeconds(
@@ -80,6 +86,7 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $q, fmaStack
           console.log('Cart updated successfully.');
           // In this case, we uploaded all the cart items to delivery.com successfully.
           var timePassedMs = (new Date()).getTime() - loadStartTime;
+          ga('send', 'timing', 'loading', 'cart_page_added_all_items', timePassedMs);
           $timeout(function() {
             $scope.isLoading = false;
           }, Math.max(fmaSharedState.minLoadingMs - timePassedMs, 0));
@@ -103,6 +110,7 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $q, fmaStack
           // In this, someof the items in the cart didn't get uploaded. This is usually because
           // a store closed in the middle of the user's swiping.
           var timePassedMs = (new Date()).getTime() - loadStartTime;
+          ga('send', 'timing', 'loading', 'cart_page_missing_some_items', timePassedMs);
           $timeout(function() {
             $scope.isLoading = false;
           }, Math.max(fmaSharedState.minLoadingMs - timePassedMs, 0));
@@ -137,6 +145,8 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $q, fmaStack
 
   // A little more setup.
   $scope.cartBackButtonPressed = function() {
+    ga('send', 'event', 'nav', 'cart_page__back_pressed');
+
     console.log('Cart back button pressed.');
     // Clear the stack.
     fmaLocalStorage.setObjectWithExpirationSeconds(
@@ -148,6 +158,8 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $q, fmaStack
   };
 
   $scope.cartFinishButtonPressed = function() {
+    ga('send', 'event', 'nav', 'cart_page__finish_pressed');
+
     if ($scope.userCart.length === 0) {
       alert('Bro, you need SOMETHING in your cart first. ' +
             'Go back and swipe-- the food loves you.');
