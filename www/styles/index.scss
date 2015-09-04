@@ -136,11 +136,9 @@ $iphone-5to6: "only screen
     and (orientation : portrait) 
     and (-webkit-min-device-pixel-ratio : 2)";
 
-$iphone-6to6plus: "only screen 
+$iphone-6plusandup: "only screen 
     and (min-device-width : 376px) 
-    and (max-device-width : 414px) 
     and (min-device-height : 569px) 
-    and (max-device-height : 736px) 
     and (orientation : portrait) 
     and (-webkit-min-device-pixel-ratio : 2)";
 
@@ -158,7 +156,7 @@ $iphone-6to6plus: "only screen
 }
 
 $intro_screen__lower_container_offset_4: 26%;
-$intro_screen__lower_container_offset_5: 23%;
+$intro_screen__lower_container_offset_5: 32%;
 .intro_screen__upper_container {
   position:absolute;
   top: 0;
@@ -166,10 +164,6 @@ $intro_screen__lower_container_offset_5: 23%;
   left: 0;
   right: 0;
   background-color: none; // This is overwritten by JS. See colorList.
-  /*TODO(daddy): this is really shitty-- don't ever do this.*/
-  @media #{$iphone-4} {
-    bottom: $intro_screen__lower_container_offset_4;
-  }
 }
 
 .intro_screen__lower_container {
@@ -180,10 +174,6 @@ $intro_screen__lower_container_offset_5: 23%;
   right: 0;
   background-color: white;
   overflow: hidden;
-  /*TODO(daddy): this is really shitty-- don't ever do this.*/
-  @media #{$iphone-4} {
-    top: 100% - $intro_screen__lower_container_offset_4;
-  }
 }
 
 $intro_screen__phone_height: 90%;
@@ -259,9 +249,27 @@ $intro_screen__screenshot_height: (260 / 350) * $intro_screen__phone_height;
   overflow: hidden;
 }
 
-.intro_screen__text_container {
-  position: absolute;
+.intro_screen__space_above_dot_slider {
+  height: 5%;
+}
+
+.intro_screen__dot_slider {
+  height: 15%;
   width: 100%;
+  position: relative;
+}
+
+.intro_screen__dot_slider_inner {
+  position: absolute;
+  margin-left: auto;
+  margin-right: auto;
+  left: 0;
+  right: 0;
+  width: 50%;
+  text-align: center;
+  display: block;
+  top: 50%;
+  transform: translateY(-50%);
 }
 
 // By sliding this element, we slide all three pieces of text to create a cool
@@ -269,58 +277,85 @@ $intro_screen__screenshot_height: (260 / 350) * $intro_screen__phone_height;
 .intro_screen__overall_text_container {
   position: absolute;
   width: 100%;
-  left: 0;
   text-align: center;
+  height: 25%;
+}
+
+.intro_screen__text_container {
+  position: absolute;
+  width: 100%;
+  height: 100%;
 }
 
 .intro_screen__main_text {
   font-family: TitleFont;
-  font-size: 1.5rem;
   text-align: center;
   text-transform: none;
   margin-bottom: 0;
-  /*TODO(daddy): this is really shitty-- don't ever do this.*/
-  @media #{$iphone-4} {
-    font-size: 1.3rem;
-  }
-  @media #{$iphone-4to5} {
-    font-size: 1.5rem;
-  }
+  position: absolute;
+  left: 0;
+  right: 0;
+  margin: 0 auto;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 1.5rem;
+  // Sigh.. increase the font-size a leetle bit on bigger screens.
   @media #{$iphone-5to6} {
     font-size: 1.8rem;
   }
-  @media #{$iphone-6to6plus} {
-    font-size: 1.8rem;
-    margin-top: 0.5rem;
+  @media #{$iphone-6plusandup} {
+    font-size: 2.3rem;
   }
 }
 
-.intro_screen__description_text {
+.intro_screen__sign_in_button {
+  display: block;
+  margin: 0 auto;
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  height: 30%;
+  width: 90%;
+  background-color: #3C5988;
+  border-radius: 10px;
+  box-shadow: 1px 3px 9px black;
+}
+
+.intro_screen__sign_in_button_text {  
+  color: white;
+  text-transform: none;
+  position: absolute;
+  left: 0;
+  right: 0;
+  margin: 0 auto;
+  font-family: TitleFont;
+  text-align: center;
+  font-size: 2.0rem;
+  top: 50%;
+  transform: translateY(-50%);
+  // Sigh.. increase the font-size a leetle bit on bigger screens.
+  @media #{$iphone-5to6} {
+    font-size: 2.4rem;
+  }
+  @media #{$iphone-6plusandup} {
+    font-size: 3rem;
+  }
+}
+
+.intro_screen__attribution_text {
+  position: absolute;
+  top: 84%;
   font-family: TaglineFont;
   text-transform: none;
+  font-size: 1rem;
   text-align: center;
-  padding: 0 .5rem;
-  /*TODO(daddy): this is really shitty-- don't ever do this.*/
-  @media #{$iphone-4} {
-    font-size: 1.0rem;
-  }
-  @media #{$iphone-4to5} {
-    font-size: 1.2rem;
-  }
-  @media #{$iphone-5to6} {
-    font-size: 1.5rem;
-  }
-  @media #{$iphone-6to6plus} {
-    font-size: 1.5rem;
-    margin-top: 0.5rem;
-  }
+  left: 0;
+  right: 0;
+  margin: 0 auto;
+  height: 16%;
 }
 
-.intro_screen__dot_slider {
-  margin-top: .9rem;
-  margin-bottom: 0;
-  text-align: center;
-}
 
 // Goes with intro_screen__active_dot
 .intro_screen__dot_indicator {
@@ -338,15 +373,6 @@ $intro_screen__screenshot_height: (260 / 350) * $intro_screen__phone_height;
 .intro_screen__active_dot {
   width: 20px;
   height: 20px;
-}
-
-.intro_screen__sign_in_button {
-  position: absolute;
-  width: 90%;
-  margin: 0 auto;
-  left: 0;
-  right: 0;
-  bottom: 8%;
 }
 
 .choose_cuisine__select_all {

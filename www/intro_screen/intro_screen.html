@@ -18,15 +18,21 @@
       </div>
     </div>
     <div class="intro_screen__lower_container">
+      <div class="intro_screen__space_above_dot_slider">
+      </div>
       <div class="intro_screen__dot_slider">
-        <!--The number of circles in this div must equal numPhotos in the-->
-        <!--intro_sceen.js file. The dot-N is used by angular to set the active
-            dot.-->
-        <div class="intro_screen__dot_indicator intro_screen__dot-0"></div>
-        <div class="intro_screen__dot_indicator intro_screen__dot-1"></div>
-        <div class="intro_screen__dot_indicator intro_screen__dot-2"></div>
-        <div class="intro_screen__dot_indicator intro_screen__dot-3"></div>
-        <div class="intro_screen__dot_indicator intro_screen__dot-4"></div>
+        <div class="intro_screen__dot_slider_inner">
+          <!--The number of circles in this div must equal numPhotos in the-->
+          <!--intro_sceen.js file. The dot-N is used by angular to set the active
+              dot.-->
+          <div class="intro_screen__dot_indicator intro_screen__dot-0"></div>
+          <div class="intro_screen__dot_indicator intro_screen__dot-1"></div>
+          <div class="intro_screen__dot_indicator intro_screen__dot-2"></div>
+          <div class="intro_screen__dot_indicator intro_screen__dot-3"></div>
+          <div class="intro_screen__dot_indicator intro_screen__dot-4"></div>
+        </div>
+      </div>
+      <div class="intro_screen__space_above_overall_text">
       </div>
       <!--This div has a total width of 300% because it contains three pieces of
           text that will be swiped through. The number of divs in this container
@@ -48,7 +54,20 @@
           <p class="intro_screen__main_text">Enjoy your delivery!</p>
         </div>
       </div>
-      <img class="intro_screen__sign_in_button" ng-src="img/sign_in_button.png" alt="" ng-click="signInButtonClicked()">
+      <div class="intro_screen__space_above_bottom_button">
+      </div>
+      <div class="intro_screen__sign_in_button" ng-click="signInButtonClicked()">
+        <div class="intro_screen__sign_in_button_text">
+          Get started!
+        </div>
+      </div>
+      <div class="intro_screen__space_above_attribution">
+      </div>
+      <div class="intro_screen__attribution_text">
+        <div class="swipe_page__vertically_center">
+          Ordering by <img style="height: 1.6rem;" class="intro_screen__delivery_icon" ng-src="img/delivery_icon.png" alt="">
+        </div>
+      </div>
     </div>
     <!--<h1>{{testString}}</h1>-->
 </div>
