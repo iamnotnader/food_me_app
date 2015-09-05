@@ -327,6 +327,13 @@ h1 {
   color: #464646;
   font-size: 1.5rem; }
 
+.choose_cuisine__no_cuisines {
+  text-align: center;
+  text-transform: none;
+  font-family: TitleFont;
+  padding: 0 2rem;
+  font-size: 1.7rem; }
+
 .choose_address__container {
   height: 100%;
   width: 100%;

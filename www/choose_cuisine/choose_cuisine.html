@@ -1,6 +1,6 @@
 <div class="choose_address__container">
   <div class="choose_address__address_list">
-    <div class="choose_address__list_cell" ng-click="toggleSelectAll()">
+    <div class="choose_address__list_cell" ng-click="toggleSelectAll()" ng-if="all_cuisines.length > 0">
       <div class="choose_address__cell_top_row choose_cuisine__select_all">
         {{selectAllText}}
       </div>
@@ -17,6 +17,9 @@
       </div>
     </div>
     <div style="margin-bottom: 1em;"></div>
+    <div class="choose_cuisine__no_cuisines" ng-if="all_cuisines.length === 0">
+        Noooo!<br>It looks like delivery isn't available in your area. Maybe try a different address?
+    </div>
   </div>
   <div class="choose_address__top_bar">
     <div class="choose_address__middle_text">Select cuisines!</div>
