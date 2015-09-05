@@ -58,7 +58,7 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $q, fmaStack
   // If this is the first time loading the swipe page, tell the user that
   // their order includes tax and tip.
   if (!fmaLocalStorage.isSet('swipePageLoadedBefore')) {
-    alert("You're about to swipe! Keep in mind that all prices have tax " +
+    alert("Keep in mind that all prices have tax " +
           "and tip INCLUDED and are guaranteed to be above the " +
           "\"delivery minimum.\" So don't worry! :)");
     fmaLocalStorage.setObjectWithExpirationSeconds(
