@@ -83,7 +83,16 @@ function(fmaLocalStorage, $http, fmaSharedState, $q, $timeout) {
   //
   // TODO(daddy): We should be mindful of the schedule. If a restaurant only
   // serves our item during breakfast but it's dinner time, that's no good...
-  var findMenuItemsRecursive = function(menuObj, menuItemList) {
+  var findMenuItemsRecursive = function(menuObj, menuItemList, forbiddenItemIds) {
+    // Check forbitten items. These are things like alcohol.
+    if (forbiddenItemIds != null && forbiddenItemIds.length > 0) {
+      for (var v1 = 0; v1 < forbiddenItemIds.length; v1++) {
+        if (forbiddenItemIds[v1] === menuObj.id) {
+          return;
+        }
+      }
+    }
+
     if (menuObj.type === "item") {
       menuItemList.push(menuObj);
       return;
@@ -96,7 +105,7 @@ function(fmaLocalStorage, $http, fmaSharedState, $q, $timeout) {
     return menuItemList;
   };
 
-  var findMenuItems = function(menuArr) {
+  var findMenuItems = function(menuArr, forbiddenItemIds) {
     // menuArr is a list of objects of type "menu." An  object of type "menu" has children
     // that are either of type "menu" OR of type "item." If they're of type "item," we want
     // to return them.
@@ -107,7 +116,7 @@ function(fmaLocalStorage, $http, fmaSharedState, $q, $timeout) {
     // call the function on them individually.
     var menuItemList = [];
     for (var menuIndex = 0; menuIndex < menuArr.length; menuIndex++) {
-      findMenuItemsRecursive(menuArr[menuIndex], menuItemList);
+      findMenuItemsRecursive(menuArr[menuIndex], menuItemList, forbiddenItemIds);
     }
     return menuItemList;
   };
@@ -123,7 +132,16 @@ function(fmaLocalStorage, $http, fmaSharedState, $q, $timeout) {
           // now, but in the long run the food should be culled down before
           // the swipe page.
           menuArr = openMenus(menuArr, res.data.schedule);
-          menuItemsFound = findMenuItems(menuArr);
+          // The forbidden items are things like tobacco and alcohol. We want to make
+          // sure we filter these results out of our stack.
+          var forbiddenItemIds = [];
+          if (res.data.warnings != null && res.data.warnings.length > 0) {
+            for (var v1 = 0; v1 < res.data.warnings.length; v1++) {
+              var forbiddenObj = res.data.warnings[v1];
+              forbiddenItemIds = forbiddenItemIds.concat(forbiddenObj.items);
+            }
+          }
+          menuItemsFound = findMenuItems(menuArr, forbiddenItemIds);
 
           resolve(menuItemsFound);
         },
