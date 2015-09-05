@@ -54,6 +54,8 @@ angular.module('foodmeApp.sharedState', [])
 
     numCuisinesToShow: 30,
 
+    maxPriceToShowUSD: 40,
+
     // This is how we get commissions. It is the "You hear about us" ID from delivery.com.
     // Contact baltomare@delivery.com for questions.
     uhau_id: 50703,

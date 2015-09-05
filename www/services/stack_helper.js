@@ -226,6 +226,7 @@ function(fmaLocalStorage, $http, fmaSharedState, $q, $timeout) {
                   currentItem.unique_key = currentItem.merchantId + currentItem.id;
                   if (currentItem.name == null || currentItem.merchantName == null ||
                       currentItem.price == null ||
+                      currentItem.price > fmaSharedState.maxPriceToShowUSD ||
                       (innerCurrentMerchant.ordering.minimum != null &&
                        currentItem.price < innerCurrentMerchant.ordering.minimum)) {
                     continue;

@@ -20,23 +20,44 @@ angular.module('foodmeApp.cartHelper', [])
       // until we have enough to satisfy min_selection. Works because sort is
       // stable.
       var requiredOG = requiredOptionGroups[v1];
-      requiredOG.children = _.shuffle(requiredOG.children);
-      requiredOG.children.sort(function(option1, option2) {
-        return option1.price - option2.price;
-      });
-      for (v2 = 0; v2 < requiredOG.min_selection; v2++) {
-        var chosenOption = requiredOG.children[v2];
+      if (requiredOG.type === "price group") {
+        optionsToReturn.push(requiredOG.children[0]);
+        continue;
+      }
+      var free_options = [];
+      for (var v2 =  0; v2 < requiredOG.children.length; v2++) {
+        var potentialFreeOption = requiredOG.children[v2];
+        if (potentialFreeOption.price === 0) {
+          free_options.push(potentialFreeOption);
+        }        
+      }
+      if (free_options.length === 0) {
+        alert('Something went haywire with the options on this order.' +
+              'Probably best if you just remove everything from your cart and ' +
+              'pick something else. This is rare I promise and we are working to fix it!');
+        analytics.trackEvent('error', 'cart_helper__no_free_options');
+        console.warn('Required option had zero free options!');
+        console.warn(singleItem);
+        return optionsToReturn;
+      }
+      var numOptionsNeeded = requiredOG.min_selection;
+      while (numOptionsNeeded > 0) {
+        var randomFreeItemIndex = Math.floor(Math.random() * free_options.length);
+        var chosenOption = free_options[randomFreeItemIndex];
         optionsToReturn.push(chosenOption);
         if (chosenOption.children.length > 0) {
           // This is weird to me but options can have their own option groups, so
           // we have to recurse on the option's children to add more possible
           // options.
           console.log("Recurring.");
-          var optionsForOption = getOptionsForItem(chosenOption);          
+          var optionsForOption = getOptionsForItem(chosenOption);
           optionsToReturn = optionsToReturn.concat(optionsForOption);
         }
+        numOptionsNeeded--;
       }
     }
+    //console.log(singleItem);
+    //console.log(optionsToReturn);
     return optionsToReturn;
   };
 
