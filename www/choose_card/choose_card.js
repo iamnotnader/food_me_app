@@ -119,7 +119,7 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
     }, 0);
   }
 
-  $scope.cardsLoaading = true;
+  $scope.cardsLoading = true;
   var loadStartTime = (new Date()).getTime();
   $scope.cardList = [];
   $scope.selectedCardIndex = { value: null };
@@ -140,7 +140,7 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
       // Make the loading last at least a second.
       var timePassedMs = (new Date()).getTime() - loadStartTime;
       $timeout(function() {
-        $scope.cardsLoaading = false;
+        $scope.cardsLoading = false;
       }, Math.max(fmaSharedState.minLoadingMs - timePassedMs, 0));
     },
     function(err) {
@@ -208,7 +208,7 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
   };
 
   var takeMoneyAndFinish = function() {
-    $scope.cardsLoaading = true;
+    $scope.cardsLoading = true;
     var loadStartTime = (new Date()).getTime();
     processPaymentPromise()
     .then(
@@ -222,7 +222,7 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
         var timePassedMs = (new Date()).getTime() - loadStartTime;
         analytics.trackTiming('purchase', timePassedMs, 'card_page__order_success');
         $timeout(function() {
-          $scope.cardsLoaading = false;
+          $scope.cardsLoading = false;
           alert("Thanks! I just took your money and your order will arrive in less " +
                 "than half an hour. Unless it doesn't. It probably will, though, " +
                 "maybe.");
@@ -248,7 +248,7 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
         var timePassedMs = (new Date()).getTime() - loadStartTime;
         analytics.trackTiming('purchase', timePassedMs, 'card_page__order_failure');
         $timeout(function() {
-          $scope.cardsLoaading = false;
+          $scope.cardsLoading = false;
           alert("Huh.. we had a problem with your payment: " + err.data.message[0].user_msg +
                 " The best thing to do is probably just to clear out your " +
                 "cart and try again. It shouldn't happen twice.");
