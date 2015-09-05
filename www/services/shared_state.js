@@ -56,7 +56,7 @@ angular.module('foodmeApp.sharedState', [])
 
     // This is how we get commissions. It is the "You hear about us" ID from delivery.com.
     // Contact baltomare@delivery.com for questions.
-    uhau_id: 50702,
+    uhau_id: 50703,
 
     // This is our Google Analytics id that we use to track events.
     ga_id: 'UA-58354537-2',
@@ -89,7 +89,7 @@ angular.module('foodmeApp.sharedState', [])
 
     // Testing
     stateObj.testing_invalidation_seconds = 60 * 60;
-    stateObj.fake_token = 's5XfkXRCxWtTZ3KrmX4KxCHafEnrM6fnicaSQKlZ';
+    stateObj.fake_token = '49S2z61i71qixirb4WbxOUD9UIKq4T1hjY6p1Mpt';
     stateObj.uhau_id = null;
   }
 
