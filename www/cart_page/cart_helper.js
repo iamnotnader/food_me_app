@@ -1,3 +1,5 @@
+/*jshint loopfunc: true, eqnull: true */
+
 angular.module('foodmeApp.cartHelper', [])
 
 // Just holds some global configuration variables that we can set to whatever
@@ -232,6 +234,56 @@ angular.module('foodmeApp.cartHelper', [])
         rawAccessToken, cartItemsAdded, cartItemsNotAdded, merchantId, 0);
   };
 
+  // Verifies that each item is indeed orderable by trying to add them to the
+  // user's cart. Note that this is NOT the same as addCartsPromise because it
+  // does not sequentially add each item. It's OK to mess with the cart like
+  // this as long as we remember to clear it before actually checking out.
+  var checkCartPromise = function(cartItems, rawAccessToken) {
+    var cartItemsAdded = [];
+    var cartItemsNotAdded = [];
+    // Actual init.
+    itemRequestObjects = createCartRequestsFromItems(cartItems);
+    return $q(function(resolve, reject) {
+      for (var v1 = 0; v1 < cartItems.length; v1++) {
+        (function(itemIndex) {
+          var currentCartItem = cartItems[itemIndex];
+          var currentItemRequestObject = itemRequestObjects[itemIndex];
+          $http({
+            method: 'POST',
+            url: fmaSharedState.endpoint+'/customer/cart/'+currentCartItem.merchantId+'?client_id=' + fmaSharedState.client_id,
+            data: currentItemRequestObject,
+            headers: {
+              "Authorization": rawAccessToken,
+              "Content-Type": "application/json",
+            }
+          }).then(
+            function(res) {
+              cartItemsAdded.push(currentCartItem);
+              if (cartItemsAdded.length + cartItemsNotAdded.length === cartItems.length) {
+                if (cartItemsNotAdded.length === 0) {
+                  analytics.trackEvent('success', 'cart_helper__no_items_dropped');
+                  return resolve({added: cartItemsAdded, not_added: cartItemsNotAdded});
+                } else {
+                  analytics.trackEvent('error', 'cart_helper__items_dropped');
+                  return reject({added: cartItemsAdded, not_added: cartItemsNotAdded});
+                }
+              }
+            },
+            function(err) {
+              cartItemsNotAdded.push(currentCartItem);
+              // In this case, we always reject regardless of what subsequent calls
+              // return.
+              if (cartItemsAdded.length + cartItemsNotAdded.length === cartItems.length) {
+                analytics.trackEvent('error', 'cart_helper__items_dropped');
+                return reject({added: cartItemsAdded, not_added: cartItemsNotAdded});
+              }
+            }
+          );
+        })(v1);
+      }
+    });
+  };
+
   // If merchantId is null, add all the items.
   var clearCartThenUpdateCartPromise = function(cartItems, rawAccessToken, merchantId) {
     return $q(function(resolve, reject) {
@@ -264,5 +316,6 @@ angular.module('foodmeApp.cartHelper', [])
 
   return {
     clearCartThenUpdateCartPromise: clearCartThenUpdateCartPromise,
+    checkCartPromise: checkCartPromise,
   };
 }]);

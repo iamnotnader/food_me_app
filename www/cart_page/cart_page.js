@@ -79,7 +79,7 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $q, fmaStack
     $scope.cartItemsNotFound = [];
     $timeout(function() {
       // We need to upload all the cart items.
-      fmaCartHelper.clearCartThenUpdateCartPromise($scope.userCart, $scope.rawAccessToken, null)
+      fmaCartHelper.checkCartPromise($scope.userCart, $scope.rawAccessToken)
       .then(
         function(newCartItems) {
           // No need to update $scope.userCart items here because everything was added successfully.
