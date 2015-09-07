@@ -61,64 +61,6 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
 
   analytics.trackView('/choose_card');
 
-  // Sigh.. we have to update the cart here as well because it's really annoying to
-  // update it when deleting items. This is killing our dryness, but it's pretty
-  // specific code.
-  if ($scope.userCart.length > 0) {
-    $scope.cartLoading = true;
-    var loadStartTime = (new Date()).getTime();
-    $scope.cartItemsNotFound = [];
-    $timeout(function() {
-      // We need to upload all the cart items.
-      fmaCartHelper.clearCartThenUpdateCartPromise($scope.userCart, $scope.rawAccessToken)
-      .then(
-        function(newCartItems) {
-          // No need to update $scope.userCart items here because everything was added successfully.
-          console.log('Cart updated successfully.');
-          // In this case, we uploaded all the cart items to delivery.com successfully.
-          var timePassedMs = (new Date()).getTime() - loadStartTime;
-
-          // Log the success with google analytics.
-          analytics.trackTiming('loading', timePassedMs, 'card_page__update_cart__failure');
-
-          $timeout(function() {
-            $scope.cartLoading = false;
-          }, Math.max(fmaSharedState.minLoadingMs - timePassedMs, 0));
-        },
-        function(newCartItems) {
-          // Log the failure with google analytics.
-          var timePassedMs = (new Date()).getTime() - loadStartTime;
-          analytics.trackTiming('loading', timePassedMs, 'card_page__update_cart__failure');
-
-          console.log('Had to drop some cart items.');
-          alert("Doh! One of the places you chose to order from just closed and we had to " +
-                "remove their items from your cart :( " +
-                "Just go back, hit refresh, and swipe some " +
-                "more-- and be quicker this time!");
-          // No need to update $scope.userCart because some items expired.
-          $scope.userCart = newCartItems.added;
-          fmaLocalStorage.setObjectWithExpirationSeconds(
-              'userCart', $scope.userCart,
-              fmaSharedState.testing_invalidation_seconds);
-          fmaLocalStorage.setObjectWithExpirationSeconds(
-              'foodData', null,
-              fmaSharedState.testing_invalidation_seconds);
-
-
-          // In this, someof the items in the cart didn't get uploaded. This is usually because
-          // a store closed in the middle of the user's swiping.
-          $timeout(function() {
-            $scope.cartLoading = false;
-            mainViewObj.removeClass();
-            mainViewObj.addClass('slide-right');
-            $location.path('/cart_page');
-            return;
-          }, Math.max(fmaSharedState.minLoadingMs - timePassedMs, 0));
-        }
-      );
-    }, 0);
-  }
-
   $scope.cardsLoading = true;
   var loadStartTime = (new Date()).getTime();
   $scope.cardList = [];
@@ -159,6 +101,64 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
     return;
   };
 
+  var checkoutEachMerchantSequentially = function(merchantIds, cardSelected, merchantIndex) {
+    return $q(function(resolve, reject) {
+      if (merchantIds.length === merchantIndex) {
+        return resolve('Phew! We made it!');
+      }
+      // Sigh.. before we checkout for a merchant we need to re-add everything
+      // to the cart because shitty delivery.com clears the cart every time.
+      var merchantId = merchantIds[merchantIndex];
+      fmaCartHelper.clearCartThenUpdateCartPromise($scope.userCart, $scope.rawAccessToken, merchantId)
+      .then(
+        function(newCartItems) {
+          console.log('Checking out for merchant id: ' + merchantId);
+          var dataObj = {
+            tip: fmaSharedState.tipAmount,
+            location_id: $scope.userAddress.location_id,
+            uhau_id: fmaSharedState.uhau_id,
+            instructions: "Tell people to download the FoodMe app and you'll get more orders!",
+            payments: [{
+              type: "credit_card",
+              id: cardSelected.cc_id,
+            }],
+            order_type: "delivery",
+            order_time: new Date().toISOString(),
+          };
+          $http({
+            method: 'POST',
+            url: fmaSharedState.endpoint + '/customer/cart/'+merchantId+'/checkout?client_id=' + fmaSharedState.client_id,
+            data: dataObj,
+            headers: {
+              "Authorization": $scope.rawAccessToken,
+              "Content-Type": "application/json",
+            }
+          }).then(
+            function(res) {
+              checkoutEachMerchantSequentially(merchantIds, cardSelected, merchantIndex + 1)
+              .then(
+                function(res) {
+                  return resolve(res);
+                },
+                function(err) {
+                  return reject(err);
+                }
+              );
+            },
+            function(err) {
+              return reject(err);
+            }
+          );
+        },
+        function(newCartItems) {
+          reject({data: {message: [{user_msg: 'Doh! Some of the merchants ' +
+              'selling the items in your cart just closed. Just go back and ' +
+              'add some more things-- this happens rarely, I promise!'}]}});
+        }
+      )
+    })
+  }
+
   // This is probably the most critical piece of code in the whole app.
   // It's where we place an order and charge the card.
   var processPaymentPromise = function() {
@@ -172,38 +172,22 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
     
     console.log('About to take money!');
     return $q(function(resolve, reject) {
+      var uniqueMerchantIdsObject = {};
       for (var v1 = 0; v1 < $scope.userCart.length; v1++) {
         var cartItem = $scope.userCart[v1];
-        var cardSelected = $scope.cardList[$scope.selectedCardIndex.value];
-        var dataObj = {
-          tip: fmaSharedState.tipAmount,
-          location_id: $scope.userAddress.location_id,
-          uhau_id: fmaSharedState.uhau_id,
-          instructions: "Tell people to download the FoodMe app and you'll get more orders!",
-          payments: [{
-            type: "credit_card",
-            id: cardSelected.cc_id,
-          }],
-          order_type: "delivery",
-          order_time: new Date().toISOString(),
-        };
-        $http({
-          method: 'POST',
-          url: fmaSharedState.endpoint + '/customer/cart/'+cartItem.merchantId+'/checkout?client_id=' + fmaSharedState.client_id,
-          data: dataObj,
-          headers: {
-            "Authorization": $scope.rawAccessToken,
-            "Content-Type": "application/json",
-          }
-        }).then(
-          function(res) {
-            resolve(res);
-          },
-          function(err) {
-            reject(err);
-          }
-        );
+        uniqueMerchantIdsObject[cartItem.merchantId] = true;
       }
+      var cardSelected = $scope.cardList[$scope.selectedCardIndex.value];
+      console.log(Object.keys(uniqueMerchantIdsObject));
+      checkoutEachMerchantSequentially(Object.keys(uniqueMerchantIdsObject), cardSelected, 0)
+      .then(
+        function(res) {
+          resolve(res);
+        },
+        function(err) {
+          reject(err);
+        }
+      );
     });
   };
 
@@ -234,6 +218,20 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
           fmaLocalStorage.setObjectWithExpirationSeconds(
               'foodData', null,
               fmaSharedState.testing_invalidation_seconds);
+
+          // Log the transaction with Google analytics.
+          var sum = 0.0;
+          var concatenatedName = ''
+          for (var v1 = 0; v1 < $scope.userCart.length; v1++) {
+            sum += parseFloat($scope.userCart[v1].price);
+            concatenatedName += ($scope.userCart[v1].name + '__');
+          }
+          concatenatedName += (new Date()).getTime() + '__';
+          concatenatedName += fmaSharedState.testModeEnabled;
+          analytics.addTransaction(concatenatedName, 'foodme', sum, 0.0,
+              0.0, 'USD');
+          analytics.addTransactionItem(concatenatedName, concatenatedName,
+              concatenatedName, 'food_purchase', sum, 1.0, 'USD');
           
           // Go back to the address page.
           mainViewObj.removeClass();
@@ -249,7 +247,12 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
         analytics.trackTiming('purchase', timePassedMs, 'card_page__order_failure');
         $timeout(function() {
           $scope.cardsLoading = false;
-          alert("Huh.. we had a problem with your payment: " + err.data.message[0].user_msg +
+          var error_str = '...';
+          if (err != null && err.data != null && err.data.message != null &&
+              err.data.message.length > 0) {
+            error_str = err.data.message[0].user_msg;
+          }
+          alert("Huh.. we had a problem with your payment: " + error_str +
                 " The best thing to do is probably just to clear out your " +
                 "cart and try again. It shouldn't happen twice.");
         }, Math.max(fmaSharedState.minLoadingMs - timePassedMs, 0));
@@ -269,14 +272,10 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
 
     var foodNames = [];
     var sum = 0.0;
-    var concatenatedName = ''
     for (var v1 = 0; v1 < $scope.userCart.length; v1++) {
       foodNames.push($scope.userCart[v1].name + ': $' + $scope.userCart[v1].price);
       sum += parseFloat($scope.userCart[v1].price);
-      concatenatedName += ($scope.userCart[v1].name + '__');
     }
-    concatenatedName += (new Date()).getTime() + '__';
-    concatenatedName += fmaSharedState.testModeEnabled;
     if (fmaSharedState.testModeEnabled) {
       // In test mode, take the money without confirmation so we can test in the
       // browser.
@@ -288,10 +287,6 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
           if (index === 1) {
             // Track this purchase.
             analytics.trackEvent('purchase', 'choose_card__confirmed_purchase');
-            analytics.addTransaction(concatenatedName, 'foodme', sum, 0.0, 0.0, 'USD');
-            analytics.addTransactionItem(concatenatedName, concatenatedName,
-                concatenatedName, 'food_purchase', sum, 1.0, 'USD');
-
             console.log('Order confirmed!');
 
             takeMoneyAndFinish();

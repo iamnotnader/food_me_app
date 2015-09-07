@@ -52,6 +52,12 @@ var initAngularStuff = function() {
       trackTiming: function() {
         console.log('Tried to track timing but not loaded yet.');
       },
+      addTransaction: function() {
+        console.log('Adding transaction!');
+      },
+      addTransactionItem: function() {
+        console.log('Adding transaction ITEM!');
+      },
     };
   }]);
 };

@@ -117,6 +117,7 @@ angular.module('foodmeApp.cartHelper', [])
         $http({
           method: 'DELETE',
           url: fmaSharedState.endpoint+'/customer/cart/'+cartItems[v1].merchantId+'?client_id=' + fmaSharedState.client_id,
+          data: {current_index: 0},
           headers: {
             "Authorization": rawAccessToken,
             "Content-Type": "application/json",
@@ -142,50 +143,97 @@ angular.module('foodmeApp.cartHelper', [])
     });
   };
 
-  var addCartsPromise = function(cartItems, itemRequestObjects, rawAccessToken) {
+  // TODO(daddy): FUCK YOU DELIVERY.COM! There is a race condition in your server
+  // because you don't add items to the cart in a transaction. You need to do
+  // the following:
+  //   TRANSACTION { <--- NECESSARY
+  //     - get the list of items currently in the cart from the db
+  //     - add the current item to the cart
+  //     - insert the new list of items back into the db
+  //   }
+  // Because you don't wrap this logic in a transaction and because you don't have
+  // an endpoint to add a list of items, I have to add all of the items sequentially
+  // or else risk having a half-empty cart. 
+  var addCartItemsSequentiallyPromise = function(cartItems, itemRequestObjects,
+      rawAccessToken, cartItemsAdded, cartItemsNotAdded, merchantId, currentItemIndex) {
     return $q(function(resolve, reject) {
-      var cartItemsAdded = [];
-      var cartItemsNotAdded = [];
-      for (var v1 = 0; v1 < cartItems.length; v1++) {
-        (function (x1) {
-          var currentCartItem = cartItems[x1];
-          // Add all items to the user's delivery.com cart.
-          $http({
-            method: 'POST',
-            url: fmaSharedState.endpoint+'/customer/cart/'+currentCartItem.merchantId+'?client_id=' + fmaSharedState.client_id,
-            data: itemRequestObjects[x1],
-            headers: {
-              "Authorization": rawAccessToken,
-              "Content-Type": "application/json",
-            }
-          }).then(
+      if (cartItems.length === currentItemIndex) {
+        resolve({added: cartItemsAdded, not_added: cartItemsNotAdded});
+        return;
+      }
+
+      var currentCartItem = cartItems[currentItemIndex];
+      var currentItemRequestObject = itemRequestObjects[currentItemIndex];
+      if (merchantId != null && merchantId !== currentCartItem.merchantId) {
+        // Skip this item if we specify a merchantId that it doesn't match up
+        // with.
+        return addCartItemsSequentiallyPromise(cartItems, itemRequestObjects,
+            rawAccessToken, cartItemsAdded, cartItemsNotAdded, merchantId,
+            currentItemIndex + 1)
+        .then(
+          function(res) {
+            resolve({added: cartItemsAdded, not_added: cartItemsNotAdded});
+          },
+          function(err) {
+            reject({added: cartItemsAdded, not_added: cartItemsNotAdded});
+          }
+        );
+      }
+      console.log('Adding: ' + currentItemIndex);
+      console.log(currentCartItem);
+      // Add all items to the user's delivery.com cart.
+      $http({
+        method: 'POST',
+        url: fmaSharedState.endpoint+'/customer/cart/'+currentCartItem.merchantId+'?client_id=' + fmaSharedState.client_id,
+        data: currentItemRequestObject,
+        headers: {
+          "Authorization": rawAccessToken,
+          "Content-Type": "application/json",
+        }
+      }).then(
+        function(res) {
+          cartItemsAdded.push(currentCartItem);
+          addCartItemsSequentiallyPromise(cartItems, itemRequestObjects,
+              rawAccessToken, cartItemsAdded, cartItemsNotAdded, merchantId,
+              currentItemIndex + 1)
+          .then(
             function(res) {
-              cartItemsAdded.push(currentCartItem);
-              if (cartItemsAdded.length +
-                  cartItemsNotAdded.length === cartItems.length) {
-                if (cartItemsNotAdded.length > 0) {
-                  reject({added: cartItemsAdded, not_added: cartItemsNotAdded});
-                }
-                resolve({added: cartItemsAdded, not_added: []});
-              }
+              resolve({added: cartItemsAdded, not_added: cartItemsNotAdded});
             },
             function(err) {
-              cartItemsNotAdded.push(currentCartItem);
-              if (cartItemsAdded.length +
-                  cartItemsNotAdded.length === cartItems.length) {
-                if (cartItemsNotAdded.length > 0) {
-                  reject({added: cartItemsAdded, not_added: cartItemsNotAdded});
-                }
-                resolve({added: cartItemsAdded, not_added: []});
-              }
+              reject({added: cartItemsAdded, not_added: cartItemsNotAdded});
             }
           );
-        })(v1);
-      }
+        },
+        function(err) {
+          cartItemsNotAdded.push(currentCartItem);
+          // In this case, we always reject regardless of what subsequent calls
+          // return.
+          addCartItemsSequentiallyPromise(cartItems, itemRequestObjects,
+              rawAccessToken, cartItemsAdded, cartItemsNotAdded, merchantId,
+              currentItemIndex + 1)
+          .then(
+            function(res) {
+              reject({added: cartItemsAdded, not_added: cartItemsNotAdded});
+            },
+            function(err) {
+              reject({added: cartItemsAdded, not_added: cartItemsNotAdded});
+            }
+          );
+        }
+      );
     });
   };
 
-  var clearCartThenUpdateCartPromise = function(cartItems, rawAccessToken) {
+  var addCartsPromise = function(cartItems, itemRequestObjects, rawAccessToken, merchantId) {
+    var cartItemsAdded = [];
+    var cartItemsNotAdded = [];
+    return addCartItemsSequentiallyPromise(cartItems, itemRequestObjects,
+        rawAccessToken, cartItemsAdded, cartItemsNotAdded, merchantId, 0);
+  };
+
+  // If merchantId is null, add all the items.
+  var clearCartThenUpdateCartPromise = function(cartItems, rawAccessToken, merchantId) {
     return $q(function(resolve, reject) {
       // Actual init.
       itemRequestObjects = createCartRequestsFromItems(cartItems);
@@ -194,7 +242,7 @@ angular.module('foodmeApp.cartHelper', [])
       .then(
         // At this point the cart should be cleared.
         function(res) {
-          addCartsPromise(cartItems, itemRequestObjects, rawAccessToken)
+          addCartsPromise(cartItems, itemRequestObjects, rawAccessToken, merchantId)
           .then(
             function(res) {
               // Cleared the cart and refreshed it with all our new items
