@@ -246,7 +246,6 @@ function(fmaLocalStorage, $http, fmaSharedState, $q, $timeout) {
                   foodData = _.shuffle(foodData);
                   // Limit the number of dishes we return to prevent oom. 
                   foodData = foodData.slice(0, fmaSharedState.maxDishesToReturn);
-                  console.log(foodData);
                   resolve({
                     allNearbyMerchantData: allNearbyMerchantData,
                     foodData: foodData
