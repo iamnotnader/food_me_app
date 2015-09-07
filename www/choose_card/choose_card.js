@@ -269,10 +269,14 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
 
     var foodNames = [];
     var sum = 0.0;
+    var concatenatedName = ''
     for (var v1 = 0; v1 < $scope.userCart.length; v1++) {
       foodNames.push($scope.userCart[v1].name + ': $' + $scope.userCart[v1].price);
       sum += parseFloat($scope.userCart[v1].price);
+      concatenatedName += ($scope.userCart[v1].name + '__');
     }
+    concatenatedName += (new Date()).getTime() + '__';
+    concatenatedName += fmaSharedState.testModeEnabled;
     if (fmaSharedState.testModeEnabled) {
       // In test mode, take the money without confirmation so we can test in the
       // browser.
@@ -282,7 +286,13 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
               '\n\nFor a total of: $' + sum.toFixed(2) + '?',
         function(index) {
           if (index === 1) {
+            // Track this purchase.
             analytics.trackEvent('purchase', 'choose_card__confirmed_purchase');
+            analytics.addTransaction(concatenatedName, 'foodme', sum, 0.0, 0.0, 'USD');
+            analytics.addTransactionItem(concatenatedName, concatenatedName,
+                concatenatedName, 'food_purchase', sum, 1.0, 'USD');
+
+            console.log('Order confirmed!');
 
             takeMoneyAndFinish();
           }

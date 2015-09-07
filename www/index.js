@@ -98,6 +98,6 @@ var app = {
         return ret;
       };
       // The ga_id is set in intitAngular
-      window.analytics.startTrackerWithId(ga_id)
+      window.analytics.startTrackerWithId(ga_id);
     }
 };
