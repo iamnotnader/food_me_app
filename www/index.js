@@ -105,5 +105,6 @@ var app = {
       };
       // The ga_id is set in intitAngular
       window.analytics.startTrackerWithId(ga_id);
+      //window.analytics.debugMode();
     }
 };
