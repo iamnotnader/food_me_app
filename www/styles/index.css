@@ -477,9 +477,21 @@ h1 {
   font-size: 1.1rem;
   vertical-align: middle; }
 
+.overall__loading_long_time {
+  position: absolute;
+  top: 80%;
+  left: 0;
+  right: 0;
+  margin: 0 auto;
+  text-align: center;
+  text-transform: none;
+  font-family: TitleFont;
+  font-size: 1.5rem;
+  color: #464646; }
+
 .overall__loading_widget {
   position: fixed;
-  top: 20%;
+  top: 15%;
   bottom: auto;
   left: 50%;
   -webkit-transform: translate(-50%, -50%);
@@ -499,7 +511,7 @@ h1 {
   position: absolute;
   left: 5%;
   right: 5%;
-  top: 30%;
+  top: 25%;
   bottom: auto;
   margin-left: auto;
   margin-right: auto;
