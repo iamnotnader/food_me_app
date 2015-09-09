@@ -304,7 +304,7 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
     console.log('Cell selected: ' + indexSelected);
     $scope.selectedCardIndex.value = indexSelected;
   };
-  var addCardUrl = fmaSharedState.endpoint+'/third_party/credit_card/add?' +
+  var addCardUrl = fmaSharedState.oauth_endpoint+'/third_party/credit_card/add?' +
                   'client_id=' + fmaSharedState.client_id + '&' +
                   'redirect_uri=' + fmaSharedState.redirect_uri + '&' +
                   'response_type=code&' +
