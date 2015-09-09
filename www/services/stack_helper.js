@@ -292,7 +292,7 @@ function(fmaLocalStorage, $http, fmaSharedState, $q, $timeout) {
 
     if (numPicsToFetch === 0) {
       return $q(function(resolve, reject) {
-        resolve({ foodImageLinks: [] })
+        resolve({ foodImageLinks: [] });
       });
     };
 
@@ -302,7 +302,7 @@ function(fmaLocalStorage, $http, fmaSharedState, $q, $timeout) {
       var goodUrls = [];
       return $q(function(resolve, reject) {
         if (imageUrls.length === 0) {
-          reject('no pics.');
+          resolve({ foodImageLinks: [] });
         }
         for (var v1 = 0; v1 < imageUrls.length; v1++) {
           (function(imageIndex) {
