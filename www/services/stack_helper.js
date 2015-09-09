@@ -51,15 +51,12 @@ function(fmaLocalStorage, $http, fmaSharedState, $q, $timeout) {
       return menuArr;
     }
 
-    if (openSchedules == null || openSchedules.length === 0) {
-      return [];
-    }
-
     var validMenus = [];
     for (var v1 = 0; v1 < menuArr.length; v1++) {
       var currentMenu = menuArr[v1];
       var currentSchedules = currentMenu.schedule;
-      if (currentSchedules == null || currentSchedules.length === 0) {
+      if (currentSchedules == null) {
+        validMenus.push(currentMenu);
         continue;
       }
       var schedulesOverlap = false;
@@ -122,9 +119,14 @@ function(fmaLocalStorage, $http, fmaSharedState, $q, $timeout) {
   };
 
   // Resolves to an array of dishes!
-  var getOpenDishesForMerchantPromise = function(merchant_id) {
+  var getOpenDishesForMerchantPromise = function(merchantObj) {
     return $q(function(resolve, reject) {
-      $http.get(fmaSharedState.endpoint+'/merchant/'+merchant_id+'/menu?client_id=' + fmaSharedState.client_id)
+      if (merchantObj == null || merchantObj.summary == null ||
+          merchantObj.summary.url == null || merchantObj.summary.url.short_tag == null) {
+        return resolve([]);
+      }
+
+      $http.get(fmaSharedState.endpoint+'/merchant/'+merchantObj.summary.url.short_tag+'/menu?iso=true&client_id=' + fmaSharedState.client_id)
       .then(
         function(res) {
           var menuArr = res.data.menu;
@@ -212,7 +214,7 @@ function(fmaLocalStorage, $http, fmaSharedState, $q, $timeout) {
           }
           (function(merchIndex) {
             var innerCurrentMerchant = merchants[merchIndex];
-            getOpenDishesForMerchantPromise(innerCurrentMerchant.id)
+            getOpenDishesForMerchantPromise(innerCurrentMerchant)
             .then(
               function(menuItemsFound) {
                 for (var v1 = 0; v1 < menuItemsFound.length; v1++) {
