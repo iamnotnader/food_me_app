@@ -226,15 +226,20 @@ function(fmaLocalStorage, $http, fmaSharedState, $q, $timeout) {
                   currentItem.merchantCuisines = innerCurrentMerchant.summary.cuisines;
                   // We use this to avoid duplicates in ng-repeat.
                   currentItem.unique_key = currentItem.merchantId + currentItem.id;
+                  var deliveryCharge = 0.0;
+                  if (innerCurrentMerchant.ordering != null &&
+                      innerCurrentMerchant.ordering.delivery_charge != null) {
+                    deliveryCharge = innerCurrentMerchant.ordering.delivery_charge;
+                  }
                   if (currentItem.name == null || currentItem.merchantName == null ||
                       currentItem.price == null ||
-                      currentItem.price > fmaSharedState.maxPriceToShowUSD ||
+                      currentItem.price + deliveryCharge > fmaSharedState.maxPriceToShowUSD ||
                       (innerCurrentMerchant.ordering.minimum != null &&
                        currentItem.price < innerCurrentMerchant.ordering.minimum)) {
                     continue;
                   }
                   // Add the tax and tip to make it accurate.
-                  currentItem.price = currentItem.price * (1 + fmaSharedState.taxRate) + fmaSharedState.tipAmount;
+                  currentItem.price = (currentItem.price + deliveryCharge) * (1 + fmaSharedState.taxRate) + fmaSharedState.tipAmount;
                   currentItem.price = currentItem.price.toFixed(2);
 
                   // Get rid of number like "55. Turkey Sandwich" -> "Turkey Sandwich"

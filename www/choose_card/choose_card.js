@@ -155,9 +155,9 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
               'selling the items in your cart just closed. Just go back and ' +
               'add some more things-- this happens rarely, I promise!'}]}});
         }
-      )
-    })
-  }
+      );
+    });
+  };
 
   // This is probably the most critical piece of code in the whole app.
   // It's where we place an order and charge the card.
@@ -221,7 +221,7 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
 
           // Log the transaction with Google analytics.
           var sum = 0.0;
-          var concatenatedName = ''
+          var concatenatedName = '';
           for (var v1 = 0; v1 < $scope.userCart.length; v1++) {
             sum += parseFloat($scope.userCart[v1].price);
             concatenatedName += ($scope.userCart[v1].name + '__');
