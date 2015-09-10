@@ -13,67 +13,6 @@ angular.module('foodMeApp.stackHelper', ['foodmeApp.localStorage', 'foodmeApp.sh
 
 .factory('fmaStackHelper', ["fmaLocalStorage", "$http", "fmaSharedState", "$q", "$timeout",
 function(fmaLocalStorage, $http, fmaSharedState, $q, $timeout) {
-  // Go through the a schedule array and return the ones that are open right now.
-  // TODO(daddy): I can hear this function softly crying "killll meeeeee!"
-  var getOpenSchedules = function(scheduleArr) {
-    currentDay = fmaSharedState.getDayAsString();
-    if (scheduleArr != null && scheduleArr.length > 0) {
-      var validSchedules = [];
-      for (var scheduleI = 0; scheduleI < scheduleArr.length; scheduleI++) {
-        var isValidSchedule = false;
-        var currentSchedule = scheduleArr[scheduleI];
-        for (var dayI = 0; dayI < currentSchedule.times.length; dayI++) {
-          var scheduleDay = currentSchedule.times[dayI]; 
-          if (scheduleDay.day === currentDay) {
-            var from = new Date(scheduleDay.from);
-            var to = new Date(scheduleDay.to);
-            var now = new Date();
-            if (now > from && now < to) {
-              isValidSchedule = true;
-              break;
-            }
-          }
-        }
-        if (isValidSchedule) {
-          validSchedules.push(currentSchedule);
-        }
-      }
-      return validSchedules;
-    }
-    return "all_valid";
-  };
-
-  // Go through an array of menus and only returns the ones that correspond
-  // to schedules that are open.
-  var openMenus = function(menuArr, scheduleArr) {
-    var openSchedules = getOpenSchedules(scheduleArr);
-    if (openSchedules === "all_valid") {
-      return menuArr;
-    }
-
-    var validMenus = [];
-    for (var v1 = 0; v1 < menuArr.length; v1++) {
-      var currentMenu = menuArr[v1];
-      var currentSchedules = currentMenu.schedule;
-      if (currentSchedules == null) {
-        validMenus.push(currentMenu);
-        continue;
-      }
-      var schedulesOverlap = false;
-      for (var v2 = 0; v2 < currentSchedules.length; v2++) {
-        for (var v3 = 0; v3 < openSchedules.length; v3++) {
-          if (currentSchedules[v2] === openSchedules[v3].id) {
-            schedulesOverlap = true;
-            break;
-          }
-        }
-      }
-      if (schedulesOverlap) {
-        validMenus.push(currentMenu);
-      }
-    }
-    return validMenus;
-  };
 
   // Finds all of the "item" subobjects in the menuObj passed in. See
   // findMenuItems for more details.
@@ -126,14 +65,10 @@ function(fmaLocalStorage, $http, fmaSharedState, $q, $timeout) {
         return resolve([]);
       }
 
-      $http.get(fmaSharedState.endpoint+'/merchant/'+merchantObj.summary.url.short_tag+'/menu?iso=true&client_id=' + fmaSharedState.client_id)
+      $http.get(fmaSharedState.endpoint+'/merchant/'+merchantObj.summary.url.short_tag+'/menu?iso=true&hide_unavailable=true&client_id=' + fmaSharedState.client_id)
       .then(
         function(res) {
           var menuArr = res.data.menu;
-          // TODO(daddy): Culling down the menus like this is necessary for
-          // now, but in the long run the food should be culled down before
-          // the swipe page.
-          menuArr = openMenus(menuArr, res.data.schedule);
           // The forbidden items are things like tobacco and alcohol. We want to make
           // sure we filter these results out of our stack.
           var forbiddenItemIds = [];
