@@ -66,12 +66,12 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
     if ($scope.selectAllButtonSet) {
       analytics.trackEvent('cell', 'choose_cuisine__select_all_off');
 
-      $scope.selectAllText = "select all cuisines";
+      $scope.selectAllText = "select all types";
       $scope.selectedCuisineIndices = { value: [] };
     } else {
       analytics.trackEvent('cell', 'choose_cuisine__select_all_on');
 
-      $scope.selectAllText = "deselect all cuisines";
+      $scope.selectAllText = "deselect all types";
       $scope.selectedCuisineIndices = { value: _.range(fmaSharedState.numCuisinesToShow) };
     }
   };

@@ -360,15 +360,17 @@ function(fmaLocalStorage, $http, fmaSharedState, $q, $timeout) {
             retVars.foodImageLinks = allData.foodImageLinks;                
 
             // Put everything in localStorage for the future.
-            fmaLocalStorage.setObjectWithExpirationSeconds(
-                'allNearbyMerchantData', retVars.allNearbyMerchantData,
-                fmaSharedState.testing_invalidation_seconds);
-            fmaLocalStorage.setObjectWithExpirationSeconds(
-                'foodData', retVars.foodData,
-                fmaSharedState.testing_invalidation_seconds);
-            fmaLocalStorage.setObjectWithExpirationSeconds(
-                'foodImageLinks', retVars.foodImageLinks,
-                fmaSharedState.testing_invalidation_seconds);
+            // TODO(daddy): We need to regulate how much we put in here. I think
+            // it causes a crash on iOS. Commenting out for now.
+            //fmaLocalStorage.setObjectWithExpirationSeconds(
+                //'allNearbyMerchantData', retVars.allNearbyMerchantData,
+                //fmaSharedState.testing_invalidation_seconds);
+            //fmaLocalStorage.setObjectWithExpirationSeconds(
+                //'foodData', retVars.foodData,
+                //fmaSharedState.testing_invalidation_seconds);
+            //fmaLocalStorage.setObjectWithExpirationSeconds(
+                //'foodImageLinks', retVars.foodImageLinks,
+                //fmaSharedState.testing_invalidation_seconds);
 
             // Now we can continue with the rest of the setup.
             resolve(retVars);

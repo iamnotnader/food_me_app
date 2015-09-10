@@ -35,9 +35,9 @@ angular.module('foodmeApp.cartHelper', [])
       }
       if (free_options.length === 0) {
         analytics.trackEvent('error', 'cart_helper__no_free_options');
-        alert('Something went haywire with the options on this order. ' +
-              'Probably best if you just remove everything from your cart and ' +
-              'pick something else. This is rare I promise and we are working to fix it!');
+        alert('Something went haywire with the options on one of your items. ' +
+              'This happens when a merchant tries to hide extra fees in weird places. ' +
+              'This is rare I promise and we are working to fix it!');
         console.warn('Required option had zero free options!');
         console.warn(singleItem);
         return optionsToReturn;
