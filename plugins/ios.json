@@ -35,6 +35,14 @@
                         {
                             "xml": "<feature name=\"UniversalAnalytics\"><param name=\"ios-package\" value=\"UniversalAnalyticsPlugin\" /></feature>",
                             "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"NetworkStatus\"><param name=\"ios-package\" value=\"CDVConnection\" /></feature>",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"Geolocation\"><param name=\"ios-package\" value=\"CDVLocation\" /></feature>",
+                            "count": 1
                         }
                     ]
                 }
@@ -57,6 +65,10 @@
                         {
                             "xml": false,
                             "count": 1
+                        },
+                        {
+                            "xml": true,
+                            "count": 1
                         }
                     ],
                     "CoreData.framework": [
@@ -74,6 +86,22 @@
                     "libsqlite3.0.dylib": [
                         {
                             "xml": false,
+                            "count": 1
+                        }
+                    ],
+                    "CoreLocation.framework": [
+                        {
+                            "xml": false,
+                            "count": 1
+                        }
+                    ]
+                }
+            },
+            "*-Info.plist": {
+                "parents": {
+                    "NSLocationWhenInUseUsageDescription": [
+                        {
+                            "xml": "<string />",
                             "count": 1
                         }
                     ]
@@ -104,6 +132,12 @@
             "PACKAGE_NAME": "io.foodme"
         },
         "cordova-plugin-google-analytics": {
+            "PACKAGE_NAME": "io.foodme"
+        },
+        "org.apache.cordova.network-information": {
+            "PACKAGE_NAME": "io.foodme"
+        },
+        "org.apache.cordova.geolocation": {
             "PACKAGE_NAME": "io.foodme"
         }
     },
