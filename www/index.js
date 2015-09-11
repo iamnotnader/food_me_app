@@ -27,13 +27,14 @@ var initAngularStuff = function() {
     'ngAnimate',
     'foodMeApp.dummyAppScreen',
     'foodMeApp.introScreen',
-    'foodMeApp.chooseAddress',
-    'foodMeApp.addAddress',
+    'foodMeApp.chooseAddress', // TODO(daddy): This should be deleted once chooseAddressV2 is live.
+    'foodMeApp.addAddress', // TODO(daddy): This should be deleted once chooseAddressV2 is live.
     'foodMeApp.chooseCuisine',
     'foodMeApp.swipePage',
     'foodMeApp.cartPage',
     'foodMeApp.chooseCard',
     'foodmeApp.sharedState',
+    'foodMeApp.chooseAddressV2',
   ]).
   config(['$routeProvider',
       function($routeProvider) {

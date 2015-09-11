@@ -335,10 +335,12 @@ h1 {
   font-size: 1.7rem; }
 
 .choose_address__container {
-  height: 100%;
-  width: 100%;
   position: absolute;
-  padding-bottom: 3rem; }
+  top: 50%;
+  bottom: 0;
+  overflow: hidden;
+  left: 0;
+  right: 0; }
 
 .choose_address__top_bar {
   position: fixed;
@@ -353,7 +355,6 @@ h1 {
   background-color: white; }
 
 .choose_address__address_list {
-  margin-top: 3rem;
   height: 100%;
   background-color: white;
   overflow: auto;
@@ -406,6 +407,23 @@ h1 {
   -webkit-backface-visibility: hidden;
   -webkit-transform: translate3d(0, 0, 0);
   transform: translate3d(0, 0, 0); }
+
+.choose_address_v2__recent_addresses {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-2rem);
+  font-size: 1.3rem;
+  line-height: 2rem;
+  text-transform: none;
+  font-family: TitleFont;
+  left: 1rem;
+  color: #464646; }
+
+.choose_address__cell_border.choose_address_v2__border_top {
+  border-top: 1px solid #979797;
+  top: 0;
+  bottom: 100%;
+  border-bottom: none; }
 
 .choose_address__cell_border {
   border-bottom: 1px solid #979797;
