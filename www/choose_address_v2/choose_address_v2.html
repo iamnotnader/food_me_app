@@ -1,0 +1,45 @@
+<div class="choose_address_v2__text_container">
+  <input class="choose_address_v2__inner_input" ng-model="query" ng-change="getAutocomplete(query)" placeholder="Enter an address..." ng-trim="false">
+</div>
+<div class="choose_address_v2__recent_addresses">
+  Recent addresses
+</div>
+<div class="choose_address__container">
+  <div class="choose_address__address_list">
+    <div style="min-height: 101%">
+      <div ng-repeat="locationObj in locationList">
+        <div class="choose_address__list_cell" ng-click="cellSelected($index)">
+          <div class="choose_address__cell_top_row">
+            {{locationObj.street}}
+          </div>
+          <div class="choose_address__cell_bottom_row">
+            {{locationObj.city}}, {{locationObj.state}} &nbsp; | &nbsp; {{locationObj.phone}}
+          </div>
+          <div class="choose_address__cell_border"></div>
+          <img class="choose_address__selected_badge leave-right-centered enter-right-centered" ng-if="$index == selectedLocationIndex.value"
+                src="img/happy_burger.png" alt="">
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="choose_address_v2__empty_address_list" ng-if="locationList == null || locationList.length === 0">
+    <div class="swipe_page__vertically_center">
+      No recent addresses.
+    </div>
+  </div>
+  <div class="choose_address_v2__empty_pusheen">
+    <div class="overall__attribution" style="bottom: 8%; font-size: .8rem;">Pusheen.com</div>
+  </div>
+  <div class="choose_address__cell_border choose_address_v2__border_top"></div>
+  <div class="choose_address__top_bar">
+    <div class="choose_address__middle_text">Where Food Go?</div>
+    <div class="choose_address__right_text" ng-click="doneButtonPressed()">
+      <div class="swipe_page__vertically_center">
+        Done
+      </div>
+    </div>
+    <div class="choose_address__cell_border"></div>
+  </div>
+</div>
+
+<div ng-include src="'loading_screen/loading_screen.html'" ng-if="isLoading" class="fade-me"></div>
