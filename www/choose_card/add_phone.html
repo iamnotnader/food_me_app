@@ -1,0 +1,32 @@
+<div class="choose_address__container">
+  <div class="enter_phone__text">
+    Your delivery dudes need to call you when they arrive.
+  </div>
+  <div class="enter_phone__phone_number_container">
+    <div class="enter_phone__phone_label">
+      Phone number*
+    </div>
+    <input class="choose_address_v2__inner_input enter_phone__phone_number" type="text" ng-model="missingAddressData.phoneNumber" placeholder="Enter phone." ng-trim="false">
+  </div>
+  <div class="enter_phone__phone_number_container">
+    <div class="enter_phone__phone_label">
+      Apartment number
+    </div>
+    <input class="choose_address_v2__inner_input enter_phone__phone_number" type="text" ng-model="missingAddressData.apartmentNumber" placeholder="Enter apartment number." ng-trim="false">
+  </div>
+  <div class="enter_phone__done_button" ng-click="enterPhoneDonePressed()">
+    <div class="swipe_page__vertically_center" style="text-transform: none; font-family: TitleFont; font-size: 2rem; color: white;">
+      Done!
+    </div>
+  </div>
+</div> 
+
+<div class="choose_address__top_bar">
+  <div class="choose_address__middle_text">Last thing!</div>
+  <div class="choose_address__left_text" ng-click="enterPhoneCancelPressed()">
+    <div class="swipe_page__vertically_center">
+      Cancel
+    </div>
+  </div>
+  <div class="choose_address__cell_border"></div>
+</div>

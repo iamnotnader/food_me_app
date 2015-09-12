@@ -127,6 +127,7 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
     // Log this error with google analytics.
     var timePassedMs = (new Date()).getTime() - loadStartTime;
     analytics.trackTiming('loading', timePassedMs, 'choose_cuisine_error');
+    $scope.all_cuisines = [];
 
     console.log('Error occurred.');
     console.log(JSON.stringify(err));

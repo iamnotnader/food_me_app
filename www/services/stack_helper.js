@@ -359,7 +359,10 @@ function(fmaLocalStorage, $http, fmaSharedState, $q, $timeout) {
           function(allData) {
             console.log('Got all the image data!');
             // Array of objects with images in them, one for each card.
-            retVars.foodImageLinks = allData.foodImageLinks;                
+            retVars.foodImageLinks = [];
+            if (allData != null) {
+              retVars.foodImageLinks = allData.foodImageLinks;                
+            }
 
             // Put everything in localStorage for the future.
             // TODO(daddy): We need to regulate how much we put in here. I think

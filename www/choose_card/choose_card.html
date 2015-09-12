@@ -37,4 +37,13 @@
   <div class="choose_address__cell_border"></div>
 </div>
 
+<!--TODO(daddy): This is shitty. It's a page embedded in another page. The reason I'm-->
+<!--doing it this way is two-fold:-->
+<!--1) I don't want to learn ui-router and gut all my code to use it.-->
+<!--2) I need to ask for confirmation after they enter the phone number, so the phone-->
+<!--page does kindof need to be tightly-coupled to the card_page.-->
+<div class="choose_card__enter_phone" ng-if="showPhonePage">
+  <div ng-include src="'choose_card/add_phone.html'"></div>
+</div>
+
 <div ng-include src="'loading_screen/loading_screen.html'" ng-if="cardsLoading || cartLoading" class="fade-me"></div>

@@ -16,7 +16,7 @@
             {{locationObj.street}}
           </div>
           <div class="choose_address__cell_bottom_row">
-            {{locationObj.city}}, {{locationObj.state}} &nbsp; | &nbsp; {{locationObj.zip_code}}
+            {{locationObj.city}}, {{locationObj.state}} &nbsp; | &nbsp; {{locationObj.zip_code}} <span ng-if="locationObj.phone != null">| &nbsp; {{locationObj.phone}}</span>
           </div>
           <div class="choose_address__cell_border"></div>
           <img class="choose_address__selected_badge leave-right-centered enter-right-centered" ng-if="$index == selectedLocationIndex.value"

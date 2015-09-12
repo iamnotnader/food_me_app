@@ -11,6 +11,10 @@ angular.module('foodMeApp.chooseAddressV2', ['ngRoute', 'ngTouch', 'foodmeApp.lo
 function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, $timeout) {
   var mainViewObj = $('#main_view_container');
 
+  if (fmaSharedState.testModeEnabled) {
+    alert('Warning-- you are using the sandbox.');
+  }
+
   analytics.trackView('/choose_address_v2');
   $scope.recentAddresses = fmaLocalStorage.getObject('recentAddresses');
   if ($scope.recentAddresses == null) {
@@ -159,9 +163,9 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
 
     // Add the address to the recent addresses.
     $scope.recentAddresses = _.filter($scope.recentAddresses, function(item) {
-      return !angular.equals(item, $scope.userAddress)
+      return fmaSharedState.addressToString(item) !== fmaSharedState.addressToString($scope.userAddress)
     });
-    $scope.recentAddresses = [$scope.userAddress,].concat($scope.recentAddresses.slice(0, 4));
+    $scope.recentAddresses = [$scope.userAddress,].concat($scope.recentAddresses.slice(0, fmaSharedState.recentAddressesToKeep-1));
     fmaLocalStorage.setObjectWithExpirationSeconds(
         'recentAddresses', $scope.recentAddresses,
         fmaSharedState.testing_invalidation_seconds);

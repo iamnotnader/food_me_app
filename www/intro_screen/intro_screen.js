@@ -12,6 +12,10 @@ function($scope, $location, $http, fmaLocalStorage, fmaSharedState, $rootScope, 
   // If you want to test a specific page, comment this in and set testEnabled = true.
   //$location.path('/choose_card');
 
+  if (fmaSharedState.testModeEnabled) {
+    alert('Warning-- you are using the sandbox.');
+  }
+
   if (window.analytics != null) {
     // For some reason deviceready doesn't execute fast enough sometimes.
     analytics.trackView('/intro_screen');

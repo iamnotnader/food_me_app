@@ -562,6 +562,58 @@ $choose_address__padding: 1rem;
   transform: translate3d(0, -50%, 0); 
 }
 
+.choose_card__enter_phone {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: white;
+}
+
+.enter_phone__text {
+  width: 80%;
+  text-align: center;
+  margin: 0 auto;
+  margin-top: 5%;
+  left: 0;
+  right: 0;
+  text-transform: none;
+  font-size: 1.4rem;
+  font-family: TitleFont;
+  top: 3%;
+}
+
+.enter_phone__phone_number_container {
+  text-transform: none;
+  margin: 0 auto;
+  left: 0;
+  margin-top: 5%;
+  width: 80%;
+  font-family: TaglineFont;
+  font-size: 1.1rem;
+}
+
+input.choose_address_v2__inner_input.enter_phone__phone_number {
+  width: 100%;
+  margin-top: .2rem;
+  padding: 0 0.5rem;
+  font-size: 1.2rem;
+  height: 2.5rem;
+  -webkit-border-radius: 0;
+  border-radius: 0;
+}
+
+.enter_phone__done_button {
+  background-color: #3C5988;
+  height: 4rem;
+  width: 80%;
+  margin: 0 auto;
+  margin-top: 10%;
+  text-align: center;
+  position: relative;
+}
+
 
 
 

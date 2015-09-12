@@ -41,10 +41,9 @@ angular.module('foodmeApp.sharedState', [])
       return days[new Date().getDay()];
     },
     addressToString: function(address) {
-      return address.street + ' ' + address.city + ', '
-          + address.state + ' ' + address.zip_code
+      return address.street + ', ' + address.city + ', '
+          + address.state + ', ' + address.zip_code
     },
-
 
     instructions: 'Tell people to download the FoodMe app and get more orders!',
 
@@ -61,6 +60,8 @@ angular.module('foodmeApp.sharedState', [])
     numCuisinesToShow: 30,
 
     maxPriceToShowUSD: 40,
+
+    recentAddressesToKeep: 5,
 
     // This is how we get commissions. It is the "You hear about us" ID from delivery.com.
     // Contact baltomare@delivery.com for questions.
@@ -98,7 +99,7 @@ angular.module('foodmeApp.sharedState', [])
 
     // Testing
     stateObj.testing_invalidation_seconds = 60 * 60;
-    stateObj.fake_token = 'JHyPICYvbiSTA45bXUFqeSvADRW1IF4rNV2azjnj';
+    //stateObj.fake_token = 'JHyPICYvbiSTA45bXUFqeSvADRW1IF4rNV2azjnj';
     stateObj.uhau_id = null;
   }
 
