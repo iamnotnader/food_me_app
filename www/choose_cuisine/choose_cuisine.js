@@ -13,33 +13,13 @@ angular.module('foodMeApp.chooseCuisine', ['ngRoute', 'ngTouch', 'foodmeApp.loca
 function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, $timeout) {
   var mainViewObj = $('#main_view_container');
 
-  // For this controller, we need a token and an address. If we are missing
+  // For this controller, we need an address. If we are missing
   // either one of those, we redirect to another screen in order to get it.
   console.log('In choose_cuisine controller.');
-  $scope.userToken = fmaLocalStorage.getObject('userToken');
-  $scope.rawAccessToken = null;
-  if (fmaSharedState.fake_token) {
-    alert('Warning-- you are using a fake access token.');
-    console.log('Fake token being used.');
-    $scope.rawAccessToken = fmaSharedState.fake_token;
-  } else if (_.has($scope.userToken, 'access_token')) {
-    console.log('Stored token being used.');
-    $scope.rawAccessToken = $scope.userToken.access_token;
-  }
-  if ($scope.rawAccessToken === null) {
-    analytics.trackEvent('reroute', 'choose_cuisine__intro_screen');
-
-    alert('In order to set cuisines, we need you to log in first.');
-    console.log('No token found-- go back to intro_screen.');
-    mainViewObj.removeClass();
-    mainViewObj.addClass('slide-right');
-    $location.path('/intro_screen');
-    return;
-  }
   if (!fmaLocalStorage.isSet('userAddress')) {
     analytics.trackEvent('reroute', 'choose_cuisine__choose_address_v2');
 
-    alert("In order to set cuisines, we need an address first. Please enter one.");
+    alert("In order to set restaurant types, we need an address first. Please enter one.");
     console.log('No address found-- go back to choose_address_v2 to get it.');
     mainViewObj.removeClass();
     mainViewObj.addClass('slide-right');
@@ -47,7 +27,7 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
     return;
   }
   $scope.userAddress = fmaLocalStorage.getObject('userAddress');
-  // When we get here, we have a valid user token and a valid address.
+  // When we get here, we have a valid address.
 
   analytics.trackView('/choose_cuisine');
 
@@ -66,12 +46,12 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
     if ($scope.selectAllButtonSet) {
       analytics.trackEvent('cell', 'choose_cuisine__select_all_off');
 
-      $scope.selectAllText = "select all types";
+      $scope.selectAllText = "tap here to toggle";
       $scope.selectedCuisineIndices = { value: [] };
     } else {
       analytics.trackEvent('cell', 'choose_cuisine__select_all_on');
 
-      $scope.selectAllText = "deselect all types";
+      $scope.selectAllText = "tap here to toggle";
       $scope.selectedCuisineIndices = { value: _.range(fmaSharedState.numCuisinesToShow) };
     }
   };
@@ -80,13 +60,15 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
   $scope.isLoading = true;
   var loadStartTime = (new Date()).getTime();
   console.log(JSON.stringify($scope.userAddress));
-  $http.defaults.headers.common.Authorization = $scope.rawAccessToken;
+  var searchAddress = fmaSharedState.addressToString($scope.userAddress);
   $http.get(fmaSharedState.endpoint+'/merchant/search/delivery?' + 
+            'address=' + searchAddress.split(' ').join('+') + '&' + 
             'client_id=' + fmaSharedState.client_id + '&' +
-            'latitude=' + $scope.userAddress.latitude + '&' +
-            'longitude=' + $scope.userAddress.longitude + '&' +
-            'merchant_type=R&' +
-            'access_token=' + $scope.rawAccessToken
+            'enable_recommendations=true&' + 
+            'iso=true&' +
+            'order_time=ASAP&' +
+            'order_type=delivery&' +
+            'vertical=f'
   )
   .then(
   function(res) {

@@ -336,6 +336,14 @@ h1 {
 
 .choose_address__container {
   position: absolute;
+  top: 9%;
+  bottom: 0;
+  overflow: hidden;
+  left: 0;
+  right: 0; }
+
+.choose_address_v2__container {
+  position: absolute;
   top: 50%;
   bottom: 0;
   overflow: hidden;

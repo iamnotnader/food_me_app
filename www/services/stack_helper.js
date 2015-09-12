@@ -92,17 +92,19 @@ function(fmaLocalStorage, $http, fmaSharedState, $q, $timeout) {
   };
 
   // This is called if we don't find the merchant and food data in our localStorage.
-  var asyncGetMerchantAndFoodData = function(latitude, longitude, token, cuisines, numMerchantsToFetch) {
+  var asyncGetMerchantAndFoodData = function(userAddress, cuisines, numMerchantsToFetch) {
     console.log('Asynchronously getting merchant data.');
     // HTTP request to get all the stuff, then process it into a list of food.
     return $q(function(resolve, reject) {
-      $http.defaults.headers.common.Authorization = token;
-      $http.get(fmaSharedState.endpoint + '/merchant/search/delivery?' + 
+      var searchAddress = fmaSharedState.addressToString(userAddress);
+      $http.get(fmaSharedState.endpoint+'/merchant/search/delivery?' + 
+                'address=' + searchAddress.split(' ').join('+') + '&' + 
                 'client_id=' + fmaSharedState.client_id + '&' +
-                'latitude=' + latitude + '&' +
-                'longitude=' + longitude + '&' +
-                'merchant_type=R&' +
-                'access_token=' + token
+                'enable_recommendations=true&' + 
+                'iso=true&' +
+                'order_time=ASAP&' +
+                'order_type=delivery&' +
+                'vertical=f'
       )
       .then(
       function(res) {
@@ -322,7 +324,7 @@ function(fmaLocalStorage, $http, fmaSharedState, $q, $timeout) {
     });
   };
 
-  var setUpDataVariables = function(latitude, longitude, token, cuisines, numPicsToFetch, numMerchantsToFetch, forceRefresh) {
+  var setUpDataVariables = function(userAddress, cuisines, numPicsToFetch, numMerchantsToFetch, forceRefresh) {
     var retVars = {};
     return $q(function(resolve, reject) {
       // This is a hack but if we're loading for more than some amount of time
@@ -338,7 +340,7 @@ function(fmaLocalStorage, $http, fmaSharedState, $q, $timeout) {
           !fmaLocalStorage.isSet('foodData') ||
           !fmaLocalStorage.isSet('foodImageLinks')) {
         console.log('We need to refetch food data (sadly)');
-        asyncGetMerchantAndFoodData(latitude, longitude, token, cuisines, numMerchantsToFetch).then(
+        asyncGetMerchantAndFoodData(userAddress, cuisines, numMerchantsToFetch).then(
           function(allData) {
             console.log('Got all the merchant and food data!');
             // This is the giant response we get back from delivery.com.

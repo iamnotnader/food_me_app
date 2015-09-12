@@ -14,31 +14,13 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $q, fmaStack
   // We attach classes to this to make transitions smooth.
   var mainViewObj = $('#main_view_container');
 
-  // For this page, we need a token, an address, and some chosen cuisines. If we
+  // For this page, an address, and some chosen restaurant types. If we
   // are missing any of these, then we redirect to the proper page to get them.
   console.log('In swipe_page controller.');
-  $scope.userToken = fmaLocalStorage.getObject('userToken');
-  $scope.rawAccessToken = null;
-  if (fmaSharedState.fake_token) {
-    alert('Warning-- you are using a fake access token.');
-    console.log('Fake token being used.');
-    $scope.rawAccessToken = fmaSharedState.fake_token;
-  } else if (_.has($scope.userToken, 'access_token')) {
-    console.log('Stored token being used.');
-    $scope.rawAccessToken = $scope.userToken.access_token;
-  }
-  if ($scope.rawAccessToken === null) {
-    analytics.trackEvent('reroute', 'swipe_page__intro_screen');
-
-    alert('In order to swipe, we need you to log in first.');
-    console.log('No token found-- go back to intro_screen.');
-    $location.path('/intro_screen');
-    return;
-  }
   if (!fmaLocalStorage.isSet('userAddress')) {
     analytics.trackEvent('reroute', 'swipe_page__choose_address');
 
-    alert("In order to swipe, we need an address and some cuisines first.");
+    alert("In order to swipe, we need an address and some restaurant types first.");
     console.log('No address found-- go back to choose_address to get it.');
     $location.path('/choose_address');
     return;
@@ -46,14 +28,14 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $q, fmaStack
   if (!fmaLocalStorage.isSet('userCuisines')) {
     analytics.trackEvent('reroute', 'swipe_page__choose_cuisine');
 
-    alert("In order to swipe, we need some cuisines first.");
-    console.log('No cuisines. Go back to choose_cuisine.');
+    alert("In order to swipe, we need some restaurant types first.");
+    console.log('No restaurant types. Go back to choose_cuisine.');
     $location.path('/choose_cuisine');
     return;
   }
   $scope.userAddress = fmaLocalStorage.getObject('userAddress');
   $scope.userCuisines = fmaLocalStorage.getObject('userCuisines');
-  // If we get here, we have a token, an address, and some chosen cuisines.
+  // If we get here, we have an address, and some chosen restaurant types.
 
   analytics.trackView('/swipe_page');
 
@@ -68,7 +50,6 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $q, fmaStack
         fmaSharedState.testing_invalidation_seconds);
   }
   
-
   // The items in the user's cart.
   $scope.showCartBadge = false;
   $scope.userCart = [];
@@ -240,8 +221,7 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $q, fmaStack
     var loadStartTime = (new Date()).getTime();
     $interval.cancel($scope.imageUpdateInterval);
     fmaStackHelper.setUpDataVariables(
-        $scope.userAddress.latitude, $scope.userAddress.longitude,
-        $scope.rawAccessToken, $scope.userCuisines, $scope.numPicsInStack,
+        $scope.userAddress, $scope.userCuisines, $scope.numPicsInStack,
         $scope.numMerchantsToFetch, true).then(
       function(retVars) {
         $scope.allNearbyMerchantData = retVars.allNearbyMerchantData;

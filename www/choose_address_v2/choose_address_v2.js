@@ -48,7 +48,7 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
           if ($scope.userAddress == null) {
             return;
           }
-          var addressAsString = addressToString($scope.userAddress)
+          var addressAsString = fmaSharedState.addressToString($scope.userAddress)
           $scope.query = addressAsString;
           $scope.selectedLocationIndex = { value: null };
         },
@@ -78,11 +78,6 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
     autocomplete.addListener('place_changed', fillInAddress);
   }
 
-  var addressToString = function(address) {
-    return address.street + ' ' + address.city + ', '
-        + address.state + ' ' + address.zip_code
-  }
-
   function fillInAddress() {
     // Get the place details from the autocomplete object.
     var place = autocomplete.getPlace();
@@ -95,7 +90,7 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
       return;
     }
 
-    var addressAsString = addressToString($scope.userAddress)
+    var addressAsString = fmaSharedState.addressToString($scope.userAddress)
     $('#choose_address_v2__autocomplete').val(addressAsString)
     $scope.$apply(function() {
       $scope.query = addressAsString;
@@ -144,7 +139,7 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
   $scope.cellSelected = function(addressIndex) {
     $scope.selectedLocationIndex.value = addressIndex;
     $scope.userAddress = $scope.recentAddresses[addressIndex];
-    $scope.query = addressToString($scope.userAddress);
+    $scope.query = fmaSharedState.addressToString($scope.userAddress);
   }
 
   $scope.doneButtonPressed = function() {
@@ -169,6 +164,8 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
     fmaLocalStorage.setObjectWithExpirationSeconds(
         'recentAddresses', $scope.recentAddresses,
         fmaSharedState.testing_invalidation_seconds);
+    mainViewObj.removeClass();
+    mainViewObj.addClass('slide-left');
     $location.path('/choose_cuisine');
     return;
   };

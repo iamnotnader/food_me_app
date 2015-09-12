@@ -40,6 +40,11 @@ angular.module('foodmeApp.sharedState', [])
       var days = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
       return days[new Date().getDay()];
     },
+    addressToString: function(address) {
+      return address.street + ' ' + address.city + ', '
+          + address.state + ' ' + address.zip_code
+    },
+
 
     instructions: 'Tell people to download the FoodMe app and get more orders!',
 
