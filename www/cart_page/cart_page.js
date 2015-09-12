@@ -166,7 +166,7 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $q, fmaStack
     console.log('Back button pressed.');
     mainViewObj.removeClass();
     mainViewObj.addClass('slide-left');
-    $location.path('/choose_card');
+    $location.path('/accounts_page');
   };
 
   $scope.cartPageClearCartPressed = function() {

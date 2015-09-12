@@ -40,7 +40,8 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
       $http.get('https://maps.googleapis.com/maps/api/geocode/json?latlng='+lattitude+','+longitude)
       .then(
         function(res) {
-          if (res.data.results == null || res.data.results.length === 0 ||
+          if ($scope.query != '' ||
+              res.data.results == null || res.data.results.length === 0 ||
               res.data.results[0].formatted_address == null) {
             return;
           }

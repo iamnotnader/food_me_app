@@ -22,7 +22,7 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $q, fmaStack
 
     alert("In order to swipe, we need an address and some restaurant types first.");
     console.log('No address found-- go back to choose_address to get it.');
-    $location.path('/choose_address');
+    $location.path('/choose_address_v2');
     return;
   }
   if (!fmaLocalStorage.isSet('userCuisines')) {
