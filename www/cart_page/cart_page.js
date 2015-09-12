@@ -13,27 +13,8 @@ angular.module('foodMeApp.cartPage', ['ngRoute', 'ngTouch', 'foodmeApp.localStor
 function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $q, fmaStackHelper, $timeout, fmaCartHelper) {
   var mainViewObj = $('#main_view_container');
 
-  // For the cart page, all we need is a token.
+  // For the cart page we need nothing but the cart :)
   console.log('In cart_page controller.');
-  $scope.userToken = fmaLocalStorage.getObject('userToken');
-  $scope.rawAccessToken = null;
-  if (fmaSharedState.fake_token) {
-    alert('Warning-- you are using a fake access token.');
-    console.log('Fake token being used.');
-    $scope.rawAccessToken = fmaSharedState.fake_token;
-  } else if (_.has($scope.userToken, 'access_token')) {
-    console.log('Stored token being used.');
-    $scope.rawAccessToken = $scope.userToken.access_token;
-  }
-  if ($scope.rawAccessToken === null) {
-    analytics.trackEvent('reroute', 'cart_page__intro_screen');
-
-    alert('In order to swipe, we need you to log in first.');
-    console.log('No token found-- go back to intro_screen.');
-    $location.path('/intro_screen');
-    return;
-  }
-  // At this point, we have a token.
 
   analytics.trackView('/cart_page');
 
@@ -76,47 +57,58 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $q, fmaStack
   if ($scope.userCart.length > 0) {
     $scope.isLoading = true;
     var loadStartTime = (new Date()).getTime();
-    $scope.cartItemsNotFound = [];
-    $timeout(function() {
-      // We need to upload all the cart items.
-      fmaCartHelper.checkCartPromise($scope.userCart, $scope.rawAccessToken)
-      .then(
-        function(newCartItems) {
-          // No need to update $scope.userCart items here because everything was added successfully.
-          console.log('Cart updated successfully.');
-          // In this case, we uploaded all the cart items to delivery.com successfully.
-          var timePassedMs = (new Date()).getTime() - loadStartTime;
-          analytics.trackTiming('loading', timePassedMs, 'cart_page_added_all_items');
-          $timeout(function() {
-            $scope.isLoading = false;
-          }, Math.max(fmaSharedState.minLoadingMs - timePassedMs, 0));
-        },
-        function(newCartItems) {
-          console.log('Had to drop some cart items.');
-          alert("Doh! One of the places you chose to order from just closed and we had to " +
-                "remove their items from your cart :( " +
-                "Just go back, hit refresh, and swipe some " +
-                "more-- and be quicker this time!");
-          // No need to update $scope.userCart because some items expired.
-          $scope.userCart = newCartItems.added;
-          fmaLocalStorage.setObjectWithExpirationSeconds(
-              'userCart', $scope.userCart,
-              fmaSharedState.testing_invalidation_seconds);
-          fmaLocalStorage.setObjectWithExpirationSeconds(
-              'foodData', null,
-              fmaSharedState.testing_invalidation_seconds);
+    // First we have to get a guest token to associate with the cart. Kindof
+    // dumb given that we're only using this endpoint to check if the items are
+    // orderable but oh well.
+    $http.get(fmaSharedState.endpoint+'/customer/auth/guest?client_id=' + fmaSharedState.client_id)
+    .then(
+      function(res) {
+        $scope.guestToken = res.data['Guest-Token'];
+        $scope.cartItemsNotFound = [];
+        $timeout(function() {
+          // We need to upload all the cart items.
+          fmaCartHelper.checkCartPromise($scope.userCart, $scope.guestToken)
+          .then(
+            function(newCartItems) {
+              // No need to update $scope.userCart items here because everything was added successfully.
+              console.log('Cart updated successfully.');
+              // In this case, we uploaded all the cart items to delivery.com successfully.
+              var timePassedMs = (new Date()).getTime() - loadStartTime;
+              analytics.trackTiming('loading', timePassedMs, 'cart_page_added_all_items');
+              $timeout(function() {
+                $scope.isLoading = false;
+              }, Math.max(fmaSharedState.minLoadingMs - timePassedMs, 0));
+            },
+            function(newCartItems) {
+              console.log('Had to drop some cart items.');
+              alert("Doh! One of the places you chose to order from just closed and we had to " +
+                    "remove their items from your cart :( " +
+                    "Just go back, hit refresh, and swipe some " +
+                    "more-- and be quicker this time!");
+              // Now need to update $scope.userCart because some items expired.
+              $scope.userCart = newCartItems.added;
+              fmaLocalStorage.setObjectWithExpirationSeconds(
+                  'userCart', $scope.userCart,
+                  fmaSharedState.testing_invalidation_seconds);
+              fmaLocalStorage.setObjectWithExpirationSeconds(
+                  'foodData', null,
+                  fmaSharedState.testing_invalidation_seconds);
 
-
-          // In this, someof the items in the cart didn't get uploaded. This is usually because
-          // a store closed in the middle of the user's swiping.
-          var timePassedMs = (new Date()).getTime() - loadStartTime;
-          analytics.trackTiming('loading', timePassedMs, 'cart_page_missing_some_items');
-          $timeout(function() {
-            $scope.isLoading = false;
-          }, Math.max(fmaSharedState.minLoadingMs - timePassedMs, 0));
-        }
-      );
-    }, 0);
+              // In this, someof the items in the cart didn't get uploaded. This is usually because
+              // a store closed in the middle of the user's swiping.
+              var timePassedMs = (new Date()).getTime() - loadStartTime;
+              analytics.trackTiming('loading', timePassedMs, 'cart_page_missing_some_items');
+              $timeout(function() {
+                $scope.isLoading = false;
+              }, Math.max(fmaSharedState.minLoadingMs - timePassedMs, 0));
+            }
+          );
+        }, 0);
+      },
+      function(err) {
+        console.warn('Could not get guest token-- NOT CHECKING CART!!!');
+      }
+    );
   }
 
   var hasMoreThanOneMerchant = function(cartItems) {

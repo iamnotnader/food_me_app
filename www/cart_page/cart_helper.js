@@ -238,7 +238,7 @@ angular.module('foodmeApp.cartHelper', [])
   // user's cart. Note that this is NOT the same as addCartsPromise because it
   // does not sequentially add each item. It's OK to mess with the cart like
   // this as long as we remember to clear it before actually checking out.
-  var checkCartPromise = function(cartItems, rawAccessToken) {
+  var checkCartPromise = function(cartItems, guestToken) {
     var cartItemsAdded = [];
     var cartItemsNotAdded = [];
     // Actual init.
@@ -253,7 +253,7 @@ angular.module('foodmeApp.cartHelper', [])
             url: fmaSharedState.endpoint+'/customer/cart/'+currentCartItem.merchantId+'?client_id=' + fmaSharedState.client_id,
             data: currentItemRequestObject,
             headers: {
-              "Authorization": rawAccessToken,
+              "Guest-Token": guestToken,
               "Content-Type": "application/json",
             }
           }).then(
