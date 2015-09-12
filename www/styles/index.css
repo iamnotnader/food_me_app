@@ -414,7 +414,8 @@ h1 {
   right: 4%;
   top: 50%;
   transform: translateY(-50%);
-  height: 2rem; }
+  -webkit-transform: translateY(-50%);
+  height: 4rem; }
 
 .choose_address_v2__clear_text {
   position: absolute;
@@ -423,6 +424,7 @@ h1 {
   background: url("../img/clear_text.svg");
   top: 50%;
   transform: translateY(-50%);
+  -webkit-transform: translateY(-50%);
   left: 0;
   right: 0;
   margin: 0 auto; }
@@ -430,7 +432,8 @@ h1 {
 .choose_address_v2__recent_addresses {
   position: absolute;
   top: 50%;
-  transform: translateY(-2rem);
+  transform: translateY(-100%);
+  -webkit-transform: translateY(-100%);
   font-size: 1.3rem;
   line-height: 2rem;
   text-transform: none;
@@ -464,6 +467,7 @@ h1 {
   height: 1rem;
   right: 0;
   top: 50%;
+  transform: translateY(-50%);
   -webkit-transform: translateY(-50%);
   right: 1rem; }
 
@@ -674,6 +678,7 @@ input:focus {
   margin-right: auto;
   left: 0;
   right: 0;
+  transform: translateY(-50%);
   -webkit-transform: translateY(-50%); }
 
 .swipe_page__tinderslide {

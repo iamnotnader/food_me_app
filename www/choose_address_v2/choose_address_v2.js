@@ -17,6 +17,51 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
     $scope.recentAddresses = [];
   }
 
+  var addressObjFromFormattedAddress = function(formatted_address) {
+    components = formatted_address.split(',')
+    if (components.length < 4 || components[2].split(' ').length < 3) {
+      return null;
+    }
+    components[2] = components[2].split(' ');
+    return {
+      street: components[0],
+      city: components[1],
+      state: components[2][1],
+      zip_code: components[2][2],
+      phone: null,
+      unit_number: null,
+    };
+  }
+
+  var initAddressWithLocation = function() {
+    navigator.geolocation.getCurrentPosition(function(locSucc) {
+      var lattitude = locSucc.coords.latitude;
+      var longitude = locSucc.coords.longitude;
+      $http.get('https://maps.googleapis.com/maps/api/geocode/json?latlng='+lattitude+','+longitude)
+      .then(
+        function(res) {
+          if (res.data.results == null || res.data.results.length === 0 ||
+              res.data.results[0].formatted_address == null) {
+            return;
+          }
+          $scope.userAddress = addressObjFromFormattedAddress(res.data.results[0].formatted_address);
+          if ($scope.userAddress == null) {
+            return;
+          }
+          var addressAsString = addressToString($scope.userAddress)
+          $scope.query = addressAsString;
+          $scope.selectedLocationIndex = { value: null };
+        },
+        function(err) {
+          console.log('Location stuff didn\'t really work.');
+        }
+      );
+    },
+    function(locErr) {
+      console.log('ERROR WITH LOCATION');
+    });
+  }
+
   $scope.userAddress = null;
   function initAutocomplete() {
     // Create the autocomplete object, restricting the search to geographical
@@ -42,26 +87,18 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
     // Get the place details from the autocomplete object.
     var place = autocomplete.getPlace();
 
-    components = place.formatted_address.split(',')
-    if (components.length < 4 || components[2].split(' ').length < 3) {
+    $scope.userAddress = addressObjFromFormattedAddress(place.formatted_address);
+    if ($scope.userAddress == null) {
       console.log('WTF! Couldn\'t parse address...');
       alert('I had trouble parsing that address-- could you try ' +
             'a slightly different one?');
       return;
     }
-    components[2] = components[2].split(' ');
-    $scope.userAddress = {
-      street: components[0],
-      city: components[1],
-      state: components[2][1],
-      zip_code: components[2][2],
-      phone: null,
-      unit_number: null,
-    };
-    console.log($scope.userAddress);
-    
+
+    var addressAsString = addressToString($scope.userAddress)
+    $('#choose_address_v2__autocomplete').val(addressAsString)
     $scope.$apply(function() {
-      $scope.query = addressToString($scope.userAddress);
+      $scope.query = addressAsString;
       $scope.selectedLocationIndex = { value: null };
     });
   }
@@ -85,22 +122,12 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
     }
   }
 
+  // Prepopulate with location.
   $scope.inputChanged = function(query) {
     $scope.userAddress = null;
     navigator.geolocation.getCurrentPosition(function(locSucc) {
       var lattitude = locSucc.coords.latitude;
       var longitude = locSucc.coords.longitude;
-      $http.get('https://maps.googleapis.com/maps/api/geocode/json?latlng='+lattitude+','+longitude)
-      .then(
-        function(res) {
-          // Pump formatted_address into autocomplete and use that.
-          console.log(res.data.results[0].formatted_address);
-          debugger;
-        },
-        function(err) {
-          debugger;
-        }
-      );
     },
     function(locErr) {
       console.log('ERROR WITH LOCATION');
@@ -110,7 +137,7 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
   };
 
   $scope.clearTextPressed = function() {
-    $scope.query = '';
+    $('#choose_address_v2__autocomplete').val('');
   };
 
   $scope.selectedLocationIndex = { value: null };
@@ -125,7 +152,7 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
     console.log('Done button pressed.');
     if ($scope.userAddress == null) {
       console.log('No address entered yet.');
-      alert('Tell us where you live, bro.');
+      alert('Tell us where you live, bro. And make sure you select your address from the dropdown.');
       return;
     }
     console.log('Saving address.');
@@ -135,24 +162,18 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
         fmaSharedState.testing_invalidation_seconds);
 
     // Add the address to the recent addresses.
-    var addressIsNew = true;
-    for (var v1 = 0; v1 < $scope.recentAddresses.length; v1++) {
-      var locationObj = $scope.recentAddresses[v1];
-      if (angular.equals(locationObj, $scope.userAddress)) {
-        addressIsNew = false;
-        break;
-      }
-    }
-    if (addressIsNew) {
-      $scope.recentAddresses = [$scope.userAddress,].concat($scope.recentAddresses.slice(0, 4));
-      fmaLocalStorage.setObjectWithExpirationSeconds(
-          'recentAddresses', $scope.recentAddresses,
-          fmaSharedState.testing_invalidation_seconds);
-    }
+    $scope.recentAddresses = _.filter($scope.recentAddresses, function(item) {
+      return !angular.equals(item, $scope.userAddress)
+    });
+    $scope.recentAddresses = [$scope.userAddress,].concat($scope.recentAddresses.slice(0, 4));
+    fmaLocalStorage.setObjectWithExpirationSeconds(
+        'recentAddresses', $scope.recentAddresses,
+        fmaSharedState.testing_invalidation_seconds);
     $location.path('/choose_cuisine');
     return;
   };
 
   // Init some things.
   initAutocomplete();
+  initAddressWithLocation();
 }]);
