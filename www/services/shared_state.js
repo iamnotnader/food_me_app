@@ -94,10 +94,11 @@ angular.module('foodmeApp.sharedState', [])
     stateObj.client_id = 'MDU1YmQ3MzM1M2I3MmU0ZTk4NDUwZTVmZDBiZGY4MDFk';
     stateObj.client_secret = 'azC3JXeAX9U57qDNUo1st2YhKm59lMZ2YC83Ck6P';
     stateObj.endpoint = 'https://sandbox.delivery.com';
+    stateObj.oauth_endpoint = 'https://sandbox.delivery.com';
 
     // Testing
     stateObj.testing_invalidation_seconds = 60 * 60;
-    stateObj.fake_token = '49S2z61i71qixirb4WbxOUD9UIKq4T1hjY6p1Mpt';
+    stateObj.fake_token = 'JHyPICYvbiSTA45bXUFqeSvADRW1IF4rNV2azjnj';
     stateObj.uhau_id = null;
   }
 

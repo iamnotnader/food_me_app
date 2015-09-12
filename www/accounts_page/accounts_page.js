@@ -76,7 +76,7 @@ function($scope, $location, $http, fmaLocalStorage, fmaSharedState, $rootScope, 
                       'client_id=' + fmaSharedState.client_id + '&' +
                       'redirect_uri=' + fmaSharedState.redirect_uri + '&' +
                       'response_type=code&' +
-                      'scope=global&' +
+                      'scope=payment,global&' +
                       'state=';
     var ref = window.open($scope.oauthUrl, '_blank',
         'location=yes,transitionstyle=crossdissolve,clearcache=yes');

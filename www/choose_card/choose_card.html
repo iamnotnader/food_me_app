@@ -21,20 +21,20 @@
       </div>
     </div>
   </div>
-  <div class="choose_address__top_bar">
-    <div class="choose_address__middle_text">Choose a card!</div>
-    <div class="choose_address__right_text" ng-click="chooseCardFinishPressed()">
-      <div class="swipe_page__vertically_center">
-        FOOD!
-      </div>
+</div>
+<div class="choose_address__top_bar">
+  <div class="choose_address__middle_text">Choose a card!</div>
+  <div class="choose_address__right_text" ng-click="chooseCardFinishPressed()">
+    <div class="swipe_page__vertically_center">
+      FOOD!
     </div>
-    <div class="choose_address__left_text" ng-click="chooseCardBackPressed()">
-      <div class="swipe_page__vertically_center">
-        Back
-      </div>
-    </div>
-    <div class="choose_address__cell_border"></div>
   </div>
+  <div class="choose_address__left_text" ng-click="chooseCardBackPressed()">
+    <div class="swipe_page__vertically_center">
+      Back
+    </div>
+  </div>
+  <div class="choose_address__cell_border"></div>
 </div>
 
 <div ng-include src="'loading_screen/loading_screen.html'" ng-if="cardsLoading || cartLoading" class="fade-me"></div>

@@ -82,7 +82,7 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $q, fmaStack
             function(newCartItems) {
               console.log('Had to drop some cart items.');
               alert("Doh! One of the places you chose to order from just closed and we had to " +
-                    "remove their items from your cart :( " +
+                    "remove their items from your cart. " +
                     "Just go back, hit refresh, and swipe some " +
                     "more-- and be quicker this time!");
               // Now need to update $scope.userCart because some items expired.

@@ -36,6 +36,7 @@ var initAngularStuff = function() {
     'foodmeApp.sharedState',
     'foodMeApp.chooseAddressV2',
     'foodMeApp.accountsPage',
+    'foodMeApp.addCard',
   ]).
   config(['$routeProvider',
       function($routeProvider) {

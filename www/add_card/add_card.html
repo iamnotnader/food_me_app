@@ -1,0 +1,27 @@
+<div class="oauth_overall">
+  <div id="oauth_wrapper">
+    <header>
+        <div class="delivery_logo"></div>
+        <h1>Add a new credit card</h1>
+    </header>
+    <div id="message"></div>
+    <div id="oauth_container">
+      <form name="forms.newCardForm" class="oauth_form" method="POST" action=""
+          accept-charset="UTF-8">
+        <input placeholder="Credit card number" class="add_card__cc_number" type="text" name="cardNumber" ng-model="cardFields.cardNumber" required>
+        <div class="fieldGroup">
+          <input placeholder="Exp. month" class="smallField" type="text" name="expMonth" ng-model="cardFields.expMonth" maxlength="2" required>
+          <input placeholder="Exp. year" class="smallField" type="text" name="expYear" ng-model="cardFields.expYear" maxlength="4" required>
+        </div>
+        <div class="fieldGroup">
+          <input placeholder="CVV" class="smallField" type="text" name="cvv" ng-model="cardFields.cvv" required>
+          <input placeholder="Billing zip" class="smallField" type="text" name="billingZip" ng-model="cardFields.billingZip" maxlength="5" required>
+        </div>
+        <button class="orange_submit" ng-click="addCardPressed()">Add card</button>
+        <button class="orange_submit" ng-click="cancelPressed()" style="margin-top: 3%; background: #3C5988;">Cancel</button>
+      </form>
+    </div>
+  </div>
+</div>
+
+<div ng-include src="'loading_screen/loading_screen.html'" ng-if="isLoading" class="fade-me"></div>

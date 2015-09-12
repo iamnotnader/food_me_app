@@ -33,7 +33,7 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
     alert('In order to choose an address, we need you to log in first.');
     mainViewObj.removeClass();
     mainViewObj.addClass('slide-right');
-    $location.path('/intro_screen');
+    $location.path('/accounts_page');
     return;
   }
   $scope.userCart = fmaLocalStorage.getObject('userCart');
@@ -54,10 +54,11 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
     alert('We need to get an address from you first.');
     mainViewObj.removeClass();
     mainViewObj.addClass('slide-right');
-    $location.path('/choose_address');
+    $location.path('/choose_address_v2');
     return;
   }
-  // If we get here, we have a valid user token AND userCart is nonempty.
+  // If we get here, we have a valid user token AND userCart is nonempty AND
+  // userAddress is populated (though may still need phone and apartment).
 
   analytics.trackView('/choose_card');
 
@@ -65,8 +66,13 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
   var loadStartTime = (new Date()).getTime();
   $scope.cardList = [];
   $scope.selectedCardIndex = { value: null };
-  $http.defaults.headers.common.Authorization = $scope.rawAccessToken;
-  $http.get(fmaSharedState.endpoint+'/customer/cc?client_id=' + fmaSharedState.client_id)
+  $http({
+    method: 'GET',
+    url: fmaSharedState.endpoint+'/customer/cc?client_id=' + fmaSharedState.client_id,
+    headers: {
+      'Authorization': $scope.rawAccessToken,
+    }
+  })
   .then(
     function(res) {
       $scope.cardList = res.data.cards;
@@ -97,7 +103,7 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
     console.log('Back button pressed.');
     mainViewObj.removeClass();
     mainViewObj.addClass('slide-right');
-    $location.path('cart_page');
+    $location.path('accounts_page');
     return;
   };
 
@@ -236,7 +242,7 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
           // Go back to the address page.
           mainViewObj.removeClass();
           mainViewObj.addClass('slide-right');
-          $location.path('/choose_address');
+          $location.path('/choose_address_v2');
         }, Math.max(fmaSharedState.minLoadingMs - timePassedMs, 0));
       },
       function(err) {
@@ -304,51 +310,15 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
     console.log('Cell selected: ' + indexSelected);
     $scope.selectedCardIndex.value = indexSelected;
   };
-  var addCardUrl = fmaSharedState.oauth_endpoint+'/third_party/credit_card/add?' +
-                  'client_id=' + fmaSharedState.client_id + '&' +
-                  'redirect_uri=' + fmaSharedState.redirect_uri + '&' +
-                  'response_type=code&' +
-                  'scope=global&';
 
   $scope.addCardButtonPressed = function() {
     analytics.trackEvent('cell', 'choose_card__add_card_pressed');
 
     console.log('Add card pressed!');
-
-    var ref = window.open(addCardUrl, '_blank',
-        'location=yes,transitionstyle=crossdissolve,clearcache=no,clearsessioncache=no');
-    ref.addEventListener('loadstart', function(event) {
-      var url = event.url;
-      if (url.indexOf(fmaSharedState.redirect_uri) === 0) {
-        // We use $route.reload to force a reload of the card list.
-        mainViewObj.removeClass();
-        $route.reload();
-
-        ref.close();
-        return;
-      }
-    });
-    ref.addEventListener('loadstop', function(event) {
-      var url = event.url;
-      var codeToRemoveLogoutButton = (
-        "var footer = document.querySelector('footer');" +
-        "if (footer != null) {" +
-          "footer.style.visibility = 'hidden';" +
-        "}" +
-        "var container = document.querySelector('#container');" +
-        "if (container != null && container.innerText.indexOf('Please log in.') >= 0) {" +
-          "container.innerText = 'Your session expired. This happens rarely--' + " +
-              "'just restart the app and login again and everything will work. If that fails, " +
-              "you can always add a card on delivery.com and then select it from the list on " +
-              "the last screen.';" +
-          "container.style.textAlign = 'center';" +
-        "}"
-      );
-      ref.executeScript({
-          code: codeToRemoveLogoutButton,
-      }, function() {
-      });
-    });
+    mainViewObj.removeClass();
+    mainViewObj.addClass('slide-left');
+    $location.path('/add_card');
+    return;
   };
 
 }]);

@@ -9,7 +9,9 @@ angular.module('foodMeApp.introScreen', ['ngRoute', 'ngTouch', 'foodmeApp.localS
 
 .controller('IntroScreenCtrl', ["$scope", "$location", "$http", "fmaLocalStorage", 'fmaSharedState', '$rootScope', '$timeout',
 function($scope, $location, $http, fmaLocalStorage, fmaSharedState, $rootScope, $timeout) {
-  $location.path('/choose_card');
+  // If you want to test a specific page, comment this in and set testEnabled = true.
+  //$location.path('/choose_card');
+
   if (window.analytics != null) {
     // For some reason deviceready doesn't execute fast enough sometimes.
     analytics.trackView('/intro_screen');
