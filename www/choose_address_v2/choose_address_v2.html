@@ -1,5 +1,8 @@
 <div class="choose_address_v2__text_container">
-  <input class="choose_address_v2__inner_input" ng-model="query" ng-change="getAutocomplete(query)" placeholder="Enter an address..." ng-trim="false">
+  <input id="choose_address_v2__autocomplete" class="choose_address_v2__inner_input" type="search" ng-model="query" ng-change="inputChanged(query)" ng-focus="geolocate()" placeholder="Enter an address..." ng-trim="false">
+  <div class="choose_address_v2__clear_text_container" ng-if="query.length > 0" ng-click="clearTextPressed()">
+    <div class="choose_address_v2__clear_text"></div>
+  </div>
 </div>
 <div class="choose_address_v2__recent_addresses">
   Recent addresses
@@ -7,13 +10,13 @@
 <div class="choose_address__container">
   <div class="choose_address__address_list">
     <div style="min-height: 101%">
-      <div ng-repeat="locationObj in locationList">
+      <div ng-repeat="locationObj in recentAddresses track by $index">
         <div class="choose_address__list_cell" ng-click="cellSelected($index)">
           <div class="choose_address__cell_top_row">
             {{locationObj.street}}
           </div>
           <div class="choose_address__cell_bottom_row">
-            {{locationObj.city}}, {{locationObj.state}} &nbsp; | &nbsp; {{locationObj.phone}}
+            {{locationObj.city}}, {{locationObj.state}} &nbsp; | &nbsp; {{locationObj.zip_code}}
           </div>
           <div class="choose_address__cell_border"></div>
           <img class="choose_address__selected_badge leave-right-centered enter-right-centered" ng-if="$index == selectedLocationIndex.value"
@@ -22,12 +25,12 @@
       </div>
     </div>
   </div>
-  <div class="choose_address_v2__empty_address_list" ng-if="locationList == null || locationList.length === 0">
+  <div class="choose_address_v2__empty_address_list" ng-if="recentAddresses == null || recentAddresses.length === 0">
     <div class="swipe_page__vertically_center">
       No recent addresses.
     </div>
   </div>
-  <div class="choose_address_v2__empty_pusheen">
+  <div class="choose_address_v2__empty_pusheen" ng-if="recentAddresses == null || recentAddresses.length === 0">
     <div class="overall__attribution" style="bottom: 8%; font-size: .8rem;">Pusheen.com</div>
   </div>
   <div class="choose_address__cell_border choose_address_v2__border_top"></div>

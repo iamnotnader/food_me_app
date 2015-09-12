@@ -408,6 +408,25 @@ h1 {
   -webkit-transform: translate3d(0, 0, 0);
   transform: translate3d(0, 0, 0); }
 
+.choose_address_v2__clear_text_container {
+  position: absolute;
+  width: 3rem;
+  right: 4%;
+  top: 50%;
+  transform: translateY(-50%);
+  height: 2rem; }
+
+.choose_address_v2__clear_text {
+  position: absolute;
+  width: 1rem;
+  height: 1rem;
+  background: url("../img/clear_text.svg");
+  top: 50%;
+  transform: translateY(-50%);
+  left: 0;
+  right: 0;
+  margin: 0 auto; }
+
 .choose_address_v2__recent_addresses {
   position: absolute;
   top: 50%;
@@ -531,14 +550,18 @@ input:focus {
   height: 2rem;
   border-radius: 9px;
   border-style: groove;
-  width: 80%; }
+  width: 75%;
+  padding-left: 3%;
+  padding-right: 10%; }
 
 .choose_address_v2__text_container {
   position: absolute;
   top: 15%;
   left: 0;
   right: 0;
-  text-align: center; }
+  text-align: center;
+  font-family: TaglineFont;
+  font-size: 1rem; }
 
 .choose_address_v2__empty_address_list {
   position: absolute;

@@ -1,3 +1,5 @@
+/* jshint eqnull: true */
+
 angular.module('foodMeApp.swipePage', ['ngRoute', 'ngTouch', 'foodmeApp.localStorage', 'foodmeApp.sharedState', 'foodMeApp.stackHelper'])
 
 .config(['$routeProvider', function($routeProvider) {

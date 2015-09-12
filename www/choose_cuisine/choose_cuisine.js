@@ -37,13 +37,13 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
     return;
   }
   if (!fmaLocalStorage.isSet('userAddress')) {
-    analytics.trackEvent('reroute', 'choose_cuisine__choose_address');
+    analytics.trackEvent('reroute', 'choose_cuisine__choose_address_v2');
 
     alert("In order to set cuisines, we need an address first. Please enter one.");
-    console.log('No address found-- go back to choose_address to get it.');
+    console.log('No address found-- go back to choose_address_v2 to get it.');
     mainViewObj.removeClass();
     mainViewObj.addClass('slide-right');
-    $location.path('/choose_address');
+    $location.path('/choose_address_v2');
     return;
   }
   $scope.userAddress = fmaLocalStorage.getObject('userAddress');
@@ -157,7 +157,7 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
     console.log('Back button pressed.');
     mainViewObj.removeClass();
     mainViewObj.addClass('slide-right');
-    $location.path('choose_address');
+    $location.path('choose_address_v2');
     return;
   };
 
