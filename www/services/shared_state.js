@@ -53,7 +53,7 @@ angular.module('foodmeApp.sharedState', [])
 
     maxDishesToReturn: 400,
 
-    numMerchantsToFetch: 10,
+    numMerchantsToFetch: 5,
 
     promiseTimeoutMs: 15000,
 
