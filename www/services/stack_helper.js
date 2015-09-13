@@ -52,6 +52,10 @@ function(fmaLocalStorage, $http, fmaSharedState, $q, $timeout) {
     // call the function on them individually.
     var menuItemList = [];
     for (var menuIndex = 0; menuIndex < menuArr.length; menuIndex++) {
+      if (menuArr[menuIndex] == null || menuArr[menuIndex].name == null ||
+          menuArr[menuIndex].name.match(/beverage/i) != null) {
+        continue;
+      }
       findMenuItemsRecursive(menuArr[menuIndex], menuItemList, forbiddenItemIds);
     }
     return menuItemList;
