@@ -53,7 +53,14 @@ angular.module('foodmeApp.sharedState', [])
 
     maxDishesToReturn: 400,
 
+    // The number of merchants we fetch food from to display
+    // in the stack.
     numMerchantsToFetch: 5,
+
+    // Number of images we fetch using the Google API. We
+    // will only display one of these but fetching more than one
+    // helps weed out bad images that don't load.
+    numImagesToFetch: 2,
 
     promiseTimeoutMs: 15000,
 
