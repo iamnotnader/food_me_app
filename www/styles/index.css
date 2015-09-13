@@ -231,6 +231,14 @@ h1 {
   color: black;
   font-family: TitleFont; }
 
+.overall__attribution_img {
+  width: 50%;
+  position: absolute;
+  bottom: 5%;
+  margin: 0 auto;
+  left: 0;
+  right: 0; }
+
 .intro_screen__enjoy_img {
   background: url("../img/pusheen_eat_everything.gif") no-repeat center center;
   position: absolute;
