@@ -37,36 +37,6 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
     };
   }
 
-  var initAddressWithLocation = function() {
-    navigator.geolocation.getCurrentPosition(function(locSucc) {
-      var lattitude = locSucc.coords.latitude;
-      var longitude = locSucc.coords.longitude;
-      $http.get('https://maps.googleapis.com/maps/api/geocode/json?latlng='+lattitude+','+longitude)
-      .then(
-        function(res) {
-          if ($scope.query != '' ||
-              res.data.results == null || res.data.results.length === 0 ||
-              res.data.results[0].formatted_address == null) {
-            return;
-          }
-          $scope.userAddress = addressObjFromFormattedAddress(res.data.results[0].formatted_address);
-          if ($scope.userAddress == null) {
-            return;
-          }
-          var addressAsString = fmaSharedState.addressToString($scope.userAddress)
-          $scope.query = addressAsString;
-          $scope.selectedLocationIndex = { value: null };
-        },
-        function(err) {
-          console.log('Location stuff didn\'t really work.');
-        }
-      );
-    },
-    function(locErr) {
-      console.log('ERROR WITH LOCATION');
-    });
-  }
-
   $scope.userAddress = null;
   function initAutocomplete() {
     // Create the autocomplete object, restricting the search to geographical
@@ -102,39 +72,6 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
       $scope.selectedLocationIndex = { value: null };
     });
   }
-
-  // Bias the autocomplete object to the user's geographical location,
-  // as supplied by the browser's 'navigator.geolocation' object.
-  // Called in the input field.
-  function geolocate() {
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(function(position) {
-        var geolocation = {
-          lat: position.coords.latitude,
-          lng: position.coords.longitude
-        };
-        var circle = new google.maps.Circle({
-          center: geolocation,
-          radius: position.coords.accuracy
-        });
-        autocomplete.setBounds(circle.getBounds());
-      });
-    }
-  }
-
-  // Prepopulate with location.
-  $scope.inputChanged = function(query) {
-    $scope.userAddress = null;
-    navigator.geolocation.getCurrentPosition(function(locSucc) {
-      var lattitude = locSucc.coords.latitude;
-      var longitude = locSucc.coords.longitude;
-    },
-    function(locErr) {
-      console.log('ERROR WITH LOCATION');
-    });
-                             //[geolocationError],
-                                         //[geolocationOptions]);
-  };
 
   $scope.clearTextPressed = function() {
     $('#choose_address_v2__autocomplete').val('');
@@ -177,5 +114,4 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
 
   // Init some things.
   initAutocomplete();
-  initAddressWithLocation();
 }]);
