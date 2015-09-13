@@ -95,8 +95,9 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
       }, Math.max(fmaSharedState.minLoadingMs - timePassedMs, 0));
     },
     function(err) {
-      alert('Error fetching credit card numbers. This usually happens if your '+
-            'login expires. Just re-add this account on the accounts page and '+
+      alert('Error fetching credit card numbers. This usually happens '+
+            'when you login to delivery.com outside of FoodMe. Just re-add ' +
+            'this account on the accounts page and '+
             'everything should be fiiine.');
       console.log(err);
       $scope.cardsLoading = false;
