@@ -47,6 +47,11 @@ function($scope, $location, $http, fmaLocalStorage, fmaSharedState, $rootScope, 
           return item.user.email !== newAccount.user.email;
         });
         $scope.accountsList = [newAccount,].concat($scope.accountsList.slice(0, 10));
+
+        // Save the account list in localStorage
+        fmaLocalStorage.setObjectWithExpirationSeconds(
+            'accountsList', $scope.accountsList,
+            fmaSharedState.testing_invalidation_seconds);
         $scope.isLoading = false;
       },
       function(err) {
@@ -79,7 +84,7 @@ function($scope, $location, $http, fmaLocalStorage, fmaSharedState, $rootScope, 
                       'scope=payment,global&' +
                       'state=';
     var ref = window.open($scope.oauthUrl, '_blank',
-        'location=yes,transitionstyle=crossdissolve,clearcache=yes');
+        'location=no,transitionstyle=crossdissolve,clearcache=yes');
     ref.addEventListener('loadstart', function(event) {
       var url = event.url;
       if (url.indexOf(fmaSharedState.redirect_uri) === 0) {

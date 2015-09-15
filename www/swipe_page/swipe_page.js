@@ -179,7 +179,7 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $q, fmaStack
       var foodDataObj = $scope.foodData[foodDataCursor + x];
       if (isBadDescription(foodDataObj.description) &&
           isBadDescription(foodDataObj.merchantDescription)) {
-        foodDataObj.description = "No description available :(";
+        foodDataObj.description = "No description available-- but it's probably delicious.";
       }
       $scope.joinedFoodInfo.push({
         foodData: foodDataObj,
