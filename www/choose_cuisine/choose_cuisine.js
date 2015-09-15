@@ -64,7 +64,7 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
   $http.get(fmaSharedState.endpoint+'/merchant/search/delivery?' + 
             'address=' + searchAddress.split(' ').join('+') + '&' + 
             'client_id=' + fmaSharedState.client_id + '&' +
-            'enable_recommendations=true&' + 
+            'enable_recommendations=false&' + 
             'iso=true&' +
             'order_time=ASAP&' +
             'order_type=delivery&' +
