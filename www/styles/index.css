@@ -195,6 +195,7 @@ h1 {
   margin: auto;
   height: 90%;
   box-shadow: 0px 15px 70px black;
+  -webkit-box-shadow: 0px 15px 70px black;
   border-radius: 30px; }
 
 /*We place the screenshot image inside the phone. To do this we take where the*/
@@ -260,6 +261,10 @@ h1 {
   border: 5px solid #464646;
   overflow: hidden; }
 
+.android .intro_screen__enjoy_img {
+  border-radius: 0;
+  -webkit-border-radius: 0; }
+
 .intro_screen__space_above_dot_slider {
   height: 5%; }
 
@@ -323,7 +328,7 @@ h1 {
   width: 90%;
   background-color: #3C5988;
   border-radius: 10px;
-  box-shadow: 1px 3px 9px black; }
+  -webkit-box-shadow: 1px 3px 9px black; }
 
 .intro_screen__sign_in_button_text {
   color: white;
@@ -640,7 +645,7 @@ input.choose_address_v2__inner_input.enter_phone__phone_number {
   top: 15%;
   bottom: auto;
   left: 50%;
-  -webkit-transform: translate(-50%, -50%);
+  -webkit-transform: translate3d(-50%, -50%, 0);
   font-family: TitleFont;
   font-size: 3rem;
   color: #464646; }
@@ -698,8 +703,8 @@ input.choose_address_v2__inner_input {
   top: 25%;
   margin-left: auto;
   margin-right: auto;
-  border-radius: 100%;
-  -webkit-border-radius: 100%;
+  border-radius: 50%;
+  -webkit-border-radius: 50%;
   border: 5px solid #464646;
   height: 60%;
   left: 20%;
@@ -708,6 +713,10 @@ input.choose_address_v2__inner_input {
   -moz-background-size: cover;
   -o-background-size: cover;
   background-size: cover; }
+
+.android .choose_address_v2__empty_pusheen {
+  border-radius: 0;
+  -webkit-border-radius: 0; }
 
 .overall__loading_pusheen {
   background: url("../img/pusheen_eating.gif") no-repeat center center;
@@ -718,14 +727,18 @@ input.choose_address_v2__inner_input {
   bottom: auto;
   margin-left: auto;
   margin-right: auto;
-  border-radius: 100%;
-  -webkit-border-radius: 100%;
+  border-radius: 50%;
+  -webkit-border-radius: 50%;
   border: 5px solid #464646;
   height: 50%;
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
   background-size: cover; }
+
+.android .overall__loading_pusheen {
+  border-radius: 0;
+  -webkit-border-radius: 0; }
 
 .swipe_page__overall_container {
   background-color: #E7E8E9;
@@ -763,8 +776,8 @@ input.choose_address_v2__inner_input {
   right: 0;
   margin-right: auto;
   margin-left: auto;
-  border-radius: 100%;
-  -webkit-border-radius: 100%;
+  border-radius: 50%;
+  -webkit-border-radius: 50%;
   border: 5px solid #464646;
   height: 50%;
   -webkit-background-size: cover;
@@ -773,6 +786,10 @@ input.choose_address_v2__inner_input {
   background-size: cover;
   background-position: center center;
   background-repeat: no-repeat; }
+
+.android .swipe_page__loading_pusheen {
+  border-radius: 0;
+  -webkit-border-radius: 0; }
 
 .swipe_page__empty_stack {
   font-family: TitleFont;
@@ -815,9 +832,13 @@ input.choose_address_v2__inner_input {
   bottom: 3%;
   left: 10%;
   background-size: contain;
-  border-radius: 100%;
-  -webkit-border-radius: 100%;
+  border-radius: 50%;
+  -webkit-border-radius: 50%;
   border: 3px solid #6E6666; }
+
+.android .swipe_page__food_image {
+  border-radius: 0;
+  -webkit-border-radius: 0; }
 
 .swipe_page__food_text_container {
   top: 50%;
@@ -895,8 +916,8 @@ input.choose_address_v2__inner_input {
   height: 1.3rem;
   width: 1.3rem;
   background-color: #FFB2B2;
-  border-radius: 100%;
-  -webkit-border-radius: 100%;
+  border-radius: 50%;
+  -webkit-border-radius: 50%;
   border: 1px solid #6E6666;
   position: absolute;
   text-align: center;
@@ -1004,57 +1025,57 @@ input.choose_address_v2__inner_input {
 
 .slide-left > .ng-enter {
   z-index: 101;
-  -webkit-transform: translateX(100%);
-  transform: translateX(100%); }
+  -webkit-transform: translate3d(100%, 0, 0);
+  transform: translate3d(100%, 0, 0); }
 
 .slide-left > .ng-enter.ng-enter-active {
-  -webkit-transform: translateX(0);
-  transform: translateX(0); }
+  -webkit-transform: translate3d(0, 0, 0);
+  transform: translate3d(0, 0, 0); }
 
 .slide-left > .ng-leave {
   z-index: 100;
-  -webkit-transform: translateX(0);
-  transform: translateX(0); }
+  -webkit-transform: translate3d(0, 0, 0);
+  transform: translate3d(0, 0, 0); }
 
 .slide-left > .ng-leave.ng-leave-active {
-  -webkit-transform: translateX(-100%);
-  transform: translateX(-100%); }
+  -webkit-transform: translate3d(-100%, 0, 0);
+  transform: translate3d(-100%, 0, 0); }
 
 .slide-left-in > .ng-enter {
   z-index: 101;
-  -webkit-transform: translateX(100%);
-  transform: translateX(100%); }
+  -webkit-transform: translate3d(100%, 0, 0);
+  transform: translate3d(100%, 0, 0); }
 
 .slide-left-in > .ng-enter.ng-enter-active {
-  -webkit-transform: translateX(0);
-  transform: translateX(0); }
+  -webkit-transform: translate3d(0, 0, 0);
+  transform: translate3d(0, 0, 0); }
 
 .slide-left-out > .ng-leave {
   z-index: 100;
-  -webkit-transform: translateX(0);
-  transform: translateX(0); }
+  -webkit-transform: translate3d(0, 0, 0);
+  transform: translate3d(0, 0, 0); }
 
 .slide-left-out > .ng-leave.ng-leave-active {
-  -webkit-transform: translateX(-100%);
-  transform: translateX(-100%); }
+  -webkit-transform: translate3d(-100%, 0, 0);
+  transform: translate3d(-100%, 0, 0); }
 
 .slide-right > .ng-enter {
   z-index: 100;
-  -webkit-transform: translateX(-100%);
-  transform: translateX(-100%); }
+  -webkit-transform: translate3d(-100%, 0, 0);
+  transform: translate3d(-100%, 0, 0); }
 
 .slide-right > .ng-enter.ng-enter-active {
-  -webkit-transform: translateX(0);
-  transform: translateX(0); }
+  -webkit-transform: translate3d(0, 0, 0);
+  transform: translate3d(0, 0, 0); }
 
 .slide-right > .ng-leave {
   z-index: 101;
-  -webkit-transform: translateX(0);
-  transform: translateX(0); }
+  -webkit-transform: translate3d(0, 0, 0);
+  transform: translate3d(0, 0, 0); }
 
 .slide-right > .ng-leave.ng-leave-active {
-  -webkit-transform: translateX(100%);
-  transform: translateX(100%); }
+  -webkit-transform: translate3d(100%, 0, 0);
+  transform: translate3d(100%, 0, 0); }
 
 .fade-me.ng-leave {
   transition: 0.25s linear all;

@@ -109,5 +109,8 @@ var app = {
       // The ga_id is set in intitAngular
       window.analytics.startTrackerWithId(ga_id);
       //window.analytics.debugMode();
+
+      // If we're on Android, we need special css because of webkit bugs.
+      document.body.className = device.platform.toLowerCase();
     }
 };

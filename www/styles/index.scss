@@ -186,6 +186,7 @@ $intro_screen__phone_height: 90%;
   margin: auto;
   height: $intro_screen__phone_height;
   box-shadow: 0px 15px 70px black;
+  -webkit-box-shadow: 0px 15px 70px black;
   border-radius: 30px;
 }
 
@@ -255,6 +256,11 @@ $intro_screen__screenshot_height: (260 / 350) * $intro_screen__phone_height;
   -webkit-border-radius: 100%;
   border: 5px solid #464646;
   overflow: hidden;
+}
+
+.android .intro_screen__enjoy_img {
+  border-radius: 0;
+  -webkit-border-radius: 0;
 }
 
 .intro_screen__space_above_dot_slider {
@@ -329,7 +335,7 @@ $intro_screen__screenshot_height: (260 / 350) * $intro_screen__phone_height;
   width: 90%;
   background-color: #3C5988;
   border-radius: 10px;
-  box-shadow: 1px 3px 9px black;
+  -webkit-box-shadow: 1px 3px 9px black;
 }
 
 .intro_screen__sign_in_button_text {  
@@ -688,7 +694,7 @@ input.choose_address_v2__inner_input.enter_phone__phone_number {
   top: 15%;
   bottom: auto;
   left: 50%;
-  -webkit-transform: translate(-50%, -50%);
+  -webkit-transform: translate3d(-50%, -50%, 0);
   font-family: TitleFont;
   font-size: 3rem;
   color: #464646;
@@ -753,8 +759,8 @@ input.choose_address_v2__inner_input {
   top: 25%;
   margin-left: auto;
   margin-right: auto;
-  border-radius: 100%;
-  -webkit-border-radius: 100%;
+  border-radius: 50%;
+  -webkit-border-radius: 50%;
   border: 5px solid #464646;
   height: 60%;
   left: 20%;
@@ -763,6 +769,11 @@ input.choose_address_v2__inner_input {
   -moz-background-size: cover;
   -o-background-size: cover;
   background-size: cover;
+}
+
+.android .choose_address_v2__empty_pusheen {
+  border-radius: 0;
+  -webkit-border-radius: 0;
 }
 
 .overall__loading_pusheen {
@@ -774,14 +785,19 @@ input.choose_address_v2__inner_input {
   bottom: auto;
   margin-left: auto;
   margin-right: auto;
-  border-radius: 100%;
-  -webkit-border-radius: 100%;
+  border-radius: 50%;
+  -webkit-border-radius: 50%;
   border: 5px solid #464646;
   height: 50%;
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
   background-size: cover;
+}
+
+.android .overall__loading_pusheen {
+  border-radius: 0;
+  -webkit-border-radius: 0;
 }
 
 .overall__inner_pusheen {
@@ -828,8 +844,8 @@ $swipe_page__stack_height: 72%;
   right: 0;
   margin-right: auto;
   margin-left: auto;
-  border-radius: 100%;
-  -webkit-border-radius: 100%;
+  border-radius: 50%;
+  -webkit-border-radius: 50%;
   border: 5px solid #464646;
   height: 50%;
   -webkit-background-size: cover;
@@ -838,6 +854,11 @@ $swipe_page__stack_height: 72%;
   background-size: cover;
   background-position: center center;
   background-repeat: no-repeat;
+}
+
+.android .swipe_page__loading_pusheen {
+  border-radius: 0;
+  -webkit-border-radius: 0;
 }
 
 .swipe_page__empty_stack {
@@ -885,9 +906,14 @@ $swipe_page__stack_height: 72%;
   bottom: 3%;
   left: 10%;
   background-size: contain;
-  border-radius: 100%;
-  -webkit-border-radius: 100%;
+  border-radius: 50%;
+  -webkit-border-radius: 50%;
   border: 3px solid #6E6666;
+}
+
+.android .swipe_page__food_image {
+  border-radius: 0;
+  -webkit-border-radius: 0;
 }
 
 .swipe_page__food_text_container {
@@ -982,8 +1008,8 @@ $sp_bottom_offset: 4%;
   height: 1.3rem;
   width: 1.3rem;
   background-color: #FFB2B2;
-  border-radius: 100%;
-  -webkit-border-radius: 100%;
+  border-radius: 50%;
+  -webkit-border-radius: 50%;
   border: 1px solid #6E6666;
   position: absolute;
   text-align: center;
@@ -1107,60 +1133,60 @@ $sp_bottom_offset: 4%;
 }  
 .slide-left > .ng-enter {  
     z-index: 101;  
-    -webkit-transform: translateX(100%); 
-    transform: translateX(100%);  
+    -webkit-transform: translate3d(100%, 0, 0); 
+    transform: translate3d(100%, 0, 0);  
 }  
 .slide-left > .ng-enter.ng-enter-active {  
-    -webkit-transform: translateX(0);  
-    transform: translateX(0);  
+    -webkit-transform: translate3d(0, 0, 0);  
+    transform: translate3d(0, 0, 0);  
 }  
 .slide-left > .ng-leave {  
     z-index: 100;  
-    -webkit-transform: translateX(0);  
-    transform: translateX(0);  
-}  
+    -webkit-transform: translate3d(0, 0, 0);  
+    transform: translate3d(0, 0, 0);  
+}
 .slide-left > .ng-leave.ng-leave-active {  
-    -webkit-transform: translateX(-100%);  
-    transform: translateX(-100%);  
+    -webkit-transform: translate3d(-100%, 0, 0);  
+    transform: translate3d(-100%, 0, 0);  
 }
 
 // Break slide-left into enter and leave.
 .slide-left-in > .ng-enter {  
     z-index: 101; 
-    -webkit-transform: translateX(100%); 
-    transform: translateX(100%);  
+    -webkit-transform: translate3d(100%, 0, 0); 
+    transform: translate3d(100%, 0, 0);  
 }  
 .slide-left-in > .ng-enter.ng-enter-active {  
-    -webkit-transform: translateX(0);  
-    transform: translateX(0);  
+    -webkit-transform: translate3d(0, 0, 0);  
+    transform: translate3d(0, 0, 0);  
 }  
 .slide-left-out > .ng-leave {  
     z-index: 100;  
-    -webkit-transform: translateX(0);  
-    transform: translateX(0);  
+    -webkit-transform: translate3d(0, 0, 0);  
+    transform: translate3d(0, 0, 0);  
 }  
 .slide-left-out > .ng-leave.ng-leave-active {  
-    -webkit-transform: translateX(-100%);  
-    transform: translateX(-100%);  
+    -webkit-transform: translate3d(-100%, 0, 0);
+    transform: translate3d(-100%, 0, 0);
 }  
 
 .slide-right > .ng-enter {  
     z-index: 100;  
-    -webkit-transform: translateX(-100%);  
-    transform: translateX(-100%);  
+    -webkit-transform: translate3d(-100%, 0, 0);
+    transform: translate3d(-100%, 0, 0);
 }  
 .slide-right > .ng-enter.ng-enter-active {  
-    -webkit-transform: translateX(0);  
-    transform: translateX(0);  
+    -webkit-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
 }  
 .slide-right > .ng-leave {  
     z-index: 101;  
-    -webkit-transform: translateX(0);  
-    transform: translateX(0);  
+    -webkit-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
 }  
 .slide-right > .ng-leave.ng-leave-active {  
-    -webkit-transform: translateX(100%);  
-    transform: translateX(100%);  
+    -webkit-transform: translate3d(100%, 0, 0);
+    transform: translate3d(100%, 0, 0);
 }
 
 // Things that fade out, like the loading screen.

@@ -42,7 +42,7 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
     // Create the autocomplete object, restricting the search to geographical
     // location types.
     autocomplete = new google.maps.places.Autocomplete(
-        /** @type {!HTMLInputElement} */(document.getElementById('choose_address_v2__autocomplete')),
+        document.getElementById('choose_address_v2__autocomplete'),
         {
           types: ['address'],
           componentRestrictions: { country: "us" }
@@ -75,6 +75,7 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
 
   $scope.clearTextPressed = function() {
     $('#choose_address_v2__autocomplete').val('');
+    $scope.userAddress = null;
   };
 
   $scope.selectedLocationIndex = { value: null };
@@ -89,7 +90,7 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
     console.log('Done button pressed.');
     if ($scope.userAddress == null) {
       console.log('No address entered yet.');
-      alert('Tell us where you live, bro. And make sure you select your address from the dropdown.');
+      alert('Tell us where you live, bro. And make sure you choose it from the dropdown.');
       return;
     }
     console.log('Saving address.');
