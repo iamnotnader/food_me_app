@@ -27,8 +27,6 @@ var initAngularStuff = function() {
     'ngAnimate',
     'foodMeApp.dummyAppScreen',
     'foodMeApp.introScreen',
-    'foodMeApp.chooseAddress', // TODO(daddy): This should be deleted once chooseAddressV2 is live.
-    'foodMeApp.addAddress', // TODO(daddy): This should be deleted once chooseAddressV2 is live.
     'foodMeApp.chooseCuisine',
     'foodMeApp.swipePage',
     'foodMeApp.cartPage',
