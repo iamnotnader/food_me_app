@@ -21,7 +21,7 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
     $scope.recentAddresses = [];
   }
 
-  var addressObjFromFormattedAddress = function(formatted_address) {
+  var addressObjFromGoogleFormattedAddress = function(formatted_address) {
     components = formatted_address.split(',')
     if (components.length < 4 || components[2].split(' ').length < 3) {
       return null;
@@ -57,20 +57,26 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
     // Get the place details from the autocomplete object.
     var place = autocomplete.getPlace();
 
-    $scope.userAddress = addressObjFromFormattedAddress(place.formatted_address);
-    if ($scope.userAddress == null) {
+    parsedAddressObj = addressObjFromGoogleFormattedAddress(place.formatted_address);
+    if (parsedAddressObj == null) {
       console.log('WTF! Couldn\'t parse address...');
       alert('I had trouble parsing that address-- could you try ' +
             'a slightly different one?');
       return;
     }
 
-    var addressAsString = fmaSharedState.addressToString($scope.userAddress)
+    var addressAsString = fmaSharedState.addressToString(parsedAddressObj)
     $('#choose_address_v2__autocomplete').val(addressAsString)
     $scope.$apply(function() {
       $scope.query = addressAsString;
       $scope.selectedLocationIndex = { value: null };
     });
+    $scope.userAddress = null;
+  }
+
+  $scope.addressDidChange = function() {
+    // Null out the location index whenever the address changes.
+    $scope.selectedLocationIndex = { value: null };
   }
 
   $scope.clearTextPressed = function() {
@@ -85,13 +91,35 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
     $scope.query = fmaSharedState.addressToString($scope.userAddress);
   }
 
+  var getAddressObjFromTextBoxString = function(textBoxString) {
+    if (textBoxString == null) {
+      return null;
+    }
+    var addressParts = textBoxString.split(/,\s*/);
+    if (addressParts.length !== 4) {
+      return null;
+    }
+    return {
+      street: addressParts[0],
+      city: addressParts[1],
+      state: addressParts[2],
+      zip_code: addressParts[3],
+      phone: null,
+      unit_number: null,
+    };
+  }
+
   $scope.doneButtonPressed = function() {
     analytics.trackEvent('nav', 'choose_address_v2__done_pressed');
     console.log('Done button pressed.');
-    if ($scope.userAddress == null) {
+
+    var textBoxAddressObj = getAddressObjFromTextBoxString($scope.query);
+    if ($scope.userAddress == null && textBoxAddressObj == null) {
       console.log('No address entered yet.');
-      alert('Tell us where you live, bro. And make sure you choose it from the dropdown.');
+      alert('Tell us where you live, bro. And make sure you use the following format: "street, city, state, zip".');
       return;
+    } else if ($scope.userAddress == null) {
+      $scope.userAddress = textBoxAddressObj;
     }
     console.log('Saving address.');
     // Save the address.
