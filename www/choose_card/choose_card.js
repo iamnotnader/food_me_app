@@ -136,7 +136,7 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
               id: cardSelected.cc_id,
             }],
             order_type: "delivery",
-            order_time: new Date().toISOString(),
+            order_time: 'ASAP',
           };
           $http({
             method: 'POST',

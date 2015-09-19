@@ -103,7 +103,7 @@ angular.module('foodmeApp.cartHelper', [])
         order_type: "delivery",
         client_id: fmaSharedState.client_id,
         item: itemRequestObject,
-        order_time: (new Date()).toISOString(),
+        order_time: 'ASAP',
       };
       // Add the request object to our list.
       finalItemRequestObjects.push(finalRequestObject);

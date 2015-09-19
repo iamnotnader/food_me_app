@@ -68,7 +68,7 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
             'iso=true&' +
             'order_time=ASAP&' +
             'order_type=delivery&' +
-            'vertical=f'
+            'merchant_type=R'
   )
   .then(
   function(res) {
@@ -77,7 +77,8 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
     var merchants = res.data.merchants;
     for (var v1 = 0; v1 < merchants.length; v1++) {
       var currentMerchant = merchants[v1];
-      if (currentMerchant.ordering != null && currentMerchant.ordering.is_open) {
+      if (currentMerchant.ordering != null && currentMerchant.ordering.is_open &&
+          currentMerchant.ordering.minutes_left_for_ASAP > 10) {
         if (currentMerchant.summary.cuisines == null) {
           continue;
         }

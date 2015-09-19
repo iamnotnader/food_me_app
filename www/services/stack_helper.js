@@ -108,7 +108,7 @@ function(fmaLocalStorage, $http, fmaSharedState, $q, $timeout) {
                 'iso=true&' +
                 'order_time=ASAP&' +
                 'order_type=delivery&' +
-                'vertical=f'
+                'merchant_type=R'
       )
       .then(
       function(res) {
@@ -142,7 +142,8 @@ function(fmaLocalStorage, $http, fmaSharedState, $q, $timeout) {
           }
                
           var outerCurrentMerchant = merchants[merchantIndex];
-          if (!outerCurrentMerchant.ordering.is_open) {
+          if (!outerCurrentMerchant.ordering.is_open ||
+              outerCurrentMerchant.ordering.minutes_left_for_ASAP < 10) {
             merchantIndex++;
             continue;
           }

@@ -82,6 +82,7 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
   $scope.clearTextPressed = function() {
     $('#choose_address_v2__autocomplete').val('');
     $scope.userAddress = null;
+    $scope.selectedLocationIndex = { value: null };
   };
 
   $scope.selectedLocationIndex = { value: null };
