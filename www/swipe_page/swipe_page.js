@@ -28,6 +28,14 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $q, fmaStack
   $scope.userAddress = fmaLocalStorage.getObject('userAddress');
   // If we get here, we have an address, and some chosen restaurant types.
 
+  $scope.allFunnyTexts = [
+    'Have a one-night ham.',
+    'Have a pea-some.',
+    'Find your bowl-mate.',
+  ];
+  $scope.funnyText = $scope.allFunnyTexts[
+      Math.floor(Math.random() * $scope.allFunnyTexts.length)];
+
   analytics.trackView('/swipe_page');
 
   // If this is the first time loading the swipe page, tell the user that
@@ -75,6 +83,48 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $q, fmaStack
     mainViewObj.addClass('slide-left');
     $location.path('/cart_page');
   };
+
+  $scope.takeScreenshotAndShareTwitter = function() {
+    console.log('take screenshot and share.');
+    fmaSharedState.getScreenshotPromise()
+    .then(
+      function(path) {
+        // If we succeed, share the actual screenshot.
+        window.plugins.socialsharing.shareViaTwitter(
+            'Think I just found my soulmate... #thanksfoodme',
+            path, 'http://www.foodme.io');
+      },
+      function(err) {
+        // If we fail, share the dummy screenshot.
+        window.plugins.socialsharing.shareViaTwitter(
+            'Think I just found my soulmate... #thanksfoodme',
+            'www/img/foodme_share.png', 'http://www.foodme.io');
+      }
+    );
+  }
+
+  $scope.takeScreenshotAndShareFacebook = function() {
+    console.log('take screenshot and share.');
+    fmaSharedState.getScreenshotPromise()
+    .then(
+      function(path) {
+        // If we succeed, share the actual screenshot.
+        window.plugins.socialsharing.shareViaFacebook(
+            'Think I just found my soulmate... #thanksfoodme',
+            path, 'http://www.foodme.io',
+            function() {console.log('share ok')},
+            function(errormsg){ });
+      },
+      function(err) {
+        // If we fail, share the dummy screenshot.
+        window.plugins.socialsharing.shareViaFacebook(
+            'Think I just found my soulmate... #thanksfoodme',
+            'www/img/foodme_share.png', 'http://www.foodme.io',
+            function() {console.log('share ok')},
+            function(errormsg){ });
+      }
+    );
+  }
 
   $scope.numPicsInStack = 3;
   $scope.numMerchantsToFetch = fmaSharedState.numMerchantsToFetch;

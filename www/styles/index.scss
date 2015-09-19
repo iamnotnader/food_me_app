@@ -803,7 +803,69 @@ input.choose_address_v2__inner_input {
 .overall__inner_pusheen {
 }
 
-$swipe_page__text_height: 12%;
+$pulsate_iterations: infinite;
+@-webkit-keyframes pulsate_twitter_button {
+  0% {-webkit-transform: translateY(-50%) scale(.9, .9);}
+  25% {-webkit-transform: translateY(-50%) scale(1.0, 1.0);}
+  50% {-webkit-transform: translateY(-50%) scale(1.1, 1.1);}
+  75% {-webkit-transform: translateY(-50%) scale(1.0, 1.0);}
+  100% {-webkit-transform: translateY(-50%) scale(.9, .9);}
+}
+.tweet_button__container {
+  height: 3rem;
+  width: 3rem;
+  top: 45%;
+  position: absolute;
+  left: 0.8rem;
+  -webkit-transform: translateY(-50%);
+  -webkit-animation: pulsate_twitter_button 1s ease-out;
+  -webkit-animation-iteration-count: $pulsate_iterations; 
+}
+
+.tweet_button {
+  background: url("../img/twitter_share.png") no-repeat center center;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+  height: 100%;
+  width: 100%;
+}
+
+@-webkit-keyframes pulsate_facebook_button {
+    0% {-webkit-transform: rotate(15deg) translateY(-46%) scale(.9, .9);}
+    25% {-webkit-transform: rotate(15deg) translateY(-46%) scale(1.0, 1.0);}
+    50% {-webkit-transform: rotate(15deg) translateY(-46%) scale(1.1, 1.1);}
+    75% {-webkit-transform: rotate(15deg) translateY(-46%) scale(1.0, 1.0);}
+    100% {-webkit-transform: rotate(15deg) translateY(-46%) scale(.9, .9);}
+}
+.facebook_button__container {
+  height: 3rem;
+  width: 3rem;
+  top: 45%;
+  position: absolute;
+  right: 0.8rem;
+  right: 1.1rem;
+  -webkit-transform: rotate(15deg) translateY(-46%);
+  -webkit-animation: pulsate_facebook_button 1s ease-out;
+  -webkit-animation-iteration-count: $pulsate_iterations; 
+}
+
+.facebook_button {
+  background: url("../img/facebook_share.png") no-repeat center center;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+  height: 100%;
+  width: 100%;
+}
+
+$swipe_page__text_height: 15%;
 .swipe_page__overall_container {
   background-color: #E7E8E9;
   height: 100%;
@@ -827,7 +889,7 @@ $swipe_page__stack_height: 72%;
 .swipe_page__jtinder_container {
   width: 92%;
   height: $swipe_page__stack_height;
-  top: 15%;
+  top: $swipe_page__text_height;
   position: absolute;
   left: 0;
   right: 0;

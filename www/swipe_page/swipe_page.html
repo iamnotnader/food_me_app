@@ -1,7 +1,13 @@
 <div class="swipe_page__overall_container">
   <div class="swipe_page__top_text">
-    <div class="swipe_page__vertically_center">
-      Swipe your destiny.  
+    <div class="tweet_button__container">
+      <div ng-click="takeScreenshotAndShareTwitter()" class="tweet_button"></div>
+    </div>
+    <div class="facebook_button__container">
+      <div ng-click="takeScreenshotAndShareFacebook()" class="facebook_button"></div>
+    </div>
+    <div class="swipe_page__vertically_center" style="font-size: 1.5rem; width: 60%;">
+      {{funnyText}}
     </div>
   </div>
   <div class="swipe_page__jtinder_container" ng-if="!isLoading">

@@ -740,6 +740,71 @@ input.choose_address_v2__inner_input {
   border-radius: 0;
   -webkit-border-radius: 0; }
 
+@-webkit-keyframes pulsate_twitter_button {
+  0% {
+    -webkit-transform: translateY(-50%) scale(0.9, 0.9); }
+  25% {
+    -webkit-transform: translateY(-50%) scale(1, 1); }
+  50% {
+    -webkit-transform: translateY(-50%) scale(1.1, 1.1); }
+  75% {
+    -webkit-transform: translateY(-50%) scale(1, 1); }
+  100% {
+    -webkit-transform: translateY(-50%) scale(0.9, 0.9); } }
+.tweet_button__container {
+  height: 3rem;
+  width: 3rem;
+  top: 45%;
+  position: absolute;
+  left: 0.8rem;
+  -webkit-transform: translateY(-50%);
+  -webkit-animation: pulsate_twitter_button 1s ease-out;
+  -webkit-animation-iteration-count: infinite; }
+
+.tweet_button {
+  background: url("../img/twitter_share.png") no-repeat center center;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+  height: 100%;
+  width: 100%; }
+
+@-webkit-keyframes pulsate_facebook_button {
+  0% {
+    -webkit-transform: rotate(15deg) translateY(-46%) scale(0.9, 0.9); }
+  25% {
+    -webkit-transform: rotate(15deg) translateY(-46%) scale(1, 1); }
+  50% {
+    -webkit-transform: rotate(15deg) translateY(-46%) scale(1.1, 1.1); }
+  75% {
+    -webkit-transform: rotate(15deg) translateY(-46%) scale(1, 1); }
+  100% {
+    -webkit-transform: rotate(15deg) translateY(-46%) scale(0.9, 0.9); } }
+.facebook_button__container {
+  height: 3rem;
+  width: 3rem;
+  top: 45%;
+  position: absolute;
+  right: 0.8rem;
+  right: 1.1rem;
+  -webkit-transform: rotate(15deg) translateY(-46%);
+  -webkit-animation: pulsate_facebook_button 1s ease-out;
+  -webkit-animation-iteration-count: infinite; }
+
+.facebook_button {
+  background: url("../img/facebook_share.png") no-repeat center center;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+  height: 100%;
+  width: 100%; }
+
 .swipe_page__overall_container {
   background-color: #E7E8E9;
   height: 100%;
@@ -748,7 +813,7 @@ input.choose_address_v2__inner_input {
 
 .swipe_page__top_text {
   position: absolute;
-  height: 12%;
+  height: 15%;
   top: 0;
   width: 100%;
   text-transform: none;
