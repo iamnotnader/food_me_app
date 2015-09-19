@@ -81,6 +81,7 @@
 		CBDCDFC76AF14CF19FB40B9F /* SocialSharing.m in Sources */ = {isa = PBXBuildFile; fileRef = B639D7E60A464AB8AAECECBB /* SocialSharing.m */; };
 		4FF527F9ACDE4288A80FA855 /* Social.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 55C3E93129BF4C2583C74D6F /* Social.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		826168182E774CC08DEB184F /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ECCF31528A424D14AC340466 /* MessageUI.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
+		7862D815B4B245898CB1C595 /* Screenshot.m in Sources */ = {isa = PBXBuildFile; fileRef = 440824156B084A538ECA643E /* Screenshot.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -208,6 +209,8 @@
 		F6FD5BEEE822471FABA52E4C /* SocialSharing.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "SocialSharing.h"; path = "cordova-plugin-x-socialsharing/SocialSharing.h"; sourceTree = "<group>"; fileEncoding = 4; };
 		55C3E93129BF4C2583C74D6F /* Social.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "Social.framework"; path = "System/Library/Frameworks/Social.framework"; sourceTree = SDKROOT; fileEncoding = 4; };
 		ECCF31528A424D14AC340466 /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "MessageUI.framework"; path = "System/Library/Frameworks/MessageUI.framework"; sourceTree = SDKROOT; fileEncoding = 4; };
+		440824156B084A538ECA643E /* Screenshot.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = "Screenshot.m"; path = "com.darktalker.cordova.screenshot/Screenshot.m"; sourceTree = "<group>"; fileEncoding = 4; };
+		814423074EB1431A91B10915 /* Screenshot.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "Screenshot.h"; path = "com.darktalker.cordova.screenshot/Screenshot.h"; sourceTree = "<group>"; fileEncoding = 4; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -360,6 +363,8 @@
 				F2390EEE84E44C26AF222D7B /* CDVLocation.h */,
 				B639D7E60A464AB8AAECECBB /* SocialSharing.m */,
 				F6FD5BEEE822471FABA52E4C /* SocialSharing.h */,
+				440824156B084A538ECA643E /* Screenshot.m */,
+				814423074EB1431A91B10915 /* Screenshot.h */,
 			);
 			name = Plugins;
 			path = FoodMe/Plugins;
@@ -601,6 +606,7 @@
 				CC38579A1D064CBB91586F24 /* CDVReachability.m in Sources */,
 				C4A719BE386E462FBC53E111 /* CDVLocation.m in Sources */,
 				CBDCDFC76AF14CF19FB40B9F /* SocialSharing.m in Sources */,
+				7862D815B4B245898CB1C595 /* Screenshot.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

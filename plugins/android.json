@@ -43,6 +43,10 @@
                         {
                             "xml": "<feature name=\"SocialSharing\"><param name=\"android-package\" value=\"nl.xservices.plugins.SocialSharing\" /></feature>",
                             "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"Screenshot\"><param name=\"android-package\" value=\"com.darktalker.cordova.screenshot.Screenshot\" /></feature>",
+                            "count": 1
                         }
                     ]
                 }
@@ -74,7 +78,7 @@
                         },
                         {
                             "xml": "<uses-permission android:name=\"android.permission.WRITE_EXTERNAL_STORAGE\" />",
-                            "count": 1
+                            "count": 2
                         }
                     ]
                 }
@@ -113,6 +117,9 @@
             "PACKAGE_NAME": "io.foodme"
         },
         "cordova-plugin-x-socialsharing": {
+            "PACKAGE_NAME": "io.foodme"
+        },
+        "com.darktalker.cordova.screenshot": {
             "PACKAGE_NAME": "io.foodme"
         }
     },

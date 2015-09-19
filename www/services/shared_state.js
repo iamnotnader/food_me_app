@@ -11,7 +11,7 @@ angular.module('foodmeApp.sharedState', [])
 
 // Just holds some global configuration variables that we can set to whatever
 // we need.
-.factory('fmaSharedState', [function() {
+.factory('fmaSharedState', ['$q', function($q) {
   var stateObj = {
     testModeEnabled: testModeEnabled,
     takePayment: takePayment,
@@ -39,6 +39,24 @@ angular.module('foodmeApp.sharedState', [])
     getDayAsString: function() {
       var days = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
       return days[new Date().getDay()];
+    },
+    getScreenshotPromise: function (filename, extension, quality) {
+        extension = extension || 'jpg';
+        quality = quality || '100';
+
+        var defer = $q.defer();
+
+        navigator.screenshot.save(function (error, res){
+            if (error) {
+                console.error(error);
+                defer.reject(error);
+            } else {
+                console.log('screenshot saved in: ', res.filePath);
+                defer.resolve(res.filePath);
+            }
+        }, extension, quality, filename);
+
+        return defer.promise;
     },
     addressToString: function(address) {
       return address.street + ', ' + address.city + ', '

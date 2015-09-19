@@ -47,6 +47,10 @@
                         {
                             "xml": "<feature name=\"SocialSharing\"><param name=\"ios-package\" value=\"SocialSharing\" /><param name=\"onload\" value=\"true\" /></feature>",
                             "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"Screenshot\"><param name=\"ios-package\" value=\"Screenshot\" /></feature>",
+                            "count": 1
                         }
                     ]
                 }
@@ -157,6 +161,9 @@
             "PACKAGE_NAME": "io.foodme"
         },
         "cordova-plugin-x-socialsharing": {
+            "PACKAGE_NAME": "io.foodme"
+        },
+        "com.darktalker.cordova.screenshot": {
             "PACKAGE_NAME": "io.foodme"
         }
     },
