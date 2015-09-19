@@ -228,9 +228,9 @@ $intro_screen__screenshot_height: (260 / 350) * $intro_screen__phone_height;
   font-family: TitleFont;
 }
 .overall__attribution_img {
-  width: 50%;
+  height: 3.5%;
+  top: 0.6%;
   position: absolute;
-  bottom: 8%;
   margin: 0 auto;
   left: 0;
   right: 0;
@@ -885,7 +885,7 @@ $swipe_page__text_height: 15%;
   color: #6E6666;
 }
 
-$swipe_page__stack_height: 72%;
+$swipe_page__stack_height: 75%;
 .swipe_page__jtinder_container {
   width: 92%;
   height: $swipe_page__stack_height;
@@ -958,6 +958,7 @@ $swipe_page__stack_height: 72%;
 .swipe_page__food_image_container {
   width: 100%;
   height: 50%;
+  top: 3.5%;
   position: absolute;
 }
 
@@ -979,7 +980,7 @@ $swipe_page__stack_height: 72%;
 }
 
 .swipe_page__food_text_container {
-  top: 50%;
+  top: 53%;
   position: absolute;
   font-family: TaglineFont;
   font-size: 1rem;
