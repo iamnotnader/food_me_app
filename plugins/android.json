@@ -39,6 +39,10 @@
                         {
                             "xml": "<feature name=\"NetworkStatus\"><param name=\"android-package\" value=\"org.apache.cordova.networkinformation.NetworkManager\" /></feature>",
                             "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"SocialSharing\"><param name=\"android-package\" value=\"nl.xservices.plugins.SocialSharing\" /></feature>",
+                            "count": 1
                         }
                     ]
                 }
@@ -66,6 +70,10 @@
                         },
                         {
                             "xml": "<uses-permission android:name=\"android.permission.ACCESS_FINE_LOCATION\" />",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<uses-permission android:name=\"android.permission.WRITE_EXTERNAL_STORAGE\" />",
                             "count": 1
                         }
                     ]
@@ -102,6 +110,9 @@
             "PACKAGE_NAME": "io.foodme"
         },
         "org.apache.cordova.network-information": {
+            "PACKAGE_NAME": "io.foodme"
+        },
+        "cordova-plugin-x-socialsharing": {
             "PACKAGE_NAME": "io.foodme"
         }
     },
