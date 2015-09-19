@@ -1,5 +1,15 @@
 /* jshint eqnull: true */
 
+
+
+
+// TODO(daddy): Delete this page in favor of keyword search button on the
+// swipe page.
+
+
+
+
+
 angular.module('foodMeApp.chooseCuisine', ['ngRoute', 'ngTouch', 'foodmeApp.localStorage', 'foodmeApp.sharedState'])
 
 .config(['$routeProvider', function($routeProvider) {

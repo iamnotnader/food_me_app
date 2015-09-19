@@ -138,7 +138,7 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
         fmaSharedState.testing_invalidation_seconds);
     mainViewObj.removeClass();
     mainViewObj.addClass('slide-left');
-    $location.path('/choose_cuisine');
+    $location.path('/swipe_page');
     return;
   };
 

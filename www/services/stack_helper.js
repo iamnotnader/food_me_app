@@ -96,7 +96,7 @@ function(fmaLocalStorage, $http, fmaSharedState, $q, $timeout) {
   };
 
   // This is called if we don't find the merchant and food data in our localStorage.
-  var asyncGetMerchantAndFoodData = function(userAddress, cuisines, numMerchantsToFetch) {
+  var asyncGetMerchantAndFoodData = function(userAddress, numMerchantsToFetch) {
     console.log('Asynchronously getting merchant data.');
     // HTTP request to get all the stuff, then process it into a list of food.
     return $q(function(resolve, reject) {
@@ -116,19 +116,6 @@ function(fmaLocalStorage, $http, fmaSharedState, $q, $timeout) {
         var merchants = allNearbyMerchantData.merchants;
         // Shuffle up the merchants for fun.
         merchants = _.shuffle(merchants);
-        var cuisinesOverlap = function(merchantCuisines, cuisines) {
-          if (merchantCuisines == null) {
-            return false;
-          }
-          for (var mCuis = 0; mCuis < merchantCuisines.length; mCuis++) {
-            for (var uCuis = 0; uCuis < cuisines.length; uCuis++) {
-              if (cuisines[uCuis] != null &&
-                  merchantCuisines[mCuis] === cuisines[uCuis].name) {
-                  return true;
-              }
-            }
-          }
-        };
         var foodData = [];
         var currentNumMerchantsToFetch = Math.min(merchants.length, numMerchantsToFetch);
         console.log(currentNumMerchantsToFetch);
@@ -144,13 +131,6 @@ function(fmaLocalStorage, $http, fmaSharedState, $q, $timeout) {
           var outerCurrentMerchant = merchants[merchantIndex];
           if (!outerCurrentMerchant.ordering.is_open ||
               outerCurrentMerchant.ordering.minutes_left_for_ASAP < 10) {
-            merchantIndex++;
-            continue;
-          }
-          // TODO(securitythreat): Sigh.. this loop is O(mn) where m = merchant
-          // cuisines and n = selected cuisines.
-          var merchantCuisines = outerCurrentMerchant.summary.cuisines;
-          if (!cuisinesOverlap(merchantCuisines, cuisines)) {
             merchantIndex++;
             continue;
           }
@@ -334,7 +314,7 @@ function(fmaLocalStorage, $http, fmaSharedState, $q, $timeout) {
     });
   };
 
-  var setUpDataVariables = function(userAddress, cuisines, numPicsToFetch, numMerchantsToFetch, forceRefresh) {
+  var setUpDataVariables = function(userAddress, numPicsToFetch, numMerchantsToFetch, forceRefresh) {
     var retVars = {};
     return $q(function(resolve, reject) {
       // This is a hack but if we're loading for more than some amount of time
@@ -350,7 +330,7 @@ function(fmaLocalStorage, $http, fmaSharedState, $q, $timeout) {
           !fmaLocalStorage.isSet('foodData') ||
           !fmaLocalStorage.isSet('foodImageLinks')) {
         console.log('We need to refetch food data (sadly)');
-        asyncGetMerchantAndFoodData(userAddress, cuisines, numMerchantsToFetch).then(
+        asyncGetMerchantAndFoodData(userAddress, numMerchantsToFetch).then(
           function(allData) {
             console.log('Got all the merchant and food data!');
             // This is the giant response we get back from delivery.com.

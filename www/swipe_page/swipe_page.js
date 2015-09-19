@@ -25,16 +25,7 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $q, fmaStack
     $location.path('/choose_address_v2');
     return;
   }
-  if (!fmaLocalStorage.isSet('userCuisines')) {
-    analytics.trackEvent('reroute', 'swipe_page__choose_cuisine');
-
-    alert("In order to swipe, we need some restaurant types first.");
-    console.log('No restaurant types. Go back to choose_cuisine.');
-    $location.path('/choose_cuisine');
-    return;
-  }
   $scope.userAddress = fmaLocalStorage.getObject('userAddress');
-  $scope.userCuisines = fmaLocalStorage.getObject('userCuisines');
   // If we get here, we have an address, and some chosen restaurant types.
 
   analytics.trackView('/swipe_page');
@@ -73,7 +64,7 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $q, fmaStack
     console.log('back pressed!');
     mainViewObj.removeClass();
     mainViewObj.addClass('slide-right');
-    $location.path('/choose_cuisine');
+    $location.path('/choose_address_v2');
   };
 
   $scope.cartButtonPressed = function() {
@@ -221,7 +212,7 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $q, fmaStack
     var loadStartTime = (new Date()).getTime();
     $interval.cancel($scope.imageUpdateInterval);
     fmaStackHelper.setUpDataVariables(
-        $scope.userAddress, $scope.userCuisines, $scope.numPicsInStack,
+        $scope.userAddress, $scope.numPicsInStack,
         $scope.numMerchantsToFetch, true).then(
       function(retVars) {
         $scope.allNearbyMerchantData = retVars.allNearbyMerchantData;
