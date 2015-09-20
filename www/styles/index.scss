@@ -865,7 +865,7 @@ $pulsate_iterations: infinite;
   width: 100%;
 }
 
-$swipe_page__text_height: 15%;
+$swipe_page__text_height: 12%;
 .swipe_page__overall_container {
   background-color: #E7E8E9;
   height: 100%;
@@ -885,7 +885,7 @@ $swipe_page__text_height: 15%;
   color: #6E6666;
 }
 
-$swipe_page__stack_height: 75%;
+$swipe_page__stack_height: 78%;
 .swipe_page__jtinder_container {
   width: 92%;
   height: $swipe_page__stack_height;
@@ -1061,7 +1061,7 @@ $sp_bottom_offset: 4%;
 
 .swipe_page__bottom_button {
   display: inline-block;
-  width: 33.33333%;
+  width: 20%;
   height: 75%;
   position: relative;
 }

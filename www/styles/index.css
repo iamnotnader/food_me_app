@@ -813,7 +813,7 @@ input.choose_address_v2__inner_input {
 
 .swipe_page__top_text {
   position: absolute;
-  height: 15%;
+  height: 12%;
   top: 0;
   width: 100%;
   text-transform: none;
@@ -824,8 +824,8 @@ input.choose_address_v2__inner_input {
 
 .swipe_page__jtinder_container {
   width: 92%;
-  height: 75%;
-  top: 15%;
+  height: 78%;
+  top: 12%;
   position: absolute;
   left: 0;
   right: 0;
@@ -974,7 +974,7 @@ input.choose_address_v2__inner_input {
 
 .swipe_page__bottom_button {
   display: inline-block;
-  width: 33.33333%;
+  width: 20%;
   height: 75%;
   position: relative; }
 

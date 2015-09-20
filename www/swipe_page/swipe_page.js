@@ -28,6 +28,20 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $q, fmaStack
   $scope.userAddress = fmaLocalStorage.getObject('userAddress');
   // If we get here, we have an address, and some chosen restaurant types.
 
+  var setSwipePage = function(pageId) {
+    $scope.current_page = pageId;
+    fmaLocalStorage.setObjectWithExpirationSeconds(
+        'currentSwipePage', pageId,
+        fmaSharedState.testing_invalidation_seconds);
+    if ($scope.current_page === 'main_swipe_page_tab') {
+      $scope.initEverything();
+    }
+  }
+  $scope.current_page = fmaLocalStorage.getObject('currentSwipePage');
+  if ($scope.current_page == null) {
+    $scope.current_page = 'main_swipe_page_tab';
+  }
+
   $scope.allFunnyTexts = [
     'Have a one-night ham.',
     'Have a pea-some.',
@@ -59,11 +73,12 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $q, fmaStack
   $scope.refreshButtonPressed = function() {
     analytics.trackEvent('nav', 'swipe_page__refresh_pressed');
 
+    setSwipePage('main_swipe_page_tab');
+
     console.log('refresh pressed.');
     fmaLocalStorage.setObjectWithExpirationSeconds(
         'foodData', null,
         fmaSharedState.testing_invalidation_seconds);
-    $scope.initEverything();
   };
 
   $scope.backButtonPressed = function() {
@@ -75,6 +90,32 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $q, fmaStack
     $location.path('/choose_address_v2');
   };
 
+  // Stuff for the search page.
+  $scope.searchQuery = fmaLocalStorage.getObject('searchQuery');
+  if ($scope.searchQuery == null) {
+    $scope.searchQuery = {query: ''};
+  }
+  $scope.searchButtonPressed = function() {
+    analytics.trackEvent('nav', 'swipe_page__back_pressed');
+    setSwipePage('search_swipe_page_tab');
+  };
+  $scope.keywordDidChange = function() {
+    fmaLocalStorage.setObjectWithExpirationSeconds(
+        'searchQuery', $scope.searchQuery,
+        fmaSharedState.testing_invalidation_seconds);
+  };
+  $scope.clearTextPressed = function() {
+    $('.choose_address_v2__inner_input').val('');
+    $scope.searchQuery = {query: ''};
+  }
+
+  // Stuff for the recent orders page.
+  $scope.recentOrdersButtonPressed = function() {
+    analytics.trackEvent('nav', 'swipe_page__recent_orders_pressed');
+    setSwipePage('recent_orders_swipe_page_tab');
+  };
+
+  // Rest of the stuff.
   $scope.cartButtonPressed = function() {
     analytics.trackEvent('nav', 'swipe_page__cart_pressed');
 
@@ -266,7 +307,7 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $q, fmaStack
     var loadStartTime = (new Date()).getTime();
     $interval.cancel($scope.imageUpdateInterval);
     fmaStackHelper.setUpDataVariables(
-        $scope.userAddress, $scope.numPicsInStack,
+        $scope.userAddress, $scope.searchQuery.query, $scope.numPicsInStack,
         $scope.numMerchantsToFetch, true).then(
       function(retVars) {
         $scope.allNearbyMerchantData = retVars.allNearbyMerchantData;
@@ -295,7 +336,9 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $q, fmaStack
       } 
     );
   };
-  $scope.initEverything();
+  if ($scope.current_page === 'main_swipe_page_tab') {
+    $scope.initEverything();
+  }
 
 }])
 
