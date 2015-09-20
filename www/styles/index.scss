@@ -23,6 +23,13 @@
   -webkit-tap-highlight-color: rgba(0,0,0,0); /* make transparent link selection, adjust last value opacity 0 to 1.0 */
 }
 
+html {
+  margin:0px;
+  padding:0px;
+  height:100%;
+  overflow: hidden;
+}
+
 body {
   -webkit-touch-callout: none;        /* prevent callout to copy image, etc when tap to hold */
   -webkit-text-size-adjust: none;       /* prevent webkit from resizing text to fit */
@@ -37,6 +44,7 @@ body {
   text-transform:uppercase;
   width:100%;
   background:white;
+  overflow: hidden;
 }
 
 /* Portrait layout (default) */
@@ -871,6 +879,7 @@ $swipe_page__text_height: 12%;
   height: 100%;
   width: 100%;
   position: absolute;
+  overflow: hidden;
 }
 
 .recent_orders__container {
@@ -881,6 +890,7 @@ $swipe_page__text_height: 12%;
   overflow: hidden;
   left: 0;
   right: 0;
+  bottom: 10%;
 }
 
 .swipe_page__top_text {
