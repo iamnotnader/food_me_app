@@ -33,7 +33,7 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
   if ($scope.rawAccessToken === null) {
     analytics.trackEvent('reroute', 'choose_card__intro_screen');
 
-    alert('In order to choose an address, we need you to log in first.');
+    alert('In order to choose a card, we need you to log in first.');
     mainViewObj.removeClass();
     mainViewObj.addClass('slide-right');
     $location.path('/accounts_page');

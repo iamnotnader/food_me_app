@@ -4,10 +4,13 @@
       <div ng-repeat="accountObj in accountsList">
         <div class="choose_address__list_cell" ng-click="cellSelected($index)">
           <div class="choose_address__cell_top_row">
-            {{accountObj.user.first_name}} {{accountObj.user.last_name}} &nbsp; | &nbsp; points: {{accountObj.user.life_time_delivery_points}}
+            {{accountObj.user.first_name}} {{accountObj.user.last_name}}
           </div>
           <div class="choose_address__cell_bottom_row">
-            {{accountObj.user.email}} &nbsp; | &nbsp; orders: {{accountObj.user.life_time_orders_count}}
+            {{accountObj.user.email}} 
+          </div>
+          <div class="choose_address__cell_bottom_row">
+            points: {{accountObj.user.life_time_delivery_points}}  &nbsp; | &nbsp; orders: {{accountObj.user.life_time_orders_count}}
           </div>
           <div class="choose_address__cell_border"></div>
           <img class="choose_address__selected_badge leave-right-centered enter-right-centered" ng-if="$index == selectedAccountIndex.value"

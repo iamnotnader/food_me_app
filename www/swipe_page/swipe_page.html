@@ -1,4 +1,4 @@
-<div class="swipe_page__overall_container" ng-if="current_page === 'main_swipe_page_tab'">
+<div class="swipe_page__overall_container" ng-hide="current_page !== 'main_swipe_page_tab'">
   <div class="swipe_page__top_text">
     <div class="tweet_button__container">
       <div ng-click="takeScreenshotAndShareTwitter()" class="tweet_button"></div>
@@ -41,7 +41,7 @@
     </div>
 
     <div class="swipe_page__empty_stack fade-in-slow" ng-if="foodData.length === foodDataCursor">
-      Sad, your stack is empty. Try refreshing a few times or widening your search by tapping the magnifying glass.
+      Sad, your stack is empty. Tap Burgie to refresh or change your search by tapping the magnifying glass.
     </div>
     <div class="swipe_page__loading_pusheen fade-in-300ms fade-out-300ms" alt="" ng-if="(allImageLinks.length - foodDataCursor <= 0) && (foodDataCursor !== foodData.length)">
       <div class="overall__attribution">Pusheen.com</div>
@@ -62,8 +62,10 @@
       <div class="choose_address_v2__clear_text"></div>
     </div>
   </div>
-  <div class="swipe_page__empty_stack" style="top: 25%; width: 80%; margin: 0 auto; left: 0; right: 0;">
-    Tap Burgie to swipe on your keyword.
+  <div class="swipe_page__empty_stack"
+      ng-click="executeSearchPressed()"
+      style="top: 25%; width: 90%; margin: 0 auto; left: 0; right: 0; background-color: #9F9FEA; border-radius: 6px; box-shadow: 1px 2px 4px 0px;">
+    search!
   </div>
 </div>
 
@@ -112,19 +114,22 @@
 </div>
 
 <div class="swipe_page__bottom_menu">
-  <div ng-click="backButtonPressed()" class="swipe_page__bottom_button" style="border-right: 1px solid #6E6666;">
+  <div ng-click="backButtonPressed()" class="swipe_page__bottom_button">
     <img style="height: 100%;" class="swipe_page__vertically_center" src="img/back.png" alt="">
   </div>
-  <div ng-click="searchButtonPressed()" class="swipe_page__bottom_button" style="border-right: 1px solid #6E6666; -webkit-transform: translateY(-100%);">
-    {{searchQuery}}
-    <img style="height: 100%;" class="swipe_page__vertically_center" src="img/search.png" alt="" ng-if="searchQuery.query == ''">
-    <img style="height: 100%;" class="swipe_page__vertically_center" src="img/red_search.png" alt="" ng-if="searchQuery.query != ''">
+  <div ng-click="searchButtonPressed()" class="swipe_page__bottom_button">
+    <img style="height: 100%;" class="swipe_page__vertically_center" src="img/search.png" alt="" ng-if="current_page !== 'search_swipe_page_tab' && searchQuery.query == ''">
+    <img style="height: 100%;" class="swipe_page__vertically_center" src="img/red_search.png" alt="" ng-if="current_page !== 'search_swipe_page_tab' && searchQuery.query != ''">
+    <img style="height: 100%;" class="swipe_page__vertically_center" src="img/active_search.png" alt="" ng-if="current_page === 'search_swipe_page_tab' && searchQuery.query == ''">
+    <img style="height: 100%;" class="swipe_page__vertically_center" src="img/active_red_search.png" alt="" ng-if="current_page === 'search_swipe_page_tab' && searchQuery.query != ''">
   </div>
-  <div ng-click="refreshButtonPressed()" class="swipe_page__bottom_button" style="border-right: 1px solid #6E6666;">
-    <img style="height: 100%; padding: 2%;" class="swipe_page__vertically_center" src="img/happy_burger.png" alt="">
+  <div ng-click="refreshButtonPressed()" class="swipe_page__bottom_button">
+    <img style="height: 130%;" class="swipe_page__vertically_center" src="img/active_burgie.png" alt="" ng-if="current_page === 'main_swipe_page_tab'" >
+    <img style="height: 130%;" class="swipe_page__vertically_center" src="img/inactive_burgie.png" alt="" ng-if="current_page !== 'main_swipe_page_tab'" >
   </div>
-  <div ng-click="recentOrdersButtonPressed()" class="swipe_page__bottom_button" style="border-right: 1px solid #6E6666;">
+  <div ng-click="recentOrdersButtonPressed()" class="swipe_page__bottom_button">
     <img style="height: 100%;" class="swipe_page__vertically_center" src="img/recent.png" alt="">
+    <img style="height: 100%;" class="swipe_page__vertically_center" src="img/active_recent.png" alt="" ng-if="current_page === 'recent_orders_swipe_page_tab'">
   </div>
   <div ng-click="cartButtonPressed()" class="swipe_page__bottom_button">
     <!--We use the onload method to set the little badge-->
@@ -132,7 +137,19 @@
   </div>
 </div>
 
-<div ng-include src="'loading_screen/loading_screen.html'" ng-if="isLoading"></div>
+<div ng-if="isLoading && current_page === 'main_swipe_page_tab'" class="swipe_page__loading_container">
+  <div class="overall__loading_container">
+    <div class="overall__loading_widget_background"></div>
+    <div class="overall__loading_widget">Loading!</div>
+    <div class="overall__loading_pusheen">
+    <!--<img class="overall__loading_pusheen" src="img/pusheen_eating.gif" alt="">-->
+      <div class="overall__attribution">Pusheen.com</div>
+    </div>
+    <div class="overall__loading_long_time">
+      (takes a while sorry..)
+    </div>
+  </div>
+</div>
 <!--This gets positioned by javascript in the swipe-page-cart-image-on-load function.-->
 <!--Not ideal, but oh well.-->
 <div class="swipe_page__num_items_in_cart_badge" ng-show="userCart.length > 0 && showCartBadge">

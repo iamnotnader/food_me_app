@@ -304,7 +304,7 @@ function(fmaLocalStorage, $http, fmaSharedState, $q, $timeout) {
           var foodDataObj = foodData[foodDataCursor + index];
           // We try to detect "double encoding" by looking for %2520, which is
           // what you get when you try to double-encode a space character.
-          var urlToFetch = 'https://ajax.googleapis.com/ajax/services/search/images?v=1.0&safe=active&rsz='+
+          var urlToFetch = 'https://ajax.googleapis.com/ajax/services/search/images?v=1.0&safe=active&imgsz=large&rsz='+
                            fmaSharedState.numImagesToFetch+'&q=' +
               foodDataObj.name.split(' ').join('+');
           $http.get(urlToFetch)

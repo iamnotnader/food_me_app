@@ -28,12 +28,12 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $q, fmaStack
   $scope.userAddress = fmaLocalStorage.getObject('userAddress');
   // If we get here, we have an address, and some chosen restaurant types.
 
-  var setSwipePage = function(pageId) {
+  var setSwipePage = function(pageId, shouldReload) {
     $scope.current_page = pageId;
     fmaLocalStorage.setObjectWithExpirationSeconds(
         'currentSwipePage', pageId,
         fmaSharedState.testing_invalidation_seconds);
-    if ($scope.current_page === 'main_swipe_page_tab') {
+    if (shouldReload) {
       $scope.initEverything();
     }
   }
@@ -73,7 +73,12 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $q, fmaStack
   $scope.refreshButtonPressed = function() {
     analytics.trackEvent('nav', 'swipe_page__refresh_pressed');
 
-    setSwipePage('main_swipe_page_tab');
+    if ($scope.current_page === 'search_swipe_page_tab' ||
+        $scope.current_page === 'main_swipe_page_tab') {
+      setSwipePage('main_swipe_page_tab', true);
+    } else {
+      setSwipePage('main_swipe_page_tab', false);
+    }
 
     console.log('refresh pressed.');
     fmaLocalStorage.setObjectWithExpirationSeconds(
@@ -96,8 +101,8 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $q, fmaStack
     $scope.searchQuery = {query: ''};
   }
   $scope.searchButtonPressed = function() {
+    setSwipePage('search_swipe_page_tab', false);
     analytics.trackEvent('nav', 'swipe_page__back_pressed');
-    setSwipePage('search_swipe_page_tab');
   };
   $scope.keywordDidChange = function() {
     fmaLocalStorage.setObjectWithExpirationSeconds(
@@ -111,6 +116,9 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $q, fmaStack
         'searchQuery', $scope.searchQuery,
         fmaSharedState.testing_invalidation_seconds);
   }
+  $scope.executeSearchPressed = function() {
+    $scope.refreshButtonPressed();
+  }
 
   // Stuff for the recent orders page.
   $scope.recentOrders = fmaLocalStorage.getObject('recentOrders');
@@ -119,7 +127,7 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $q, fmaStack
   }
   $scope.recentOrdersButtonPressed = function() {
     analytics.trackEvent('nav', 'swipe_page__recent_orders_pressed');
-    setSwipePage('recent_orders_swipe_page_tab');
+    setSwipePage('recent_orders_swipe_page_tab', false);
   };
   $scope.addRecentOrderToCart = function(index) {
     // Add the recent order to the cart.
@@ -308,6 +316,10 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $q, fmaStack
   };
 
   $scope.initEverything = function() {
+    if ($scope.isLoading) {
+      return;
+    }
+
     // foodData is like a lot of food objects. Like > 100. But the stack consists
     // of fewer-- a max of $scope.numPicsInStack to be exact. In order to avoid
     // refetching foodData every time we want to refresh the stack, we keep an

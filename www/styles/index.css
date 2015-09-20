@@ -664,6 +664,13 @@ input.choose_address_v2__inner_input.enter_phone__phone_number {
   background-color: white;
   opacity: 0.8; }
 
+.swipe_page__loading_container {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 9%; }
+
 input:focus {
   outline: none; }
 
@@ -983,18 +990,22 @@ input.choose_address_v2__inner_input {
   right: 0; }
 
 .swipe_page__bottom_menu {
-  height: 7%;
+  height: 9%;
   bottom: 0;
   position: absolute;
   left: 0;
   right: 0;
-  font-size: 0; }
+  font-size: 0;
+  background-color: #464646; }
 
 .swipe_page__bottom_button {
   display: inline-block;
   width: 20%;
-  height: 75%;
-  position: relative; }
+  height: 60%;
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
+  -webkit-transform: translateY(-50%); }
 
 .swipe_page__num_items_in_cart_badge {
   height: 1.3rem;

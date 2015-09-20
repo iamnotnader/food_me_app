@@ -61,6 +61,34 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState) {
       exp_month: $scope.cardFields.expMonth,
       exp_year: $scope.cardFields.expYear,
     };
+    if (isNaN(dataObj.cc_number) || dataObj.cc_number == null ||
+        dataObj.cc_number.length === 0) {
+      alert ('Credit card is invalid! Try again?');
+      return;
+    }
+    if (isNaN(dataObj.exp_month) || dataObj.exp_month == null ||
+        dataObj.exp_month.length !== 2) {
+      alert ('Credit card expiration month must be two digits! Try again?');
+      return;
+    }
+    if (isNaN(dataObj.exp_year) || dataObj.exp_year == null) {
+      alert ('Credit card expiration year must be four digits! Try again?');
+      return;
+    }
+    if (dataObj.exp_year.length !== 4) {
+      if (dataObj.exp_year.length === 2) {
+        dataObj.exp_year = '20' + dataObj.exp_year;
+      } else {
+        alert ('Credit card expiration year must be four digits! Try again?');
+        return;
+      }
+    }
+    if (isNaN(dataObj.billing_zip) || dataObj.billing_zip == null ||
+        dataObj.billing_zip.length !== 5) {
+      alert ('Zip code must be five digits! Try again?');
+      return;
+    }
+
     $scope.isLoading = true;
     $http({
       method: 'POST',
@@ -74,6 +102,7 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState) {
       function(res) {
         mainViewObj.removeClass();
         mainViewObj.addClass('slide-right');
+        $scope.isLoading = false;
         $location.path('choose_card');
         return;
       },
@@ -82,7 +111,7 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState) {
             err.data.message[0].user_msg != null) {
           alert(err.data.message[0].user_msg);
         } else {
-          alert('A very weird error occured. No idea what\'s going on. Try again?');
+          alert('One of the fields you entered was invalid. Try again!');
         }
         $scope.isLoading = false;
         return;
