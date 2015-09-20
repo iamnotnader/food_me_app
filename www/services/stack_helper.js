@@ -100,14 +100,14 @@ function(fmaLocalStorage, $http, fmaSharedState, $q, $timeout) {
     return $q(function(resolve, reject) {
       var searchAddress = fmaSharedState.addressToString(userAddress);
       $http.get(fmaSharedState.endpoint+'/merchant/search/delivery?' + 
-                'address=' + searchAddress.split(' ').join('+') + '&' + 
+                'address=' + searchAddress.split(/\s+/).join('+') + '&' + 
                 'client_id=' + fmaSharedState.client_id + '&' +
                 'enable_recommendations=false&' + 
                 'iso=true&' +
                 'order_time=ASAP&' +
                 'order_type=delivery&' +
                 'merchant_type=R&' +
-                'keyword=' + searchQuery
+                'keyword=' + searchQuery.split(/\s+/).join('+')
       )
       .then(
       function(res) {
@@ -302,11 +302,20 @@ function(fmaLocalStorage, $http, fmaSharedState, $q, $timeout) {
         // Need a closure to preserve the loop index.
         (function(index) {
           var foodDataObj = foodData[foodDataCursor + index];
+          if (foodDataObj == null) {
+            var currentLinkObj = {};
+            currentLinkObj.index = index;
+            foodImageLinks.push(currentLinkObj);
+            if (foodImageLinks.length == numPicsToFetch) {
+              resolve({foodImageLinks: foodImageLinks});
+            }
+            return;
+          }
           // We try to detect "double encoding" by looking for %2520, which is
           // what you get when you try to double-encode a space character.
           var urlToFetch = 'https://ajax.googleapis.com/ajax/services/search/images?v=1.0&safe=active&imgsz=large&rsz='+
                            fmaSharedState.numImagesToFetch+'&q=' +
-              foodDataObj.name.split(' ').join('+');
+              foodDataObj.name.split(/\s+/).join('+');
           $http.get(urlToFetch)
           .then(
             function(res) {
@@ -340,7 +349,6 @@ function(fmaLocalStorage, $http, fmaSharedState, $q, $timeout) {
             function(err) {
               var currentLinkObj = {};
               currentLinkObj.index = index;
-              currentLinkObj.foodDataId = foodDataObj.id;
               foodImageLinks.push(currentLinkObj);
               if (foodImageLinks.length == numPicsToFetch) {
                 resolve({foodImageLinks: foodImageLinks});

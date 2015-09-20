@@ -243,6 +243,9 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $q, fmaStack
       // Add the swiped food to the cart and save the cart to localStorage.
       $scope.userCart.push($scope.foodData[$scope.foodDataCursor]);
       $scope.userCart = _.uniq($scope.userCart, function(item) {
+        if (item == null) {
+          return '';
+        }
         return item.unique_key;
       });
       fmaLocalStorage.setObjectWithExpirationSeconds(
@@ -365,9 +368,7 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $q, fmaStack
       } 
     );
   };
-  if ($scope.current_page === 'main_swipe_page_tab') {
-    $scope.initEverything();
-  }
+  $scope.initEverything();
 
 }])
 
