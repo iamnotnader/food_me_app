@@ -774,15 +774,15 @@ input.choose_address_v2__inner_input {
 
 @-webkit-keyframes pulsate_facebook_button {
   0% {
-    -webkit-transform: rotate(15deg) translateY(-46%) scale(0.9, 0.9); }
+    -webkit-transform: rotate(15deg) translateY(-50%) scale(0.9, 0.9); }
   25% {
-    -webkit-transform: rotate(15deg) translateY(-46%) scale(1, 1); }
+    -webkit-transform: rotate(15deg) translateY(-50%) scale(1, 1); }
   50% {
-    -webkit-transform: rotate(15deg) translateY(-46%) scale(1.1, 1.1); }
+    -webkit-transform: rotate(15deg) translateY(-50%) scale(1.1, 1.1); }
   75% {
-    -webkit-transform: rotate(15deg) translateY(-46%) scale(1, 1); }
+    -webkit-transform: rotate(15deg) translateY(-50%) scale(1, 1); }
   100% {
-    -webkit-transform: rotate(15deg) translateY(-46%) scale(0.9, 0.9); } }
+    -webkit-transform: rotate(15deg) translateY(-50%) scale(0.9, 0.9); } }
 .facebook_button__container {
   height: 3rem;
   width: 3rem;
@@ -790,7 +790,7 @@ input.choose_address_v2__inner_input {
   position: absolute;
   right: 0.8rem;
   right: 1.1rem;
-  -webkit-transform: rotate(15deg) translateY(-46%);
+  -webkit-transform: rotate(15deg) translateY(-50%);
   -webkit-animation: pulsate_facebook_button 1s ease-out;
   -webkit-animation-iteration-count: infinite; }
 

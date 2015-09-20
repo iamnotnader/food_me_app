@@ -93,12 +93,14 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $q, fmaStack
         window.plugins.socialsharing.shareViaTwitter(
             'Think I just found my soulmate... #thanksfoodme',
             path, 'http://www.foodme.io');
+        analytics.trackEvent('swipe', 'swipe_page__tweet_share_success');
       },
       function(err) {
         // If we fail, share the dummy screenshot.
         window.plugins.socialsharing.shareViaTwitter(
             'Think I just found my soulmate... #thanksfoodme',
             'www/img/foodme_share.png', 'http://www.foodme.io');
+        analytics.trackEvent('swipe', 'swipe_page__tweet_share_error');
       }
     );
   }
@@ -114,6 +116,7 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $q, fmaStack
             path, 'http://www.foodme.io',
             function() {console.log('share ok')},
             function(errormsg){ });
+        analytics.trackEvent('swipe', 'swipe_page__facebook_share_success');
       },
       function(err) {
         // If we fail, share the dummy screenshot.
@@ -122,6 +125,7 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $q, fmaStack
             'www/img/foodme_share.png', 'http://www.foodme.io',
             function() {console.log('share ok')},
             function(errormsg){ });
+        analytics.trackEvent('swipe', 'swipe_page__facebook_share_error');
       }
     );
   }

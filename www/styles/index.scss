@@ -835,11 +835,11 @@ $pulsate_iterations: infinite;
 }
 
 @-webkit-keyframes pulsate_facebook_button {
-    0% {-webkit-transform: rotate(15deg) translateY(-46%) scale(.9, .9);}
-    25% {-webkit-transform: rotate(15deg) translateY(-46%) scale(1.0, 1.0);}
-    50% {-webkit-transform: rotate(15deg) translateY(-46%) scale(1.1, 1.1);}
-    75% {-webkit-transform: rotate(15deg) translateY(-46%) scale(1.0, 1.0);}
-    100% {-webkit-transform: rotate(15deg) translateY(-46%) scale(.9, .9);}
+    0% {-webkit-transform: rotate(15deg) translateY(-50%) scale(.9, .9);}
+    25% {-webkit-transform: rotate(15deg) translateY(-50%) scale(1.0, 1.0);}
+    50% {-webkit-transform: rotate(15deg) translateY(-50%) scale(1.1, 1.1);}
+    75% {-webkit-transform: rotate(15deg) translateY(-50%) scale(1.0, 1.0);}
+    100% {-webkit-transform: rotate(15deg) translateY(-50%) scale(.9, .9);}
 }
 .facebook_button__container {
   height: 3rem;
@@ -848,7 +848,7 @@ $pulsate_iterations: infinite;
   position: absolute;
   right: 0.8rem;
   right: 1.1rem;
-  -webkit-transform: rotate(15deg) translateY(-46%);
+  -webkit-transform: rotate(15deg) translateY(-50%);
   -webkit-animation: pulsate_facebook_button 1s ease-out;
   -webkit-animation-iteration-count: $pulsate_iterations; 
 }
