@@ -87,8 +87,10 @@ angular.module('foodmeApp.sharedState', [])
     maxPriceToShowUSD: 40,
 
     recentAddressesToKeep: 5,
+    recentOrdersToKeep: 10,
 
-    merchantNameFilterRegex: /deli/i,
+    merchantCuisineFilterRegex: /deli/i,
+    merchantNameFilterRegex: /corner grocers/i,
 
     // This is how we get commissions. It is the "You hear about us" ID from delivery.com.
     // Contact baltomare@delivery.com for questions.

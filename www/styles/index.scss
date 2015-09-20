@@ -873,6 +873,16 @@ $swipe_page__text_height: 12%;
   position: absolute;
 }
 
+.recent_orders__container {
+  position: absolute;
+  top: $swipe_page__text_height;
+  bottom: 0;
+  background-color: #E7E8E9;
+  overflow: hidden;
+  left: 0;
+  right: 0;
+}
+
 .swipe_page__top_text {
   position: absolute;
   height: $swipe_page__text_height;

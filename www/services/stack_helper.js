@@ -127,12 +127,22 @@ function(fmaLocalStorage, $http, fmaSharedState, $q, $timeout) {
             break;
           }
           var outerCurrentMerchant = merchants[merchantIndex];
-          var outerMerchantCuisines = outerCurrentMerchant.summary.cuisines;
           var badMerchant = false;
-          for (var v3 = 0; v3 < outerMerchantCuisines.length; v3++) {
-            var currentCuisine = outerMerchantCuisines[v3];
-            if (currentCuisine.match(fmaSharedState.merchantNameFilterRegex)) {
-              badMerchant = true;
+          if (outerCurrentMerchant == null) {
+            return true;
+          }
+          if (outerCurrentMerchant.summary != null &&
+              outerCurrentMerchant.summary.name != null &&
+              outerCurrentMerchant.summary.name.match(fmaSharedState.merchantNameFilterRegex) != null) {
+            badMerchant = true;
+          }
+          var outerMerchantCuisines = outerCurrentMerchant.summary.cuisines;
+          if (outerMerchantCuisines != null) {
+            for (var v3 = 0; v3 < outerMerchantCuisines.length; v3++) {
+              var currentCuisine = outerMerchantCuisines[v3];
+              if (currentCuisine.match(fmaSharedState.merchantCuisineFilterRegex)) {
+                badMerchant = true;
+              }
             }
           }
           if (!outerCurrentMerchant.ordering.is_open ||
@@ -168,7 +178,7 @@ function(fmaLocalStorage, $http, fmaSharedState, $q, $timeout) {
                   }
 
                   // We use this to avoid duplicates in ng-repeat.
-                  currentItem.unique_key = currentItem.merchantId + currentItem.id;
+                  currentItem.unique_key = currentItem.merchantId + '' + currentItem.id;
                   var deliveryCharge = 0.0;
                   if (innerCurrentMerchant.ordering != null &&
                       innerCurrentMerchant.ordering.delivery_charge != null) {
@@ -370,7 +380,7 @@ function(fmaLocalStorage, $http, fmaSharedState, $q, $timeout) {
           function(err) {
             console.log("Error getting merchant data WTF.");
             console.log(JSON.stringify(err));
-            alert("We haad a weird problem. Uh.. try restarting the app.");
+            //alert("We had a weird problem. Uh.. try restarting the app.");
             reject(err);
         }).then(
           function(allData) {

@@ -245,6 +245,22 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
               0.0, 'USD');
           analytics.addTransactionItem(concatenatedName, concatenatedName,
               concatenatedName, 'food_purchase', sum, 1.0, 'USD');
+
+          // Add the orders to our recent orders.
+          $scope.recentOrders = fmaLocalStorage.getObject('recentOrders');
+          if ($scope.recentOrders == null) {
+            $scope.recentOrders = [];
+          }
+          for (var v1 = 0; v1 < $scope.userCart.length; v1++) {
+            var currentItem = $scope.userCart[v1];
+            $scope.recentOrders = _.filter($scope.recentOrders, function(item) {
+              return item.unique_key !== currentItem.unique_key;
+            });
+            $scope.recentOrders = [currentItem,].concat($scope.recentOrders.slice(0, fmaSharedState.recentOrdersToKeep-1));
+          }
+          fmaLocalStorage.setObjectWithExpirationSeconds(
+              'recentOrders', $scope.recentOrders,
+              fmaSharedState.testing_invalidation_seconds);
           
           // Go back to the address page.
           mainViewObj.removeClass();

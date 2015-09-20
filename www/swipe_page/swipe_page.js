@@ -107,13 +107,30 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $q, fmaStack
   $scope.clearTextPressed = function() {
     $('.choose_address_v2__inner_input').val('');
     $scope.searchQuery = {query: ''};
+    fmaLocalStorage.setObjectWithExpirationSeconds(
+        'searchQuery', $scope.searchQuery,
+        fmaSharedState.testing_invalidation_seconds);
   }
 
   // Stuff for the recent orders page.
+  $scope.recentOrders = fmaLocalStorage.getObject('recentOrders');
+  if ($scope.recentOrders == null) {
+    $scope.recentOrders = [];
+  }
   $scope.recentOrdersButtonPressed = function() {
     analytics.trackEvent('nav', 'swipe_page__recent_orders_pressed');
     setSwipePage('recent_orders_swipe_page_tab');
   };
+  $scope.addRecentOrderToCart = function(index) {
+    // Add the recent order to the cart.
+    $scope.userCart.push($scope.recentOrders[index]);
+    $scope.userCart = _.uniq($scope.userCart, function(item) {
+      return item.unique_key;
+    });
+    fmaLocalStorage.setObjectWithExpirationSeconds(
+        'userCart', $scope.userCart,
+        fmaSharedState.testing_invalidation_seconds);
+  }
 
   // Rest of the stuff.
   $scope.cartButtonPressed = function() {

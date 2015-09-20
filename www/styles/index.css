@@ -811,6 +811,15 @@ input.choose_address_v2__inner_input {
   width: 100%;
   position: absolute; }
 
+.recent_orders__container {
+  position: absolute;
+  top: 12%;
+  bottom: 0;
+  background-color: #E7E8E9;
+  overflow: hidden;
+  left: 0;
+  right: 0; }
+
 .swipe_page__top_text {
   position: absolute;
   height: 12%;
