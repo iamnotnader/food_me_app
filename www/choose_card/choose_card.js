@@ -88,6 +88,9 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
         }
         cardInList.pretty_exp_month = pretty_exp_month;
       }
+      if ($scope.cardList.length > 0) {
+        $scope.cellSelected(0);
+      }
       // Make the loading last at least a second.
       var timePassedMs = (new Date()).getTime() - loadStartTime;
       $timeout(function() {
@@ -468,6 +471,9 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
     console.log('Cell selected: ' + indexSelected);
     $scope.selectedCardIndex.value = indexSelected;
   };
+  if ($scope.cardList.length > 0) {
+    $scope.cellSelected(0);
+  }
 
   $scope.addCardButtonPressed = function() {
     analytics.trackEvent('cell', 'choose_card__add_card_pressed');

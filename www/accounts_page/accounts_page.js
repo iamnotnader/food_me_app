@@ -52,6 +52,10 @@ function($scope, $location, $http, fmaLocalStorage, fmaSharedState, $rootScope, 
         fmaLocalStorage.setObjectWithExpirationSeconds(
             'accountsList', $scope.accountsList,
             fmaSharedState.testing_invalidation_seconds);
+        // Select the account to save time.
+      if ($scope.accountsList.length > 0) {
+        $scope.cellSelected(0);
+      }
         $scope.isLoading = false;
       },
       function(err) {
@@ -146,6 +150,10 @@ function($scope, $location, $http, fmaLocalStorage, fmaSharedState, $rootScope, 
   $scope.cellSelected = function(accountIndex) {
     $scope.selectedAccountIndex.value = accountIndex;
   }
+  if ($scope.accountsList.length > 0) {
+    $scope.cellSelected(0);
+  }
+
 
   $scope.finishButtonPressed = function() {
     if ($scope.selectedAccountIndex.value == null) {

@@ -92,6 +92,9 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
     $scope.userAddress = $scope.recentAddresses[addressIndex];
     $scope.query = fmaSharedState.addressToString($scope.userAddress);
   }
+  if ($scope.recentAddresses.length > 0) {
+    $scope.cellSelected(0);
+  }
 
   var getAddressObjFromTextBoxString = function(textBoxString) {
     if (textBoxString == null) {
