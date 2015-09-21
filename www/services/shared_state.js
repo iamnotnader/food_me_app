@@ -133,9 +133,9 @@ angular.module('foodmeApp.sharedState', [])
 
     // Testing
     stateObj.testing_invalidation_seconds = 60 * 60;
-    //stateObj.fake_token = 'JHyPICYvbiSTA45bXUFqeSvADRW1IF4rNV2azjnj';
     stateObj.uhau_id = null;
   }
+  //stateObj.fake_token = 'ybw0hFK4IrFDP1bzYxsUJMa5gdN6sgkuJ9S8Y6nA';
 
   return stateObj;
 }]);

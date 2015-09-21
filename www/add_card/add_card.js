@@ -61,20 +61,6 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState) {
       exp_month: $scope.cardFields.expMonth,
       exp_year: $scope.cardFields.expYear,
     };
-    if (isNaN(dataObj.cc_number) || dataObj.cc_number == null ||
-        dataObj.cc_number.length === 0) {
-      alert ('Credit card is invalid! Try again?');
-      return;
-    }
-    if (isNaN(dataObj.exp_month) || dataObj.exp_month == null ||
-        dataObj.exp_month.length !== 2) {
-      alert ('Credit card expiration month must be two digits! Try again?');
-      return;
-    }
-    if (isNaN(dataObj.exp_year) || dataObj.exp_year == null) {
-      alert ('Credit card expiration year must be four digits! Try again?');
-      return;
-    }
     if (dataObj.exp_year.length !== 4) {
       if (dataObj.exp_year.length === 2) {
         dataObj.exp_year = '20' + dataObj.exp_year;
@@ -83,39 +69,48 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState) {
         return;
       }
     }
-    if (isNaN(dataObj.billing_zip) || dataObj.billing_zip == null ||
-        dataObj.billing_zip.length !== 5) {
-      alert ('Zip code must be five digits! Try again?');
-      return;
-    }
 
+    // You'll notice this isn't using $http() below. That's because I had a
+    // bug that made me really mad and I figured as a last-ditch effort I'd
+    // just rewrite the darn thing using $.ajax. Well, that worked so I left
+    // it. Yay debt!
     $scope.isLoading = true;
-    $http({
-      method: 'POST',
+    $.ajax({
+      method: "POST",
       url: fmaSharedState.endpoint + '/customer/cc',
-      data: dataObj,
+      datatype : "json",
+      contentType: "application/json; charset=utf-8",
+      data: JSON.stringify(dataObj),
       headers: {
         "Authorization": $scope.rawAccessToken,
-        "Content-Type": "application/json",
-      }
-    }).then(
-      function(res) {
+      },
+      success: function(res, statusObj, xhr) {
+        $scope.isLoading = false;
+        $scope.$apply();
+        if (res.message != null && res.message.length > 0) {
+          alert(res.message[0].dev_msg);
+          return;
+        }
+        alert('Successfully added your card!');
         mainViewObj.removeClass();
         mainViewObj.addClass('slide-right');
-        $scope.isLoading = false;
         $location.path('choose_card');
         return;
       },
-      function(err) {
-        if (err.data != null && err.data.message != null && err.data.message.length > 0 &&
-            err.data.message[0].user_msg != null) {
-          alert(err.data.message[0].user_msg);
-        } else {
-          alert('One of the fields you entered was invalid. Try again!');
-        }
+      error: function(xhr, statusObj, error) {
         $scope.isLoading = false;
-        return;
+        $scope.$apply();
+        if (xhr.responseJSON != null && xhr.responseJSON.message != null &&
+            xhr.responseJSON.message.dev_msg != null) {
+          alert(xhr.responseJSON.message.dev_msg);
+          return;
+        }
+        alert('Whoops! We had an error. This is probably due to network ' +
+              'connectivity so just try again and it should work!');
+
+      },
+      complete: function(xhr, statusObj) {
       }
-    );
+    });
   };
 }]);

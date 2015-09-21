@@ -6,8 +6,8 @@
     </header>
     <div id="message"></div>
     <div id="oauth_container">
-      <form name="forms.newCardForm" class="oauth_form" method="POST" action=""
-          accept-charset="UTF-8">
+      <form name="forms.newCardForm" class="oauth_form" method="POST" action="javascript:void(0);"
+          accept-charset="UTF-8" ng-submit="addCardPressed()">
         <input placeholder="Credit card number" class="add_card__cc_number" type="text" name="cardNumber" ng-model="cardFields.cardNumber" required>
         <div class="fieldGroup">
           <input placeholder="Exp. month" class="smallField" type="text" name="expMonth" ng-model="cardFields.expMonth" maxlength="2" required>

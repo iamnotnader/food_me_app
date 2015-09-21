@@ -48,6 +48,9 @@ function($scope, $location, $http, fmaLocalStorage, fmaSharedState, $rootScope, 
         });
         $scope.accountsList = [newAccount,].concat($scope.accountsList.slice(0, 10));
 
+        // Comment this in to see the access token.
+        //alert(full_token.access_token);
+
         // Save the account list in localStorage
         fmaLocalStorage.setObjectWithExpirationSeconds(
             'accountsList', $scope.accountsList,
