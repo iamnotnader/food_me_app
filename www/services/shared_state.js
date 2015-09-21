@@ -52,7 +52,12 @@ angular.module('foodmeApp.sharedState', [])
                 defer.reject(error);
             } else {
                 console.log('screenshot saved in: ', res.filePath);
-                defer.resolve(res.filePath);
+                if (device.platform.toLowerCase() == 'android') {
+                  console.log('Special case for android!');
+                  defer.resolve('file://' + res.filePath);
+                } else {
+                  defer.resolve(res.filePath);
+                }
             }
         }, extension, quality, filename);
 
