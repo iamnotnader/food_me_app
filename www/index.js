@@ -25,6 +25,7 @@ var initAngularStuff = function() {
   angular.module('foodMeApp', [
     'ngRoute',
     'ngAnimate',
+    'ngIOS9UIWebViewPatch',
     'foodMeApp.dummyAppScreen',
     'foodMeApp.introScreen',
     'foodMeApp.chooseCuisine',
