@@ -44,7 +44,6 @@
       Tap Burgie below to refresh or change your search by tapping the magnifying glass.
     </div>
     <div class="swipe_page__loading_pusheen fade-in-300ms fade-out-300ms" alt="" ng-if="(allImageLinks.length - foodDataCursor <= 0) && (foodDataCursor !== foodData.length)">
-      <div class="overall__attribution">Pusheen.com</div>
     </div>
   </div>
 </div>
@@ -107,7 +106,6 @@
       </div>
     </div>
     <div class="choose_address_v2__empty_pusheen" style="height: 35%" ng-if="recentOrders == null || recentOrders.length === 0">
-      <div class="overall__attribution" style="bottom: 8%; font-size: .8rem;">Pusheen.com</div>
     </div>
     <div class="choose_address__cell_border choose_address_v2__border_top"></div>
   </div>
@@ -140,10 +138,8 @@
 <div ng-if="isLoading && current_page === 'main_swipe_page_tab'" class="swipe_page__loading_container">
   <div class="overall__loading_container">
     <div class="overall__loading_widget_background"></div>
-    <div class="overall__loading_widget">Loading!</div>
+    <div class="overall__loading_widget">Refreshing!</div>
     <div class="overall__loading_pusheen">
-    <!--<img class="overall__loading_pusheen" src="img/pusheen_eating.gif" alt="">-->
-      <div class="overall__attribution">Pusheen.com</div>
     </div>
     <div class="overall__loading_long_time">
       (takes a while sorry..)

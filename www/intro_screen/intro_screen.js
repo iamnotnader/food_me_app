@@ -35,12 +35,12 @@ function($scope, $location, $http, fmaLocalStorage, fmaSharedState, $rootScope, 
   // We have a single giant png that contains all of the app intro screens. Its
   // width should be screenshotWidth * numPhotos so we can slide through it
   // properly.
-  $scope.numPhotos = 4;
+  $scope.numPhotos = 3;
   // The list of background colors for our intro screen. You should be able to
   // add more without anything breaking, but you won't see them unless you make
   // numPhotos bigger above to correspond. Note that you can have fewer colors
   // than photos and the colors will just repeat.
-  $scope.colorList = ["rgb(154, 97, 56)", "rgb(154, 56, 84)", "rgb(62, 145, 146)", "rgb(154, 56, 84)"];
+  $scope.colorList = ["rgb(154, 97, 56)", "rgb(62, 145, 146)", "rgb(154, 56, 84)"];
   // The index into colorList that determines which background color we're on
   // currently.
   $scope.colorIndex = 0;

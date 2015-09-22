@@ -248,7 +248,7 @@ h1 {
   right: 0; }
 
 .intro_screen__enjoy_img {
-  background: url("../img/pusheen_eat_everything.gif") no-repeat center center;
+  background: url("../img/burgie_loading.gif") no-repeat center center;
   position: absolute;
   left: 0;
   right: 0;
@@ -266,7 +266,8 @@ h1 {
   border-radius: 100%;
   -webkit-border-radius: 100%;
   border: 5px solid #464646;
-  overflow: hidden; }
+  overflow: hidden;
+  background-color: #AF6D6D; }
 
 .android .intro_screen__enjoy_img {
   border-radius: 0;
@@ -654,8 +655,9 @@ input.choose_address_v2__inner_input.enter_phone__phone_number {
   left: 50%;
   -webkit-transform: translate3d(-50%, -50%, 0);
   font-family: TitleFont;
-  font-size: 3rem;
-  color: #464646; }
+  font-size: 2.5rem;
+  color: #464646;
+  text-transform: none; }
 
 .overall__loading_widget_background {
   position: absolute;
@@ -710,7 +712,7 @@ input.choose_address_v2__inner_input {
   font-family: TitleFont; }
 
 .choose_address_v2__empty_pusheen {
-  background: url("../img/pusheen_kneading.gif") no-repeat center center;
+  background: url("../img/wink.gif") no-repeat center center;
   position: absolute;
   left: 5%;
   right: 5%;
@@ -726,14 +728,15 @@ input.choose_address_v2__inner_input {
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
-  background-size: cover; }
+  background-size: cover;
+  background-color: #AF6D6D; }
 
 .android .choose_address_v2__empty_pusheen {
   border-radius: 0;
   -webkit-border-radius: 0; }
 
 .overall__loading_pusheen {
-  background: url("../img/pusheen_eating.gif") no-repeat center center;
+  background: url("../img/burgie_loading.gif") no-repeat center center;
   position: absolute;
   left: 5%;
   right: 5%;
@@ -748,7 +751,8 @@ input.choose_address_v2__inner_input {
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
-  background-size: cover; }
+  background-size: cover;
+  background-color: #AF6D6D; }
 
 .android .overall__loading_pusheen {
   border-radius: 0;
@@ -858,7 +862,7 @@ input.choose_address_v2__inner_input {
   margin-right: auto; }
 
 .swipe_page__loading_pusheen {
-  background-image: url("../img/pusheen_pie.gif");
+  background-image: url("../img/burgie_loading.gif");
   position: absolute;
   top: 20%;
   left: 0;
@@ -875,7 +879,8 @@ input.choose_address_v2__inner_input {
   -o-background-size: cover;
   background-size: cover;
   background-position: center center;
-  background-repeat: no-repeat; }
+  background-repeat: no-repeat;
+  background-color: #AF6D6D; }
 
 .android .swipe_page__loading_pusheen {
   border-radius: 0;
