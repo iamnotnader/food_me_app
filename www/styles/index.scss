@@ -686,7 +686,7 @@ input.choose_address_v2__inner_input.enter_phone__phone_number {
 }
 
 .overall__loading_long_time {
-  position: absolute;
+  position: fixed;
   top: 80%;
   left: 0;
   right: 0;
@@ -797,7 +797,7 @@ input.choose_address_v2__inner_input {
 
 .overall__loading_pusheen {
   background: url("../img/burgie_loading.gif") no-repeat center center;
-  position: absolute;
+  position: fixed;
   left: 5%;
   right: 5%;
   top: 25%;
