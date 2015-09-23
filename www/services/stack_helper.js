@@ -95,6 +95,22 @@ function(fmaLocalStorage, $http, fmaSharedState, $q, $timeout) {
     });
   };
 
+  var filterBadName = function(nameStr) {
+    if (nameStr == null) {
+      return null;
+    }
+    var oldName = nameStr;
+    regexes = fmaSharedState.dishNameFilterRegexes;
+    for (var v1 = 0; v1 < regexes.length; v1++) {
+      var currentRegex = regexes[v1];
+      nameStr = nameStr.replace(currentRegex.pattern, currentRegex.replacement);
+    }
+    if (nameStr.split(/\s+/).length < 2) {
+      return null;
+    }
+    return nameStr;
+  };
+
   var getMenuItemsForMerchants = function(userAddress, searchQuery, numMerchantsToFetch) {
     // HTTP request to get all the stuff, then process it into a list of food.
     return $q(function(resolve, reject) {
@@ -184,6 +200,7 @@ function(fmaLocalStorage, $http, fmaSharedState, $q, $timeout) {
                       innerCurrentMerchant.ordering.delivery_charge != null) {
                     deliveryCharge = innerCurrentMerchant.ordering.delivery_charge;
                   }
+                  currentItem.name = filterBadName(currentItem.name);
                   if (currentItem.name == null || currentItem.merchantName == null ||
                       currentItem.price == null ||
                       currentItem.price + deliveryCharge > fmaSharedState.maxPriceToShowUSD ||
@@ -196,7 +213,6 @@ function(fmaLocalStorage, $http, fmaSharedState, $q, $timeout) {
                   currentItem.price = currentItem.price.toFixed(2);
 
                   // Get rid of number like "55. Turkey Sandwich" -> "Turkey Sandwich"
-                  currentItem.name = currentItem.name.replace(/[0-9a-zA-z]+\.\s+/, '').replace(/\s+-\s+/, ' ').replace(/\s*choose\s+[0-9]+/i, '');
                   foodData.push(currentItem);
                 }
                 numMerchantsFetched++;
