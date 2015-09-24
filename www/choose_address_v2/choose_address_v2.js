@@ -140,6 +140,11 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
     fmaLocalStorage.setObjectWithExpirationSeconds(
         'recentAddresses', $scope.recentAddresses,
         fmaSharedState.testing_invalidation_seconds);
+
+    analytics.trackEvent('address_entered',
+                         fmaSharedState.addressToString($scope.userAddress) +
+                         '__' + fmaSharedState.testModeEnabled);
+
     mainViewObj.removeClass();
     mainViewObj.addClass('slide-left');
     $location.path('/swipe_page');

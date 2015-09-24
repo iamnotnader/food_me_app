@@ -45,8 +45,8 @@ var initAngularStuff = function() {
   run(['$rootScope', 'fmaSharedState', function($rootScope, fmaSharedState) {
     ga_id = fmaSharedState.ga_id;
     window.analytics = {
-      trackEvent: function () {
-        console.log('Tried to track event but not loaded yet.');
+      trackEvent: function (cat, str) {
+        console.log('Tried to track event but not loaded yet: ' + cat + ' ' + str);
       },
       trackView: function() {
         console.log('Tried to track view but not loaded yet.');

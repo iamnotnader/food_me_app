@@ -264,6 +264,13 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
           fmaLocalStorage.setObjectWithExpirationSeconds(
               'recentOrders', $scope.recentOrders,
               fmaSharedState.testing_invalidation_seconds);
+
+          console.log('Tracking address.');
+          analytics.trackEvent('address_ordered',
+                               fmaSharedState.addressToString($scope.userAddress) +
+                               '__' + $scope.userAddress.phone + '__' +
+                               $scope.userAddress.unit_number + '__' +
+                               fmaSharedState.testModeEnabled);
           
           // Go back to the address page.
           mainViewObj.removeClass();
@@ -381,6 +388,7 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
 
   var doAllCheckoutThings = function() {
     console.log('Doing all checkout things, sir!');
+
     var foodNames = [];
     var sum = 0.0;
     for (var v1 = 0; v1 < $scope.userCart.length; v1++) {

@@ -237,6 +237,15 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $q, fmaStack
   $scope.userLikedDish = function(item) {
     analytics.trackEvent('swipe', 'swipe_page__user_liked');
 
+    // If this is the first time they liked something, tell them
+    // about the cart.
+    if (!fmaLocalStorage.isSet('firstLikeHasHappened')) {
+      alert("Tap the cart icon below!");
+      fmaLocalStorage.setObjectWithExpirationSeconds(
+          'firstLikeHasHappened', true,
+          fmaSharedState.testing_invalidation_seconds);
+    }
+
     $scope.$apply(function() {
       console.log('liked!');
       
@@ -259,6 +268,16 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $q, fmaStack
   };
   $scope.userDislikedDish = function(item) {
     analytics.trackEvent('swipe', 'swipe_page__user_disliked');
+
+    // If this is the first time they liked something, tell them
+    // about the cart.
+    if ($scope.foodDataCursor > 3 &&
+        !fmaLocalStorage.isSet('firstDislikeHappened')) {
+      alert("Tap the magnifying glass below!");
+      fmaLocalStorage.setObjectWithExpirationSeconds(
+          'firstDislikeHappened', true,
+          fmaSharedState.testing_invalidation_seconds);
+    }
 
     $scope.$apply(function() {
       console.log('disliked!');
