@@ -4,7 +4,17 @@
 
 $ sudo npm install -g phonegap
 
-3a) To build and run iOS:
+3) Get the node_modules directory to appear with all the stuff you need by running the following from the root directory:
+
+$ npm install
+
+4) Get the bower_components directory to appear with all the stuff you need by running the following from the root directory:
+
+$ bower install
+
+Note that bower_components will be in the www/ directory not the root directory.
+
+5a) To build and run iOS:
 
 cd into project directory
 
@@ -15,7 +25,7 @@ Open the .xcodeproj file under platforms/ios in XCode
 Run the app in the simulator-- that's it!
 
 
-3b) To build and run in Android:
+5b) To build and run in Android:
 
 cd into project directory
 
