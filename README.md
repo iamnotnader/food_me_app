@@ -3,6 +3,7 @@
 2) Install Phonegap via:
 
 $ sudo npm install -g phonegap
+
 3a) To build and run iOS:
 
 cd into project directory
