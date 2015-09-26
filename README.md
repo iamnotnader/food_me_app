@@ -1,3 +1,10 @@
+0) Install bower and npm (after installing homebrew from brew.sh):
+
+brew install npm
+
+npm install -g bower
+
+
 1) Clone the repo
 
 2) Install Phonegap via:
