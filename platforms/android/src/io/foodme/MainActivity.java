@@ -20,6 +20,10 @@
 package io.foodme;
 
 import android.os.Bundle;
+
+import com.parse.Parse;
+import com.parse.ParseInstallation;
+
 import org.apache.cordova.*;
 
 public class MainActivity extends CordovaActivity
@@ -28,6 +32,10 @@ public class MainActivity extends CordovaActivity
     public void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
+        Parse.initialize(this, "1nX0o0NEF3uUaM3eKZUEz70qv3er0YimVVAM75ER",
+                         "pmh3Wt8MMi9rN7XJcsvWMktBJxKTqSFOdzNyTihn");
+        ParseInstallation.getCurrentInstallation().saveInBackground();
+        System.out.println("Questionably worked.");
         // Set by <content src="index.html" /> in config.xml
         loadUrl(launchUrl);
     }
