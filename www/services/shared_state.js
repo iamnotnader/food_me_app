@@ -159,6 +159,12 @@ angular.module('foodmeApp.sharedState', [])
       {pattern: /.*stuffed.*/ig, replacement: ''},
       {pattern: /.*meat\s*loaf.*/ig, replacement: ''},
       {pattern: /.*liver.*/ig, replacement: ''},
+      {pattern: /\s+.\s+/ig, replacement: ''},
+      {pattern: /.*chickenty.*/ig, replacement: ''},
+      {pattern: /.*cappicosia.*/ig, replacement: ''},
+      {pattern: /.*navajo.*/ig, replacement: ''},
+      {pattern: /.*malibu.*/ig, replacement: ''},
+      {pattern: /.*red.*mist.*/ig, replacement: ''},
     ],
 
     // This is how we get commissions. It is the "You hear about us" ID from delivery.com.
