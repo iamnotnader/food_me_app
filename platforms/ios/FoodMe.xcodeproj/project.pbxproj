@@ -5,7 +5,6 @@
 	};
 	objectVersion = 46;
 	objects = {
-
 /* Begin PBXBuildFile section */
 		06B758EAF2FA4B01821141ED /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 14BB879F8EA04ED597D24408 /* AudioToolbox.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		0A3CC021A9A74C8DB0D5839F /* CDVConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 008E1EBB65724FBBBCADC1CC /* CDVConnection.m */; };
