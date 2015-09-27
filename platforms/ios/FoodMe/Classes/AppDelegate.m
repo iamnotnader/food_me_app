@@ -27,6 +27,7 @@
 
 #import "AppDelegate.h"
 #import "MainViewController.h"
+#import <Parse/Parse.h>
 
 #import <Cordova/CDVPlugin.h>
 
@@ -87,6 +88,26 @@
 
     self.window.rootViewController = self.viewController;
     [self.window makeKeyAndVisible];
+    
+    UIUserNotificationType userNotificationTypes = (UIUserNotificationTypeAlert |
+                                                    UIUserNotificationTypeBadge |
+                                                    UIUserNotificationTypeSound);
+    UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:userNotificationTypes
+                                                                             categories:nil];
+    [application registerUserNotificationSettings:settings];
+    [application registerForRemoteNotifications];
+    
+    
+    // [Optional] Power your app with Local Datastore. For more info, go to
+    // https://parse.com/docs/ios_guide#localdatastore/iOS
+    [Parse enableLocalDatastore];
+    
+    // Initialize Parse.
+    [Parse setApplicationId:@"1nX0o0NEF3uUaM3eKZUEz70qv3er0YimVVAM75ER"
+                  clientKey:@"pmh3Wt8MMi9rN7XJcsvWMktBJxKTqSFOdzNyTihn"];
+    
+    // [Optional] Track statistics around application opens.
+    [PFAnalytics trackAppOpenedWithLaunchOptions:launchOptions];
 
     return YES;
 }
@@ -113,8 +134,6 @@
     [[NSNotificationCenter defaultCenter] postNotificationName:CDVLocalNotification object:notification];
 }
 
-#ifndef DISABLE_PUSH_NOTIFICATIONS
-
     - (void)                                 application:(UIApplication*)application
         didRegisterForRemoteNotificationsWithDeviceToken:(NSData*)deviceToken
     {
@@ -125,6 +144,13 @@
             stringByReplacingOccurrencesOfString:@" " withString:@""];
 
         [[NSNotificationCenter defaultCenter] postNotificationName:CDVRemoteNotification object:token];
+        
+        // Store the deviceToken in the current installation and save it to Parse.
+        PFInstallation *currentInstallation = [PFInstallation currentInstallation];
+        [currentInstallation setDeviceTokenFromData:deviceToken];
+        currentInstallation.channels = @[ @"global" ];
+        [currentInstallation saveInBackground];
+
     }
 
     - (void)                                 application:(UIApplication*)application
@@ -133,7 +159,10 @@
         // re-post ( broadcast )
         [[NSNotificationCenter defaultCenter] postNotificationName:CDVRemoteNotificationError object:error];
     }
-#endif
+
+- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo {
+    [PFPush handlePush:userInfo];
+}
 
 - (NSUInteger)application:(UIApplication*)application supportedInterfaceOrientationsForWindow:(UIWindow*)window
 {
