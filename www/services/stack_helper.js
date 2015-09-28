@@ -253,7 +253,7 @@ function(fmaLocalStorage, $http, fmaSharedState, $q, $timeout) {
         reject(err);
       });
     });
-  }
+  };
 
   // This is called if we don't find the merchant and food data in our localStorage.
   var asyncGetMerchantAndFoodData = function(userAddress, searchQuery, numMerchantsToFetch) {
@@ -274,7 +274,7 @@ function(fmaLocalStorage, $http, fmaSharedState, $q, $timeout) {
       return $q(function(resolve, reject) {
         resolve({ foodImageLinks: [] });
       });
-    };
+    }
 
     // TODO(daddy): I don't want to delete this yet because I'm not 100% sure it's
     // not useful. Commenting out for now.
@@ -310,6 +310,35 @@ function(fmaLocalStorage, $http, fmaSharedState, $q, $timeout) {
       //});
     //};
 
+    var processGoogleImagesResponse = function(resolve, reject, res, index, foodDataObj, foodImageLinks) {
+      var imageDataList = res.responseData.results; 
+      var currentLinkObj = {};
+      currentLinkObj.index = index;
+      currentLinkObj.foodDataId = foodDataObj.id;
+      currentLinkObj.urls = [];
+      currentLinkObj.name = foodDataObj.name;
+      for (var y = 0; y < imageDataList.length; y++) {
+        currentLinkObj.urls.push(unescape(imageDataList[y].url)); 
+      } 
+      // TODO(daddy): I don't want to delete this yet because I'm not 100% sure it's
+      // not useful. Commenting out for now.
+      //cleanImagesPromise(currentLinkObj.urls).then(
+        //function(res) {
+          //currentLinkObj.urls = res;
+          foodImageLinks.push(currentLinkObj);
+          if (foodImageLinks.length == numPicsToFetch) {
+            foodImageLinks.sort(function(a, b) {
+              return a.index - b.index;
+            });
+            resolve({foodImageLinks: foodImageLinks});
+          }
+        //},
+        //function(err) {
+          //console.warn('cleanImages should never ERR.');
+          //reject(err);
+        //});
+    };
+
     // Sorry the below code is a little confusing-- I'm not a huge fan of
     // Google's API. We actually process the images in searchComplete.
     return $q(function(resolve, reject) { 
@@ -332,35 +361,15 @@ function(fmaLocalStorage, $http, fmaSharedState, $q, $timeout) {
           var urlToFetch = 'https://ajax.googleapis.com/ajax/services/search/images?v=1.0&safe=active&imgsz=large&rsz='+
                            fmaSharedState.numImagesToFetch+'&q=' +
               foodDataObj.name.split(/\s+/).join('+');
-          $http.get(urlToFetch)
+          $.ajax({
+            url:urlToFetch,
+            type:"GET",
+            dataType: 'jsonp',
+            async:'true',
+          })
           .then(
             function(res) {
-              var imageDataList = res.data.responseData.results; 
-              var currentLinkObj = {};
-              currentLinkObj.index = index;
-              currentLinkObj.foodDataId = foodDataObj.id;
-              currentLinkObj.urls = [];
-              currentLinkObj.name = foodDataObj.name;
-              for (var y = 0; y < imageDataList.length; y++) {
-                currentLinkObj.urls.push(unescape(imageDataList[y].url)); 
-              } 
-              // TODO(daddy): I don't want to delete this yet because I'm not 100% sure it's
-              // not useful. Commenting out for now.
-              //cleanImagesPromise(currentLinkObj.urls).then(
-                //function(res) {
-                  //currentLinkObj.urls = res;
-                  foodImageLinks.push(currentLinkObj);
-                  if (foodImageLinks.length == numPicsToFetch) {
-                    foodImageLinks.sort(function(a, b) {
-                      return a.index - b.index;
-                    });
-                    resolve({foodImageLinks: foodImageLinks});
-                  }
-                //},
-                //function(err) {
-                  //console.warn('cleanImages should never ERR.');
-                  //reject(err);
-                //});
+              processGoogleImagesResponse(resolve, reject, res, index, foodDataObj, foodImageLinks);
             },
             function(err) {
               var currentLinkObj = {};

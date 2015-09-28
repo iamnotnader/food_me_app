@@ -147,6 +147,7 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $q, fmaStack
     mainViewObj.removeClass();
     mainViewObj.addClass('slide-right');
     $location.path('/swipe_page');
+    return;
   };
 
   $scope.cartFinishButtonPressed = function() {
@@ -164,9 +165,24 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $q, fmaStack
         fmaSharedState.testing_invalidation_seconds);
 
     console.log('Back button pressed.');
-    mainViewObj.removeClass();
-    mainViewObj.addClass('slide-left');
-    $location.path('/accounts_page');
+
+    $scope.userToken = fmaLocalStorage.getObject('userToken');
+    if ($scope.userToken != null) {
+      // If we have a token, just go straight to the card page.
+      mainViewObj.removeClass();
+      mainViewObj.addClass('slide-left');
+      $location.path('/choose_card');
+      return;
+    } else {
+      $scope.oauthUrl = fmaSharedState.oauth_endpoint+'/third_party/account/create?' +
+                        'client_id=' + fmaSharedState.client_id + '&' +
+                        'redirect_uri=' + fmaSharedState.redirect_uri + '/%23/choose_card' + '&' +
+                        'response_type=code&' +
+                        'scope=payment,global&' +
+                        'state=';
+      var ref = window.open($scope.oauthUrl, '_self',
+          'location=no,transitionstyle=crossdissolve,clearcache=yes');
+    }
   };
 
   $scope.cartPageClearCartPressed = function() {
