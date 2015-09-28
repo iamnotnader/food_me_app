@@ -500,7 +500,7 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
     $scope.cardsLoading = true;
     $http({
       method: "post",
-      url: 'http://localhost:1337/api.delivery.com/third_party/access_token',
+      url: fmaSharedState.shitty_oauth_endpoint,
       data: 'client_id='+fmaSharedState.client_id+'&' +
             'redirect_uri=' + fmaSharedState.redirect_uri + '/%23/choose_card'+ '&' +
             'grant_type=authorization_code&' +

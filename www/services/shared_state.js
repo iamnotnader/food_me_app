@@ -22,6 +22,7 @@ angular.module('foodmeApp.sharedState', [])
     oauth_endpoint: 'https://api.delivery.com',
     endpoint: 'http://www.foodme.io:1337/www.delivery.com/api',
     redirect_uri: 'http://www.foodme.io',
+    shitty_oauth_endpoint: 'http://www.foodme.io:1337/api.delivery.com/third_party/access_token',
 
 
     // This determines whether or not we redirect the user to different screens.
