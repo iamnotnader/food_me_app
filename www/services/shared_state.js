@@ -20,8 +20,8 @@ angular.module('foodmeApp.sharedState', [])
     client_id: 'NDIyZDg1MjA0M2M4Y2NhYzgxOGY1NDhjMmE0YTIwMTJh',
     client_secret: 'YEQZ54Wvth4TDtpNclTxOolRVgX6UK79pNw82O1s',
     oauth_endpoint: 'https://api.delivery.com',
-    endpoint: 'http://localhost:1337/www.delivery.com/api',
-    redirect_uri: 'http://localhost:4000',
+    endpoint: 'http://www.foodme.io:1337/www.delivery.com/api',
+    redirect_uri: 'http://www.foodme.io',
 
 
     // This determines whether or not we redirect the user to different screens.
