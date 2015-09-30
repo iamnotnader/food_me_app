@@ -20,9 +20,9 @@ angular.module('foodmeApp.sharedState', [])
     client_id: 'NDIyZDg1MjA0M2M4Y2NhYzgxOGY1NDhjMmE0YTIwMTJh',
     client_secret: 'YEQZ54Wvth4TDtpNclTxOolRVgX6UK79pNw82O1s',
     oauth_endpoint: 'https://api.delivery.com',
-    endpoint: 'http://www.foodme.io:1337/www.delivery.com/api',
-    redirect_uri: 'http://www.foodme.io',
-    shitty_oauth_endpoint: 'http://www.foodme.io:1337/api.delivery.com/third_party/access_token',
+    endpoint: 'http://www.foodmelongtime.com:1337/www.delivery.com/api',
+    redirect_uri: 'http://www.foodmelongtime.com',
+    shitty_oauth_endpoint: 'http://www.foodmelongtime.com:1337/api.delivery.com/third_party/access_token',
 
 
     // This determines whether or not we redirect the user to different screens.
@@ -201,7 +201,7 @@ angular.module('foodmeApp.sharedState', [])
     stateObj.client_secret = 'azC3JXeAX9U57qDNUo1st2YhKm59lMZ2YC83Ck6P';
     stateObj.oauth_endpoint = 'https://sandbox.delivery.com';
     stateObj.endpoint = 'http://localhost:1337/sandbox.delivery.com';
-    stateObj.redirect_uri = 'http://localhost:8080';
+    stateObj.redirect_uri = 'http://localhost:4000';
     stateObj.shitty_oauth_endpoint = 'http://localhost:1337/sandbox.delivery.com/third_party/access_token';
 
     // Testing

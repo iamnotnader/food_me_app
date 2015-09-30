@@ -91,7 +91,8 @@ body {
   text-transform: uppercase;
   width: 100%;
   background: white;
-  overflow: hidden; }
+  overflow: hidden;
+  text-align: center; }
 
 /* Portrait layout (default) */
 .app {
@@ -166,8 +167,17 @@ h1 {
 ::-webkit-scrollbar {
   display: none; }
 
-.main_view {
-  -webkit-backface-visibility: hidden; }
+#main_view_container {
+  -webkit-backface-visibility: hidden;
+  height: 93%;
+  width: 100%;
+  max-width: 500px;
+  max-height: 800px;
+  position: relative;
+  overflow: hidden;
+  display: block;
+  margin: 0 auto;
+  top: 7%; }
 
 .intro_screen_container {
   position: absolute;
@@ -414,7 +424,7 @@ h1 {
   right: 0; }
 
 .choose_address__top_bar {
-  position: fixed;
+  position: absolute;
   top: 0;
   width: 100%;
   height: 9%;
@@ -477,7 +487,8 @@ h1 {
   color: #6E6666;
   -webkit-backface-visibility: hidden;
   -webkit-transform: translate3d(0, 0, 0);
-  transform: translate3d(0, 0, 0); }
+  transform: translate3d(0, 0, 0);
+  text-align: left; }
 
 .choose_address_v2__clear_text_container {
   position: absolute;
@@ -637,7 +648,7 @@ input.choose_address_v2__inner_input.enter_phone__phone_number {
   vertical-align: middle; }
 
 .overall__loading_long_time {
-  position: fixed;
+  position: absolute;
   top: 80%;
   left: 0;
   right: 0;
@@ -649,7 +660,7 @@ input.choose_address_v2__inner_input.enter_phone__phone_number {
   color: #464646; }
 
 .overall__loading_widget {
-  position: fixed;
+  position: absolute;
   top: 15%;
   bottom: auto;
   left: 50%;
@@ -737,7 +748,7 @@ input.choose_address_v2__inner_input {
 
 .overall__loading_pusheen {
   background: url("../img/burgie_loading.gif") no-repeat center center;
-  position: fixed;
+  position: absolute;
   left: 5%;
   right: 5%;
   top: 25%;
@@ -905,6 +916,30 @@ input.choose_address_v2__inner_input {
   transform: translateY(-50%);
   -webkit-transform: translateY(-50%); }
 
+.download_the_app__container {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 7.2%;
+  background-color: #464646;
+  width: 100%;
+  max-width: 500px;
+  max-height: 800px;
+  overflow: hidden;
+  display: block;
+  margin: 0 auto;
+  top: 0;
+  font-family: TitleFont; }
+
+a.download_the_app {
+  font-size: 1.5rem;
+  position: absolute;
+  margin: 0 auto;
+  left: 0;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%); }
+
 .swipe_page__tinderslide {
   position: absolute;
   background: #fff;
@@ -1070,7 +1105,7 @@ input.choose_address_v2__inner_input {
   border-bottom: 1px solid #6E6666; }
 
 .cart_page__bottom_bar {
-  position: fixed;
+  position: absolute;
   bottom: 0;
   width: 100%;
   height: 3rem;
@@ -1083,7 +1118,7 @@ input.choose_address_v2__inner_input {
 
 .cart_page__clear_cart {
   padding: 0;
-  position: fixed;
+  position: absolute;
   bottom: 3.5rem;
   width: 100%;
   height: 3rem;
@@ -1378,7 +1413,7 @@ div.disclaimer {
   font-family: TaglineFont;
   background: #eee;
   color: #666;
-  position: fixed;
+  position: absolute;
   left: 0;
   right: 0;
   top: 0;
