@@ -320,10 +320,10 @@ h1 {
   font-size: 1.5rem; }
   @media only screen and (min-device-width: 321px) and (max-device-width: 375px) and (min-device-height: 569px) and (max-device-height: 667px) and (orientation: portrait) and (-webkit-min-device-pixel-ratio: 2) {
     .intro_screen__main_text {
-      font-size: 1.8rem; } }
+      font-size: 1.7rem; } }
   @media only screen and (min-device-width: 376px) and (min-device-height: 569px) and (orientation: portrait) and (-webkit-min-device-pixel-ratio: 2) {
     .intro_screen__main_text {
-      font-size: 2.3rem; } }
+      font-size: 2.0rem; } }
 
 .intro_screen__sign_in_button {
   display: block;
