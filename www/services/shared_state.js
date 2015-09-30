@@ -199,8 +199,10 @@ angular.module('foodmeApp.sharedState', [])
     // These are the credentials we need to interact with delivery.com's API
     stateObj.client_id = 'MDU1YmQ3MzM1M2I3MmU0ZTk4NDUwZTVmZDBiZGY4MDFk';
     stateObj.client_secret = 'azC3JXeAX9U57qDNUo1st2YhKm59lMZ2YC83Ck6P';
-    stateObj.endpoint = 'https://sandbox.delivery.com';
     stateObj.oauth_endpoint = 'https://sandbox.delivery.com';
+    stateObj.endpoint = 'http://localhost:1337/sandbox.delivery.com';
+    stateObj.redirect_uri = 'http://localhost:8080';
+    stateObj.shitty_oauth_endpoint = 'http://localhost:1337/sandbox.delivery.com/third_party/access_token';
 
     // Testing
     stateObj.testing_invalidation_seconds = 60 * 60;
