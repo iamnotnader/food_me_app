@@ -273,15 +273,9 @@ h1 {
   -moz-background-size: cover;
   -o-background-size: cover;
   background-size: cover;
-  border-radius: 100%;
-  -webkit-border-radius: 100%;
   border: 5px solid #464646;
   overflow: hidden;
   background-color: #AF6D6D; }
-
-.android .intro_screen__enjoy_img {
-  border-radius: 0;
-  -webkit-border-radius: 0; }
 
 .intro_screen__space_above_dot_slider {
   height: 5%; }
@@ -730,8 +724,6 @@ input.choose_address_v2__inner_input {
   top: 25%;
   margin-left: auto;
   margin-right: auto;
-  border-radius: 50%;
-  -webkit-border-radius: 50%;
   border: 5px solid #464646;
   height: 60%;
   left: 20%;
@@ -742,10 +734,6 @@ input.choose_address_v2__inner_input {
   background-size: cover;
   background-color: #AF6D6D; }
 
-.android .choose_address_v2__empty_pusheen {
-  border-radius: 0;
-  -webkit-border-radius: 0; }
-
 .overall__loading_pusheen {
   background: url("../img/burgie_loading.gif") no-repeat center center;
   position: absolute;
@@ -755,8 +743,6 @@ input.choose_address_v2__inner_input {
   bottom: auto;
   margin-left: auto;
   margin-right: auto;
-  border-radius: 50%;
-  -webkit-border-radius: 50%;
   border: 5px solid #464646;
   height: 50%;
   -webkit-background-size: cover;
@@ -764,10 +750,6 @@ input.choose_address_v2__inner_input {
   -o-background-size: cover;
   background-size: cover;
   background-color: #AF6D6D; }
-
-.android .overall__loading_pusheen {
-  border-radius: 0;
-  -webkit-border-radius: 0; }
 
 @-webkit-keyframes pulsate_twitter_button {
   0% {
@@ -881,8 +863,6 @@ input.choose_address_v2__inner_input {
   right: 0;
   margin-right: auto;
   margin-left: auto;
-  border-radius: 50%;
-  -webkit-border-radius: 50%;
   border: 5px solid #464646;
   height: 50%;
   -webkit-background-size: cover;
@@ -892,10 +872,6 @@ input.choose_address_v2__inner_input {
   background-position: center center;
   background-repeat: no-repeat;
   background-color: #AF6D6D; }
-
-.android .swipe_page__loading_pusheen {
-  border-radius: 0;
-  -webkit-border-radius: 0; }
 
 .swipe_page__empty_stack {
   font-family: TitleFont;
@@ -964,13 +940,7 @@ a.download_the_app {
   bottom: 3%;
   left: 10%;
   background-size: contain;
-  border-radius: 50%;
-  -webkit-border-radius: 50%;
   border: 3px solid #6E6666; }
-
-.android .swipe_page__food_image {
-  border-radius: 0;
-  -webkit-border-radius: 0; }
 
 .swipe_page__food_text_container {
   top: 53%;
