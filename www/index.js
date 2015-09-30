@@ -61,9 +61,7 @@ var initAngularStuff = function() {
         console.log('Adding transaction ITEM!');
       },
     };
-    if ($('body').width() > 500) {
-      alert('This web app is EXPERIMENTAL! FoodMe works better on your phone so take it out and download the app!');
-    }
+    alert('Warning: this web app is a little rough around the edges. Download the mobile app for the best experience :)');
   }]);
 };
 
