@@ -61,6 +61,9 @@ var initAngularStuff = function() {
         console.log('Adding transaction ITEM!');
       },
     };
+    if ($('body').width() > 500) {
+      alert('FoodMe works better on your phone. Take it out and go to www.foodmelongtime.com.');
+    }
   }]);
 };
 

@@ -73,7 +73,6 @@ function($scope, $location, $http, fmaLocalStorage, fmaSharedState, $rootScope, 
   $scope.getStartedButtonPressed = function() {
     analytics.trackEvent('button', 'intro_screen__get_started_pressed');
 
-    console.log("Get started press!");
     $location.path('/choose_address_v2');
     return;
   };
@@ -113,18 +112,26 @@ function($scope, $location, $http, fmaLocalStorage, fmaSharedState, $rootScope, 
       var textObject = $('.intro_screen__overall_text_container');
       var backgroundObject = $('.intro_screen__upper_container');
 
-      element.on('touchstart', function(event) {
+      element.on('touchstart mousedown', function(event) {
         // Prevent default dragging of selected content
         event.preventDefault();
-        startX = event.originalEvent.touches[0].pageX;
+        if (event.originalEvent.touches == null) {
+          startX = event.pageX;
+        } else {
+          startX = event.originalEvent.touches[0].pageX;
+        }
         startingTextOffset = scope.textOffset;
         amountMoved = 0;
-        $document.on('touchmove', touchmove);
-        $document.on('touchend', touchend);
+        $document.on('touchmove mousemove', touchmove);
+        $document.on('touchend mouseup', touchend);
       });
 
       function touchmove(event) {
-        amountMoved = (event.originalEvent.touches[0].pageX - startX) / 2.0;
+        if (event.originalEvent.touches == null) {
+          amountMoved = (event.pageX - startX) / 2.0;
+        } else {
+          amountMoved = (event.originalEvent.touches[0].pageX - startX) / 2.0;
+        }
         scope.textOffset = (startingTextOffset + amountMoved);
         scope.textOffset =
             Math.max(scope.textOffset,
@@ -137,8 +144,8 @@ function($scope, $location, $http, fmaLocalStorage, fmaSharedState, $rootScope, 
       }
 
       function touchend() {
-        $document.off('touchmove', touchmove);
-        $document.off('touchend', touchend);
+        $document.off('touchmove mousemove', touchmove);
+        $document.off('touchend mouseend', touchend);
         // Compute the index of the screen we're going to snap to.
         var screenIndex = Math.floor(Math.abs(scope.textOffset) / scope.textWidth);
 
