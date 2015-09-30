@@ -326,10 +326,10 @@ $intro_screen__screenshot_height: (260 / 350) * $intro_screen__phone_height;
   font-size: 1.5rem;
   // Sigh.. increase the font-size a leetle bit on bigger screens.
   @media #{$iphone-5to6} {
-    font-size: 1.8rem;
+    font-size: 1.7rem;
   }
   @media #{$iphone-6plusandup} {
-    font-size: 2.3rem;
+    font-size: 2.0rem;
   }
 }
 
