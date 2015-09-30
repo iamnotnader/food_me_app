@@ -62,7 +62,7 @@ var initAngularStuff = function() {
       },
     };
     if ($('body').width() > 500) {
-      alert('FoodMe works better on your phone. Take it out and go to www.foodmelongtime.com.');
+      alert('This web app is EXPERIMENTAL! FoodMe works better on your phone so take it out and download the app!');
     }
   }]);
 };
