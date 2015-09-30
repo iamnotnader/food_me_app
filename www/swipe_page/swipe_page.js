@@ -403,8 +403,9 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $q, fmaStack
 
 // We position the badge with the number of items added to cart on
 // loading the screen. It's hard to do otherwise.
-// TODO(daddy): This is pretty shitty-- we actually use a timeout to wait
-// for everything to load before we move the little badge.
+// TODO(daddy): This is *incredibly* shitty-- we actually use a timeout to wait
+// for everything to load before we move the little badge. AND the positioning
+// is SO sketchy.
 .directive('swipePageCartImageOnLoad', ['$timeout', function($timeout) {
     return {
         restrict: 'A',
@@ -415,9 +416,12 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $q, fmaStack
                 var cartHeight = element.height();
                 var cartLeftOffset = element.offset().left;
                 var cartRightOffset = element.offset().top;
+                var mainViewOffset = $('#main_view_container').offset();
                 var badge = $('.swipe_page__num_items_in_cart_badge');
-                badge.css('top', cartRightOffset - badge.height()/2);
-                badge.css('left', cartLeftOffset + cartWidth - badge.width()/2);
+                badge.offset({
+                  top: cartRightOffset - badge.height()/2 - mainViewOffset.top,
+                  left: cartLeftOffset + cartWidth - badge.width()/2 - mainViewOffset.left
+                });
                 scope.showCartBadge = true;
               }, 1000);
             });
