@@ -61,7 +61,9 @@ var initAngularStuff = function() {
         console.log('Adding transaction ITEM!');
       },
     };
-    alert('Warning: this web app is a little rough around the edges. Download the mobile app for the best experience :)');
+    if ($('body').width() > 500) {
+      alert('Warning: this web app is a little rough around the edges-- like Kanye but you still love him. Download the mobile app for the best experience :)');
+    }
   }]);
 };
 
