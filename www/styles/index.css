@@ -113,15 +113,6 @@ body {
   /* offset vertical: half of image height and text area height */
   /* offset horizontal: half of text area width */ }
 
-/* Landscape layout (with min-width) */
-@media screen and (min-aspect-ratio: 1 / 1) and (min-width: 400px) {
-  .app {
-    background-position: left center;
-    padding: 75px 0px 75px 170px;
-    /* padding-top + padding-bottom + text area = image height */
-    margin: -90px 0px 0px -198px;
-    /* offset vertical: half of image height */
-    /* offset horizontal: half of image width and text area width */ } }
 h1 {
   font-size: 24px;
   font-weight: normal;
@@ -322,12 +313,6 @@ h1 {
   transform: translateY(-50%);
   -webkit-transform: translateY(-50%);
   font-size: 1.5rem; }
-  @media only screen and (min-device-width: 321px) and (max-device-width: 375px) and (min-device-height: 569px) and (max-device-height: 667px) and (orientation: portrait) and (-webkit-min-device-pixel-ratio: 2) {
-    .intro_screen__main_text {
-      font-size: 1.7rem; } }
-  @media only screen and (min-device-width: 376px) and (min-device-height: 569px) and (orientation: portrait) and (-webkit-min-device-pixel-ratio: 2) {
-    .intro_screen__main_text {
-      font-size: 2.0rem; } }
 
 .intro_screen__sign_in_button {
   display: block;
@@ -340,7 +325,8 @@ h1 {
   width: 90%;
   background-color: #3C5988;
   border-radius: 10px;
-  -webkit-box-shadow: 1px 3px 9px black; }
+  -webkit-box-shadow: 1px 3px 9px black;
+  box-shadow: 1px 3px 9px black; }
 
 .intro_screen__sign_in_button_text {
   color: white;
@@ -355,12 +341,6 @@ h1 {
   top: 50%;
   transform: translateY(-50%);
   -webkit-transform: translateY(-50%); }
-  @media only screen and (min-device-width: 321px) and (max-device-width: 375px) and (min-device-height: 569px) and (max-device-height: 667px) and (orientation: portrait) and (-webkit-min-device-pixel-ratio: 2) {
-    .intro_screen__sign_in_button_text {
-      font-size: 2.4rem; } }
-  @media only screen and (min-device-width: 376px) and (min-device-height: 569px) and (orientation: portrait) and (-webkit-min-device-pixel-ratio: 2) {
-    .intro_screen__sign_in_button_text {
-      font-size: 3rem; } }
 
 .intro_screen__attribution_text {
   position: absolute;
