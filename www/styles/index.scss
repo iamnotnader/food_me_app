@@ -44,7 +44,7 @@ body {
   text-transform:uppercase;
   width:100%;
   background:white;
-  overflow: hidden;
+  overflow: scroll;
   text-align: center;
 }
 
@@ -149,7 +149,7 @@ $iphone-6plusandup: "only screen
   max-width: 500px;
   max-height: 800px;
   position: relative;
-  overflow: scroll;
+  overflow: hidden;
   display: block;
   margin: 0 auto;
   top: 7%;
