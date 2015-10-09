@@ -5,7 +5,6 @@
 	};
 	objectVersion = 46;
 	objects = {
-
 /* Begin PBXBuildFile section */
 		06B758EAF2FA4B01821141ED /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 14BB879F8EA04ED597D24408 /* AudioToolbox.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		0A3CC021A9A74C8DB0D5839F /* CDVConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 008E1EBB65724FBBBCADC1CC /* CDVConnection.m */; };
@@ -730,7 +729,7 @@
 					"-ObjC",
 				);
 				PRODUCT_NAME = FoodMe;
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "0a6a1c2b-c144-4e70-97cb-461f89b87004";
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -773,7 +772,7 @@
 					"-ObjC",
 				);
 				PRODUCT_NAME = FoodMe;
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "8fbe6728-90f7-43ab-8bf4-b936cffacf6f";
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
