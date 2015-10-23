@@ -179,7 +179,7 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $q, fmaStack
         // If we succeed, share the actual screenshot.
         window.plugins.socialsharing.shareViaFacebook(
             'Think I just found my soulmate... #thanksfoodme',
-            path, 'http://www.foodme.io',
+            path, null,
             function() {console.log('share ok')},
             function(errormsg){ });
         analytics.trackEvent('swipe', 'swipe_page__facebook_share_success');
