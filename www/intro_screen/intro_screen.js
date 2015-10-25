@@ -1,12 +1,5 @@
 angular.module('foodMeApp.introScreen', ['ngRoute', 'ngTouch', 'foodmeApp.localStorage', 'foodmeApp.sharedState'])
 
-.config(['$routeProvider', function($routeProvider) {
-  $routeProvider.when('/intro_screen', {
-    templateUrl: 'intro_screen/intro_screen.html',
-    controller: 'IntroScreenCtrl'
-  });
-}])
-
 .controller('IntroScreenCtrl', ["$scope", "$location", "$http", "fmaLocalStorage", 'fmaSharedState', '$rootScope', '$timeout',
 function($scope, $location, $http, fmaLocalStorage, fmaSharedState, $rootScope, $timeout) {
   // If you want to test a specific page, comment this in and set testEnabled = true.

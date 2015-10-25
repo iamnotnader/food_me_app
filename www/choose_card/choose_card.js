@@ -1,13 +1,6 @@
 /*jshint eqnull: true */
 angular.module('foodMeApp.chooseCard', ['ngRoute', 'ngTouch', 'foodmeApp.localStorage', 'foodmeApp.sharedState', 'foodmeApp.cartHelper'])
 
-.config(['$routeProvider', function($routeProvider) {
-  $routeProvider.when('/choose_card', {
-    templateUrl: 'choose_card/choose_card.html',
-    controller: 'ChooseCardCtrl'
-  });
-}])
-
 .controller('ChooseCardCtrl', ["$scope", "$location", "fmaLocalStorage", "$http", "fmaSharedState", "$rootScope", "$timeout", "$q", "$route", "fmaCartHelper",
 function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, $timeout, $q, $route, fmaCartHelper) {
   var mainViewObj = $('#main_view_container');

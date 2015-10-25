@@ -2,13 +2,6 @@
 
 angular.module('foodMeApp.addCard', ['ngRoute', 'ngTouch', 'foodmeApp.localStorage', 'foodmeApp.sharedState'])
 
-.config(['$routeProvider', function($routeProvider) {
-  $routeProvider.when('/add_card', {
-    templateUrl: 'add_card/add_card.html',
-    controller: 'AddCardCtrl'
-  });
-}])
-
 .controller('AddCardCtrl', ["$scope", "$location", "fmaLocalStorage", "$http", "fmaSharedState",
 function($scope, $location, fmaLocalStorage, $http, fmaSharedState) {
   var mainViewObj = $('#main_view_container');

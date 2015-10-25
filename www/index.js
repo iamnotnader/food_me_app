@@ -23,13 +23,14 @@ var initAngularStuff = function() {
   // Declare app level module which depends on views, and components
   console.log('Engaging angular.');
   angular.module('foodMeApp', [
-    'ngRoute',
     'ngAnimate',
+    'ui.router',
     'ngIOS9UIWebViewPatch',
-    'foodMeApp.dummyAppScreen',
     'foodMeApp.introScreen',
-    'foodMeApp.chooseCuisine',
+    'foodMeApp.homePage',
     'foodMeApp.swipePage',
+    'foodMeApp.searchPage',
+    'foodMeApp.recentOrdersPage',
     'foodMeApp.cartPage',
     'foodMeApp.chooseCard',
     'foodmeApp.sharedState',
@@ -37,10 +38,61 @@ var initAngularStuff = function() {
     'foodMeApp.accountsPage',
     'foodMeApp.addCard',
   ]).
-  config(['$routeProvider',
-      function($routeProvider) {
-    $routeProvider
-      .otherwise({redirectTo: '/intro_screen'});
+  config(['$stateProvider', '$urlRouterProvider',
+      function($stateProvider, $urlRouterProvider) {
+    $urlRouterProvider
+      .otherwise('/intro_screen');
+    $stateProvider
+      .state('intro_screen', {
+          url: '/intro_screen',
+          templateUrl: 'intro_screen/intro_screen.html',
+          controller: 'IntroScreenCtrl'
+      })
+      .state('accounts_page', {
+          url: '/accounts_page',
+          templateUrl: 'accounts_page/accounts_page.html',
+          controller: 'AccountsPageCtrl'
+      })
+      .state('add_card', {
+          url: '/add_card',
+          templateUrl: 'add_card/add_card.html',
+          controller: 'AddCardCtrl'
+      })
+      .state('cart_page', {
+          url: '/cart_page',
+          templateUrl: 'cart_page/cart_page.html',
+          controller: 'CartPageCtrl'
+      })
+      .state('choose_address_v2', {
+          url: '/choose_address_v2',
+          templateUrl: 'choose_address_v2/choose_address_v2.html',
+          controller: 'ChooseAddressV2Ctrl'
+      })
+      .state('home_page', {
+          url: '/home_page',
+          templateUrl: 'home_page/home_page_partial.html',
+          controller: 'HomePageCtrl'
+      })
+      .state('home_page.swipe_page', {
+          url: '/swipe_page',
+          templateUrl: 'home_page/swipe_page.html',
+          controller: 'SwipePageCtrl'
+      })
+      .state('home_page.search_page', {
+          url: '/search_page',
+          templateUrl: 'home_page/search_page.html',
+          controller: 'SearchPageCtrl'
+      })
+      .state('home_page.recent_orders', {
+          url: '/recent_orders',
+          templateUrl: 'home_page/recent_orders.html',
+          controller: 'RecentOrdersPageCtrl'
+      })
+      .state('choose_card', {
+          url: '/choose_card',
+          templateUrl: 'choose_card/choose_card.html',
+          controller: 'ChooseCardCtrl'
+      });
   }]).
   run(['$rootScope', 'fmaSharedState', function($rootScope, fmaSharedState) {
     ga_id = fmaSharedState.ga_id;

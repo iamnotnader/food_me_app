@@ -2,13 +2,6 @@
 
 angular.module('foodMeApp.accountsPage', ['ngRoute', 'ngTouch', 'foodmeApp.localStorage', 'foodmeApp.sharedState'])
 
-.config(['$routeProvider', function($routeProvider) {
-  $routeProvider.when('/accounts_page', {
-    templateUrl: 'accounts_page/accounts_page.html',
-    controller: 'AccountsPageCtrl'
-  });
-}])
-
 .controller('AccountsPageCtrl', ["$scope", "$location", "$http", "fmaLocalStorage", 'fmaSharedState', '$rootScope', '$timeout',
 function($scope, $location, $http, fmaLocalStorage, fmaSharedState, $rootScope, $timeout) {
   var mainViewObj = $('#main_view_container');
@@ -62,6 +55,7 @@ function($scope, $location, $http, fmaLocalStorage, fmaSharedState, $rootScope, 
         $scope.isLoading = false;
       },
       function(err) {
+        $scope.isLoading = false;
         alert('A bad thing happened when setting up your account. '+
               'This is really rare-- just do it again!');
       }

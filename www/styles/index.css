@@ -1212,6 +1212,15 @@ input.choose_address_v2__inner_input {
 .swipe_page__empty_stack.ng-enter.ng-enter-active {
   opacity: 1; }
 
+.swipe_page__bottom_bar {
+  position: absolute;
+  left: 0;
+  right: 0;
+  background-color: #FFB2B2;
+  bottom: 0;
+  top: 95%;
+  width: 20%; }
+
 .fade-in-300ms.ng-enter {
   ms-transition: .3s ease-in-out;
   webkit-transition: .3s ease-in-out;

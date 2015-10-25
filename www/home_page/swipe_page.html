@@ -1,0 +1,61 @@
+<div class="swipe_page__overall_container">
+  <div class="swipe_page__top_text">
+    <div class="tweet_button__container">
+      <div ng-click="takeScreenshotAndShareTwitter()" class="tweet_button"></div>
+    </div>
+    <div class="facebook_button__container">
+      <div ng-click="takeScreenshotAndShareFacebook()" class="facebook_button"></div>
+    </div>
+    <div class="swipe_page__vertically_center" style="font-size: 1.5rem; width: 60%;">
+      {{funnyText}}
+    </div>
+  </div>
+  <div class="swipe_page__jtinder_container" ng-if="!isLoading">
+    <div id="tinderslide" class="swipe_page__tinderslide">
+        <ul>
+          <li class="pane1 fade-in-300ms" ng-repeat="foodInfo in joinedFoodInfo">
+            <img class="overall__attribution_img" src="img/powered_by_google.png">
+            <div class= "swipe_page__food_image_container">
+              <div class="swipe_page__food_image" fma-back-img="{{foodInfo.imagesToShow.urls[0]}}">
+              </div>
+            </div>
+            <div class="like"></div>
+            <div class="dislike"></div>
+
+            <div class="swipe_page__food_text_container">
+              <div class="swipe_page__price">${{foodInfo.foodData.price}}</div>
+              <div class="swipe_page__food_name">{{foodInfo.foodData.name}}</div>
+              <div style="margin-bottom: -0.6rem;">from</div>
+              <div class="swipe_page__restaurant_name">{{foodInfo.foodData.merchantName}}</div>
+              <div class="swipe_page__top_description_bar"></div>
+              <div class="swipe_page__description_container">
+                <div class="swipe_page__scroller">
+                  <div>{{foodInfo.foodData.description}}</div>
+                  <div>{{foodInfo.foodData.merchantDescription}}</div>
+                </div>
+              </div>
+              <div class="swipe_page__bottom_description_bar"></div>
+            </div>
+          </li>
+        </ul>
+    </div>
+
+    <div class="swipe_page__empty_stack fade-in-slow" ng-if="foodData.length === foodDataCursor">
+      Tap Burgie below to refresh or change your search by tapping the magnifying glass.
+    </div>
+    <div class="swipe_page__loading_pusheen fade-in-300ms fade-out-300ms" alt="" ng-if="(allImageLinks.length - foodDataCursor <= 0) && (foodDataCursor !== foodData.length)">
+    </div>
+  </div>
+
+  <div ng-if="isLoading" class="swipe_page__loading_container">
+    <div class="overall__loading_container">
+      <div class="overall__loading_widget_background"></div>
+      <div class="overall__loading_widget">Refreshing!</div>
+      <div class="overall__loading_pusheen">
+      </div>
+      <div class="overall__loading_long_time">
+        (takes a while sorry..)
+      </div>
+    </div>
+  </div>
+</div>

@@ -94,6 +94,8 @@ angular.module('foodmeApp.sharedState', [])
     recentAddressesToKeep: 5,
     recentOrdersToKeep: 10,
 
+    bottomBarAnimateMS: 200,
+
     merchantCuisineFilterRegex: /deli/i,
     merchantNameFilterRegex: /corner grocers/i,
     dishNameFilterRegexes: [
@@ -165,6 +167,7 @@ angular.module('foodmeApp.sharedState', [])
       {pattern: /.*navajo.*/ig, replacement: ''},
       {pattern: /.*malibu.*/ig, replacement: ''},
       {pattern: /.*red.*mist.*/ig, replacement: ''},
+      {pattern: /.*[a-z]ty.*/ig, replacement: ''},
     ],
 
     // This is how we get commissions. It is the "You hear about us" ID from delivery.com.
@@ -205,7 +208,6 @@ angular.module('foodmeApp.sharedState', [])
     stateObj.testing_invalidation_seconds = 60 * 60;
     stateObj.uhau_id = null;
   }
-  //stateObj.fake_token = 'ybw0hFK4IrFDP1bzYxsUJMa5gdN6sgkuJ9S8Y6nA';
 
   return stateObj;
 }]);

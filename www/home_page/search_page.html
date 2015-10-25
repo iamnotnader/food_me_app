@@ -1,0 +1,19 @@
+<div class="swipe_page__overall_container">
+  <div class="swipe_page__top_text">
+    <div class="swipe_page__vertically_center" style="font-size: 1.5rem; width: 60%;">
+      Keyword search
+    </div>
+  </div>
+  <div class="choose_address_v2__text_container">
+    <!--Got rid of this; consider putting it back. ng-focus="geolocate()"-->
+    <input ng-change="keywordDidChange()" class="choose_address_v2__inner_input" type="search" ng-model="searchQuery.query" placeholder="E.g. chicken, japanese, domino's..." ng-trim="false">
+    <div class="choose_address_v2__clear_text_container" ng-if="searchQuery.query.length > 0" ng-click="clearTextPressed()">
+      <div class="choose_address_v2__clear_text"></div>
+    </div>
+  </div>
+  <div class="swipe_page__empty_stack"
+      ng-click="executeSearchPressed()"
+      style="top: 25%; width: 90%; margin: 0 auto; left: 0; right: 0; background-color: #9F9FEA; border-radius: 6px; box-shadow: 1px 2px 4px 0px;">
+    search!
+  </div>
+</div>

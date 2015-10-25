@@ -39,7 +39,7 @@
     <body>
         <!--TODO(daddy): One view for now but we will probably want to use UIRouter-->
         <div id="main_view_container">
-          <div ng-view class="main_view"></div>
+          <div ui-view class="main_view"></div>
         </div>
         <!--Angular stuff.-->
         <script src="bower_components/jquery/dist/jquery.js"></script>
@@ -53,6 +53,7 @@
         <script src="bower_components/underscore/underscore.js"></script>
         <script src="bower_components/jquery.cookie/jquery.cookie.js"></script>
         <script src="bower_components/he/he.js"></script>
+        <script src="bower_components/angular-ui-router/release/angular-ui-router.js"></script> 
         <script src="https://www.google.com/jsapi"></script>
         <script src="third_party/ios9_patch.js"></script>
         <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?libraries=places"></script>
@@ -67,10 +68,11 @@
         <script type="text/javascript" src="services/stack_helper.js"></script>
         <script type="text/javascript" src="services/shared_state.js"></script>
         <script type="text/javascript" src="services/localstorage.js"></script>
-        <script type="text/javascript" src="dummy_app_screen/dummy_app_screen.js"></script>
         <script type="text/javascript" src="intro_screen/intro_screen.js"></script>
-        <script type="text/javascript" src="choose_cuisine/choose_cuisine.js"></script>
-        <script type="text/javascript" src="swipe_page/swipe_page.js"></script>
+        <script type="text/javascript" src="home_page/home_page.js"></script>
+        <script type="text/javascript" src="home_page/swipe_page.js"></script>
+        <script type="text/javascript" src="home_page/search_page.js"></script>
+        <script type="text/javascript" src="home_page/recent_orders.js"></script>
         <script type="text/javascript" src="cart_page/cart_helper.js"></script>
         <script type="text/javascript" src="cart_page/cart_page.js"></script>
         <script type="text/javascript" src="choose_card/choose_card.js"></script>

@@ -2,13 +2,6 @@
 
 angular.module('foodMeApp.cartPage', ['ngRoute', 'ngTouch', 'foodmeApp.localStorage', 'foodmeApp.sharedState', 'foodMeApp.stackHelper'])
 
-.config(['$routeProvider', function($routeProvider) {
-  $routeProvider.when('/cart_page', {
-    templateUrl: 'cart_page/cart_page.html',
-    controller: 'CartPageCtrl'
-  });
-}])
-
 .controller('CartPageCtrl', ["$scope", "$location", "fmaLocalStorage", "$http", "fmaSharedState", "$q", "fmaStackHelper", "$timeout", "fmaCartHelper", 
 function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $q, fmaStackHelper, $timeout, fmaCartHelper) {
   var mainViewObj = $('#main_view_container');
@@ -146,7 +139,7 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $q, fmaStack
         fmaSharedState.testing_invalidation_seconds);
     mainViewObj.removeClass();
     mainViewObj.addClass('slide-right');
-    $location.path('/swipe_page');
+    $location.path('/home_page/swipe_page');
   };
 
   $scope.cartFinishButtonPressed = function() {

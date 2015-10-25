@@ -1,18 +1,13 @@
 /* jshint eqnull: true */
 
-angular.module('foodMeApp.swipePage', ['ngRoute', 'ngTouch', 'foodmeApp.localStorage', 'foodmeApp.sharedState', 'foodMeApp.stackHelper'])
+angular.module('foodMeApp.homePage', ['ngRoute', 'ngTouch', 'foodmeApp.localStorage', 'foodmeApp.sharedState', 'foodMeApp.stackHelper'])
 
-.config(['$routeProvider', function($routeProvider) {
-  $routeProvider.when('/swipe_page', {
-    templateUrl: 'swipe_page/swipe_page.html',
-    controller: 'SwipePageCtrl'
-  });
-}])
-
-.controller('SwipePageCtrl', ["$scope", "$location", "fmaLocalStorage", "$http", "fmaSharedState", "$q", "fmaStackHelper", "$timeout", "$interval",
+.controller('HomePageCtrl', ["$scope", "$location", "fmaLocalStorage", "$http", "fmaSharedState", "$q", "fmaStackHelper", "$timeout", "$interval",
 function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $q, fmaStackHelper, $timeout, $interval) {
   // We attach classes to this to make transitions smooth.
   var mainViewObj = $('#main_view_container');
+
+  $scope.location = $location;
 
   // For this page, an address, and some chosen restaurant types. If we
   // are missing any of these, then we redirect to the proper page to get them.
@@ -27,21 +22,6 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $q, fmaStack
   }
   $scope.userAddress = fmaLocalStorage.getObject('userAddress');
   // If we get here, we have an address, and some chosen restaurant types.
-
-  var setSwipePage = function(pageId, shouldReload) {
-    $scope.current_page = pageId;
-    fmaLocalStorage.setObjectWithExpirationSeconds(
-        'currentSwipePage', pageId,
-        fmaSharedState.testing_invalidation_seconds);
-    if (shouldReload) {
-      $scope.initEverything();
-    }
-  }
-  $scope.current_page = fmaLocalStorage.getObject('currentSwipePage');
-  if ($scope.current_page == null) {
-    $scope.current_page = 'main_swipe_page_tab';
-  }
-
   $scope.allFunnyTexts = [
     'Have a one-night ham.',
     'Have a pea-some.',
@@ -50,7 +30,7 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $q, fmaStack
   $scope.funnyText = $scope.allFunnyTexts[
       Math.floor(Math.random() * $scope.allFunnyTexts.length)];
 
-  analytics.trackView('/swipe_page');
+  analytics.trackView('home_page');
 
   // If this is the first time loading the swipe page, tell the user that
   // their order includes tax and tip.
@@ -73,17 +53,13 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $q, fmaStack
   $scope.refreshButtonPressed = function() {
     analytics.trackEvent('nav', 'swipe_page__refresh_pressed');
 
-    if ($scope.current_page === 'search_swipe_page_tab' ||
-        $scope.current_page === 'main_swipe_page_tab') {
-      setSwipePage('main_swipe_page_tab', true);
-    } else {
-      setSwipePage('main_swipe_page_tab', false);
-    }
-
     console.log('refresh pressed.');
     fmaLocalStorage.setObjectWithExpirationSeconds(
         'foodData', null,
         fmaSharedState.testing_invalidation_seconds);
+    $('.swipe_page__bottom_bar').animate({ left: '40%'}, fmaSharedState.bottomBarAnimateMS);
+    $scope.initEverything();
+    $location.path('/home_page/swipe_page');
   };
 
   $scope.backButtonPressed = function() {
@@ -95,30 +71,16 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $q, fmaStack
     $location.path('/choose_address_v2');
   };
 
-  // Stuff for the search page.
+  // Stuff for the search.
   $scope.searchQuery = fmaLocalStorage.getObject('searchQuery');
   if ($scope.searchQuery == null) {
     $scope.searchQuery = {query: ''};
   }
   $scope.searchButtonPressed = function() {
-    setSwipePage('search_swipe_page_tab', false);
     analytics.trackEvent('nav', 'swipe_page__back_pressed');
+    $('.swipe_page__bottom_bar').animate({ left: '20%'}, fmaSharedState.bottomBarAnimateMS);
+    $location.path('/home_page/search_page');
   };
-  $scope.keywordDidChange = function() {
-    fmaLocalStorage.setObjectWithExpirationSeconds(
-        'searchQuery', $scope.searchQuery,
-        fmaSharedState.testing_invalidation_seconds);
-  };
-  $scope.clearTextPressed = function() {
-    $('.choose_address_v2__inner_input').val('');
-    $scope.searchQuery = {query: ''};
-    fmaLocalStorage.setObjectWithExpirationSeconds(
-        'searchQuery', $scope.searchQuery,
-        fmaSharedState.testing_invalidation_seconds);
-  }
-  $scope.executeSearchPressed = function() {
-    $scope.refreshButtonPressed();
-  }
 
   // Stuff for the recent orders page.
   $scope.recentOrders = fmaLocalStorage.getObject('recentOrders');
@@ -127,18 +89,9 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $q, fmaStack
   }
   $scope.recentOrdersButtonPressed = function() {
     analytics.trackEvent('nav', 'swipe_page__recent_orders_pressed');
-    setSwipePage('recent_orders_swipe_page_tab', false);
+    $('.swipe_page__bottom_bar').animate({ left: '60%'}, fmaSharedState.bottomBarAnimateMS);
+    $location.path('/home_page/recent_orders');
   };
-  $scope.addRecentOrderToCart = function(index) {
-    // Add the recent order to the cart.
-    $scope.userCart.push($scope.recentOrders[index]);
-    $scope.userCart = _.uniq($scope.userCart, function(item) {
-      return item.unique_key;
-    });
-    fmaLocalStorage.setObjectWithExpirationSeconds(
-        'userCart', $scope.userCart,
-        fmaSharedState.testing_invalidation_seconds);
-  }
 
   // Rest of the stuff.
   $scope.cartButtonPressed = function() {
@@ -169,7 +122,7 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $q, fmaStack
         analytics.trackEvent('swipe', 'swipe_page__tweet_share_error');
       }
     );
-  }
+  };
 
   $scope.takeScreenshotAndShareFacebook = function() {
     console.log('take screenshot and share.');
@@ -194,7 +147,7 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $q, fmaStack
         analytics.trackEvent('swipe', 'swipe_page__facebook_share_error');
       }
     );
-  }
+  };
 
   $scope.numPicsInStack = 3;
   $scope.numMerchantsToFetch = fmaSharedState.numMerchantsToFetch;

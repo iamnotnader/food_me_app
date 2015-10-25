@@ -1,12 +1,5 @@
 angular.module('foodMeApp.chooseAddressV2', ['ngRoute', 'ngTouch', 'foodmeApp.localStorage', 'foodmeApp.sharedState'])
 
-.config(['$routeProvider', function($routeProvider) {
-  $routeProvider.when('/choose_address_v2', {
-    templateUrl: 'choose_address_v2/choose_address_v2.html',
-    controller: 'ChooseAddressV2Ctrl'
-  });
-}])
-
 .controller('ChooseAddressV2Ctrl', ["$scope", "$location", "fmaLocalStorage", "$http", "fmaSharedState", "$rootScope", "$timeout",
 function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, $timeout) {
   var mainViewObj = $('#main_view_container');
@@ -22,7 +15,10 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
   }
 
   var addressObjFromGoogleFormattedAddress = function(formatted_address) {
-    components = formatted_address.split(',')
+    if (formatted_address == null) {
+      alert("Hmm.. that address is messed up! Try again...");
+    }
+    components = formatted_address.split(',');
     if (components.length < 4 || components[2].split(' ').length < 3) {
       return null;
     }
@@ -35,7 +31,7 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
       phone: null,
       unit_number: null,
     };
-  }
+  };
 
   $scope.userAddress = null;
   function initAutocomplete() {
@@ -65,8 +61,8 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
       return;
     }
 
-    var addressAsString = fmaSharedState.addressToString(parsedAddressObj)
-    $('#choose_address_v2__autocomplete').val(addressAsString)
+    var addressAsString = fmaSharedState.addressToString(parsedAddressObj);
+    $('#choose_address_v2__autocomplete').val(addressAsString);
     $scope.$apply(function() {
       $scope.query = addressAsString;
       $scope.selectedLocationIndex = { value: null };
@@ -77,7 +73,7 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
   $scope.addressDidChange = function() {
     // Null out the location index whenever the address changes.
     $scope.selectedLocationIndex = { value: null };
-  }
+  };
 
   $scope.clearTextPressed = function() {
     $('#choose_address_v2__autocomplete').val('');
@@ -91,7 +87,7 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
     $scope.selectedLocationIndex.value = addressIndex;
     $scope.userAddress = $scope.recentAddresses[addressIndex];
     $scope.query = fmaSharedState.addressToString($scope.userAddress);
-  }
+  };
   if ($scope.recentAddresses.length > 0) {
     $scope.cellSelected(0);
   }
@@ -134,7 +130,7 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
 
     // Add the address to the recent addresses.
     $scope.recentAddresses = _.filter($scope.recentAddresses, function(item) {
-      return fmaSharedState.addressToString(item) !== fmaSharedState.addressToString($scope.userAddress)
+      return fmaSharedState.addressToString(item) !== fmaSharedState.addressToString($scope.userAddress);
     });
     $scope.recentAddresses = [$scope.userAddress,].concat($scope.recentAddresses.slice(0, fmaSharedState.recentAddressesToKeep-1));
     fmaLocalStorage.setObjectWithExpirationSeconds(
@@ -147,7 +143,7 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
 
     mainViewObj.removeClass();
     mainViewObj.addClass('slide-left');
-    $location.path('/swipe_page');
+    $location.path('/home_page/swipe_page');
     return;
   };
 

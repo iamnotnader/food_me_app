@@ -1,0 +1,29 @@
+<div ui-view></div>
+<div class="swipe_page__bottom_menu">
+  <div ng-click="backButtonPressed()" class="swipe_page__bottom_button">
+    <img style="height: 100%;" class="swipe_page__vertically_center" src="img/back.png" alt="">
+  </div>
+  <div ng-click="searchButtonPressed()" class="swipe_page__bottom_button">
+    <img style="height: 100%;" class="swipe_page__vertically_center" src="img/search.png" alt="" ng-if="searchQuery.query == ''">
+    <img style="height: 100%;" class="swipe_page__vertically_center" src="img/active_search.png" alt="" ng-if="searchQuery.query != ''">
+  </div>
+  <div ng-click="refreshButtonPressed()" class="swipe_page__bottom_button">
+    <img style="height: 130%;" class="swipe_page__vertically_center" src="img/active_burgie.png" alt="">
+  </div>
+  <div ng-click="recentOrdersButtonPressed()" class="swipe_page__bottom_button">
+    <img style="height: 100%;" class="swipe_page__vertically_center" src="img/recent.png" alt="">
+  </div>
+  <div ng-click="cartButtonPressed()" class="swipe_page__bottom_button">
+    <!--We use the onload method to set the little badge-->
+    <img swipe-page-cart-image-on-load style="height: 100%;" class="swipe_page__vertically_center" src="img/cart.png" alt="">
+  </div>
+  <div class="swipe_page__bottom_bar" style="left: 40%"></div>
+</div>
+
+
+<!--This gets positioned by javascript in the swipe-page-cart-image-on-load function.-->
+<!--Not ideal, but oh well.-->
+<div class="swipe_page__num_items_in_cart_badge" ng-show="userCart.length > 0 && showCartBadge">
+  <div class="swipe_page__num_items_in_cart_text swipe_page__vertically_center">{{userCart.length}}</div>
+</div>
+
