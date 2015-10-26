@@ -15,7 +15,7 @@ function($scope, $location, $http, fmaLocalStorage, fmaSharedState, $rootScope, 
   if ($scope.accountsList == null) {
     $scope.accountsList = [];
   }
-  $.removeCookie('userAuthToken')
+  $.removeCookie('userAuthToken');
   $scope.selectedAccountIndex = { value: null };
 
   var updateAccountsList = function(full_token) {

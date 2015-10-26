@@ -193,6 +193,9 @@ angular.module('foodmeApp.sharedState', [])
     fake_token: null,
 
   };
+  // iamnotnader+fakeacct3@gmail.com
+  // !Nader2009
+  //stateObj.fake_token = 'XgMhZngTRqajbu6JOtN76qQPTN39s8nwygAaBTTU';
 
   // The variables below are set strictly for testing purposes.
   if (testModeEnabled) {
@@ -207,6 +210,7 @@ angular.module('foodmeApp.sharedState', [])
     // Testing
     stateObj.testing_invalidation_seconds = 60 * 60;
     stateObj.uhau_id = null;
+    stateObj.fake_token = '2fYU4vcSnuPBHocN3Xw2BYy8NEoK61wp2ma7fKEl';
   }
 
   return stateObj;

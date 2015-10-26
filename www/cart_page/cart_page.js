@@ -117,17 +117,6 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $q, fmaStack
     return false;
   };
 
-  // If the user has items from more than one merchant, inform them that their
-  // delivery times might be staggered.
-  if (hasMoreThanOneMerchant($scope.userCart)) {
-    console.log('More than one merchant detected.');
-    alert("Looks like you're ordering from more than one merchant. This won't " +
-          "affect the price at all, but keep in mind that you might receive " +
-          "your items at slightly different times.");
-  } else {
-    console.log('Ordering from the same merchant.');
-  }
-
   // A little more setup.
   $scope.cartBackButtonPressed = function() {
     analytics.trackEvent('nav', 'cart_page__back_pressed');
@@ -155,6 +144,17 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $q, fmaStack
     fmaLocalStorage.setObjectWithExpirationSeconds(
         'userCart', $scope.userCart,
         fmaSharedState.testing_invalidation_seconds);
+
+    // If the user has items from more than one merchant, inform them that their
+    // delivery times might be staggered.
+    if (hasMoreThanOneMerchant($scope.userCart)) {
+      console.log('More than one merchant detected.');
+      alert("Looks like you're ordering from more than one merchant. This won't " +
+            "affect the price at all, but keep in mind that you might receive " +
+            "your items at slightly different times.");
+    } else {
+      console.log('Ordering from the same merchant.');
+    }
 
     console.log('Back button pressed.');
     mainViewObj.removeClass();

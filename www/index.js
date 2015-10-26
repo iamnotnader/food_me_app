@@ -37,6 +37,7 @@ var initAngularStuff = function() {
     'foodMeApp.chooseAddressV2',
     'foodMeApp.accountsPage',
     'foodMeApp.addCard',
+    'foodMeApp.addPhone',
   ]).
   config(['$stateProvider', '$urlRouterProvider',
       function($stateProvider, $urlRouterProvider) {
@@ -92,6 +93,11 @@ var initAngularStuff = function() {
           url: '/choose_card',
           templateUrl: 'choose_card/choose_card.html',
           controller: 'ChooseCardCtrl'
+      })
+      .state('add_phone', {
+          url: '/add_phone',
+          templateUrl: 'add_phone/add_phone.html',
+          controller: 'AddPhoneCtrl'
       });
   }]).
   run(['$rootScope', 'fmaSharedState', function($rootScope, fmaSharedState) {
