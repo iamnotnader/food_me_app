@@ -92,73 +92,47 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
     });
   };
 
-  var cartSuccessHelper = function(resolve, reject, merchantIds, cardSelected, merchantIndex, merchantId) {
-    console.log('Checking out for merchant id: ' + merchantId);
-    var dataObj = {
-      tip: fmaSharedState.tipAmount,
-      location_id: $scope.userAddress.location_id,
-      uhau_id: fmaSharedState.uhau_id,
-      instructions: "Tell people to download the FoodMe app and you'll get more orders!",
-      payments: [{
-        type: "credit_card",
-        id: cardSelected.cc_id,
-      }],
-      order_type: "delivery",
-      order_time: 'ASAP',
-    };
-    $http({
-      method: 'POST',
-      url: fmaSharedState.endpoint + '/customer/cart/'+merchantId+'/checkout?client_id=' + fmaSharedState.client_id,
-      data: dataObj,
-      headers: {
-        "Authorization": $scope.rawAccessToken,
-        "Content-Type": "application/json",
-      }
-    }).then(
-      function(res) {
-        checkoutEachMerchantSequentially(merchantIds, cardSelected, merchantIndex + 1)
-        .then(
-          function(res) {
-            return resolve(res);
-          },
-          function(err) {
-            return reject(err);
-          }
-        );
-      },
-      function(err) {
-        return reject(err);
-      }
-    );
-  };
-
   var checkoutEachMerchantSequentially = function(merchantIds, cardSelected, merchantIndex) {
     return $q(function(resolve, reject) {
       if (merchantIds.length === merchantIndex) {
-        return resolve('Phew! We made it!');
+        resolve('Phew! We made it!');
       }
-      // Sigh.. before we checkout for a merchant we need to re-add everything
-      // to the cart because shitty delivery.com clears the cart every time.
       var merchantId = merchantIds[merchantIndex];
-      fmaCartHelper.clearCartThenUpdateCartPromise($scope.userCart, $scope.rawAccessToken, merchantId)
-      .then(
-        function(newCartItems) {
-          applyDealCodePromise($scope.missingAddressData.promoCode, merchantId)
+      console.log('Checking out for merchant id: ' + merchantId);
+      var dataObj = {
+        tip: fmaSharedState.tipAmount,
+        location_id: $scope.userAddress.location_id,
+        uhau_id: fmaSharedState.uhau_id,
+        instructions: "Tell people to download the FoodMe app and you'll get more orders!",
+        payments: [{
+          type: "credit_card",
+          id: cardSelected.cc_id,
+        }],
+        order_type: "delivery",
+        order_time: 'ASAP',
+      };
+      $http({
+        method: 'POST',
+        url: fmaSharedState.endpoint + '/customer/cart/'+merchantId+'/checkout?client_id=' + fmaSharedState.client_id,
+        data: dataObj,
+        headers: {
+          "Authorization": $scope.rawAccessToken,
+          "Content-Type": "application/json",
+        }
+      }).then(
+        function(res) {
+          checkoutEachMerchantSequentially(merchantIds, cardSelected, merchantIndex + 1)
           .then(
             function(res) {
-              debugger;
-              cartSuccessHelper(resolve, reject, merchantIds, cardSelected, merchantIndex, merchantId);
+              resolve(res);
             },
             function(err) {
-              debugger;
-              cartSuccessHelper(resolve, reject, merchantIds, cardSelected, merchantIndex, merchantId);
+              reject(err);
             }
           );
         },
-        function(newCartItems) {
-          reject({data: {message: [{user_msg: 'Doh! Some of the merchants ' +
-              'selling the items in your cart just closed. Just go back and ' +
-              'add some more things-- this happens rarely, I promise!'}]}});
+        function(err) {
+          reject(err);
         }
       );
     });
@@ -417,33 +391,39 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
         console.log('Successfully added address.');
 
         // First try the promo code.
-        if ($scope.missingAddressData.promoCode != null &&
-            $scope.missingAddressData.promoCode.length > 0) {
-          applyDealCodePromise($scope.missingAddressData.promoCode,
-              $scope.userCart[0].merchantId)
-          .then(
-            function(res) {
-              // Alert on and factor in the discount.
-              $scope.cardsLoading = false;
-              $scope.deal = res.data.deal;
-              if ($scope.deal == null || $scope.deal.reward == null) {
-                alert('Oh no! Your deal didn\'t work :( Try a different code!');
-                return;
-              }
-              doAllCheckoutThings();
-              return;
-            },
-            function(err) {
-              // Discount didn't work so don't checkout.
-              $scope.cardsLoading = false;
-              alert('Oh no! Your deal didn\'t work :( Try a different code?');
+        var checkForCartItemsInterval;
+        checkForCartItemsInterval = setInterval(function() {
+          if ($scope.doneAddingCartItems) {
+            clearInterval(checkForCartItemsInterval);
+            if ($scope.missingAddressData.promoCode != null &&
+                $scope.missingAddressData.promoCode.length > 0) {
+              applyDealCodePromise($scope.missingAddressData.promoCode,
+                  $scope.userCart[0].merchantId)
+              .then(
+                function(res) {
+                  // Alert on and factor in the discount.
+                  $scope.cardsLoading = false;
+                  $scope.deal = res.data.deal;
+                  if ($scope.deal == null || $scope.deal.reward == null) {
+                    alert('Oh no! Your deal didn\'t work :( Try a different code!');
+                    return;
+                  }
+                  doAllCheckoutThings();
+                  return;
+                },
+                function(err) {
+                  // Discount didn't work so don't checkout.
+                  $scope.cardsLoading = false;
+                  alert('Oh no! Your deal didn\'t work :( Try a different code?');
+                  return;
+                }
+              );
               return;
             }
-          );
-          return;
-        }
-        $scope.cardsLoading = false;
-        doAllCheckoutThings();
+            $scope.cardsLoading = false;
+            doAllCheckoutThings();
+          }
+        }, 100);
 
         return;
       },
@@ -462,4 +442,35 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
         return;
     });
   };
+
+  var initEverything = function() {
+    $scope.doneAddingCartItems = false;
+
+    // Sigh.. before we checkout for a merchant we need to re-add everything
+    // to the cart because shitty delivery.com clears the cart every time.
+    console.log('Adding items to cart.');
+    fmaCartHelper.clearCartThenUpdateCartPromise($scope.userCart,
+        $scope.rawAccessToken,
+        $scope.userCart[0].merchantId)
+    .then(
+      function(newCartItems) {
+        console.log('Items added.');
+        $scope.doneAddingCartItems = true;
+        return;
+      },
+      function(newCartItems) {
+        // If adding to cart fails, 
+        alert('Doh! Some of the merchants ' +
+          'selling the items in your cart just closed. Just go back and ' +
+          'add some more things-- this happens rarely, I promise!');
+        // Go back to the address page.
+        mainViewObj.removeClass();
+        mainViewObj.addClass('slide-right');
+        $location.path('/choose_address_v2');
+        return;
+      }
+    );
+  };
+
+  initEverything();
 }]);

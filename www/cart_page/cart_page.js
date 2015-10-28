@@ -149,9 +149,9 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $q, fmaStack
     // delivery times might be staggered.
     if (hasMoreThanOneMerchant($scope.userCart)) {
       console.log('More than one merchant detected.');
-      alert("Looks like you're ordering from more than one merchant. This won't " +
-            "affect the price at all, but keep in mind that you might receive " +
-            "your items at slightly different times.");
+      alert("Oh no! We only support odering from one merchant at a time right now. "+
+            "You'll have to go back and remove a few items :(");
+      return;
     } else {
       console.log('Ordering from the same merchant.');
     }
