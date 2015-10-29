@@ -135,7 +135,7 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
   var checkoutEachMerchantSequentially = function(merchantIds, cardSelected, merchantIndex) {
     return $q(function(resolve, reject) {
       if (merchantIds.length === merchantIndex) {
-        return resolve('Phew! We made it!');
+        resolve('Phew! We made it!');
       }
       // Sigh.. before we checkout for a merchant we need to re-add everything
       // to the cart because shitty delivery.com clears the cart every time.
