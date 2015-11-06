@@ -169,6 +169,7 @@ angular.module('foodmeApp.sharedState', [])
       {pattern: /.*red.*mist.*/ig, replacement: ''},
       {pattern: /.*[a-z]ty.*/ig, replacement: ''},
       {pattern: /.*combination.*/ig, replacement: ''},
+      {pattern: /.*diesel.*/ig, replacement: ''},
     ],
 
     // This is how we get commissions. It is the "You hear about us" ID from delivery.com.
@@ -211,7 +212,7 @@ angular.module('foodmeApp.sharedState', [])
     // Testing
     stateObj.testing_invalidation_seconds = 60 * 60;
     stateObj.uhau_id = null;
-    stateObj.fake_token = '2fYU4vcSnuPBHocN3Xw2BYy8NEoK61wp2ma7fKEl';
+    stateObj.fake_token = 'MLxqlMe2bPeTEkj40zVU4iquqmkGJszB8oUp3nTY';
   }
 
   return stateObj;

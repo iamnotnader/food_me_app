@@ -92,46 +92,6 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
     });
   };
 
-  var cartSuccessHelper = function(resolve, reject, merchantIds, cardSelected, merchantIndex, merchantId) {
-    console.log('Checking out for merchant id: ' + merchantId);
-    var dataObj = {
-      tip: fmaSharedState.tipAmount,
-      location_id: $scope.userAddress.location_id,
-      uhau_id: fmaSharedState.uhau_id,
-      instructions: "Tell people to download the FoodMe app and you'll get more orders!",
-      payments: [{
-        type: "credit_card",
-        id: cardSelected.cc_id,
-      }],
-      order_type: "delivery",
-      order_time: 'ASAP',
-    };
-    $http({
-      method: 'POST',
-      url: fmaSharedState.endpoint + '/customer/cart/'+merchantId+'/checkout?client_id=' + fmaSharedState.client_id,
-      data: dataObj,
-      headers: {
-        "Authorization": $scope.rawAccessToken,
-        "Content-Type": "application/json",
-      }
-    }).then(
-      function(res) {
-        checkoutEachMerchantSequentially(merchantIds, cardSelected, merchantIndex + 1)
-        .then(
-          function(res) {
-            return resolve(res);
-          },
-          function(err) {
-            return reject(err);
-          }
-        );
-      },
-      function(err) {
-        return reject(err);
-      }
-    );
-  };
-
   var checkoutEachMerchantSequentially = function(merchantIds, cardSelected, merchantIndex) {
     return $q(function(resolve, reject) {
       if (merchantIds.length === merchantIndex) {
@@ -143,15 +103,50 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
       fmaCartHelper.clearCartThenUpdateCartPromise($scope.userCart, $scope.rawAccessToken, merchantId)
       .then(
         function(newCartItems) {
-          applyDealCodePromise($scope.missingAddressData.promoCode, merchantId)
-          .then(
+          console.log('Checking out for merchant id: ' + merchantId);
+          var dataObj = {
+            tip: fmaSharedState.tipAmount,
+            location_id: $scope.userAddress.location_id,
+            uhau_id: fmaSharedState.uhau_id,
+            instructions: "Tell people to download the FoodMe app and you'll get more orders!",
+            payments: [{
+              type: "credit_card",
+              id: cardSelected.cc_id,
+            }],
+            order_type: "delivery",
+            order_time: 'ASAP',
+          };
+          if ($scope.deal != null && $scope.deal.id != null) {
+            // Apply a deal code.
+            dataObj.payments.push({
+              type: "promo",
+              id: $scope.deal.id,
+            });
+            // Invalidate the deal so we don't try to use it on another merchant.
+            $scope.deal = null;
+          }
+          $http({
+            method: 'POST',
+            url: fmaSharedState.endpoint + '/customer/cart/'+merchantId+'/checkout?client_id=' + fmaSharedState.client_id,
+            data: dataObj,
+            headers: {
+              "Authorization": $scope.rawAccessToken,
+              "Content-Type": "application/json",
+            }
+          }).then(
             function(res) {
-              debugger;
-              cartSuccessHelper(resolve, reject, merchantIds, cardSelected, merchantIndex, merchantId);
+              checkoutEachMerchantSequentially(merchantIds, cardSelected, merchantIndex + 1)
+              .then(
+                function(res) {
+                  return resolve(res);
+                },
+                function(err) {
+                  return reject(err);
+                }
+              );
             },
             function(err) {
-              debugger;
-              cartSuccessHelper(resolve, reject, merchantIds, cardSelected, merchantIndex, merchantId);
+              return reject(err);
             }
           );
         },
@@ -313,8 +308,8 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
     } else if ($scope.deal != null && $scope.deal.reward != null &&
         $scope.deal.reward === 'percent_off' && $scope.deal.value != null) {
       // Process percent off an order.
-      confirmationString = 'Your deal worked! You\'re getting %' +
-          $scope.deal.value.toFixed(0) + ' off of your order :)\n\n' +
+      confirmationString = 'Your deal worked! You\'re getting ' +
+          $scope.deal.value.toFixed(0) + '% off of your order :)\n\n' +
           confirmationString +
           sum.toFixed(2) + ' - $' +
           (sum * $scope.deal.value / 100.0).toFixed(2) + ' = $' +

@@ -41,13 +41,12 @@ function($scope, $location, $http, fmaLocalStorage, fmaSharedState, $rootScope, 
         });
         $scope.accountsList = [newAccount,].concat($scope.accountsList.slice(0, 10));
 
-        // Comment this in to see the access token.
-        //alert(full_token.access_token);
-
         // Save the account list in localStorage
         fmaLocalStorage.setObjectWithExpirationSeconds(
             'accountsList', $scope.accountsList,
             fmaSharedState.testing_invalidation_seconds);
+        console.log('accounts_page__' + JSON.stringify(newAccount));
+        analytics.trackEvent('account_created', 'accounts_page__' + JSON.stringify(newAccount));
         // Select the account to save time.
       if ($scope.accountsList.length > 0) {
         $scope.cellSelected(0);
