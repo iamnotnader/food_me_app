@@ -38,6 +38,10 @@ var initAngularStuff = function() {
     'foodMeApp.accountsPage',
     'foodMeApp.addCard',
     'foodMeApp.addPhone',
+    'foodMeApp.homePageV2',
+    'foodMeApp.chooseAddressV3',
+    'foodMeApp.partialSwipePageV2',
+    'foodMeApp.stackV2',
   ]).
   config(['$stateProvider', '$urlRouterProvider',
       function($stateProvider, $urlRouterProvider) {
@@ -98,6 +102,41 @@ var initAngularStuff = function() {
           url: '/add_phone',
           templateUrl: 'add_phone/add_phone.html',
           controller: 'AddPhoneCtrl'
+      })
+      // This is going to be our new app below.
+      .state('home_page_v2', {
+          url: '/home_page_v2',
+          templateUrl: 'home_page_v2/partial_home_page_v2.html',
+          controller: 'HomePageV2Ctrl'
+      })
+      .state('home_page_v2.search_page_v2', {
+          url: '/search_page_v2',
+          templateUrl: 'home_page_v2/search_page_v2/partial_search_page_v2.html',
+      })
+      .state('home_page_v2.cart_page_v2', {
+          url: '/cart_page_v2',
+          templateUrl: 'home_page_v2/cart_page_v2/partial_cart_page_v2.html',
+      })
+      .state('home_page_v2.swipe_page_v2', {
+          url: '/swipe_page_v2',
+          views: {
+            '': {
+              // This guy is the parent. He has things that the address view and
+              // the stack view need to share with each other.
+              templateUrl: 'home_page_v2/swipe_page_v2/partial_swipe_page_v2.html',
+              controller: 'PartialSwipePageV2Ctrl',
+            },
+            'choose_address_v3@home_page_v2.swipe_page_v2': {
+              templateUrl: ('home_page_v2/swipe_page_v2/' +
+                            'choose_address_v3/choose_address_v3.html'),
+              controller: 'ChooseAddressV3Ctrl'
+            },
+            'stack_v2@home_page_v2.swipe_page_v2': {
+              templateUrl: ('home_page_v2/swipe_page_v2/' +
+                            'stack_v2/stack_v2.html'),
+              controller: 'StackV2Ctrl',
+            }
+          }
       });
   }]).
   run(['$rootScope', 'fmaSharedState', function($rootScope, fmaSharedState) {

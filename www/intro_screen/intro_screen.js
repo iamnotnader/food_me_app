@@ -67,7 +67,7 @@ function($scope, $location, $http, fmaLocalStorage, fmaSharedState, $rootScope, 
     analytics.trackEvent('button', 'intro_screen__get_started_pressed');
 
     console.log("Get started press!");
-    $location.path('/choose_address_v2');
+    $location.path('/home_page_v2/swipe_page_v2');
     return;
   };
 }])

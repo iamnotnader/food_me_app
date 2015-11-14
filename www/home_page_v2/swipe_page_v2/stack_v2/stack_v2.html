@@ -1,0 +1,50 @@
+<div ng-show="globals.userAddress != null" class="stack__overall_container">
+  <div class="stack__restaurant">
+    <div class="stack__restaurant_name">Mariano's Grill</div>
+  </div>
+  <div class="stack__delivery_minimum">
+    <div class="stack__delivery_minimum_text">
+      <div class="stack__delivery_minimum_text__message">Delivery minimum:</div>
+      <div class="stack__delivery_minimum_text__price">$10</div>
+    </div>
+  </div>
+  <div class="stack__buttons">
+    <div class="stack__buttons__container">
+      <div class="stack__buttons__info" ng-click="infoPressed()"></div>
+      <div class="stack__buttons__like" ng-click="likePressed()"></div>
+      <div class="stack__buttons__dislike" ng-click="dislikePressed()"></div>
+      <div class="stack__buttons__shuffle_dishes" ng-click="shuffleDishesPressed()"></div>
+      <div class="stack__buttons__new_merchants" ng-click="shuffleMerchantsPressed()"></div>
+    </div>
+  </div>
+  <div class="stack__cards">
+    <div class="stack__cards__cards_container">
+      <div class="stack__single_card">
+        <!--TODO(daddy): These urls need to be dynamic-->
+        <div class= "stack__single_card__food_image"></div>
+        <img class="overall__attribution_img" src="img/powered_by_google.png">
+        <!--<div class= "swipe_page__food_image_container">-->
+          <!--<div class="swipe_page__food_image" fma-back-img="{{foodInfo.imagesToShow.urls[0]}}">-->
+          <!--</div>-->
+        <!--</div>-->
+        <div class="stack__single_card__text_container">
+          <div class="stack__single_card__item_name">
+            <div class="stack__single_card__item_name_inner">
+              <!--TODO(daddy): Strip names so they're not too long.-->
+              Delicious spicy hot wings from wing land.
+            </div>
+          </div>
+          <div class="stack__single_card__item_price">
+            <div class="stack__single_card__item_price_inner">$50</div>
+         </div>         
+        </div>
+      </div>
+      <!--Cards get put in here with jquery.-->
+    </div>
+  </div>
+</div>
+<div class="stack__overall_container" ng-show="globals.userAddress == null" style="background-color: black;">
+  <div class="stack__top_text">Enter an address.</div>
+  <div class="stack__winking_burgie"></div>
+  <div class="stack__bottom_text">Have a pea-some.</div>
+</div>

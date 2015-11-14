@@ -30,12 +30,12 @@
 		0FA9127E1B981F9F00061EC9 /* icon_60.png in Resources */ = {isa = PBXBuildFile; fileRef = 0FA9127A1B981F9F00061EC9 /* icon_60.png */; };
 		0FA9127F1B981F9F00061EC9 /* icon_100.png in Resources */ = {isa = PBXBuildFile; fileRef = 0FA9127B1B981F9F00061EC9 /* icon_100.png */; };
 		0FA912871B98261200061EC9 /* Default@2x~iphone4.png in Resources */ = {isa = PBXBuildFile; fileRef = 0FA912861B98261200061EC9 /* Default@2x~iphone4.png */; };
-		0FE260701BB7CB840020EA0D /* Bolts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0FE2606A1BB7CB840020EA0D /* Bolts.framework */; settings = {ASSET_TAGS = (); }; };
-		0FE260711BB7CB840020EA0D /* Parse.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0FE2606B1BB7CB840020EA0D /* Parse.framework */; settings = {ASSET_TAGS = (); }; };
-		0FE260721BB7CB840020EA0D /* ParseCrashReporting.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0FE2606C1BB7CB840020EA0D /* ParseCrashReporting.framework */; settings = {ASSET_TAGS = (); }; };
-		0FE260731BB7CB840020EA0D /* ParseFacebookUtilsV4.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0FE2606D1BB7CB840020EA0D /* ParseFacebookUtilsV4.framework */; settings = {ASSET_TAGS = (); }; };
-		0FE260741BB7CB840020EA0D /* ParseTwitterUtils.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0FE2606E1BB7CB840020EA0D /* ParseTwitterUtils.framework */; settings = {ASSET_TAGS = (); }; };
-		0FE260751BB7CB840020EA0D /* ParseUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0FE2606F1BB7CB840020EA0D /* ParseUI.framework */; settings = {ASSET_TAGS = (); }; };
+		0FE260701BB7CB840020EA0D /* Bolts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0FE2606A1BB7CB840020EA0D /* Bolts.framework */; };
+		0FE260711BB7CB840020EA0D /* Parse.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0FE2606B1BB7CB840020EA0D /* Parse.framework */; };
+		0FE260721BB7CB840020EA0D /* ParseCrashReporting.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0FE2606C1BB7CB840020EA0D /* ParseCrashReporting.framework */; };
+		0FE260731BB7CB840020EA0D /* ParseFacebookUtilsV4.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0FE2606D1BB7CB840020EA0D /* ParseFacebookUtilsV4.framework */; };
+		0FE260741BB7CB840020EA0D /* ParseTwitterUtils.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0FE2606E1BB7CB840020EA0D /* ParseTwitterUtils.framework */; };
+		0FE260751BB7CB840020EA0D /* ParseUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0FE2606F1BB7CB840020EA0D /* ParseUI.framework */; };
 		0FE260771BB7CBC40020EA0D /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0FE260761BB7CBC40020EA0D /* UIKit.framework */; };
 		0FE260791BB7CBD10020EA0D /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0FE260781BB7CBD10020EA0D /* CFNetwork.framework */; };
 		0FE2607B1BB7CBE50020EA0D /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0FE2607A1BB7CBE50020EA0D /* QuartzCore.framework */; };
@@ -45,8 +45,8 @@
 		0FE260831BB7CC0C0020EA0D /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 0FE260821BB7CC0C0020EA0D /* libsqlite3.tbd */; };
 		0FE260851BB7CC140020EA0D /* libstdc++.6.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 0FE260841BB7CC140020EA0D /* libstdc++.6.tbd */; };
 		0FE260871BB7CC1A0020EA0D /* Accounts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0FE260861BB7CC1A0020EA0D /* Accounts.framework */; };
-		0FE260891BB7CD1A0020EA0D /* FBSDKCoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0FE260881BB7CD1A0020EA0D /* FBSDKCoreKit.framework */; settings = {ASSET_TAGS = (); }; };
-		0FE2608B1BB7CD2D0020EA0D /* FBSDKLoginKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0FE2608A1BB7CD2D0020EA0D /* FBSDKLoginKit.framework */; settings = {ASSET_TAGS = (); }; };
+		0FE260891BB7CD1A0020EA0D /* FBSDKCoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0FE260881BB7CD1A0020EA0D /* FBSDKCoreKit.framework */; };
+		0FE2608B1BB7CD2D0020EA0D /* FBSDKLoginKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0FE2608A1BB7CD2D0020EA0D /* FBSDKLoginKit.framework */; };
 		1D3623260D0F684500981E51 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D3623250D0F684500981E51 /* AppDelegate.m */; };
 		1D60589B0D05DD56006BFB54 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; };
 		288765FD0DF74451002DB57D /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 288765FC0DF74451002DB57D /* CoreGraphics.framework */; };
@@ -533,7 +533,7 @@
 		29B97313FDCFA39411CA2CEA /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 510;
+				LastUpgradeCheck = 710;
 				TargetAttributes = {
 					1D6058900D05DD3D006BFB54 = {
 						DevelopmentTeam = 5T8K4MDSW4;
@@ -711,7 +711,7 @@
 				GCC_THUMB_SUPPORT = NO;
 				GCC_VERSION = "";
 				INFOPLIST_FILE = "FoodMe/FoodMe-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.1;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/FoodMe/Plugins/cordova-plugin-google-analytics\"",
@@ -728,6 +728,7 @@
 					"-weak-lSystem",
 					"-ObjC",
 				);
+				PRODUCT_BUNDLE_IDENTIFIER = io.foodme;
 				PRODUCT_NAME = FoodMe;
 				PROVISIONING_PROFILE = "0a6a1c2b-c144-4e70-97cb-461f89b87004";
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -754,7 +755,7 @@
 				GCC_THUMB_SUPPORT = NO;
 				GCC_VERSION = "";
 				INFOPLIST_FILE = "FoodMe/FoodMe-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.1;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/FoodMe/Plugins/cordova-plugin-google-analytics\"",
@@ -771,6 +772,7 @@
 					"-weak-lSystem",
 					"-ObjC",
 				);
+				PRODUCT_BUNDLE_IDENTIFIER = io.foodme;
 				PRODUCT_NAME = FoodMe;
 				PROVISIONING_PROFILE = "8fbe6728-90f7-43ab-8bf4-b936cffacf6f";
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -789,6 +791,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer: Nader Al-Naji (4YZ9337BRM)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Nader Al-Naji (4YZ9337BRM)";
+				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_THUMB_SUPPORT = NO;
 				GCC_VERSION = "";
@@ -802,7 +805,7 @@
 					"\"$(OBJROOT)/UninstalledProducts/include\"",
 					"\"$(BUILT_PRODUCTS_DIR)\"",
 				);
-				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.1;
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = (
 					"-weak_framework",
@@ -848,7 +851,7 @@
 					"\"$(OBJROOT)/UninstalledProducts/include\"",
 					"\"$(BUILT_PRODUCTS_DIR)\"",
 				);
-				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.1;
 				OTHER_LDFLAGS = (
 					"-weak_framework",
 					CoreFoundation,

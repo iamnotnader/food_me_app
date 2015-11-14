@@ -89,7 +89,7 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $q, fmaStack
   }
   $scope.recentOrdersButtonPressed = function() {
     analytics.trackEvent('nav', 'swipe_page__recent_orders_pressed');
-    $('.swipe_page__bottom_bar').animate({ left: '60%'}, fmaSharedState.bottomBarAnimateMS);
+    $('.swipe_page__bottom_bar').animate({ left: '33.33333333%'}, fmaSharedState.bottomBarAnimateMS);
     $location.path('/home_page/recent_orders');
   };
 
