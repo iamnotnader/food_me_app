@@ -158,6 +158,7 @@ var initAngularStuff = function() {
         console.log('Adding transaction ITEM!');
       },
     };
+    FastClick.attach(document.body);
   }]);
 };
 
@@ -188,7 +189,7 @@ var app = {
       console.log('Received Event: ' + id);
       setTimeout(function () {
         navigator.splashscreen.hide();
-      }, 1500);
+      }, 0);
       window.alert = function (txt) {
           navigator.notification.alert(txt, function(){
           }, "Burgie says..", "hush, burgie");

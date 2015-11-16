@@ -15,10 +15,10 @@ function($scope, $location, $http, fmaLocalStorage, fmaSharedState, $rootScope, 
   }
 
   // Capture the main view container so we can add/remove animations.
-  var mainViewObj = $('#main_view_container');
+  var mainViewObj = $('.main_view');
   mainViewObj.removeClass();
   // Default to sliding left.
-  mainViewObj.addClass('slide-left-in slide-left-out');
+  mainViewObj.addClass('fade-out-100ms');
 
   // The width of the phone png. Gets set in introScreenImageOnload
   $scope.phoneWidth = 0;
@@ -33,7 +33,7 @@ function($scope, $location, $http, fmaLocalStorage, fmaSharedState, $rootScope, 
   // add more without anything breaking, but you won't see them unless you make
   // numPhotos bigger above to correspond. Note that you can have fewer colors
   // than photos and the colors will just repeat.
-  $scope.colorList = ["rgb(154, 97, 56)", "rgb(62, 145, 146)", "rgb(154, 56, 84)"];
+  $scope.colorList = ["rgb(154, 56, 84)", "rgb(154, 97, 56)", "rgb(62, 145, 146)"];
   // The index into colorList that determines which background color we're on
   // currently.
   $scope.colorIndex = 0;

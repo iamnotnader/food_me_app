@@ -2,7 +2,4 @@ angular.module('foodMeApp.partialSwipePageV2', ['ngRoute', 'ngTouch', 'foodmeApp
 
 .controller('PartialSwipePageV2Ctrl', ["$scope", "$location", "fmaLocalStorage", "$http", "fmaSharedState", "$rootScope", "$timeout",
 function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, $timeout) {
-  $scope.globals = {
-    userAddress: fmaLocalStorage.getObject('userAddress'),
-  };
 }]);

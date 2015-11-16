@@ -4,6 +4,9 @@ angular.module('foodMeApp.homePageV2', ['ngRoute', 'ngTouch', 'foodmeApp.localSt
 
 .controller('HomePageV2Ctrl', ["$scope", "$location", "fmaLocalStorage", "$http", "fmaSharedState", "$q", "fmaStackHelper", "$timeout", "$interval",
 function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $q, fmaStackHelper, $timeout, $interval) {
+  $scope.globals = {
+    userAddress: fmaLocalStorage.getObject('userAddress'),
+  };
   $scope.searchButtonPressed = function() {
     console.log('Search button pressed.');
     $('.swipe_page__bottom_bar').animate({left: '0%'});

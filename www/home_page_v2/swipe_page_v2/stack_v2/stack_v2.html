@@ -1,6 +1,6 @@
 <div ng-show="globals.userAddress != null" class="stack__overall_container">
   <div class="stack__restaurant">
-    <div class="stack__restaurant_name">Mariano's Grill</div>
+    <div class="stack__restaurant_name"></div>
   </div>
   <div class="stack__delivery_minimum">
     <div class="stack__delivery_minimum_text">
@@ -20,22 +20,21 @@
   <div class="stack__cards">
     <div class="stack__cards__cards_container">
       <div class="stack__single_card">
-        <!--TODO(daddy): These urls need to be dynamic-->
+        <!--Some crazy shit happens in javascript to make this refresh. It's very bad.-->
+        <!--Basically be careful when you make changes to this class.-->
+        <div class= "stack__single_card__food_image_loading">
+          <div class="stack__single_card__food_image_waiting">No image yet-- but keep swiping!</div>
+        </div>
         <div class= "stack__single_card__food_image"></div>
         <img class="overall__attribution_img" src="img/powered_by_google.png">
-        <!--<div class= "swipe_page__food_image_container">-->
-          <!--<div class="swipe_page__food_image" fma-back-img="{{foodInfo.imagesToShow.urls[0]}}">-->
-          <!--</div>-->
-        <!--</div>-->
         <div class="stack__single_card__text_container">
           <div class="stack__single_card__item_name">
             <div class="stack__single_card__item_name_inner">
-              <!--TODO(daddy): Strip names so they're not too long.-->
-              Delicious spicy hot wings from wing land.
+              <!--TODO(daddy): Strip names so they're not too long.--> 
             </div>
           </div>
           <div class="stack__single_card__item_price">
-            <div class="stack__single_card__item_price_inner">$50</div>
+            <div class="stack__single_card__item_price_inner"></div>
          </div>         
         </div>
       </div>
