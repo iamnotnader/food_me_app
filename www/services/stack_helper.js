@@ -14,53 +14,6 @@ angular.module('foodMeApp.stackHelper', ['foodmeApp.localStorage', 'foodmeApp.sh
 .factory('fmaStackHelper', ["fmaLocalStorage", "$http", "fmaSharedState", "$q", "$timeout",
 function(fmaLocalStorage, $http, fmaSharedState, $q, $timeout) {
 
-  // Finds all of the "item" subobjects in the menuObj passed in. See
-  // findMenuItems for more details.
-  //
-  // TODO(daddy): We should be mindful of the schedule. If a restaurant only
-  // serves our item during breakfast but it's dinner time, that's no good...
-  var findMenuItemsRecursive = function(menuObj, menuItemList, forbiddenItemIds) {
-    // Check forbitten items. These are things like alcohol.
-    if (forbiddenItemIds != null && forbiddenItemIds.length > 0) {
-      for (var v1 = 0; v1 < forbiddenItemIds.length; v1++) {
-        if (forbiddenItemIds[v1] === menuObj.id) {
-          return;
-        }
-      }
-    }
-
-    if (menuObj.type === "item") {
-      menuItemList.push(menuObj);
-      return;
-    }
-    // If we're here, menuObj is a menu, not an item.
-    for (var menuIndex = 0; menuIndex < menuObj.children.length; menuIndex++) {
-      var menuSubObj = menuObj.children[menuIndex];
-      findMenuItemsRecursive(menuSubObj, menuItemList);
-    } 
-    return menuItemList;
-  };
-
-  var findMenuItems = function(menuArr, forbiddenItemIds) {
-    // menuArr is a list of objects of type "menu." An  object of type "menu" has children
-    // that are either of type "menu" OR of type "item." If they're of type "item," we want
-    // to return them.
-    //
-    // Because menuArr is not itself a menu, we cannot call findMenuItemRecursive on it directly.
-    // That would have been nice because we would have had one line here.
-    // Instead, we have to have this for loop here to pull out the actual menu objects and
-    // call the function on them individually.
-    var menuItemList = [];
-    for (var menuIndex = 0; menuIndex < menuArr.length; menuIndex++) {
-      if (menuArr[menuIndex] == null || menuArr[menuIndex].name == null ||
-          menuArr[menuIndex].name.match(/beverage/i) != null) {
-        continue;
-      }
-      findMenuItemsRecursive(menuArr[menuIndex], menuItemList, forbiddenItemIds);
-    }
-    return menuItemList;
-  };
-
   // Resolves to an array of dishes!
   var getOpenDishesForMerchantPromise = function(merchantObj) {
     return $q(function(resolve, reject) {
