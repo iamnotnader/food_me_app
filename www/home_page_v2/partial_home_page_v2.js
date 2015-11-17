@@ -4,8 +4,13 @@ angular.module('foodMeApp.homePageV2', ['ngRoute', 'ngTouch', 'foodmeApp.localSt
 
 .controller('HomePageV2Ctrl', ["$scope", "$location", "fmaLocalStorage", "$http", "fmaSharedState", "$q", "fmaStackHelper", "$timeout", "$interval",
 function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $q, fmaStackHelper, $timeout, $interval) {
+  var userCart = fmaLocalStorage.getObject('userCart');
+  if (userCart == null) {
+    userCart = [];
+  }
   $scope.globals = {
     userAddress: fmaLocalStorage.getObject('userAddress'),
+    userCart: userCart,
   };
   $scope.searchButtonPressed = function() {
     console.log('Search button pressed.');

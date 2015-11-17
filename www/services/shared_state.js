@@ -193,6 +193,8 @@ angular.module('foodmeApp.sharedState', [])
     // Prod
     // Basically never invalidate the cache.
     testing_invalidation_seconds: 60 * 60 * 24 * 365 * 10,
+    // Make menu items go stale after an hour.
+    foodItemValidationSeconds: 60 * 60,
     fake_token: null,
 
   };

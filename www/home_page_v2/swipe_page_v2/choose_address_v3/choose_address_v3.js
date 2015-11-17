@@ -119,5 +119,10 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
     fmaLocalStorage.setObjectWithExpirationSeconds(
         'userAddress', null,
         fmaSharedState.testing_invalidation_seconds);
+    $scope.globals.userCart = [];
+    fmaLocalStorage.setObjectWithExpirationSeconds(
+        'userCart', null,
+        fmaSharedState.testing_invalidation_seconds);
+    $scope.globals.minimumLeft = null;
   };
 }]);

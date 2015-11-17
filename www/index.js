@@ -42,6 +42,7 @@ var initAngularStuff = function() {
     'foodMeApp.chooseAddressV3',
     'foodMeApp.partialSwipePageV2',
     'foodMeApp.stackV2',
+    'foodMeApp.cartPageV2',
   ]).
   config(['$stateProvider', '$urlRouterProvider',
       function($stateProvider, $urlRouterProvider) {
@@ -116,6 +117,7 @@ var initAngularStuff = function() {
       .state('home_page_v2.cart_page_v2', {
           url: '/cart_page_v2',
           templateUrl: 'home_page_v2/cart_page_v2/partial_cart_page_v2.html',
+          controller: 'CartPageV2Ctrl'
       })
       .state('home_page_v2.swipe_page_v2', {
           url: '/swipe_page_v2',

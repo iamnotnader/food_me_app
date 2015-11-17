@@ -13,14 +13,19 @@
 
 <div class="swipe_page__bottom_menu">
   <div ng-click="searchButtonPressed()" class="swipe_page__bottom_button">
-    <img style="height: 100%;" class="swipe_page__vertically_center" src="img/search.png" alt="">
+    <div class="home_page_v2__search_icon">
+    </div>
   </div>
   <div ng-click="homeButtonPressed()" class="swipe_page__bottom_button">
-    <img style="height: 120%;" class="swipe_page__vertically_center" src="img/active_burgie.png" alt="">
+    <div class="home_page_v2__burgie_icon">
+    </div>
   </div>
   <div ng-click="cartButtonPressed()" class="swipe_page__bottom_button">
-    <!--We use the onload method to set the little badge-->
-    <img swipe-page-cart-image-on-load style="height: 110%;" class="swipe_page__vertically_center" src="img/cart.png" alt="">
+    <div class="home_page_v2__cart_icon">
+      <div class="home_page_v2__cart_badge" ng-show="globals.userCart.length !== 0">
+        <div class="home_page_v2__cart_badge__inner">{{globals.userCart.length}}</div>
+      </div>
+    </div>
   </div>
   <div class="swipe_page__bottom_bar" style="left: 33.333333%"></div>
 </div>

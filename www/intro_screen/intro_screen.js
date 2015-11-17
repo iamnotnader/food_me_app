@@ -18,7 +18,7 @@ function($scope, $location, $http, fmaLocalStorage, fmaSharedState, $rootScope, 
   var mainViewObj = $('.main_view');
   mainViewObj.removeClass();
   // Default to sliding left.
-  mainViewObj.addClass('fade-out-100ms');
+  mainViewObj.addClass('fade-out-100ms fade-in-100ms');
 
   // The width of the phone png. Gets set in introScreenImageOnload
   $scope.phoneWidth = 0;

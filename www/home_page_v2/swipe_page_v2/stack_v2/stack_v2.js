@@ -49,6 +49,13 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
         xStart = ev.pageX;
         yStart = ev.pageY;
         mainElem = $(this);
+        if (mainElemStartX == null || mainElemStartY == null) {
+          XYObj = getXAndYCoords(mainElem);
+          mainElemStartX = XYObj.startX;
+          mainElemStartY = XYObj.startY;
+        }
+        posX = mainElemStartX;
+        posY = mainElemStartY;
         break;
       case 'mousemove':
       case 'touchmove':
@@ -78,6 +85,10 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
           $scope.likePressed();
         } else if (finalOffset < -threshold) {
           $scope.dislikePressed();
+        } else if (finalOffset == 0) {
+          // This piece prevents transforms from queuing up unless the card
+          // actually moves.
+          break;
         } else {
           mainElem.animate({
               transform: "translate(" + mainElemStartX + "px, " + mainElemStartY + "px)"
@@ -211,16 +222,7 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
     var lastCard = $(stackCards[currentCardDomIndex]);
     lastCard.unbind();
     setEventHandlers(lastCard);
-
-    if ($scope.globals.allMerchants != null &&
-        $scope.globals.allMerchants.length > $scope.globals.merchantIndex &&
-        $scope.globals.allMerchants[$scope.globals.merchantIndex].summary != null &&
-        $scope.globals.allMerchants[$scope.globals.merchantIndex].summary.name != null) {
-      //TODO(daddy): Make sure name can't overflow.
-      $scope.restaurantName.text(
-          trimString($scope.globals.allMerchants[$scope.globals.merchantIndex].summary.name,
-            MAX_RESTAURANT_NAME_LENGTH));
-    }
+    setMerchantName();
   };
 
   var removeTopCardAddNewCard = function() {
@@ -273,6 +275,15 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
         removeTopCardAddNewCard();
       }
     );
+    // Add to cart...
+    var itemInfo = $scope.globals.allFoodItems[$scope.globals.itemIndex];
+    $scope.globals.userCart.push(itemInfo);
+    $scope.globals.userCart = _.uniq($scope.globals.userCart);
+    fmaLocalStorage.setObjectWithExpirationSeconds(
+        'userCart', $scope.globals.userCart,
+        fmaSharedState.foodItemValidationSeconds);
+    $scope.globals.minimumLeft -= parseFloat(itemInfo.price);
+    $scope.globals.minimumLeft = Math.max(0, $scope.globals.minimumLeft);
   };
 
   $scope.dislikePressed = function() {
@@ -299,6 +310,7 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
       firstCard.remove();
     }
     firstCard = $($scope.stackContainer.children()[0]);
+    firstCard.unbind();
     var imageElement = firstCard.find('.stack__single_card__food_image');
     var loadingElement = firstCard.find('.stack__single_card__food_image_loading');
     var textElement = firstCard.find('.stack__single_card__food_image_waiting');
@@ -339,15 +351,38 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
     initStackWithCards($scope.globals.allFoodItems, MAX_CARDS_IN_STACK, $scope.stackContainer);
   };
 
+  var setMerchantName = function() {
+    if ($scope.globals.allMerchants != null &&
+        $scope.globals.allMerchants.length > $scope.globals.merchantIndex &&
+        $scope.globals.allMerchants[$scope.globals.merchantIndex].summary != null &&
+        $scope.globals.allMerchants[$scope.globals.merchantIndex].summary.name != null) {
+      //TODO(daddy): Make sure name can't overflow.
+      $scope.restaurantName.text(
+          trimString($scope.globals.allMerchants[$scope.globals.merchantIndex].summary.name,
+            MAX_RESTAURANT_NAME_LENGTH));
+    }
+  };
+
   $scope.shuffleMerchantsPressed = function() {
     console.log('shuffleMerchants');
     if ($scope.globals.allMerchants == null) {
       return;
     }
+    // TODO(daddy): Warn the user before clearing the cart.
+    $scope.globals.userCart = [];
+    fmaLocalStorage.setObjectWithExpirationSeconds(
+        'userCart', $scope.globals.userCart,
+        fmaSharedState.foodItemValidationSeconds);
+
     resetStack();
 
     $scope.globals.merchantIndex = ($scope.globals.merchantIndex + 1) % $scope.globals.allMerchants.length;
     var currentMerchant = $scope.globals.allMerchants[$scope.globals.merchantIndex];
+    if (currentMerchant.ordering && currentMerchant.ordering.minimum) {
+      $scope.globals.minimumLeft = parseFloat(currentMerchant.ordering.minimum);
+    }
+    setMerchantName();
+    console.log('Minimum left: ' + $scope.globals.minimumLeft);
     getOpenDishesForMerchantPromise(currentMerchant)
     .then(
       function(res) {
@@ -360,6 +395,55 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
       }
     );
   };
+
+  var setCartTotal = function() {
+    var total = 0.0;
+    for (var v1 = 0; v1 < $scope.globals.userCart.length; v1++) {
+      total += parseFloat($scope.globals.userCart[v1].price);
+    }
+    $scope.cartTotal = total.toFixed(2);
+  };
+
+  setCartTotal();
+  $scope.$watch(
+    function(scope) {
+      // We only watch the cart length for efficiency reaasons.
+      return scope.globals.userCart.length;
+    },
+    function() {
+      setCartTotal();
+  });
+
+  var setMinimumString = function() {
+    if ($scope.globals.minimumLeft === null ||
+        $scope.globals.allMerchants == null) {
+      $scope.minimumString = 'Delivery minmum:';
+      return;
+    }
+    var currentMerchant = $scope.globals.allMerchants[$scope.globals.merchantIndex];
+    var actualMinimum = -1.0;
+    if (currentMerchant.ordering && currentMerchant.ordering.minimum) {
+      actualMinimum = parseFloat(currentMerchant.ordering.minimum);
+    }
+    if (actualMinimum == $scope.globals.minimumLeft) {
+      $scope.minimumString = 'Delivery minmum:';
+      return;
+    }
+
+    if ($scope.globals.minimumLeft < 5 && $scope.globals.minimumLeft > 0) {
+      $scope.minimumString = 'Almost there!';
+    }
+    else if ($scope.globals.minimumLeft === 0) {
+      $scope.minimumString = 'You did it! Total:';
+    }
+    else {
+      $scope.minimumString = 'Left to order: ';
+    }
+  };
+  $scope.$watch('globals.minimumLeft', function() {
+    setMinimumString();
+  });
+  setMinimumString();
 
   var filterBadName = function(nameStr) {
     if (nameStr == null) {
@@ -415,11 +499,6 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
 
             // We use this to avoid duplicates in ng-repeat.
             currentItem.unique_key = currentItem.merchantId + '' + currentItem.id;
-            var deliveryCharge = 0.0;
-            if (merchantObj.ordering != null &&
-                merchantObj.ordering.delivery_charge != null) {
-              deliveryCharge = merchantObj.ordering.delivery_charge;
-            }
             currentItem.name = filterBadName(currentItem.name);
             if (currentItem.name == null || currentItem.merchantName == null ||
                 currentItem.price == null) {
@@ -518,11 +597,16 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
         );
         if (merchants == null || merchants.length == 0) {
           console.log('Error: Response from merchant endoint ');
+          reject('No merchants around.');
+          return;
         }
         $scope.globals.merchantIndex = 0;
         $scope.globals.allMerchants = merchants;
         var currentMerchant = $scope.globals.allMerchants[$scope.globals.merchantIndex];
-        resolve(getOpenDishesForMerchantPromise(currentMerchant))
+        if (currentMerchant.ordering && currentMerchant.ordering.minimum) {
+          $scope.globals.minimumLeft = parseFloat(currentMerchant.ordering.minimum);
+        }
+        resolve(getOpenDishesForMerchantPromise(currentMerchant));
       },
       function(err) {
         console.log('Error searching address.');
@@ -543,7 +627,14 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
       // Save the stackContainer so we can avoid crawling the dom.
       $scope.stackContainer = $('.stack__cards__cards_container');
       $scope.restaurantName = $('.stack__restaurant_name');
-      if ($scope.globals.allFoodItems != null) {
+      if ($scope.globals.allFoodItems != null &&
+          JSON.stringify($scope.globals.lastAddress) == JSON.stringify(userAddress)) {
+        var currentMerchant = $scope.globals.allMerchants[$scope.globals.merchantIndex];
+        if (currentMerchant.ordering && currentMerchant.ordering.minimum) {
+          $scope.globals.minimumLeft = parseFloat(currentMerchant.ordering.minimum);
+        }
+        $scope.globals.minimumLeft = Math.max(0, $scope.globals.minimumLeft - $scope.cartTotal);
+
         // Start the array at the previous itemIndex.
         initStackWithCards(
             $scope.globals.allFoodItems,
@@ -552,12 +643,19 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
         return;
       }
 
+      $scope.globals.lastAddress = userAddress;
+      resetStack();
+      $scope.globals.userCart = [];
+      fmaLocalStorage.setObjectWithExpirationSeconds(
+          'userCart', $scope.globals.userCart,
+          fmaSharedState.foodItemValidationSeconds);
       getMerchantsAndFoodItemsPromise(userAddress).then(
         function(res) {
           $scope.globals.itemIndex = 0;
           initStackWithCards(res, MAX_CARDS_IN_STACK, $scope.stackContainer);
         },
         function(err) {
+          console.log('There was a problem with getMerchantsAndFoodItemsPromise.');
         } 
       );
     });
