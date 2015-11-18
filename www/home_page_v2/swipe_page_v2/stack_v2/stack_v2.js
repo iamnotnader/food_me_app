@@ -112,6 +112,7 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
           if (res.data == null || res.data.responseData == null ||
               res.data.responseData.results == null ||
               res.data.responseData.results.length == 0 ||
+              res.data.responseData.results[0] != null &&
               res.data.responseData.results[0].url == null) {
             resolve(null);
           }
@@ -202,7 +203,6 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
   var initStackWithCards = function(cardInfoList, maxCardsInStack, stackContainer) {
     console.log('initStackWithCards');
     // Shuffle the food items to keep things fun.
-    cardInfoList = _.shuffle(cardInfoList);
     $scope.globals.allFoodItems = cardInfoList;
 
     if (cardInfoList == null || stackContainer == null) {
@@ -516,6 +516,11 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
                 currentItem.price == null) {
               continue;
             }
+            if ($scope.globals.keywordValue != null && $scope.globals.keywordValue != '' &&
+                merchantObj.matched_items != null &&
+                merchantObj.matched_items[currentItem.unique_id] == null) {
+              continue;
+            }
             // Add the tax and tip to make it accurate.
             //currentItem.price = (currentItem.price + deliveryCharge) *
             //    (1 + fmaSharedState.taxRate) + fmaSharedState.tipAmount;
@@ -585,6 +590,11 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
   var getMerchantsAndFoodItemsPromise = function(userAddress) {
     return $q(function(resolve, reject) {
       var searchAddress = fmaSharedState.addressToString(userAddress);
+      var keywordParam = '';
+      if ($scope.globals.keywordValue != null &&
+          $scope.globals.keywordValue != '') {
+        keywordParam = '&keyword=' + $scope.globals.keywordValue.split(/\s+/).join('+')
+      }
       $http.get(fmaSharedState.endpoint+'/merchant/search/delivery?' + 
                 'address=' + searchAddress.split(/\s+/).join('+') + '&' + 
                 'client_id=' + fmaSharedState.client_id + '&' +
@@ -592,8 +602,8 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
                 'iso=true&' +
                 'order_time=ASAP&' +
                 'order_type=delivery&' +
-                'merchant_type=R' // &' +
-                //'keyword=' + searchQuery.split(/\s+/).join('+')
+                'merchant_type=R' +
+                keywordParam
       )
       .then(
       function(res) {
@@ -602,13 +612,31 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
         // Shuffle up the merchants for fun.
         merchants = _.shuffle(merchants);
         merchants = _.filter(merchants, function(merchantObj) {
-            return merchantObj && merchantObj.ordering &&
-              merchantObj.ordering.is_open &&
-              merchantObj.ordering.minutes_left_for_ASAP >= 10;
+            var goodMerchant = true;
+            goodMerchant = goodMerchant &&
+                merchantObj != null &&
+                merchantObj.ordering != null &&
+                merchantObj.ordering.is_open &&
+                merchantObj.ordering.minutes_left_for_ASAP >= 10;
+            if (keywordParam != '') {
+              goodMerchant = goodMerchant &&
+                  merchantObj.is_matching_items;
+            }
+            if ($scope.globals.deliveryMinimumLimit != null &&
+                merchantObj.ordering.minimum != null) {
+              goodMerchant = goodMerchant &&
+                  merchantObj.ordering.minimum <= $scope.globals.deliveryMinimumLimit;
+            }
+            if ($scope.globals.selectedMerchantId != null &&
+                $scope.globals.selectedMerchantId != $scope.globals.DEFAULT_MERCHANT_ID) {
+              goodMerchant = goodMerchant &&
+                  merchantObj.id == $scope.globals.selectedMerchantId;
+            }
+            return goodMerchant;
           }
         );
-        if (merchants == null || merchants.length == 0) {
-          console.log('Error: Response from merchant endoint ');
+        if (merchants == null || merchants.length === 0) {
+          console.log('Error: No merchants around.');
           reject('No merchants around.');
           return;
         }
@@ -629,18 +657,25 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
 
   var initEverything = function() {
     $scope.$watch('globals.userAddress', function() {
+      console.log('Address has changed.');
       var userAddress = $scope.globals.userAddress;
       if (userAddress == null || userAddress == '') {
         console.log('No address-- not doing anything.');
         return;
       }
-      console.log('hey, myVar has changed!');
+      var currentSearch =
+          JSON.stringify($scope.globals.selectedMerchantId) +
+          JSON.stringify($scope.globals.deliveryMinimumLimit) +
+          JSON.stringify($scope.globals.keywordValue);
+      console.log(currentSearch + ' ' + $scope.globals.lastSearch);
 
       // Save the stackContainer so we can avoid crawling the dom.
       $scope.stackContainer = $('.stack__cards__cards_container');
       $scope.restaurantName = $('.stack__restaurant_name');
       if ($scope.globals.allFoodItems != null &&
-          JSON.stringify($scope.globals.lastAddress) == JSON.stringify(userAddress)) {
+          JSON.stringify($scope.globals.lastAddress) == JSON.stringify(userAddress) &&
+          $scope.globals.lastSearch == currentSearch) {
+        console.log('Not refreshing stack.');
         var currentMerchant = $scope.globals.allMerchants[$scope.globals.merchantIndex];
         if (currentMerchant.ordering && currentMerchant.ordering.minimum) {
           $scope.globals.minimumLeft = parseFloat(currentMerchant.ordering.minimum);
@@ -656,6 +691,7 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
       }
 
       $scope.globals.lastAddress = userAddress;
+      $scope.globals.lastSearch = currentSearch;
       resetStack();
       $scope.globals.userCart = [];
       fmaLocalStorage.setObjectWithExpirationSeconds(
