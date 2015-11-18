@@ -11,6 +11,9 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $q, fmaStack
   $scope.globals = {
     userAddress: fmaLocalStorage.getObject('userAddress'),
     userCart: userCart,
+    selectedMerchantId: fmaLocalStorage.getObject('selectedMerchantId'),
+    deliveryMinimumLimit: fmaLocalStorage.getObject('deliveryMinimumLimit'),
+    keywordValue: fmaLocalStorage.getObject('keywordValue'),
   };
   $scope.searchButtonPressed = function() {
     console.log('Search button pressed.');

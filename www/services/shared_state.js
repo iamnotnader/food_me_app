@@ -68,6 +68,8 @@ angular.module('foodmeApp.sharedState', [])
           + address.state + ', ' + address.zip_code
     },
 
+    defaultDeliveryMinimumLimit: 50,
+
     instructions: 'Tell people to download the FoodMe app and get more orders!',
 
     taxRate: 0.09,

@@ -193,6 +193,7 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
 
   var setEventHandlers = function(cardObj) {
     console.log('setEventHandlers');
+    $scope.canManipulateCards = true;
     cardObj.bind('touchstart mousedown', topCardHandler);
     cardObj.bind('touchmove mousemove', topCardHandler);
     cardObj.bind('touchend mouseup', topCardHandler);
@@ -200,6 +201,8 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
 
   var initStackWithCards = function(cardInfoList, maxCardsInStack, stackContainer) {
     console.log('initStackWithCards');
+    // Shuffle the food items to keep things fun.
+    cardInfoList = _.shuffle(cardInfoList);
     $scope.globals.allFoodItems = cardInfoList;
 
     if (cardInfoList == null || stackContainer == null) {
@@ -220,6 +223,7 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
     var stackCards = stackContainer.children();
     var currentCardDomIndex = stackCards.length - 1;
     var lastCard = $(stackCards[currentCardDomIndex]);
+    $scope.canManipulateCards = false;
     lastCard.unbind();
     setEventHandlers(lastCard);
     setMerchantName();
@@ -230,6 +234,7 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
     // Remove the top card.
     var stackCards = $scope.stackContainer.children();
     var lastCard = $(stackCards[stackCards.length - 1]);
+    $scope.canManipulateCards = false;
     lastCard.unbind();
     lastCard.remove();
 
@@ -262,6 +267,9 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
 
   $scope.likePressed = function() {
     console.log('like');
+    if (!$scope.canManipulateCards) {
+      return;
+    }
     var stackCards = $scope.stackContainer.children();
     var lastCard = $(stackCards[stackCards.length - 1]);
     XAndY = getXAndYCoords(lastCard);
@@ -288,6 +296,9 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
 
   $scope.dislikePressed = function() {
     console.log('dislike');
+    if (!$scope.canManipulateCards) {
+      return;
+    }
     var stackCards = $scope.stackContainer.children();
     var lastCard = $(stackCards[stackCards.length - 1]);
     XAndY = getXAndYCoords(lastCard);
@@ -310,6 +321,7 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
       firstCard.remove();
     }
     firstCard = $($scope.stackContainer.children()[0]);
+    $scope.canManipulateCards = false;
     firstCard.unbind();
     var imageElement = firstCard.find('.stack__single_card__food_image');
     var loadingElement = firstCard.find('.stack__single_card__food_image_loading');
@@ -342,7 +354,7 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
 
   $scope.shuffleDishesPressed = function() {
     console.log('shuffleDishes');
-    if ($scope.globals.allFoodItems == null) {
+    if (!$scope.canManipulateCards) {
       return;
     }
     resetStack();
@@ -365,7 +377,7 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
 
   $scope.shuffleMerchantsPressed = function() {
     console.log('shuffleMerchants');
-    if ($scope.globals.allMerchants == null) {
+    if (!$scope.canManipulateCards) {
       return;
     }
     // TODO(daddy): Warn the user before clearing the cart.

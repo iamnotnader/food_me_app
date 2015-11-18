@@ -233,7 +233,7 @@ input.choose_address_v2__inner_input {
   top: 50%;
   transform: translateY(-50%);
   -webkit-transform: translateY(-50%);
-  height: 12rem; }
+  height: 5vh; }
 
 .cart_page__clear_text {
   font-family: TitleFont;
@@ -251,7 +251,7 @@ input.choose_address_v2__inner_input {
   width: 100%; }
 
 .choose_address__scroll_container {
-  height: 8.9rem;
+  height: 25vh;
   overflow: scroll;
   background-color: white; }
 
@@ -672,5 +672,118 @@ input.choose_address_v2__inner_input {
   top: 50%;
   transform: translateY(-50%);
   height: auto; }
+
+.search_page_v2__filter_list {
+  height: 100%;
+  background-color: white;
+  overflow: auto;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch; }
+
+.search_page_v2__keyword_container {
+  width: 100%;
+  margin-top: 1vh;
+  margin-left: 4vw;
+  text-transform: none;
+  font-family: TitleFont;
+  font-size: 4vh; }
+
+input.search_page_v2__keyword_input_inner {
+  height: 5vh;
+  margin-left: 3vw;
+  margin-top: 0;
+  margin-bottom: 1vh;
+  border-radius: 5px;
+  -webkit-border-radius: 5px;
+  border-style: groove;
+  padding-left: 3vw;
+  padding-right: 10vw;
+  -webkit-appearance: none;
+  border: 1px solid #333333;
+  font-size: 3.5vh;
+  font-family: TaglineFont;
+  width: 80vw; }
+
+select.search_page_v2__keyword_input_inner {
+  height: 5.9vh;
+  margin-left: 3vw;
+  margin-top: 0;
+  margin-bottom: 1vh;
+  border-radius: 5px;
+  -webkit-border-radius: 5px;
+  border-style: groove;
+  padding-left: 3vw;
+  padding-right: 10vw;
+  width: 93vw;
+  border: 1px solid #333333;
+  font-size: 4vh;
+  font-family: TaglineFont;
+  background-color: white; }
+
+.search_page_v2__price_number_inner {
+  width: 32.5vw;
+  display: inline-block;
+  height: 15vw;
+  position: relative; }
+
+.search_page_v2__price_number_plus {
+  position: absolute;
+  width: 15vw;
+  height: 15vw;
+  top: 50%;
+  right: 5vw;
+  transform: translateY(-50%);
+  background: url(../img/minus.png) no-repeat center center;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover; }
+
+.search_page_v2__price_number_minus {
+  position: absolute;
+  width: 15vw;
+  height: 15vw;
+  top: 50%;
+  left: 5vw;
+  transform: translateY(-50%);
+  background: url(../img/plus.png) no-repeat center center;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover; }
+
+.search_page_v2__price_number_value {
+  position: absolute;
+  width: 100%;
+  height: 100%; }
+
+.search_page_v2__price_number_value_inner {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translateY(-50%) translateX(-50%);
+  text-transform: none;
+  font-family: TitleFont;
+  font-size: 10vw; }
+
+.search_page_v2__button_container {
+  height: 8vh;
+  width: 80vw;
+  margin: 0 auto;
+  margin-top: 3vh;
+  border-radius: 5px;
+  background-color: #DB6782;
+  border: 1px solid #333333;
+  position: relative; }
+
+.search_page_v2__button_inner {
+  text-transform: none;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translateX(-50%) translateY(-50%);
+  font-size: 5vh;
+  font-family: TitleFont; }
 
 /*# sourceMappingURL=index_2.css.map */
