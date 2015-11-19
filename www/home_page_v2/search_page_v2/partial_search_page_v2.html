@@ -24,7 +24,6 @@
           Choose restaurant
         </div>
       </div>
-      {{globals.selectedMerchantId}}
       <div class="search_page_v2__keyword_input_container">
         <select ng-model="globals.selectedMerchantId" class="search_page_v2__keyword_input_inner" ng-change="selectDidChange()"
                 ng-options="merchant.id as merchant.summary.name for merchant in sortedMerchants">

@@ -429,7 +429,7 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
   var setMinimumString = function() {
     if ($scope.globals.minimumLeft === null ||
         $scope.globals.allMerchants == null) {
-      $scope.minimumString = 'Delivery minmum:';
+      $scope.minimumString = 'Delivery minimum:';
       return;
     }
     var currentMerchant = $scope.globals.allMerchants[$scope.globals.merchantIndex];
@@ -438,7 +438,7 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
       actualMinimum = parseFloat(currentMerchant.ordering.minimum);
     }
     if (actualMinimum == $scope.globals.minimumLeft) {
-      $scope.minimumString = 'Delivery minmum:';
+      $scope.minimumString = 'Delivery minimum:';
       return;
     }
 
