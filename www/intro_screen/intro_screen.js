@@ -1,4 +1,4 @@
-angular.module('foodMeApp.introScreen', ['ngRoute', 'ngTouch', 'foodmeApp.localStorage', 'foodmeApp.sharedState'])
+angular.module('foodMeApp.introScreen', ['ngRoute', 'foodmeApp.localStorage', 'foodmeApp.sharedState'])
 
 .controller('IntroScreenCtrl', ["$scope", "$location", "$http", "fmaLocalStorage", 'fmaSharedState', '$rootScope', '$timeout',
 function($scope, $location, $http, fmaLocalStorage, fmaSharedState, $rootScope, $timeout) {

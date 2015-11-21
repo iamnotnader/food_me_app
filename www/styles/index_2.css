@@ -568,7 +568,7 @@ input.choose_address_v2__inner_input {
   top: 50%;
   transform: translateX(-50%) translateY(-50%); }
 
-.cart_page_v2__items_container.ng-scope {
+.cart_page_v2__items_container {
   top: 14%;
   bottom: 9%;
   position: absolute;

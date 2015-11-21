@@ -121,6 +121,12 @@
         },
         "com.darktalker.cordova.screenshot": {
             "PACKAGE_NAME": "io.foodme"
+        },
+        "cordova-plugin-statusbar": {
+            "PACKAGE_NAME": "io.foodme"
+        },
+        "ionic-plugin-keyboard": {
+            "PACKAGE_NAME": "io.foodme"
         }
     },
     "dependent_plugins": {}

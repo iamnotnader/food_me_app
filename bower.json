@@ -13,7 +13,7 @@
     "html5-boilerplate": "~5.2.0",
     "bootstrap": "~3.1.1",
     "angular-resource": "1.4.x",
-    "angular-animate": "~1.4.4",
+    "angular-animate": "~1.4.7",
     "jquery": "~2.1.4",
     "jquery-ui": "~1.11.4",
     "jquery-color": "~2.1.2",
@@ -21,6 +21,11 @@
     "underscore": "~1.8.3",
     "he": "~0.5.0",
     "jquery.cookie": "~1.4.1",
-    "fastclick": "~1.0.6"
+    "fastclick": "~1.0.6",
+    "ionic": "driftyco/ionic-bower#1.1.1"
+  },
+  "resolutions": {
+    "angular": "1.4.3",
+    "angular-animate": "1.4.3"
   }
 }

@@ -99,6 +99,9 @@
 		CC38579A1D064CBB91586F24 /* CDVReachability.m in Sources */ = {isa = PBXBuildFile; fileRef = CB095A9C93BC435E829BE488 /* CDVReachability.m */; };
 		D4A0D8761607E02300AEF8BB /* Default-568h@2x~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = D4A0D8751607E02300AEF8BB /* Default-568h@2x~iphone.png */; };
 		ECB4495C1B8F4D1FA8DCB4D9 /* CDVViewController+SplashScreen.m in Sources */ = {isa = PBXBuildFile; fileRef = BCC0BF90EF5E49ADA9C02E83 /* CDVViewController+SplashScreen.m */; };
+		DDD1A316F7FB4738A8962887 /* CDVStatusBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 743853A0EFD14A3B82B358A8 /* CDVStatusBar.m */; };
+		2D21E863526D4087AD71F4E9 /* IonicKeyboard.m in Sources */ = {isa = PBXBuildFile; fileRef = F44070356C7243A686036823 /* IonicKeyboard.m */; };
+		FB0CD894250E4DFEB5B7017C /* UIWebViewExtension.m in Sources */ = {isa = PBXBuildFile; fileRef = A274C423A5DD4787A8ED8D9B /* UIWebViewExtension.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -245,6 +248,12 @@
 		F70567D90E644DDD9EC176A9 /* CDVDevice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CDVDevice.h; path = "cordova-plugin-device/CDVDevice.h"; sourceTree = "<group>"; };
 		F840E1F0165FE0F500CFE078 /* config.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; name = config.xml; path = FoodMe/config.xml; sourceTree = "<group>"; };
 		FEC4857FB6E04265A91055C3 /* GAIEcommerceFields.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GAIEcommerceFields.h; path = "cordova-plugin-google-analytics/GAIEcommerceFields.h"; sourceTree = "<group>"; };
+		743853A0EFD14A3B82B358A8 /* CDVStatusBar.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = "CDVStatusBar.m"; path = "cordova-plugin-statusbar/CDVStatusBar.m"; sourceTree = "<group>"; fileEncoding = 4; };
+		F1BB560BB5F840E58C060547 /* CDVStatusBar.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "CDVStatusBar.h"; path = "cordova-plugin-statusbar/CDVStatusBar.h"; sourceTree = "<group>"; fileEncoding = 4; };
+		F44070356C7243A686036823 /* IonicKeyboard.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = "IonicKeyboard.m"; path = "ionic-plugin-keyboard/IonicKeyboard.m"; sourceTree = "<group>"; fileEncoding = 4; };
+		A274C423A5DD4787A8ED8D9B /* UIWebViewExtension.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = "UIWebViewExtension.m"; path = "ionic-plugin-keyboard/UIWebViewExtension.m"; sourceTree = "<group>"; fileEncoding = 4; };
+		6073062917A44A26ACAE4D2F /* IonicKeyboard.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "IonicKeyboard.h"; path = "ionic-plugin-keyboard/IonicKeyboard.h"; sourceTree = "<group>"; fileEncoding = 4; };
+		38AF7A6D4E21484B80B19B17 /* UIWebViewExtension.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "UIWebViewExtension.h"; path = "ionic-plugin-keyboard/UIWebViewExtension.h"; sourceTree = "<group>"; fileEncoding = 4; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -433,6 +442,12 @@
 				F6FD5BEEE822471FABA52E4C /* SocialSharing.h */,
 				440824156B084A538ECA643E /* Screenshot.m */,
 				814423074EB1431A91B10915 /* Screenshot.h */,
+				743853A0EFD14A3B82B358A8 /* CDVStatusBar.m */,
+				F1BB560BB5F840E58C060547 /* CDVStatusBar.h */,
+				F44070356C7243A686036823 /* IonicKeyboard.m */,
+				A274C423A5DD4787A8ED8D9B /* UIWebViewExtension.m */,
+				6073062917A44A26ACAE4D2F /* IonicKeyboard.h */,
+				38AF7A6D4E21484B80B19B17 /* UIWebViewExtension.h */,
 			);
 			name = Plugins;
 			path = FoodMe/Plugins;
@@ -675,6 +690,9 @@
 				C4A719BE386E462FBC53E111 /* CDVLocation.m in Sources */,
 				CBDCDFC76AF14CF19FB40B9F /* SocialSharing.m in Sources */,
 				7862D815B4B245898CB1C595 /* Screenshot.m in Sources */,
+				DDD1A316F7FB4738A8962887 /* CDVStatusBar.m in Sources */,
+				2D21E863526D4087AD71F4E9 /* IonicKeyboard.m in Sources */,
+				FB0CD894250E4DFEB5B7017C /* UIWebViewExtension.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

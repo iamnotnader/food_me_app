@@ -23,6 +23,7 @@ var initAngularStuff = function() {
   // Declare app level module which depends on views, and components
   console.log('Engaging angular.');
   angular.module('foodMeApp', [
+    'ionic',
     'ngAnimate',
     'ui.router',
     'ngIOS9UIWebViewPatch',
@@ -143,7 +144,7 @@ var initAngularStuff = function() {
           }
       });
   }]).
-  run(['$rootScope', 'fmaSharedState', function($rootScope, fmaSharedState) {
+  run(['$rootScope', 'fmaSharedState', '$ionicPlatform', function($rootScope, fmaSharedState, $ionicPlatform) {
     ga_id = fmaSharedState.ga_id;
     window.analytics = {
       trackEvent: function (cat, str) {
@@ -162,7 +163,7 @@ var initAngularStuff = function() {
         console.log('Adding transaction ITEM!');
       },
     };
-    FastClick.attach(document.body);
+
   }]);
 };
 
@@ -191,9 +192,6 @@ var app = {
     // Update DOM on a Received Event
     receivedEvent: function(id) {
       console.log('Received Event: ' + id);
-      setTimeout(function () {
-        navigator.splashscreen.hide();
-      }, 0);
       window.alert = function (txt) {
           navigator.notification.alert(txt, function(){
           }, "Burgie says..", "hush, burgie");
