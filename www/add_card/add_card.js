@@ -1,6 +1,6 @@
 /* jshint eqnull: true */
 
-angular.module('foodMeApp.addCard', ['ngRoute', 'ngTouch', 'foodmeApp.localStorage', 'foodmeApp.sharedState'])
+angular.module('foodMeApp.addCard', ['ngRoute', 'foodmeApp.localStorage', 'foodmeApp.sharedState'])
 
 .controller('AddCardCtrl', ["$scope", "$location", "fmaLocalStorage", "$http", "fmaSharedState",
 function($scope, $location, fmaLocalStorage, $http, fmaSharedState) {

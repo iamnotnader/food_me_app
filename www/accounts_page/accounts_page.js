@@ -1,6 +1,6 @@
 /* jshint eqnull: true */
 
-angular.module('foodMeApp.accountsPage', ['ngRoute', 'ngTouch', 'foodmeApp.localStorage', 'foodmeApp.sharedState'])
+angular.module('foodMeApp.accountsPage', ['ngRoute', 'foodmeApp.localStorage', 'foodmeApp.sharedState'])
 
 .controller('AccountsPageCtrl', ["$scope", "$location", "$http", "fmaLocalStorage", 'fmaSharedState', '$rootScope', '$timeout',
 function($scope, $location, $http, fmaLocalStorage, fmaSharedState, $rootScope, $timeout) {

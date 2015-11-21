@@ -136,9 +136,6 @@
         "cordova-plugin-device": {
             "PACKAGE_NAME": "io.foodme"
         },
-        "cordova-plugin-splashscreen": {
-            "PACKAGE_NAME": "io.foodme"
-        },
         "cordova-plugin-whitelist": {
             "PACKAGE_NAME": "io.foodme"
         },
@@ -169,7 +166,7 @@
         "cordova-plugin-statusbar": {
             "PACKAGE_NAME": "io.foodme"
         },
-        "ionic-plugin-keyboard": {
+        "cordova-plugin-splashscreen": {
             "PACKAGE_NAME": "io.foodme"
         }
     },

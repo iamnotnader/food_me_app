@@ -192,6 +192,10 @@ var app = {
     // Update DOM on a Received Event
     receivedEvent: function(id) {
       console.log('Received Event: ' + id);
+      setTimeout(function() {
+        navigator.splashscreen.hide();
+      }, 600);
+      cordova.plugins.Keyboard.hideKeyboardAccessoryBar(false);
       window.alert = function (txt) {
           navigator.notification.alert(txt, function(){
           }, "Burgie says..", "hush, burgie");

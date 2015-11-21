@@ -32,7 +32,7 @@ html {
 
 /* Portrait layout (default) */
 .app {
-  background:url(../img/logo.png) no-repeat center top; /* 170px x 200px */
+  background:url(../../img/logo.png) no-repeat center top; /* 170px x 200px */
   position:absolute;       /* position in the center of the screen */
   left:50%;
   top:50%;
@@ -220,7 +220,7 @@ $intro_screen__screenshot_height: (260 / 350) * $intro_screen__phone_height;
 }
 
 .intro_screen__enjoy_img {
-  background: url('../img/burgie_loading.gif') no-repeat center center;
+  background: url('../../img/burgie_loading.gif') no-repeat center center;
   position: absolute;
   left: 0;
   right: 0;
@@ -298,14 +298,7 @@ $intro_screen__screenshot_height: (260 / 350) * $intro_screen__phone_height;
   top: 50%;
   transform: translateY(-50%);
   -webkit-transform: translateY(-50%);
-  font-size: 1.5rem;
-  // Sigh.. increase the font-size a leetle bit on bigger screens.
-  @media #{$iphone-5to6} {
-    font-size: 1.7rem;
-  }
-  @media #{$iphone-6plusandup} {
-    font-size: 2.0rem;
-  }
+  font-size: 4vh;
 }
 
 .intro_screen__sign_in_button {
@@ -673,7 +666,7 @@ input {
 }
 
 .choose_address_v2__empty_pusheen {
-  background: url("../img/wink.gif") no-repeat center center;
+  background: url("../../img/wink.gif") no-repeat center center;
   position: absolute;
   left: 5%;
   right: 5%;
@@ -699,7 +692,7 @@ input {
 }
 
 .overall__loading_pusheen {
-  background: url("../img/burgie_loading.gif") no-repeat center center;
+  background: url("../../img/burgie_loading.gif") no-repeat center center;
   position: fixed;
   left: 5%;
   right: 5%;
@@ -746,7 +739,7 @@ $pulsate_iterations: infinite;
 }
 
 .tweet_button {
-  background: url("../img/twitter_share.png") no-repeat center center;
+  background: url("../../img/twitter_share.png") no-repeat center center;
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
@@ -777,7 +770,7 @@ $pulsate_iterations: infinite;
 }
 
 .facebook_button {
-  background: url("../img/facebook_share.png") no-repeat center center;
+  background: url("../../img/facebook_share.png") no-repeat center center;
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
@@ -833,7 +826,7 @@ $swipe_page__stack_height: 78%;
 }
 
 .swipe_page__loading_pusheen {
-  background-image: url("../img/burgie_loading.gif");
+  background-image: url("../../img/burgie_loading.gif");
   position: absolute;
   top: 20%;
   left: 0;
@@ -1036,17 +1029,6 @@ $sp_bottom_offset: 4%;
   font-size: 1.3rem;
 }
 
-.cart_page__empty_cart {
-  font-family: TitleFont;
-  text-transform: none;
-  margin-top: 1rem;
-  margin-left: 1.5rem;
-  margin-right: 1.5rem;
-  font-size: 1.5rem;
-  text-align: center;
-  color: #464646;
-}
-
 
 
 
@@ -1166,7 +1148,7 @@ $sp_bottom_offset: 4%;
 }
 
 .swipe_page__menu_button {
-  background: url(../img/hamburger_menu.png) no-repeat center top; /* 170px x 200px */
+  background: url(../../img/hamburger_menu.png) no-repeat center top; /* 170px x 200px */
   width: 45%;
   height: 33%;
   background-size: 100%;
@@ -1277,7 +1259,7 @@ header > .delivery_logo {
     height: 59px;
     margin: 0 auto;
     text-align: center;
-    background: url('../img/delivery-logo.png') no-repeat;
+    background: url('../../img/delivery-logo.png') no-repeat;
 }
 
 header > h1 {
@@ -1379,4 +1361,24 @@ form.oauth_form {
   display: block;
   margin-top: 0em;
 }
-
+.intro_screen__delivery_icon {
+  background: url("../../img/delivery_icon.png") no-repeat center center;
+  -webkit-transform: translateY(-50%);
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+  display: inline-block;
+  width: 17vh;
+  height: 5vh;
+  margin-top: 5vh;
+  vertical-align: top;
+}
+.intro_screen__delivery_text {
+  display: inline-block;
+  vertical-align: top;
+  margin-top: 3.8vh;
+  font-size: 3vh;
+  margin-right: 0.2vh;
+  font-family: TaglineFont;
+}

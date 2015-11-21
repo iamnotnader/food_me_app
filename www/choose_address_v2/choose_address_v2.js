@@ -1,4 +1,4 @@
-angular.module('foodMeApp.chooseAddressV2', ['ngRoute', 'ngTouch', 'foodmeApp.localStorage', 'foodmeApp.sharedState'])
+angular.module('foodMeApp.chooseAddressV2', ['ngRoute', 'foodmeApp.localStorage', 'foodmeApp.sharedState'])
 
 .controller('ChooseAddressV2Ctrl', ["$scope", "$location", "fmaLocalStorage", "$http", "fmaSharedState", "$rootScope", "$timeout",
 function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, $timeout) {

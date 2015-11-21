@@ -39,7 +39,7 @@ body {
   height: 100%;
 }
 .home_page_v2__hamburger_button {
-  background: url(../img/hamburger_menu.png) no-repeat center center;
+  background: url(../../img/hamburger_menu.png) no-repeat center center;
   width: 6vh;
   height: 80%;
   -webkit-background-size: cover;
@@ -53,7 +53,7 @@ body {
 .home_page_v2__search_icon {
   width: 8.5vh;
   height: 90%;
-  background: url(../img/search.png) no-repeat center center;
+  background: url(../../img/search.png) no-repeat center center;
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
@@ -66,7 +66,7 @@ body {
 .home_page_v2__burgie_icon {
   width: 8.5vh;
   height: 90%;
-  background: url(../img/active_burgie.png) no-repeat center center;
+  background: url(../../img/active_burgie.png) no-repeat center center;
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
@@ -79,7 +79,7 @@ body {
 .home_page_v2__cart_icon {
   width: 8.5vh;
   height: 90%;
-  background: url(../img/cart.png) no-repeat center center;
+  background: url(../../img/cart.png) no-repeat center center;
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
@@ -199,7 +199,8 @@ input.choose_address_v2__inner_input {
 .cart_page__clear_text {
   font-family: TitleFont;
   font-size: 6vh;
-  height: 10vh;
+  line-height: 6vh;
+  height: 6vh;
   position: absolute;
   left: 50%;
   top: 50%;
@@ -226,7 +227,7 @@ input.choose_address_v2__inner_input {
   background-color: white;
 }
 .choose_address__attribution {
-  background: url(../img/powered_by_google.png) no-repeat center center;
+  background: url(../../img/powered_by_google.png) no-repeat center center;
   top: 50%;
   transform: TranslateY(-50%);
   margin: 0auto;
@@ -324,7 +325,7 @@ input.choose_address_v2__inner_input {
   right: 0;
 }
 .stack__buttons__info {
-  background: url(../img/info_button.png) no-repeat center center;
+  background: url(../../img/info_button.png) no-repeat center center;
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
@@ -334,7 +335,7 @@ input.choose_address_v2__inner_input {
 }
 $like-height: 200%;
 .stack__buttons__like {
-  background: url(../img/like_button.png) no-repeat center center;
+  background: url(../../img/like_button.png) no-repeat center center;
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
@@ -347,7 +348,7 @@ $like-height: 200%;
   transform: translateY(-50%);
 }
 .stack__buttons__dislike {
-  background: url(../img/dislike_button.png) no-repeat center center;
+  background: url(../../img/dislike_button.png) no-repeat center center;
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
@@ -360,7 +361,7 @@ $like-height: 200%;
   transform: translateY(-50%);
 }
 .stack__buttons__shuffle_dishes {
-  background: url(../img/shuffle_button.png) no-repeat center center;
+  background: url(../../img/shuffle_button.png) no-repeat center center;
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
@@ -373,7 +374,7 @@ $like-height: 200%;
   transform: translateY(-50%);
 }
 .stack__buttons__new_merchants {
-  background: url(../img/next_merchant_button.png) no-repeat center center;
+  background: url(../../img/next_merchant_button.png) no-repeat center center;
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
@@ -400,7 +401,7 @@ $like-height: 200%;
   font-size: 6vh;
 }
 .stack__winking_burgie {
-  background: url("../img/wink.gif") no-repeat center center;
+  background: url("../../img/wink.gif") no-repeat center center;
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
@@ -458,6 +459,7 @@ $like-height: 200%;
   font-family: TitleFont;
   text-align: center;
   font-size: 5vh;
+  line-height: 7vh;
   position: absolute;
   top: 50%;
   left: 50%;
@@ -470,7 +472,7 @@ $like-height: 200%;
 .stack__single_card__food_image_loading {
   width: 100%;
   height: 75%;
-  background: url(../img/burgie_loading.gif) no-repeat center center;
+  background: url(../../img/burgie_loading.gif) no-repeat center center;
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
@@ -497,6 +499,7 @@ $like-height: 200%;
   text-transform: none;
   font-family: TaglineFont;
   font-size: 3.5vh;
+  line-height: 3.5vh;
   text-align: left;
   padding-left: 0.5rem;
   padding-right: .5rem;
@@ -534,8 +537,10 @@ $like-height: 200%;
   font-size: 4.5vh;
   position: absolute;
   left: 50%;
+  width: 100%;
+  text-align: center;
   top: 50%;
-  transform: translateX(-50%)translateY(-50%);
+  transform: translateX(-50%) translateY(-50%);
 }
 .cart_page_v2__items_container {
   top: 14%;
@@ -600,7 +605,7 @@ $like-height: 200%;
   top: 50%;
   left: 50%;
   transform: translateY(-50%) translateX(-50%);
-  background: url(../img/delete.png) no-repeat center center;
+  background: url(../../img/delete.png) no-repeat center center;
   background-size: cover;
 }
 
@@ -608,7 +613,7 @@ $like-height: 200%;
   position: absolute;
   width: 2.5vh;
   height: 2.5vh;
-  background: url("../img/clear_text.svg") no-repeat center center;
+  background: url("../../img/clear_text.svg") no-repeat center center;
   top: 50%;
   transform: translateY(-50%);
   -webkit-transform: translateY(-50%);
@@ -658,11 +663,12 @@ $like-height: 200%;
 }
 .search_page_v2__keyword_container {
   width: 100%;
-  margin-top: 1vh;
+  margin-top: 2.5vh;
   margin-left: 4vw;
   text-transform: none;
   font-family: TitleFont;
   font-size: 4vh;
+  margin-bottom: 1vh;
 }
 input.search_page_v2__keyword_input_inner {
   height: 5vh;
@@ -677,6 +683,7 @@ input.search_page_v2__keyword_input_inner {
   -webkit-appearance: none;
   border: 1px solid #333333;
   font-size: 3.5vh;
+  line-height: 4vh;
   font-family: TaglineFont;
   width: 80vw;
 }
@@ -709,7 +716,7 @@ select.search_page_v2__keyword_input_inner {
   top: 50%;
   right: 5vw;
   transform: translateY(-50%);
-  background: url(../img/minus.png) no-repeat center center;
+  background: url(../../img/minus.png) no-repeat center center;
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
@@ -722,7 +729,7 @@ select.search_page_v2__keyword_input_inner {
   top: 50%;
   left: 5vw;
   transform: translateY(-50%);
-  background: url(../img/plus.png) no-repeat center center;
+  background: url(../../img/plus.png) no-repeat center center;
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
@@ -760,4 +767,15 @@ select.search_page_v2__keyword_input_inner {
   transform: translateX(-50%)translateY(-50%);
   font-size: 5vh;
   font-family: TitleFont;
+}
+.cart_page__empty_cart {
+  font-family: TitleFont;
+  text-transform: none;
+  margin-top: 3vh;
+  margin-left: 3vh;
+  margin-right: 3vh;
+  font-size: 5vh;
+  line-height: 6vh;
+  text-align: center;
+  color: #464646;
 }

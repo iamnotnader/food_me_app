@@ -95,9 +95,6 @@
         "cordova-plugin-console": {
             "PACKAGE_NAME": "com.phonegap.helloworld"
         },
-        "cordova-plugin-splashscreen": {
-            "PACKAGE_NAME": "com.phonegap.helloworld"
-        },
         "org.apache.cordova.inappbrowser": {
             "PACKAGE_NAME": "com.phonegap.helloworld"
         },
@@ -122,10 +119,7 @@
         "com.darktalker.cordova.screenshot": {
             "PACKAGE_NAME": "io.foodme"
         },
-        "cordova-plugin-statusbar": {
-            "PACKAGE_NAME": "io.foodme"
-        },
-        "ionic-plugin-keyboard": {
+        "cordova-plugin-splashscreen": {
             "PACKAGE_NAME": "io.foodme"
         }
     },

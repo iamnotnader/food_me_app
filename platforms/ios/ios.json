@@ -21,7 +21,7 @@
                             "count": 1
                         },
                         {
-                            "xml": "<feature name=\"Keyboard\"><param name=\"ios-package\" onload=\"true\" value=\"IonicKeyboard\" /></feature>",
+                            "xml": "<feature name=\"SplashScreen\"><param name=\"ios-package\" value=\"CDVSplashScreen\" /><param name=\"onload\" value=\"true\" /></feature>",
                             "count": 1
                         }
                     ]
@@ -33,7 +33,7 @@
         "cordova-plugin-statusbar": {
             "PACKAGE_NAME": "io.foodme"
         },
-        "ionic-plugin-keyboard": {
+        "cordova-plugin-splashscreen": {
             "PACKAGE_NAME": "io.foodme"
         }
     },
@@ -48,13 +48,12 @@
             ]
         },
         {
-            "file": "plugins/ionic-plugin-keyboard/www/ios/keyboard.js",
-            "id": "ionic-plugin-keyboard.keyboard",
-            "pluginId": "ionic-plugin-keyboard",
+            "file": "plugins/cordova-plugin-splashscreen/www/splashscreen.js",
+            "id": "cordova-plugin-splashscreen.SplashScreen",
+            "pluginId": "cordova-plugin-splashscreen",
             "clobbers": [
-                "cordova.plugins.Keyboard"
-            ],
-            "runs": true
+                "navigator.splashscreen"
+            ]
         }
     ]
 }

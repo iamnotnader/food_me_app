@@ -1,5 +1,5 @@
 /* jshint eqnull: true */
-angular.module('foodMeApp.searchPageV2', ['ngRoute', 'ngTouch', 'foodmeApp.localStorage', 'foodmeApp.sharedState'])
+angular.module('foodMeApp.searchPageV2', ['ngRoute', 'foodmeApp.localStorage', 'foodmeApp.sharedState'])
 
 .controller('SearchPageV2Ctrl', ["$scope", "$location", "$http", "fmaLocalStorage", 'fmaSharedState', '$rootScope', '$timeout',
 function($scope, $location, $http, fmaLocalStorage, fmaSharedState, $rootScope, $timeout) {
