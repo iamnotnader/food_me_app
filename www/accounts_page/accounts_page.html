@@ -6,14 +6,14 @@
 </div>
 <div class="home_page_v2__top_bar">
   <div class="home_page_v2__cell_border"></div>
-  <div class="home_page_v2__left_text" ng-click="backButtonPressed()">
+  <div class="home_page_v2__left_text" on-touch="backButtonPressed()">
     <!--<div class="home_page_v2__hamburger_button">-->
     <!--</div>-->
     <div class="home_page_v2__next" style="left: 5vw; text-align: left;">
       Back
     </div>
   </div>
-  <div class="home_page_v2__right_text" ng-click="finishButtonPressed()" style="right: 0; width: 36vw;">
+  <div class="home_page_v2__right_text" on-touch="finishButtonPressed()" style="right: 0; width: 36vw;">
     <div class="home_page_v2__next">
       Payment
     </div>
@@ -24,7 +24,7 @@
   <div class="choose_address__address_list">
     <div style="min-height: 101%">
       <div ng-repeat="accountObj in accountsList">
-        <div class="choose_address__list_cell" ng-click="cellSelected($index)">
+        <div class="choose_address__list_cell" on-touch="cellSelected($index)">
           <div class="choose_account__cell_container">
             <div class="choose_account__cell_top_row">
               {{accountObj.user.first_name}} {{accountObj.user.last_name}}
@@ -43,7 +43,7 @@
           </div>
         </div>
       </div>
-      <div class="choose_address__list_cell" ng-click="addAccountButtonPressed()" style="margin-bottom: 1em;">
+      <div class="choose_address__list_cell" on-touch="addAccountButtonPressed()" style="margin-bottom: 1em;">
         <div class="choose_address__add_new_text">+ Add new account</div>
         <div class="choose_address__cell_border"></div>
         <img class="choose_address__arrow" src="img/arrow.png" alt="">

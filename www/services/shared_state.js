@@ -68,7 +68,7 @@ angular.module('foodmeApp.sharedState', [])
           + address.state + ', ' + address.zip_code
     },
 
-    defaultDeliveryMinimumLimit: 50,
+    defaultDeliveryMinimumLimit: 30,
 
     instructions: 'Tell people to download the FoodMe app and get more orders!',
 
@@ -173,6 +173,7 @@ angular.module('foodmeApp.sharedState', [])
       {pattern: /.*combination.*/ig, replacement: ''},
       {pattern: /.*diesel.*/ig, replacement: ''},
       {pattern: /.*two.*eggs.*sausage.*/ig, replacement: ''},
+      {pattern: /\s*gaga/ig, replacement: ''},
     ],
 
     // This is how we get commissions. It is the "You hear about us" ID from delivery.com.

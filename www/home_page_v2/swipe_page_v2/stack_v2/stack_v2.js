@@ -1,9 +1,9 @@
 /* jshint eqnull: true */
 
-angular.module('foodMeApp.stackV2', ['ngRoute', 'foodmeApp.localStorage', 'foodmeApp.sharedState'])
+angular.module('foodMeApp.stackV2', ['ngRoute', 'foodmeApp.localStorage', 'foodmeApp.sharedState', 'ionic'])
 
-.controller('StackV2Ctrl', ["$scope", "$location", "fmaLocalStorage", "$http", "fmaSharedState", "$rootScope", "$timeout", "$q",
-function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, $timeout, $q) {
+.controller('StackV2Ctrl', ["$scope", "$location", "fmaLocalStorage", "$http", "fmaSharedState", "$rootScope", "$timeout", "$q", "$ionicPopup",
+function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, $timeout, $q, $ionicPopup) {
   var MAX_CARDS_IN_STACK = 3;
   var MAX_RESTAURANT_NAME_LENGTH = 32;
   var MAX_ITEM_NAME_LENGTH = 42;
@@ -200,14 +200,29 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
     cardObj.bind('touchend mouseup', topCardHandler);
   };
 
+  // If we find that a merchant has no dishes, we set this variable as a signal
+  // that we should show a null state instead of showing the stack. It's shitty but
+  // right now you have to make sure you unset it when you go to a new merchant.
+  $scope.emptyStackConfirmed = false;
   var initStackWithCards = function(cardInfoList, maxCardsInStack, stackContainer) {
     console.log('initStackWithCards');
     // Shuffle the food items to keep things fun.
     $scope.globals.allFoodItems = cardInfoList;
+    if ($scope.globals.allFoodItems == null ||
+        $scope.globals.allFoodItems.length === 0) {
+      $scope.canManipulateCards = true;
+      $scope.emptyStackConfirmed = true;
+      return;
+    }
 
     if (cardInfoList == null || stackContainer == null) {
       console.log("Encountered null in initStackWithCards.");
       return;
+    }
+    // Start the array at the previous itemIndex.
+    while ($scope.stackContainer.children().length > 1) {
+      firstCard = $scope.stackContainer.children()[0];
+      firstCard.remove();
     }
     var firstCard = stackContainer.children()[0];
     firstCard.remove();
@@ -226,7 +241,6 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
     $scope.canManipulateCards = false;
     lastCard.unbind();
     setEventHandlers(lastCard);
-    setMerchantName();
   };
 
   var removeTopCardAddNewCard = function() {
@@ -267,7 +281,8 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
 
   $scope.likePressed = function() {
     console.log('like');
-    if (!$scope.canManipulateCards) {
+    if (!$scope.canManipulateCards || $scope.emptyStackConfirmed) {
+      console.log('Not liking because can\'t manipulate cards');
       return;
     }
     var stackCards = $scope.stackContainer.children();
@@ -290,13 +305,12 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
     fmaLocalStorage.setObjectWithExpirationSeconds(
         'userCart', $scope.globals.userCart,
         fmaSharedState.foodItemValidationSeconds);
-    $scope.globals.minimumLeft -= parseFloat(itemInfo.price);
-    $scope.globals.minimumLeft = Math.max(0, $scope.globals.minimumLeft);
   };
 
   $scope.dislikePressed = function() {
     console.log('dislike');
-    if (!$scope.canManipulateCards) {
+    if (!$scope.canManipulateCards || $scope.emptyStackConfirmed) {
+      console.log('Not disliking because can\'t manipulate cards');
       return;
     }
     var stackCards = $scope.stackContainer.children();
@@ -354,7 +368,8 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
 
   $scope.shuffleDishesPressed = function() {
     console.log('shuffleDishes');
-    if (!$scope.canManipulateCards) {
+    if (!$scope.canManipulateCards || $scope.emptyStackConfirmed) {
+      console.log('Not shuffling dishes because can\'t manipulate cards');
       return;
     }
     resetStack();
@@ -375,11 +390,9 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
     }
   };
 
-  $scope.shuffleMerchantsPressed = function() {
-    console.log('shuffleMerchants');
-    if (!$scope.canManipulateCards) {
-      return;
-    }
+  var actuallyShuffleMerchants = function() {
+    $scope.emptyStackConfirmed = false;
+
     // TODO(daddy): Warn the user before clearing the cart.
     $scope.globals.userCart = [];
     fmaLocalStorage.setObjectWithExpirationSeconds(
@@ -406,11 +419,55 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
         return;
       }
     );
+  }
+
+  $scope.shuffleMerchantsPressed = function() {
+    console.log('shuffleMerchants');
+    if (!$scope.canManipulateCards) {
+      console.log('Not shuffling merchants because can\'t manipulate cards');
+      return;
+    }
+    if ($scope.globals.userCart != null &&
+        $scope.globals.userCart.length > 0) {
+      var confirmPopup = $ionicPopup.confirm({
+        title: 'Burgie says...',
+        template: 'Yo. Going to the next merchant will clear your cart-- you ok with this?',
+        cancelText: 'Nah',
+        okText: 'Yeah',
+      });
+      confirmPopup.then(function(res) {
+        if(res) {
+          console.log('Yay shuffling merchants');
+          actuallyShuffleMerchants();
+        } else {
+          console.log('Staying on current merchant.');
+        }
+      });
+      return;
+    }
+    actuallyShuffleMerchants();
   };
 
   var setCartTotal = function() {
     $scope.cartTotal = $scope.globals.computeCartTotal($scope.globals.userCart).toFixed(2);
   };
+  var setMinimumLeft = function() {
+    if ($scope.globals.allMerchants == null ||
+       $scope.globals.merchantIndex == null) {
+      console.log('Not adjusting minimum because allMerchants or merchantIndex is null');
+      return;
+    }
+    var currentMerchant = $scope.globals.allMerchants[$scope.globals.merchantIndex];
+    if (currentMerchant.ordering == null || currentMerchant.ordering.minimum == null ||
+        $scope.globals.userCart == null) {
+      console.log('Not adjusting minimum because minimum or cart is null.');
+      return;
+    }
+
+    actualMinimum = parseFloat(currentMerchant.ordering.minimum);
+    var cartTotal = $scope.globals.computeCartTotal($scope.globals.userCart);
+    $scope.globals.minimumLeft = Math.max(0, actualMinimum - cartTotal);
+  }
 
   setCartTotal();
   $scope.$watch(
@@ -420,6 +477,7 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
     },
     function() {
       setCartTotal();
+      setMinimumLeft();
   });
 
   var setMinimumString = function() {
@@ -525,7 +583,8 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
             foodData.push(currentItem);
           }
 
-          resolve(foodData);
+          // Shuffle the results for fun.
+          resolve(_.shuffle(foodData));
         },
         function(err) {
           // Messed up response???
@@ -623,11 +682,6 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
               goodMerchant = goodMerchant &&
                   merchantObj.ordering.minimum <= $scope.globals.deliveryMinimumLimit;
             }
-            if ($scope.globals.selectedMerchantId != null &&
-                $scope.globals.selectedMerchantId != $scope.globals.DEFAULT_MERCHANT_ID) {
-              goodMerchant = goodMerchant &&
-                  merchantObj.id == $scope.globals.selectedMerchantId;
-            }
             return goodMerchant;
           }
         );
@@ -636,11 +690,20 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
           reject('No merchants around.');
           return;
         }
-        $scope.globals.merchantIndex = 0;
         $scope.globals.allMerchants = merchants;
+        $scope.globals.merchantIndex = _.findIndex(
+            $scope.globals.allMerchants,
+            function(merchantObj) {
+              return merchantObj.id == $scope.globals.selectedMerchantId;
+            }
+        );
+        if ($scope.globals.merchantIndex < 0) {
+          $scope.globals.merchantIndex = 0;
+        }
         var currentMerchant = $scope.globals.allMerchants[$scope.globals.merchantIndex];
         if (currentMerchant.ordering && currentMerchant.ordering.minimum) {
           $scope.globals.minimumLeft = parseFloat(currentMerchant.ordering.minimum);
+          setMerchantName();
         }
         resolve(getOpenDishesForMerchantPromise(currentMerchant));
       },
@@ -651,60 +714,89 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
     });
   };
 
-  var initEverything = function() {
-    $scope.$watch('globals.userAddress', function() {
-      console.log('Address has changed.');
-      var userAddress = $scope.globals.userAddress;
-      if (userAddress == null || userAddress == '') {
-        console.log('No address-- not doing anything.');
-        return;
-      }
-      var currentSearch =
-          JSON.stringify($scope.globals.selectedMerchantId) +
-          JSON.stringify($scope.globals.deliveryMinimumLimit) +
-          JSON.stringify($scope.globals.keywordValue);
-      console.log(currentSearch + ' ' + $scope.globals.lastSearch);
+  $scope.initEverything = function() {
+    $scope.emptyStackConfirmed = false;
+    var userAddress = $scope.globals.userAddress;
+    if (userAddress == null || userAddress == '') {
+      console.log('No address-- not doing anything.');
+      return;
+    }
+    var currentSearch =
+        JSON.stringify($scope.globals.selectedMerchantId) +
+        JSON.stringify($scope.globals.deliveryMinimumLimit) +
+        JSON.stringify($scope.globals.keywordValue);
+    console.log(currentSearch + ' ' + $scope.globals.lastSearch);
 
-      // Save the stackContainer so we can avoid crawling the dom.
-      $scope.stackContainer = $('.stack__cards__cards_container');
-      $scope.restaurantName = $('.stack__restaurant_name');
-      if ($scope.globals.allFoodItems != null &&
-          JSON.stringify($scope.globals.lastAddress) == JSON.stringify(userAddress) &&
-          $scope.globals.lastSearch == currentSearch) {
-        console.log('Not refreshing stack.');
+    // Save the stackContainer so we can avoid crawling the dom.
+    $scope.stackContainer = $('.stack__cards__cards_container');
+    $scope.restaurantName = $('.stack__restaurant_name');
+    if ($scope.globals.allFoodItems != null &&
+        JSON.stringify($scope.globals.lastAddress) == JSON.stringify(userAddress) &&
+        $scope.globals.lastSearch == currentSearch) {
+      console.log('Not refreshing stack.');
+      var currentMerchant = $scope.globals.allMerchants[$scope.globals.merchantIndex];
+      if (currentMerchant.ordering && currentMerchant.ordering.minimum) {
+        $scope.globals.minimumLeft = parseFloat(currentMerchant.ordering.minimum);
+      }
+      setMerchantName();
+      $scope.globals.minimumLeft = Math.max(0, $scope.globals.minimumLeft - $scope.cartTotal);
+
+      initStackWithCards(
+          $scope.globals.allFoodItems,
+          MAX_CARDS_IN_STACK,
+          $scope.stackContainer);
+      return;
+    }
+
+    $scope.globals.minimumLeft = null;
+    $scope.globals.lastAddress = userAddress;
+    $scope.globals.lastSearch = currentSearch;
+    resetStack();
+    $scope.globals.userCart = [];
+    fmaLocalStorage.setObjectWithExpirationSeconds(
+        'userCart', $scope.globals.userCart,
+        fmaSharedState.foodItemValidationSeconds);
+    getMerchantsAndFoodItemsPromise(userAddress).then(
+      function(res) {
+        $scope.globals.itemIndex = 0;
         var currentMerchant = $scope.globals.allMerchants[$scope.globals.merchantIndex];
         if (currentMerchant.ordering && currentMerchant.ordering.minimum) {
           $scope.globals.minimumLeft = parseFloat(currentMerchant.ordering.minimum);
         }
-        $scope.globals.minimumLeft = Math.max(0, $scope.globals.minimumLeft - $scope.cartTotal);
-
-        // Start the array at the previous itemIndex.
-        initStackWithCards(
-            $scope.globals.allFoodItems,
-            MAX_CARDS_IN_STACK,
-            $scope.stackContainer);
-        return;
-      }
-
-      $scope.globals.minimumLeft = null;
-      $scope.globals.lastAddress = userAddress;
-      $scope.globals.lastSearch = currentSearch;
-      resetStack();
-      $scope.globals.userCart = [];
-      fmaLocalStorage.setObjectWithExpirationSeconds(
-          'userCart', $scope.globals.userCart,
-          fmaSharedState.foodItemValidationSeconds);
-      getMerchantsAndFoodItemsPromise(userAddress).then(
-        function(res) {
-          $scope.globals.itemIndex = 0;
-          initStackWithCards(res, MAX_CARDS_IN_STACK, $scope.stackContainer);
-        },
-        function(err) {
-          console.log('There was a problem with getMerchantsAndFoodItemsPromise.');
-        } 
-      );
-    });
+        setMerchantName();
+        initStackWithCards(res, MAX_CARDS_IN_STACK, $scope.stackContainer);
+      },
+      function(err) {
+        $scope.emptyStackConfirmed = true;
+        // Pretty hackey. We probably need to null out some other things too.
+        $scope.globals.allMerchants = null;
+        $scope.globals.allFoodItems = null;
+        $scope.globals.merchantIndex = null;
+        if (($scope.globals.keywordValue != null && $scope.globals.keywordValue !== '')||
+            $scope.globals.selectedMerchantId !== $scope.globals.DEFAULT_MERCHANT_ID ||
+            $scope.globals.deliveryMinimumLimit <= 15) {
+          var confirmPopup = $ionicPopup.confirm({
+            title: 'Burgie says...',
+            template: 'Shoot. There aren\'t any matching merchants. Want to loosen your search preferences?',
+            cancelText: 'Nah',
+            okText: 'Yeah',
+          });
+          confirmPopup.then(function(res) {
+            if(res) {
+              console.log('Loosening search prefs.');
+              $scope.searchButtonPressed();
+            } else {
+              console.log('Not loosening search prefs..');
+            }
+          });
+        }
+        console.log('There was a problem with getMerchantsAndFoodItemsPromise.');
+      } 
+    );
   };
 
-  initEverything();
+  $scope.$watch('globals.userAddress', function() {
+    console.log('Address has changed.');
+    $scope.initEverything();
+  });
 }]);

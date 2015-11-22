@@ -31,7 +31,7 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
     alert('We need something in your cart first.');
     mainViewObj.removeClass();
     mainViewObj.addClass('slide-right');
-    $location.path('/cart_page');
+    $location.path('/home_page_v2/cart_page_v2');
     return;
   }
   $scope.userAddress = fmaLocalStorage.getObject('userAddress');
@@ -41,7 +41,7 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
     alert('We need to get an address from you first.');
     mainViewObj.removeClass();
     mainViewObj.addClass('slide-right');
-    $location.path('/choose_address_v2');
+    $location.path('/home_page_v2/swipe_page_v2');
     return;
   }
   $scope.cardSelected = fmaLocalStorage.getObject('cardSelected');

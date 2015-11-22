@@ -13,7 +13,7 @@ function($scope, $location, $http, fmaLocalStorage, fmaSharedState, $rootScope, 
       return merchant.summary.name;
     });
   }
-  $scope.sortedMerchants.unshift({id: $scope.globals.DEFAULT_MERCHANT_ID, summary: { name: 'Not selected.' } });
+  $scope.sortedMerchants.unshift({id: $scope.globals.DEFAULT_MERCHANT_ID, summary: { name: 'Any merchant.' } });
 
   // Set the selected merchantId if we have one.
   var merchantIdIsMissing = _.every(
@@ -48,6 +48,9 @@ function($scope, $location, $http, fmaLocalStorage, fmaSharedState, $rootScope, 
     // TODO(daddy): Warn the user when clearing the select.
     $scope.globals.selectedMerchantId = $scope.globals.DEFAULT_MERCHANT_ID;
   };
+  $scope.clearKeywordPressed = function() {
+    $scope.globals.keywordValue = '';
+  };
   $scope.addToLimit = function() {
     $scope.globals.deliveryMinimumLimit++;
   };
@@ -58,7 +61,7 @@ function($scope, $location, $http, fmaLocalStorage, fmaSharedState, $rootScope, 
   $scope.doneButtonPressed = function() {
     // Save our search variables and go back to the swipe page.
     $scope.globals.saveSearchParams();
-    $('.swipe_page__bottom_bar').animate({left: '33.33333%'});
+    $('.swipe_page__bottom_bar').css({left: '33.33333%'});
     $location.path('/home_page_v2/swipe_page_v2');
     return;
   };

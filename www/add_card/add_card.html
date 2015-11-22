@@ -17,8 +17,8 @@
           <input placeholder="CVV" class="smallField" type="text" name="cvv" ng-model="cardFields.cvv" required>
           <input placeholder="Billing zip" class="smallField" type="text" name="billingZip" ng-model="cardFields.billingZip" maxlength="5" required>
         </div>
-        <button class="orange_submit" ng-click="addCardPressed()">Add card</button>
-        <button class="orange_submit" ng-click="cancelPressed()" style="margin-top: 3%; background: #3C5988;">Cancel</button>
+        <button class="orange_submit" on-touch="addCardPressed()">Add card</button>
+        <button class="orange_submit" on-touch="cancelPressed()" style="margin-top: 3%; background: #3C5988;">Cancel</button>
       </form>
     </div>
   </div>

@@ -28,14 +28,8 @@ var initAngularStuff = function() {
     'ui.router',
     'ngIOS9UIWebViewPatch',
     'foodMeApp.introScreen',
-    'foodMeApp.homePage',
-    'foodMeApp.swipePage',
-    'foodMeApp.searchPage',
-    'foodMeApp.recentOrdersPage',
-    'foodMeApp.cartPage',
     'foodMeApp.chooseCard',
     'foodmeApp.sharedState',
-    'foodMeApp.chooseAddressV2',
     'foodMeApp.accountsPage',
     'foodMeApp.addCard',
     'foodMeApp.addPhone',
@@ -65,36 +59,6 @@ var initAngularStuff = function() {
           url: '/add_card',
           templateUrl: 'add_card/add_card.html',
           controller: 'AddCardCtrl'
-      })
-      .state('cart_page', {
-          url: '/cart_page',
-          templateUrl: 'cart_page/cart_page.html',
-          controller: 'CartPageCtrl'
-      })
-      .state('choose_address_v2', {
-          url: '/choose_address_v2',
-          templateUrl: 'choose_address_v2/choose_address_v2.html',
-          controller: 'ChooseAddressV2Ctrl'
-      })
-      .state('home_page', {
-          url: '/home_page',
-          templateUrl: 'home_page/home_page_partial.html',
-          controller: 'HomePageCtrl'
-      })
-      .state('home_page.swipe_page', {
-          url: '/swipe_page',
-          templateUrl: 'home_page/swipe_page.html',
-          controller: 'SwipePageCtrl'
-      })
-      .state('home_page.search_page', {
-          url: '/search_page',
-          templateUrl: 'home_page/search_page.html',
-          controller: 'SearchPageCtrl'
-      })
-      .state('home_page.recent_orders', {
-          url: '/recent_orders',
-          templateUrl: 'home_page/recent_orders.html',
-          controller: 'RecentOrdersPageCtrl'
       })
       .state('choose_card', {
           url: '/choose_card',

@@ -1,9 +1,9 @@
 /* jshint eqnull: true */
 
-angular.module('foodMeApp.homePageV2', ['ngRoute', 'foodmeApp.localStorage', 'foodmeApp.sharedState', 'foodMeApp.stackHelper'])
+angular.module('foodMeApp.homePageV2', ['ngRoute', 'foodmeApp.localStorage', 'foodmeApp.sharedState', 'foodMeApp.stackHelper', 'ionic'])
 
-.controller('HomePageV2Ctrl', ["$scope", "$location", "fmaLocalStorage", "$http", "fmaSharedState", "$q", "fmaStackHelper", "$timeout", "$interval",
-function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $q, fmaStackHelper, $timeout, $interval) {
+.controller('HomePageV2Ctrl', ["$scope", "$location", "fmaLocalStorage", "$http", "fmaSharedState", "$q", "fmaStackHelper", "$timeout", "$interval", "$ionicPopup",
+function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $q, fmaStackHelper, $timeout, $interval, $ionicPopup) {
   $scope.searchButtonPressed = function() {
     console.log('Search button pressed.');
     $('.swipe_page__bottom_bar').css({left: '0%'});
@@ -65,12 +65,19 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $q, fmaStack
     console.log('Checkout button pressed.');
     if ($scope.globals.userCart == null ||
         $scope.globals.userCart.length == 0) {
-      // TODO(daddy): Need to make sexy alerts.
-      alert('Bro. You need to add something to your cart first. Swipe right. The food loves you.');
+      var alertPopup = $ionicPopup.alert({
+        title: 'Burgie says...',
+        template: 'Bro. You need to add something to your cart first. Swipe right. The food loves you.',
+        okText: 'Hush, burgie.',
+      });
       return;
     }
     if ($scope.globals.minimumLeft > 0) {
-      alert('Beat the delivery minimum first. Swipe right more. We believe in you.');
+      var alertPopup = $ionicPopup.alert({
+        title: 'Burgie says...',
+        template: 'Beat the delivery minimum first. Swipe right more. We believe in you.',
+        okText: 'Hush, burgie.',
+      });
       return;
     }
 

@@ -1,7 +1,7 @@
-angular.module('foodMeApp.chooseAddressV3', ['ngRoute', 'foodmeApp.localStorage', 'foodmeApp.sharedState'])
+angular.module('foodMeApp.chooseAddressV3', ['ngRoute', 'foodmeApp.localStorage', 'foodmeApp.sharedState', 'ionic'])
 
-.controller('ChooseAddressV3Ctrl', ["$scope", "$location", "fmaLocalStorage", "$http", "fmaSharedState", "$rootScope", "$timeout",
-function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, $timeout) {
+.controller('ChooseAddressV3Ctrl', ["$scope", "$location", "fmaLocalStorage", "$http", "fmaSharedState", "$rootScope", "$timeout", "$ionicPopup",
+function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, $timeout, $ionicPopup) {
 
   if ($scope.globals.userAddress != null) {
     $scope.addressQuery = fmaSharedState.addressToString($scope.globals.userAddress);
@@ -112,7 +112,7 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
     placesVanillaService.getDetails({placeId: addressChosen.place_id}, handleChosenAddress);
   };
 
-  $scope.clearTextPressed = function() {
+  var actuallyClearAddress = function() {
     $scope.addressQuery = '';
     $scope.predictedAddresses.data = [];
     $scope.globals.userAddress = null;
@@ -124,5 +124,27 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
         'userCart', null,
         fmaSharedState.testing_invalidation_seconds);
     $scope.globals.minimumLeft = null;
+  }
+
+  $scope.clearTextPressed = function() {
+    if ($scope.globals.userCart != null &&
+        $scope.globals.userCart.length > 0) {
+      var confirmPopup = $ionicPopup.confirm({
+        title: 'Burgie says...',
+        template: 'Yo. Changing your address will clear your cart-- you ok with this?',
+        cancelText: 'Nah',
+        okText: 'Yeah',
+      });
+      confirmPopup.then(function(res) {
+        if(res) {
+          console.log('Yay shuffling merchants');
+          actuallyClearAddress();
+        } else {
+          console.log('Staying on current merchant.');
+        }
+      });
+      return;
+    }
+    actuallyClearAddress();
   };
 }]);
