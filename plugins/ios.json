@@ -168,6 +168,9 @@
         },
         "cordova-plugin-inappbrowser": {
             "PACKAGE_NAME": "io.foodme"
+        },
+        "ionic-plugin-deploy": {
+            "PACKAGE_NAME": "io.foodme"
         }
     },
     "dependent_plugins": {}

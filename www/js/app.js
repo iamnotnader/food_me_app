@@ -23,7 +23,8 @@ var initAngularStuff = function() {
   // Declare app level module which depends on views, and components
   console.log('Engaging angular.');
   angular.module('foodMeApp', [
-    'ionic',
+    'ionic','ionic.service.core',
+    
     'ngAnimate',
     'ui.router',
     'ngIOS9UIWebViewPatch',

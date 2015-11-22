@@ -107,4 +107,5 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $q, fmaStack
     $location.path('/accounts_page');
     return;
   }
+
 }]);

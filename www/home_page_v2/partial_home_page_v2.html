@@ -4,7 +4,7 @@
     <!--<div class="home_page_v2__hamburger_button">-->
     <!--</div>-->
   </div>
-  <div class="home_page_v2__right_text" on-touch="checkoutButtonPressed()" style="right: 0; width: 36vw;">
+  <div class="home_page_v2__right_text" on-tap="checkoutButtonPressed()" style="right: 0; width: 36vw;">
     <div class="home_page_v2__next">
       Checkout
     </div>
@@ -12,15 +12,15 @@
 </div>
 
 <div class="swipe_page__bottom_menu">
-  <div on-touch="searchButtonPressed()" class="swipe_page__bottom_button">
+  <div on-tap="searchButtonPressed()" class="swipe_page__bottom_button">
     <div class="home_page_v2__search_icon">
     </div>
   </div>
-  <div on-touch="homeButtonPressed()" class="swipe_page__bottom_button">
+  <div on-tap="homeButtonPressed()" class="swipe_page__bottom_button">
     <div class="home_page_v2__burgie_icon">
     </div>
   </div>
-  <div on-touch="cartButtonPressed()" class="swipe_page__bottom_button">
+  <div on-tap="cartButtonPressed()" class="swipe_page__bottom_button">
     <div class="home_page_v2__cart_icon">
       <div class="home_page_v2__cart_badge" ng-show="globals.userCart.length !== 0">
         <div class="home_page_v2__cart_badge__inner">{{globals.userCart.length}}</div>

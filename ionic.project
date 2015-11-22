@@ -1,6 +1,6 @@
 {
   "name": "food_me_app",
-  "app_id": "",
+  "app_id": "2086b8a3",
   "gulpStartupTasks": [
     "sass",
     "watch"

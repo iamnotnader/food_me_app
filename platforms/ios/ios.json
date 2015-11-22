@@ -27,6 +27,10 @@
                         {
                             "xml": "<feature name=\"InAppBrowser\"><param name=\"ios-package\" value=\"CDVInAppBrowser\" /></feature>",
                             "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"IonicDeploy\"><param name=\"ios-package\" onload=\"true\" value=\"IonicDeploy\" /></feature>",
+                            "count": 1
                         }
                     ]
                 }
@@ -41,6 +45,9 @@
             "PACKAGE_NAME": "io.foodme"
         },
         "cordova-plugin-inappbrowser": {
+            "PACKAGE_NAME": "io.foodme"
+        },
+        "ionic-plugin-deploy": {
             "PACKAGE_NAME": "io.foodme"
         }
     },
@@ -69,6 +76,14 @@
             "clobbers": [
                 "cordova.InAppBrowser.open",
                 "window.open"
+            ]
+        },
+        {
+            "file": "plugins/ionic-plugin-deploy/www/ionicdeploy.js",
+            "id": "ionic-plugin-deploy.IonicDeploy",
+            "pluginId": "ionic-plugin-deploy",
+            "clobbers": [
+                "IonicDeploy"
             ]
         }
     ]

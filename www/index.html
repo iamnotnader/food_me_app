@@ -21,11 +21,11 @@
 -->
 <html lang="en" ng-app="foodMeApp" class="no-js">
     <head>
-        <meta charset="utf-8" />
-        <meta name="format-detection" content="telephone=no" />
-        <meta name="msapplication-tap-highlight" content="no" />
+        <meta charset="utf-8">
+        <meta name="format-detection" content="telephone=no">
+        <meta name="msapplication-tap-highlight" content="no">
         <!-- WARNING: for iOS 7, remove the width=device-width and height=device-height attributes. See https://issues.apache.org/jira/browse/CB-4323 -->
-        <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" />
+        <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi">
         <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css">
         <link rel="stylesheet" href="bower_components/html5-boilerplate/dist/css/normalize.css">
         <link rel="stylesheet" href="bower_components/html5-boilerplate/dist/css/main.css">
@@ -34,6 +34,8 @@
         <script src="bower_components/jquery/dist/jquery.js"></script>
         <link rel="stylesheet" href="styles/css/ionic.app.css">
         <script src="lib/ionic/js/ionic.bundle.js"></script>
+        <!--TODO(daddy): This needs to be updated manually atm-->
+        <script src="lib/ionic-platform-web-client/dist/ionic.io.bundle.min.js"></script>
 
         <!--My stuff-->
         <link rel="stylesheet" type="text/css" href="third_party/jTinder/css/jTinder.css">
@@ -46,7 +48,7 @@
     <body>
         <!--TODO(daddy): One view for now but we will probably want to use UIRouter-->
         <div id="main_view_container">
-          <div ui-view class="main_view"></div>
+          <div ui-view="" class="main_view"></div>
         </div>
         <!--Angular stuff.-->
         <script src="bower_components/jquery-ui/jquery-ui.js"></script>
@@ -65,7 +67,8 @@
         <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD5Ir5fYC7LvALpHDVnyBge8gaG_n_aebU&libraries=places"></script>
 
         <!--Cordova stuff-->
-        <script type="text/javascript" src="cordova.js"></script>
+        <!-- Cordova is bootstrapped by ionic-platform-web-client, uncomment this if you remove ionic-platform-web-client... -->
+<!-- <script type="text/javascript" src="cordova.js"></script> -->
         <!--My stuff-->
         <!--jTinderrr-->
         <script type="text/javascript" src="third_party/jTinder/js/jquery.transform2d.js"></script>
@@ -86,7 +89,8 @@
         <script type="text/javascript" src="home_page_v2/partial_home_page_v2.js"></script>
         <script type="text/javascript" src="home_page_v2/cart_page_v2/partial_cart_page_v2.js"></script>
         <script type="text/javascript" src="home_page_v2/search_page_v2/partial_search_page_v2.js"></script>
-        <script type="text/javascript" src="index.js"></script>
+        <!--We do this to make ionic happy-->
+        <script type="text/javascript" src="js/app.js"></script>
         <script type="text/javascript">
             app.initialize();
             <!--Function to get the degrees of rotation of a jQuery object.-->
