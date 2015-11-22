@@ -40,7 +40,7 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
     alert('We need something in your cart first.');
     mainViewObj.removeClass();
     mainViewObj.addClass('slide-right');
-    $location.path('/cart_page');
+    $location.path('/home_page_v2/swipe_page_v2');
     return;
   }
 
@@ -124,6 +124,11 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
   // Set the selected location index when a user taps a cell.
   $scope.cellSelected = function(indexSelected) {
     analytics.trackEvent('cell', 'choose_card__cell_selected');
+    // This allows the user to toggle the check.
+    if ($scope.selectedCardIndex.value === indexSelected) {
+      $scope.selectedCardIndex.value = null;
+      return;
+    }
 
     console.log('Cell selected: ' + indexSelected);
     $scope.selectedCardIndex.value = indexSelected;

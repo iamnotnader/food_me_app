@@ -409,11 +409,7 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
   };
 
   var setCartTotal = function() {
-    var total = 0.0;
-    for (var v1 = 0; v1 < $scope.globals.userCart.length; v1++) {
-      total += parseFloat($scope.globals.userCart[v1].price);
-    }
-    $scope.cartTotal = total.toFixed(2);
+    $scope.cartTotal = $scope.globals.computeCartTotal($scope.globals.userCart).toFixed(2);
   };
 
   setCartTotal();
@@ -690,6 +686,7 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
         return;
       }
 
+      $scope.globals.minimumLeft = null;
       $scope.globals.lastAddress = userAddress;
       $scope.globals.lastSearch = currentSearch;
       resetStack();

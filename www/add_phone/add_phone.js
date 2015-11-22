@@ -125,6 +125,7 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
             // Invalidate the deal so we don't try to use it on another merchant.
             $scope.deal = null;
           }
+          dataObj.merchant_id = merchantId;
           $http({
             method: 'POST',
             url: fmaSharedState.endpoint + '/customer/cart/'+merchantId+'/checkout?client_id=' + fmaSharedState.client_id,
@@ -258,7 +259,7 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
           // Go back to the address page.
           mainViewObj.removeClass();
           mainViewObj.addClass('slide-right');
-          $location.path('/choose_address_v2');
+          $location.path('/home_page_v2/swipe_page_v2');
         }, Math.max(fmaSharedState.minLoadingMs - timePassedMs, 0));
       },
       function(err) {

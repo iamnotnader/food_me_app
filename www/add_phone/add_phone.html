@@ -1,24 +1,43 @@
-<div class="choose_address__container" style="overflow: scroll; padding-bottom: 1rem;">
-  <div class="enter_phone__text">
-    Your delivery dudes need to call you when they arrive.
+<div class="cart_page_v2__top_text">
+  <div class="cart_page_v2__top_text__inner">
+    Last thing.
   </div>
+  <div class="home_page_v2__cell_border"></div>
+</div>
+<div class="home_page_v2__top_bar">
+  <div class="home_page_v2__cell_border"></div>
+  <div class="home_page_v2__left_text" ng-click="enterPhoneCancelPressed()">
+    <!--<div class="home_page_v2__hamburger_button">-->
+    <!--</div>-->
+    <div class="home_page_v2__next" style="left: 5vw; text-align: left;">
+      Back
+    </div>
+  </div>
+  <div class="home_page_v2__right_text" style="right: 0; width: 36vw;">
+    <!--<div class="home_page_v2__next">-->
+      <!--Confirm-->
+    <!--</div>-->
+  </div>
+</div>
+
+<div class="choose_address__container" style="padding-top: 3vh;">
   <div class="enter_phone__phone_number_container">
     <div class="enter_phone__phone_label">
       Phone number*
     </div>
-    <input class="choose_address_v2__inner_input enter_phone__phone_number" type="text" ng-model="missingAddressData.phoneNumber" placeholder="Enter phone." ng-trim="false">
+    <input class="choose_phone__inner_input enter_phone__phone_number" type="text" ng-model="missingAddressData.phoneNumber" placeholder="Enter phone." ng-trim="false">
   </div>
   <div class="enter_phone__phone_number_container">
     <div class="enter_phone__phone_label">
       Apartment number
     </div>
-    <input class="choose_address_v2__inner_input enter_phone__phone_number" type="text" ng-model="missingAddressData.apartmentNumber" placeholder="Enter apartment number." ng-trim="false">
+    <input class="choose_phone__inner_input enter_phone__phone_number" type="text" ng-model="missingAddressData.apartmentNumber" placeholder="Enter apartment number." ng-trim="false">
   </div>
   <div class="enter_phone__phone_number_container">
     <div class="enter_phone__phone_label">
       Promo code
     </div>
-    <input class="choose_address_v2__inner_input enter_phone__phone_number" type="text" ng-model="missingAddressData.promoCode" placeholder="Enter a code." ng-trim="false">
+    <input class="choose_phone__inner_input enter_phone__phone_number" type="text" ng-model="missingAddressData.promoCode" placeholder="Enter a code." ng-trim="false">
   </div>
   <div class="enter_phone__done_button" ng-click="enterPhoneDonePressed()">
     <div class="swipe_page__vertically_center" style="text-transform: none; font-family: TitleFont; font-size: 2rem; color: white;">
@@ -27,14 +46,14 @@
   </div>
 </div> 
 
-<div class="choose_address__top_bar">
-  <div class="choose_address__middle_text">Last thing!</div>
-  <div class="choose_address__left_text" ng-click="enterPhoneCancelPressed()">
-    <div class="swipe_page__vertically_center">
-      Back
-    </div>
-  </div>
-  <div class="choose_address__cell_border"></div>
-</div>
+<!--<div class="choose_address__top_bar">-->
+  <!--<div class="choose_address__middle_text">Last thing!</div>-->
+  <!--<div class="choose_address__left_text" ng-click="enterPhoneCancelPressed()">-->
+    <!--<div class="swipe_page__vertically_center">-->
+      <!--Back-->
+    <!--</div>-->
+  <!--</div>-->
+  <!--<div class="choose_address__cell_border"></div>-->
+<!--</div>-->
 
 <div ng-include src="'loading_screen/ordering_screen.html'" ng-if="cardsLoading || cartLoading" class="fade-me"></div>

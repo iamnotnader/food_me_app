@@ -36,6 +36,13 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $q, fmaStack
   if (userCart == null) {
     userCart = [];
   }
+  var computeCartTotal = function(cartArg) {
+    var total = 0.0;
+    for (var v1 = 0; v1 < cartArg.length; v1++) {
+      total += parseFloat(cartArg[v1].price);
+    }
+    return total;
+  } ;
   $scope.globals = {
     userAddress: fmaLocalStorage.getObject('userAddress'),
     userCart: userCart,
@@ -43,6 +50,54 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $q, fmaStack
     deliveryMinimumLimit: fmaLocalStorage.getObject('deliveryMinimumLimit'),
     keywordValue: fmaLocalStorage.getObject('keywordValue'),
     saveSearchParams: saveSearchParams,
+    itemIndex: fmaLocalStorage.getObject('stackItemIndex'),
+    allFoodItems: fmaLocalStorage.getObject('allFoodItems'), 
+    allMerchants: fmaLocalStorage.getObject('allMerchants'), 
+    merchantIndex: fmaLocalStorage.getObject('stackMerchantIndex'), 
+    lastAddress: fmaLocalStorage.getObject('lastAddress'),
+    lastSearch: fmaLocalStorage.getObject('lastSearch'),
+    computeCartTotal: computeCartTotal,
+    minimumLeft: fmaLocalStorage.getObject('minimumLeft'),
     DEFAULT_MERCHANT_ID: "-1",
   };
+
+  $scope.checkoutButtonPressed = function() {
+    console.log('Checkout button pressed.');
+    if ($scope.globals.userCart == null ||
+        $scope.globals.userCart.length == 0) {
+      // TODO(daddy): Need to make sexy alerts.
+      alert('Bro. You need to add something to your cart first. Swipe right. The food loves you.');
+      return;
+    }
+    if ($scope.globals.minimumLeft > 0) {
+      alert('Beat the delivery minimum first. Swipe right more. We believe in you.');
+      return;
+    }
+
+    // Save the state of the stack.
+    fmaLocalStorage.setObjectWithExpirationSeconds(
+        'stackItemIndex', $scope.globals.itemIndex,
+        fmaSharedState.foodItemValidationSeconds);
+    fmaLocalStorage.setObjectWithExpirationSeconds(
+        'allFoodItems', $scope.globals.allFoodItems,
+        fmaSharedState.foodItemValidationSeconds);
+    fmaLocalStorage.setObjectWithExpirationSeconds(
+        'allMerchants', $scope.globals.allMerchants,
+        fmaSharedState.foodItemValidationSeconds);
+    fmaLocalStorage.setObjectWithExpirationSeconds(
+        'stackMerchantIndex', $scope.globals.merchantIndex,
+        fmaSharedState.foodItemValidationSeconds);
+    fmaLocalStorage.setObjectWithExpirationSeconds(
+        'lastAddress', $scope.globals.lastAddress,
+        fmaSharedState.foodItemValidationSeconds);
+    fmaLocalStorage.setObjectWithExpirationSeconds(
+        'lastSearch', $scope.globals.lastSearch,
+        fmaSharedState.foodItemValidationSeconds);
+    fmaLocalStorage.setObjectWithExpirationSeconds(
+        'minimumLeft', $scope.globals.minimumLeft,
+        fmaSharedState.foodItemValidationSeconds);
+
+    $location.path('/accounts_page');
+    return;
+  }
 }]);

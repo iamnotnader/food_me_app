@@ -144,8 +144,13 @@ function($scope, $location, $http, fmaLocalStorage, fmaSharedState, $rootScope, 
   };
 
   $scope.cellSelected = function(accountIndex) {
+    // This allows the user to toggle the check.
+    if ($scope.selectedAccountIndex.value === accountIndex) {
+      $scope.selectedAccountIndex.value = null;
+      return;
+    }
     $scope.selectedAccountIndex.value = accountIndex;
-  }
+  };
   if ($scope.accountsList.length > 0) {
     $scope.cellSelected(0);
   }
@@ -181,6 +186,6 @@ function($scope, $location, $http, fmaLocalStorage, fmaSharedState, $rootScope, 
     console.log('Accounts back button pressed.');
     mainViewObj.removeClass();
     mainViewObj.addClass('slide-right');
-    $location.path('/cart_page');
+    $location.path('/home_page_v2/swipe_page_v2');
   };
 }]);

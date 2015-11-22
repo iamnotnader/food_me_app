@@ -1,20 +1,46 @@
+<div class="cart_page_v2__top_text">
+  <div class="cart_page_v2__top_text__inner">
+    Choose an account.
+  </div>
+  <div class="home_page_v2__cell_border"></div>
+</div>
+<div class="home_page_v2__top_bar">
+  <div class="home_page_v2__cell_border"></div>
+  <div class="home_page_v2__left_text" ng-click="backButtonPressed()">
+    <!--<div class="home_page_v2__hamburger_button">-->
+    <!--</div>-->
+    <div class="home_page_v2__next" style="left: 5vw; text-align: left;">
+      Back
+    </div>
+  </div>
+  <div class="home_page_v2__right_text" ng-click="finishButtonPressed()" style="right: 0; width: 36vw;">
+    <div class="home_page_v2__next">
+      Payment
+    </div>
+  </div>
+</div>
+
 <div class="choose_address__container">
   <div class="choose_address__address_list">
     <div style="min-height: 101%">
       <div ng-repeat="accountObj in accountsList">
         <div class="choose_address__list_cell" ng-click="cellSelected($index)">
-          <div class="choose_address__cell_top_row">
-            {{accountObj.user.first_name}} {{accountObj.user.last_name}}
-          </div>
-          <div class="choose_address__cell_bottom_row">
-            {{accountObj.user.email}} 
-          </div>
-          <div class="choose_address__cell_bottom_row">
-            points: {{accountObj.user.life_time_delivery_points}}  &nbsp; | &nbsp; orders: {{accountObj.user.life_time_orders_count}}
+          <div class="choose_account__cell_container">
+            <div class="choose_account__cell_top_row">
+              {{accountObj.user.first_name}} {{accountObj.user.last_name}}
+            </div>
+            <div class="choose_account__cell_middle_row">
+              {{accountObj.user.email}} 
+            </div>
+            <div class="choose_account__cell_bottom_row">
+              points: {{accountObj.user.life_time_delivery_points}}  &nbsp; | &nbsp; orders: {{accountObj.user.life_time_orders_count}}
+            </div>
           </div>
           <div class="choose_address__cell_border"></div>
-          <img class="choose_address__selected_badge leave-right-centered enter-right-centered" ng-if="$index == selectedAccountIndex.value"
-                src="img/happy_burger.png" alt="">
+          <div class="choose_account__selected_badge" ng-if="$index == selectedAccountIndex.value">
+          </div>
+          <div class="choose_account__deselected_badge" ng-if="$index != selectedAccountIndex.value">
+          </div>
         </div>
       </div>
       <div class="choose_address__list_cell" ng-click="addAccountButtonPressed()" style="margin-bottom: 1em;">
@@ -24,20 +50,6 @@
       </div>
     </div>
   </div>
-</div>
-<div class="choose_address__top_bar">
-  <div class="choose_address__middle_text">Choose account!</div>
-  <div class="choose_address__right_text" ng-click="finishButtonPressed()">
-    <div class="swipe_page__vertically_center">
-      Next
-    </div>
-  </div>
-  <div class="choose_address__left_text" ng-click="backButtonPressed()">
-    <div class="swipe_page__vertically_center">
-      Back
-    </div>
-  </div>
-  <div class="choose_address__cell_border"></div>
 </div>
 
 <div ng-include src="'loading_screen/loading_screen.html'" ng-if="isLoading" class="fade-me"></div>

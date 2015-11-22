@@ -18,12 +18,10 @@
  */
 @font-face {
   font-family: TitleFont;
-  src: url("../fonts/Alegreya Sans 900.ttf"); }
-
+  src: url("./fonts/Alegreya Sans 900.ttf"); }
 @font-face {
   font-family: TaglineFont;
-  src: url("../fonts/Alegreya Sans 500.ttf"); }
-
+  src: url("./fonts/Alegreya Sans 500.ttf"); }
 /* latin-ext */
 @font-face {
   font-family: 'Lato';
@@ -31,7 +29,6 @@
   font-weight: 300;
   src: local("Lato Light"), local("Lato-Light"), url(https://fonts.gstatic.com/s/lato/v11/IY9HZVvI1cMoAHxvl0w9LVKPGs1ZzpMvnHX-7fPOuAc.woff2) format("woff2");
   unicode-range: U+0100-024F, U+1E00-1EFF, U+20A0-20AB, U+20AD-20CF, U+2C60-2C7F, U+A720-A7FF; }
-
 /* latin */
 @font-face {
   font-family: 'Lato';
@@ -39,7 +36,6 @@
   font-weight: 300;
   src: local("Lato Light"), local("Lato-Light"), url(https://fonts.gstatic.com/s/lato/v11/22JRxvfANxSmnAhzbFH8PgLUuEpTyoUstqEm5AMlJo4.woff2) format("woff2");
   unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2212, U+2215, U+E0FF, U+EFFD, U+F000; }
-
 /* latin-ext */
 @font-face {
   font-family: 'Lato';
@@ -47,7 +43,6 @@
   font-weight: 400;
   src: local("Lato Regular"), local("Lato-Regular"), url(https://fonts.gstatic.com/s/lato/v11/8qcEw_nrk_5HEcCpYdJu8BTbgVql8nDJpwnrE27mub0.woff2) format("woff2");
   unicode-range: U+0100-024F, U+1E00-1EFF, U+20A0-20AB, U+20AD-20CF, U+2C60-2C7F, U+A720-A7FF; }
-
 /* latin */
 @font-face {
   font-family: 'Lato';
@@ -55,7 +50,6 @@
   font-weight: 400;
   src: local("Lato Regular"), local("Lato-Regular"), url(https://fonts.gstatic.com/s/lato/v11/MDadn8DQ_3oT6kvnUq_2r_esZW2xOQ-xsNqO47m55DA.woff2) format("woff2");
   unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2212, U+2215, U+E0FF, U+EFFD, U+F000; }
-
 /* latin-ext */
 @font-face {
   font-family: 'Lato';
@@ -63,7 +57,6 @@
   font-weight: 700;
   src: local("Lato Bold"), local("Lato-Bold"), url(https://fonts.gstatic.com/s/lato/v11/rZPI2gHXi8zxUjnybc2ZQFKPGs1ZzpMvnHX-7fPOuAc.woff2) format("woff2");
   unicode-range: U+0100-024F, U+1E00-1EFF, U+20A0-20AB, U+20AD-20CF, U+2C60-2C7F, U+A720-A7FF; }
-
 /* latin */
 @font-face {
   font-family: 'Lato';
@@ -71,7 +64,6 @@
   font-weight: 700;
   src: local("Lato Bold"), local("Lato-Bold"), url(https://fonts.gstatic.com/s/lato/v11/MgNNr5y1C_tIEuLEmicLmwLUuEpTyoUstqEm5AMlJo4.woff2) format("woff2");
   unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2212, U+2215, U+E0FF, U+EFFD, U+F000; }
-
 * {
   -webkit-tap-highlight-color: transparent;
   /* make transparent link selection, adjust last value opacity 0 to 1.0 */ }
@@ -110,7 +102,6 @@ html {
     margin: -90px 0px 0px -198px;
     /* offset vertical: half of image height */
     /* offset horizontal: half of image width and text area width */ } }
-
 h1 {
   font-size: 24px;
   font-weight: normal;
@@ -142,7 +133,6 @@ h1 {
     opacity: 0.4; }
   to {
     opacity: 1.0; } }
-
 @-webkit-keyframes fade {
   from {
     opacity: 1.0; }
@@ -150,7 +140,6 @@ h1 {
     opacity: 0.4; }
   to {
     opacity: 1.0; } }
-
 .blink {
   animation: fade 3000ms infinite;
   -webkit-animation: fade 3000ms infinite; }
@@ -377,7 +366,7 @@ h1 {
 
 .choose_address__container {
   position: absolute;
-  top: 9%;
+  top: 14%;
   bottom: 0;
   overflow: hidden;
   left: 0;
@@ -439,29 +428,23 @@ h1 {
   bottom: 100%;
   border-bottom: none; }
 
-.choose_address__cell_border {
-  border-bottom: 1px solid #979797;
-  position: absolute;
-  left: 1rem;
-  right: 1rem;
-  bottom: 0;
-  margin-left: auto;
-  margin-right: auto; }
-
 .choose_address__add_new_text {
-  margin: 0.5rem 0;
   color: #464646;
-  font-family: TitleFont; }
+  font-family: TitleFont;
+  position: absolute;
+  top: 50%;
+  left: 5vw;
+  transform: translateY(-50%); }
 
 .choose_address__arrow {
   position: absolute;
-  width: 1rem;
-  height: 1rem;
+  width: 9vw;
+  height: 7vw;
   right: 0;
   top: 50%;
   transform: translateY(-50%);
   -webkit-transform: translateY(-50%);
-  right: 1rem; }
+  right: 5vw; }
 
 .choose_address__selected_badge {
   width: 2.8rem;
@@ -495,19 +478,10 @@ h1 {
   text-transform: none;
   margin: 0 auto;
   left: 0;
-  margin-top: 5%;
   width: 80%;
   font-family: TaglineFont;
-  font-size: 1.1rem; }
-
-input.choose_address_v2__inner_input.enter_phone__phone_number {
-  width: 100%;
-  margin-top: .2rem;
-  padding: 0 0.5rem;
-  font-size: 1.2rem;
-  height: 2.5rem;
-  -webkit-border-radius: 0;
-  border-radius: 0; }
+  font-size: 4vh;
+  line-height: 4vh; }
 
 .enter_phone__done_button {
   background-color: #3C5988;
@@ -680,7 +654,6 @@ input {
     -webkit-transform: translateY(-50%) scale(1, 1); }
   100% {
     -webkit-transform: translateY(-50%) scale(0.9, 0.9); } }
-
 .tweet_button__container {
   height: 3rem;
   width: 3rem;
@@ -713,7 +686,6 @@ input {
     -webkit-transform: rotate(15deg) translateY(-50%) scale(1, 1); }
   100% {
     -webkit-transform: rotate(15deg) translateY(-50%) scale(0.9, 0.9); } }
-
 .facebook_button__container {
   height: 3rem;
   width: 3rem;
@@ -1260,3 +1232,5 @@ form.oauth_form {
   font-size: 3vh;
   margin-right: 0.2vh;
   font-family: TaglineFont; }
+
+/*# sourceMappingURL=index.css.map */

@@ -1,11 +1,9 @@
 @font-face {
   font-family: TitleFont;
-  src: url("../fonts/Alegreya Sans 900.ttf"); }
-
+  src: url("./fonts/Alegreya Sans 900.ttf"); }
 @font-face {
   font-family: TaglineFont;
-  src: url("../fonts/Alegreya Sans 500.ttf"); }
-
+  src: url("./fonts/Alegreya Sans 500.ttf"); }
 /* latin-ext */
 @font-face {
   font-family: 'Lato';
@@ -13,7 +11,6 @@
   font-weight: 300;
   src: local("Lato Light"), local("Lato-Light"), url(https://fonts.gstatic.com/s/lato/v11/IY9HZVvI1cMoAHxvl0w9LVKPGs1ZzpMvnHX-7fPOuAc.woff2) format("woff2");
   unicode-range: U+0100-024F, U+1E00-1EFF, U+20A0-20AB, U+20AD-20CF, U+2C60-2C7F, U+A720-A7FF; }
-
 /* latin */
 @font-face {
   font-family: 'Lato';
@@ -21,7 +18,6 @@
   font-weight: 300;
   src: local("Lato Light"), local("Lato-Light"), url(https://fonts.gstatic.com/s/lato/v11/22JRxvfANxSmnAhzbFH8PgLUuEpTyoUstqEm5AMlJo4.woff2) format("woff2");
   unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2212, U+2215, U+E0FF, U+EFFD, U+F000; }
-
 /* latin-ext */
 @font-face {
   font-family: 'Lato';
@@ -29,7 +25,6 @@
   font-weight: 400;
   src: local("Lato Regular"), local("Lato-Regular"), url(https://fonts.gstatic.com/s/lato/v11/8qcEw_nrk_5HEcCpYdJu8BTbgVql8nDJpwnrE27mub0.woff2) format("woff2");
   unicode-range: U+0100-024F, U+1E00-1EFF, U+20A0-20AB, U+20AD-20CF, U+2C60-2C7F, U+A720-A7FF; }
-
 /* latin */
 @font-face {
   font-family: 'Lato';
@@ -37,7 +32,6 @@
   font-weight: 400;
   src: local("Lato Regular"), local("Lato-Regular"), url(https://fonts.gstatic.com/s/lato/v11/MDadn8DQ_3oT6kvnUq_2r_esZW2xOQ-xsNqO47m55DA.woff2) format("woff2");
   unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2212, U+2215, U+E0FF, U+EFFD, U+F000; }
-
 /* latin-ext */
 @font-face {
   font-family: 'Lato';
@@ -45,7 +39,6 @@
   font-weight: 700;
   src: local("Lato Bold"), local("Lato-Bold"), url(https://fonts.gstatic.com/s/lato/v11/rZPI2gHXi8zxUjnybc2ZQFKPGs1ZzpMvnHX-7fPOuAc.woff2) format("woff2");
   unicode-range: U+0100-024F, U+1E00-1EFF, U+20A0-20AB, U+20AD-20CF, U+2C60-2C7F, U+A720-A7FF; }
-
 /* latin */
 @font-face {
   font-family: 'Lato';
@@ -53,7 +46,6 @@
   font-weight: 700;
   src: local("Lato Bold"), local("Lato-Bold"), url(https://fonts.gstatic.com/s/lato/v11/MgNNr5y1C_tIEuLEmicLmwLUuEpTyoUstqEm5AMlJo4.woff2) format("woff2");
   unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2212, U+2215, U+E0FF, U+EFFD, U+F000; }
-
 body {
   -webkit-touch-callout: none;
   /* prevent callout to copy image, etc when tap to hold */
@@ -87,8 +79,8 @@ body {
 
 .home_page_v2__left_text {
   position: absolute;
-  left: 5%;
-  width: 10vh;
+  left: 0;
+  width: 36vw;
   height: 100%; }
 
 .home_page_v2__hamburger_button {
@@ -188,7 +180,8 @@ body {
   right: 0;
   font-family: TitleFont;
   text-transform: none;
-  font-size: 4.5vh; }
+  font-size: 4.5vh;
+  right: 5vw; }
 
 .home_page_v2__cell_border {
   top: 0;
@@ -811,3 +804,71 @@ select.search_page_v2__keyword_input_inner {
   line-height: 6vh;
   text-align: center;
   color: #464646; }
+
+.choose_address__list_cell {
+  background-color: white;
+  font-family: TaglineFont;
+  font-size: 7vw;
+  text-transform: none;
+  position: relative;
+  color: #6E6666;
+  -webkit-backface-visibility: hidden;
+  -webkit-transform: translate3d(0, 0, 0);
+  transform: translate3d(0, 0, 0);
+  height: 14vh; }
+
+.choose_account__cell_container {
+  font-size: 3vh;
+  top: 50%;
+  position: absolute;
+  transform: translateY(-50%);
+  left: 5vw; }
+
+.choose_address__cell_border {
+  border-bottom: 1px solid black;
+  position: absolute;
+  left: 5vw;
+  bottom: 0;
+  right: 5vw;
+  margin-left: auto;
+  margin-right: auto; }
+
+.choose_account__selected_badge {
+  width: 15vw;
+  height: 15vw;
+  /* background-color: red; */
+  position: absolute;
+  right: 5vw;
+  top: 50%;
+  transform: translateY(-50%);
+  background: url(../../img/full_check.png) no-repeat center center;
+  background-size: cover; }
+
+.choose_account__deselected_badge {
+  width: 15vw;
+  height: 15vw;
+  /* background-color: red; */
+  position: absolute;
+  right: 5vw;
+  top: 50%;
+  transform: translateY(-50%);
+  background: url(../../img/empty_check.png) no-repeat center center;
+  background-size: cover; }
+
+input.choose_phone__inner_input {
+  height: 5.5vh;
+  line-height: 5vh;
+  border-radius: 5px;
+  -webkit-border-radius: 5px;
+  border-style: groove;
+  width: 100%;
+  padding-left: 3%;
+  padding-right: 10%;
+  -webkit-appearance: none;
+  transform: translateY(-50%);
+  border: 1px solid #333333;
+  font-size: 3.5vh;
+  font-family: TaglineFont;
+  margin-top: 4vh; }
+
+/*# sourceMappingURL=index_2.css.map */

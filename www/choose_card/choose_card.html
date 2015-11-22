@@ -1,17 +1,43 @@
+<div class="cart_page_v2__top_text">
+  <div class="cart_page_v2__top_text__inner">
+    Choose a card.
+  </div>
+  <div class="home_page_v2__cell_border"></div>
+</div>
+<div class="home_page_v2__top_bar">
+  <div class="home_page_v2__cell_border"></div>
+  <div class="home_page_v2__left_text" ng-click="chooseCardBackPressed()">
+    <!--<div class="home_page_v2__hamburger_button">-->
+    <!--</div>-->
+    <div class="home_page_v2__next" style="left: 5vw; text-align: left;">
+      Back
+    </div>
+  </div>
+  <div class="home_page_v2__right_text" ng-click="chooseCardFinishPressed()" style="right: 0; width: 36vw;">
+    <div class="home_page_v2__next">
+      Confirm
+    </div>
+  </div>
+</div>
+
 <div class="choose_address__container">
   <div class="choose_address__address_list">
     <div style="min-height: 101%">
       <div ng-repeat="cardObj in cardList">
         <div class="choose_address__list_cell" ng-click="cellSelected($index)">
-          <div class="choose_address__cell_top_row">
-            {{cardObj.type}} {{cardObj.pretty_exp_month}}/{{cardObj.exp_year}}
-          </div>
-          <div class="choose_address__cell_bottom_row">
-            XXXX-XXXX-XXXX-{{cardObj.last_four}}
+          <div class="choose_account__cell_container">
+            <div class="choose_account__cell_top_row">
+              {{cardObj.type}} {{cardObj.pretty_exp_month}}/{{cardObj.exp_year}}
+            </div>
+            <div class="choose_account__cell_bottom_row">
+              XXXX-XXXX-XXXX-{{cardObj.last_four}}
+            </div>
           </div>
           <div class="choose_address__cell_border"></div>
-          <img class="choose_address__selected_badge leave-right-centered enter-right-centered" ng-if="$index == selectedCardIndex.value"
-                src="img/happy_burger.png" alt="">
+          <div class="choose_account__selected_badge" ng-if="$index == selectedCardIndex.value">
+          </div>
+          <div class="choose_account__deselected_badge" ng-if="$index != selectedCardIndex.value">
+          </div>
         </div>
       </div>
       <div class="choose_address__list_cell" ng-click="addCardButtonPressed()" style="margin-bottom: 1em;">
@@ -21,20 +47,6 @@
       </div>
     </div>
   </div>
-</div>
-<div class="choose_address__top_bar">
-  <div class="choose_address__middle_text">Choose a card!</div>
-  <div class="choose_address__right_text" ng-click="chooseCardFinishPressed()">
-    <div class="swipe_page__vertically_center">
-      Next
-    </div>
-  </div>
-  <div class="choose_address__left_text" ng-click="chooseCardBackPressed()">
-    <div class="swipe_page__vertically_center">
-      Back
-    </div>
-  </div>
-  <div class="choose_address__cell_border"></div>
 </div>
 
 <div ng-include src="'loading_screen/loading_screen.html'" ng-if="cardsLoading || cartLoading" class="fade-me"></div>
