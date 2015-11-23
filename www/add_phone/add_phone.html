@@ -6,7 +6,7 @@
 </div>
 <div class="home_page_v2__top_bar">
   <div class="home_page_v2__cell_border"></div>
-  <div class="home_page_v2__left_text" on-touch="enterPhoneCancelPressed()">
+  <div class="home_page_v2__left_text" ng-click="enterPhoneCancelPressed()">
     <!--<div class="home_page_v2__hamburger_button">-->
     <!--</div>-->
     <div class="home_page_v2__next" style="left: 5vw; text-align: left;">
@@ -39,7 +39,7 @@
     </div>
     <input class="choose_phone__inner_input enter_phone__phone_number" type="text" ng-model="missingAddressData.promoCode" placeholder="Enter a code." ng-trim="false">
   </div>
-  <div class="enter_phone__done_button" on-touch="enterPhoneDonePressed()">
+  <div class="enter_phone__done_button" ng-click="enterPhoneDonePressed()">
     <div class="swipe_page__vertically_center" style="text-transform: none; font-family: TitleFont; font-size: 2rem; color: white;">
       Confirm
     </div>
@@ -48,7 +48,7 @@
 
 <!--<div class="choose_address__top_bar">-->
   <!--<div class="choose_address__middle_text">Last thing!</div>-->
-  <!--<div class="choose_address__left_text" on-touch="enterPhoneCancelPressed()">-->
+  <!--<div class="choose_address__left_text" ng-click="enterPhoneCancelPressed()">-->
     <!--<div class="swipe_page__vertically_center">-->
       <!--Back-->
     <!--</div>-->

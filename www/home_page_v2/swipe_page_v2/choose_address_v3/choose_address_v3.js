@@ -1,4 +1,4 @@
-angular.module('foodMeApp.chooseAddressV3', ['ngRoute', 'foodmeApp.localStorage', 'foodmeApp.sharedState', 'ionic'])
+angular.module('foodMeApp.chooseAddressV3', ['ngRoute', 'ngTouch', 'foodmeApp.localStorage', 'foodmeApp.sharedState', 'ionic'])
 
 .controller('ChooseAddressV3Ctrl', ["$scope", "$location", "fmaLocalStorage", "$http", "fmaSharedState", "$rootScope", "$timeout", "$ionicPopup",
 function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, $timeout, $ionicPopup) {
@@ -28,8 +28,11 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
     parsedAddressObj = addressObjFromGoogleFormattedAddress(place.formatted_address);
     if (parsedAddressObj == null) {
       console.log('WTF! Couldn\'t parse address...');
-      alert('I had trouble parsing that address-- could you try ' +
-            'a slightly different one?');
+      var alertPopup = $ionicPopup.alert({
+        title: 'Burgie says...',
+        template: 'I had trouble parsing that address-- could you try a slightly different one?',
+        okText: 'Hush, burgie.',
+      });
       return;
     }
 
@@ -47,7 +50,7 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
   $scope.predictedAddresses = { data: [] };
   var handlePredictions = function(pred, status) {
     if (pred == null) {
-      alert("We're having trouble fetching addresses. Is your connection spotty?");
+      console.log("We're having trouble fetching addresses. Is your connection spotty?");
       return;
     }
     // Reset the predictedAddresses field.
@@ -70,7 +73,12 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
 
   var addressObjFromGoogleFormattedAddress = function(formatted_address) {
     if (formatted_address == null) {
-      alert('Oh no! That address messed up. Can you pick a different one?');
+      console.log('Formatted address is null.');
+      var alertPopup = $ionicPopup.alert({
+        title: 'Burgie says...',
+        template: 'Oh no! That address messed up. Can you pick a different one?',
+        okText: 'Hush, burgie.',
+      });
     }
     components = formatted_address.split(',');
     if (components.length < 4 || components[2].split(' ').length < 3) {
@@ -88,12 +96,22 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
   };
   var handleChosenAddress = function(full_place, status) {
     if (full_place == null || full_place.formatted_address == null) {
-      alert('Oh no! That address messed up. Can you pick a different one?');
+      console.log('full_place is null.');
+      var alertPopup = $ionicPopup.alert({
+        title: 'Burgie says...',
+        template: 'Oh no! That address messed up. Can you pick a different one?',
+        okText: 'Hush, burgie.',
+      });
       return;
     }
     var addressObj = addressObjFromGoogleFormattedAddress(full_place.formatted_address);
     if (addressObj == null) {
-      alert('Oh no! That address messed up. Can you pick a different one?');
+      console.log('addressObj is null.');
+      var alertPopup = $ionicPopup.alert({
+        title: 'Burgie says...',
+        template: 'Oh no! That address messed up. Can you pick a different one?',
+        okText: 'Hush, burgie.',
+      });
     }
     var addressAsString = fmaSharedState.addressToString(addressObj);
     $scope.globals.userAddress = addressObj;

@@ -11,18 +11,18 @@
   </div>
   <div class="stack__buttons">
     <div class="stack__buttons__container">
-      <div class="stack__buttons__info" on-touch="infoPressed()"></div>
-      <div class="stack__buttons__like" on-touch="likePressed()"></div>
-      <div class="stack__buttons__dislike" on-touch="dislikePressed()"></div>
+      <div class="stack__buttons__info" ng-click="infoPressed()"></div>
+      <div class="stack__buttons__like" ng-click="likePressed()"></div>
+      <div class="stack__buttons__dislike" ng-click="dislikePressed()"></div>
       <div class="stack__buttons__shuffle_dishes">
-        <div class="stack__buttons__shuffle_dishes_press" on-touch="shuffleDishesPressed()"></div>
+        <div class="stack__buttons__shuffle_dishes_press" ng-click="shuffleDishesPressed()"></div>
       </div>
       <div class="stack__buttons__new_merchants">
-        <div class="stack__buttons__shuffle_merchants_press" on-touch="shuffleMerchantsPressed()"></div>
+        <div class="stack__buttons__shuffle_merchants_press" ng-click="shuffleMerchantsPressed()"></div>
       </div>
     </div>
   </div>
-  <div class="stack__cards__empty" on-touch="initEverything();" ng-if="emptyStackConfirmed && (globals.allMerchants == null || globals.allMerchants.length === 0)">
+  <div class="stack__cards__empty" ng-click="initEverything();" ng-if="emptyStackConfirmed && (globals.allMerchants == null || globals.allMerchants.length === 0)">
     <div class="stack__cards__empty_text">
       Aww.<br>Looks like we couldn't find any merchants.
     </div>

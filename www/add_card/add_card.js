@@ -1,9 +1,9 @@
 /* jshint eqnull: true */
 
-angular.module('foodMeApp.addCard', ['ngRoute', 'foodmeApp.localStorage', 'foodmeApp.sharedState'])
+angular.module('foodMeApp.addCard', ['ngRoute', 'foodmeApp.localStorage', 'foodmeApp.sharedState', 'ionic'])
 
-.controller('AddCardCtrl', ["$scope", "$location", "fmaLocalStorage", "$http", "fmaSharedState",
-function($scope, $location, fmaLocalStorage, $http, fmaSharedState) {
+.controller('AddCardCtrl', ["$scope", "$location", "fmaLocalStorage", "$http", "fmaSharedState", "$ionicPopup",
+function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $ionicPopup) {
   var mainViewObj = $('#main_view_container');
   // For this page we need an access token. If we don't have one, we
   // need to go back to the selection page.
@@ -58,7 +58,11 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState) {
       if (dataObj.exp_year.length === 2) {
         dataObj.exp_year = '20' + dataObj.exp_year;
       } else {
-        alert ('Credit card expiration year must be four digits! Try again?');
+        var alertPopup = $ionicPopup.alert({
+          title: 'Burgie says...',
+          template: 'Credit card expiration year must be four digits! Try again?',
+          okText: 'Hush, burgie.',
+        });
         return;
       }
     }
@@ -81,10 +85,18 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState) {
         $scope.isLoading = false;
         $scope.$apply();
         if (res.message != null && res.message.length > 0) {
-          alert(res.message[0].dev_msg);
+          var alertPopup = $ionicPopup.alert({
+            title: 'Burgie says...',
+            template: res.message[0].dev_msg,
+            okText: 'Hush, burgie.',
+          });
           return;
         }
-        alert('Successfully added your card!');
+        var alertPopup = $ionicPopup.alert({
+          title: 'Burgie says...',
+          template: 'Successfully added your card!',
+          okText: 'Hush, burgie.',
+        });
         mainViewObj.removeClass();
         mainViewObj.addClass('slide-right');
         $location.path('choose_card');
@@ -95,11 +107,19 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState) {
         $scope.$apply();
         if (xhr.responseJSON != null && xhr.responseJSON.message != null &&
             xhr.responseJSON.message.dev_msg != null) {
-          alert(xhr.responseJSON.message.dev_msg);
+          var alertPopup = $ionicPopup.alert({
+            title: 'Burgie says...',
+            template: xhr.responseJSON.message.dev_msg,
+            okText: 'Hush, burgie.',
+          });
           return;
         }
-        alert('Whoops! We had an error. This is probably due to network ' +
-              'connectivity so just try again and it should work!');
+        var alertPopup = $ionicPopup.alert({
+          title: 'Burgie says...',
+          template: 'Whoops! We had an error. This is probably due to network ' +
+              'connectivity so just try again and it should work!',
+          okText: 'Hush, burgie.',
+        });
 
       },
       complete: function(xhr, statusObj) {

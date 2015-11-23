@@ -1,9 +1,9 @@
 /* jshint eqnull: true */
 
-angular.module('foodMeApp.accountsPage', ['ngRoute', 'foodmeApp.localStorage', 'foodmeApp.sharedState'])
+angular.module('foodMeApp.accountsPage', ['ngRoute', 'foodmeApp.localStorage', 'foodmeApp.sharedState', 'ionic'])
 
-.controller('AccountsPageCtrl', ["$scope", "$location", "$http", "fmaLocalStorage", 'fmaSharedState', '$rootScope', '$timeout',
-function($scope, $location, $http, fmaLocalStorage, fmaSharedState, $rootScope, $timeout) {
+.controller('AccountsPageCtrl', ["$scope", "$location", "$http", "fmaLocalStorage", 'fmaSharedState', '$rootScope', '$timeout', '$ionicPopup',
+function($scope, $location, $http, fmaLocalStorage, fmaSharedState, $rootScope, $timeout, $ionicPopup) {
   var mainViewObj = $('#main_view_container');
   if (window.analytics != null) {
     // For some reason deviceready doesn't execute fast enough sometimes.
@@ -55,8 +55,11 @@ function($scope, $location, $http, fmaLocalStorage, fmaSharedState, $rootScope, 
       },
       function(err) {
         $scope.isLoading = false;
-        alert('A bad thing happened when setting up your account. '+
-              'This is really rare-- just do it again!');
+        var alertPopup = $ionicPopup.alert({
+          title: 'Burgie says...',
+          template: 'A bad thing happened when setting up your account. This is really rare-- just do it again!',
+          okText: 'Hush, burgie.',
+        });
       }
     );
   }
@@ -158,7 +161,11 @@ function($scope, $location, $http, fmaLocalStorage, fmaSharedState, $rootScope, 
 
   $scope.finishButtonPressed = function() {
     if ($scope.selectedAccountIndex.value == null) {
-      alert('Bro. You need to select an account, bro.');
+      var alertPopup = $ionicPopup.alert({
+        title: 'Burgie says...',
+        template: 'Bro. You need to select an account, bro.',
+        okText: 'Hush, burgie.',
+      });
       return;
     }
     console.log('Finish pressed.');

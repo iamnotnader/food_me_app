@@ -1,8 +1,8 @@
 /*jshint eqnull: true */
-angular.module('foodMeApp.addPhone', ['ngRoute', 'foodmeApp.localStorage', 'foodmeApp.sharedState', 'foodmeApp.cartHelper'])
+angular.module('foodMeApp.addPhone', ['ngRoute', 'foodmeApp.localStorage', 'foodmeApp.sharedState', 'foodmeApp.cartHelper', 'ionic'])
 
-.controller('AddPhoneCtrl', ["$scope", "$location", "fmaLocalStorage", "$http", "fmaSharedState", "$rootScope", "$timeout", "$q", "$route", "fmaCartHelper",
-function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, $timeout, $q, $route, fmaCartHelper) {
+.controller('AddPhoneCtrl', ["$scope", "$location", "fmaLocalStorage", "$http", "fmaSharedState", "$rootScope", "$timeout", "$q", "$route", "fmaCartHelper", "$ionicPopup",
+function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, $timeout, $q, $route, fmaCartHelper, $ionicPopup) {
   var mainViewObj = $('#main_view_container');
   console.log('In add_phone controller.');
   $scope.userToken = fmaLocalStorage.getObject('userToken');
@@ -17,7 +17,11 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
   if ($scope.rawAccessToken === null) {
     analytics.trackEvent('reroute', 'choose_card__intro_screen');
 
-    alert('In order to choose a card, we need you to log in first.');
+    var alertPopup = $ionicPopup.alert({
+      title: 'Burgie says...',
+      template: 'In order to choose a card, we need you to log in first.',
+      okText: 'Hush, burgie.',
+    });
     mainViewObj.removeClass();
     mainViewObj.addClass('slide-right');
     $location.path('/accounts_page');
@@ -28,7 +32,11 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
     analytics.trackEvent('reroute', 'choose_card__cart_page');
 
     // We redirect to the cart page if the cart is empty.
-    alert('We need something in your cart first.');
+    var alertPopup = $ionicPopup.alert({
+      title: 'Burgie says...',
+      template: 'We need something in your cart first.',
+      okText: 'Hush, burgie.',
+    });
     mainViewObj.removeClass();
     mainViewObj.addClass('slide-right');
     $location.path('/home_page_v2/cart_page_v2');
@@ -38,7 +46,11 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
   if ($scope.userAddress == null) {
     analytics.trackEvent('reroute', 'choose_card__choose_address');
 
-    alert('We need to get an address from you first.');
+    var alertPopup = $ionicPopup.alert({
+      title: 'Burgie says...',
+      template: 'We need to get an address from you first.',
+      okText: 'Hush, burgie.',
+    });
     mainViewObj.removeClass();
     mainViewObj.addClass('slide-right');
     $location.path('/home_page_v2/swipe_page_v2');
@@ -48,7 +60,11 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
   if ($scope.cardSelected == null) {
     analytics.trackEvent('reroute', 'add_phone__choose_card');
 
-    alert('We need to get an address from you first.');
+    var alertPopup = $ionicPopup.alert({
+      title: 'Burgie says...',
+      template: 'We need to get an address from you first.',
+      okText: 'Hush, burgie.',
+    });
     mainViewObj.removeClass();
     mainViewObj.addClass('slide-right');
     $location.path('/choose_card');
@@ -96,6 +112,7 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
     return $q(function(resolve, reject) {
       if (merchantIds.length === merchantIndex) {
         resolve('Phew! We made it!');
+        return;
       }
       // Sigh.. before we checkout for a merchant we need to re-add everything
       // to the cart because shitty delivery.com clears the cart every time.
@@ -115,6 +132,7 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
             }],
             order_type: "delivery",
             order_time: 'ASAP',
+            merchant_id: merchantId,
           };
           if ($scope.deal != null && $scope.deal.id != null) {
             // Apply a deal code.
@@ -125,7 +143,6 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
             // Invalidate the deal so we don't try to use it on another merchant.
             $scope.deal = null;
           }
-          dataObj.merchant_id = merchantId;
           $http({
             method: 'POST',
             url: fmaSharedState.endpoint + '/customer/cart/'+merchantId+'/checkout?client_id=' + fmaSharedState.client_id,
@@ -165,7 +182,11 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
   var processPaymentPromise = function() {
     if (!fmaSharedState.takePayment) {
       return $q(function(resolve, reject) {
-        alert('Not actually taking your money.');
+        var alertPopup = $ionicPopup.alert({
+          title: 'Burgie says...',
+          template: 'Not actually taking your money.',
+          okText: 'Hush, burgie.',
+        });
         resolve('Not actually taking money');
       });
     }
@@ -207,9 +228,13 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
         analytics.trackTiming('purchase', timePassedMs, 'card_page__order_success');
         $timeout(function() {
           $scope.cardsLoading = false;
-          alert("Thanks! I just took your money and your order will arrive in less " +
-                "than half an hour. Unless it doesn't. It probably will, though, " +
-                "maybe.");
+          var alertPopup = $ionicPopup.alert({
+            title: 'Burgie says...',
+            template: "Thanks! I just took your money and your order will arrive in less " +
+                "than an hour. Unless it doesn't. It probably will, though, " +
+                "maybe.",
+            okText: 'Hush, burgie.',
+          });
 
           // Clear the user's cart.
           fmaLocalStorage.setObjectWithExpirationSeconds(
@@ -275,9 +300,13 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
               err.data.message.length > 0) {
             error_str = err.data.message[0].user_msg;
           }
-          alert("Huh.. we had a problem with your payment: " + error_str +
+            var alertPopup = $ionicPopup.alert({
+              title: 'Burgie says...',
+              template: "Huh.. we had a problem with your payment: " + error_str +
                 " The best thing to do is probably just to clear out your " +
-                "cart and try again. It shouldn't happen twice.");
+                "cart and try again. It shouldn't happen twice.",
+              okText: 'Hush, burgie.',
+            });
         }, Math.max(fmaSharedState.minLoadingMs - timePassedMs, 0));
       }
     );
@@ -289,62 +318,65 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
     var foodNames = [];
     var sum = 0.0;
     for (var v1 = 0; v1 < $scope.userCart.length; v1++) {
-      foodNames.push($scope.userCart[v1].name + ': $' + $scope.userCart[v1].price);
+      foodNames.push($scope.userCart[v1].name + ': <b>$' + $scope.userCart[v1].price + '</b>');
       sum += parseFloat($scope.userCart[v1].price);
     }
     // Update the deal.
-    var confirmationString = "Ready to order the following to " +
+    var taxAmount = sum*.09;
+    var tipAmount = fmaSharedState.tipAmount;
+    var confirmationString = "Are you ready to order the following to <br><b>" +
         fmaSharedState.addressToString($scope.userAddress) +
-        "?\n\n" + foodNames.join('\n') +
-        '\n\nFor a total of: $';
+        "</b>?<br><br>" + foodNames.join('<br>') +
+        '<br><br>Tax: <b>$' + taxAmount.toFixed(2) + '</b>' +
+        '<br><br>Tip: <b>$' + tipAmount.toFixed(2) + '</b>' +
+        '<br><br>For a total of: ';
+    sum = sum + taxAmount + tipAmount;
     if ($scope.deal != null && $scope.deal.reward != null &&
         $scope.deal.reward === 'dollar_off' && $scope.deal.value != null) {
       // Process dollars off an order.
       confirmationString = 'Your deal worked! You\'re getting $' +
-          $scope.deal.value.toFixed(2) + ' off of your order :)\n\n' +
-          confirmationString +
+          $scope.deal.value.toFixed(2) + ' off of your order :)<br><br>' +
+          confirmationString + '$' +
           sum.toFixed(2) + ' - $' +
-          $scope.deal.value.toFixed(2) + ' = $' +
-          (sum - $scope.deal.value).toFixed(2) + '?';
+          $scope.deal.value.toFixed(2) + ' = <b>$' +
+          (sum - $scope.deal.value).toFixed(2) + '</b>?';
     } else if ($scope.deal != null && $scope.deal.reward != null &&
         $scope.deal.reward === 'percent_off' && $scope.deal.value != null) {
       // Process percent off an order.
       confirmationString = 'Your deal worked! You\'re getting ' +
-          $scope.deal.value.toFixed(0) + '% off of your order :)\n\n' +
-          confirmationString +
+          $scope.deal.value.toFixed(0) + '% off of your order :)<br><br>' +
+          confirmationString + '$' +
           sum.toFixed(2) + ' - $' +
-          (sum * $scope.deal.value / 100.0).toFixed(2) + ' = $' +
-          (sum * (100.0-$scope.deal.value) / 100.0).toFixed(2) + '?';
+          (sum * $scope.deal.value / 100.0).toFixed(2) + ' = $<b>' +
+          (sum * (100.0-$scope.deal.value) / 100.0).toFixed(2) + '</b>?';
     } else if ($scope.deal != null && $scope.deal.reward != null &&
         $scope.deal.reward === 'points' && $scope.deal.value != null) {
       // Process points with an order.
       confirmationString = 'Your deal worked! You\'re getting ' +
-          $scope.deal.value + ' points with your order :)\n\n' +
-          confirmationString +
-          sum.toFixed(2) + '?';
+          $scope.deal.value + ' points with your order :)<br><br>' +
+          confirmationString + ' <b>$'
+          sum.toFixed(2) + '</b>?';
     } else {
       // Process order with no deals.
-      confirmationString += sum.toFixed(2) + '?';
+      confirmationString +=  '<b>$' + sum.toFixed(2) + '</b>?';
     }
 
-    if (fmaSharedState.testModeEnabled) {
-      // In test mode, take the money without confirmation so we can test in the
-      // browser.
-      alert(confirmationString);
-      takeMoneyAndFinish();
-    } else {
-      confirm(confirmationString,
-        function(index) {
-          if (index === 1) {
-            // Track this purchase.
-            analytics.trackEvent('purchase', 'choose_card__confirmed_purchase');
-            console.log('Order confirmed!');
+    var confirmPopup = $ionicPopup.confirm({
+      title: 'Burgie wants to know.',
+      template: confirmationString,
+      okText: 'Sounds chill.',
+      cancelText: 'No thanks, I hate food.',
+    });
+    confirmPopup.then(function(res) {
+      if(res) {
+        analytics.trackEvent('purchase', 'choose_card__confirmed_purchase');
+        console.log('Order confirmed!');
 
-            takeMoneyAndFinish();
-          }
-        }
-      );
-    }
+        takeMoneyAndFinish();
+      } else {
+        console.log('Order cancelled.');
+      }
+    });
     return;
   };
 
@@ -358,7 +390,11 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
 
     if ($scope.missingAddressData.phoneNumber == null ||
         $scope.missingAddressData.phoneNumber.length === 0) {
-      alert('You have to enter a phone number, dude.');
+      var alertPopup = $ionicPopup.alert({
+        title: 'Burgie says...',
+        template: 'You have to enter a phone number, dude.',
+        okText: 'Hush, burgie.',
+      });
       return;
     }
 
@@ -423,7 +459,11 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
               $scope.cardsLoading = false;
               $scope.deal = res.data.deal;
               if ($scope.deal == null || $scope.deal.reward == null) {
-                alert('Oh no! Your deal didn\'t work :( Try a different code!');
+                var alertPopup = $ionicPopup.alert({
+                  title: 'Burgie says...',
+                  template: 'Oh no! Your deal didn\'t work :( Try a different code!',
+                  okText: 'Hush, burgie.',
+                });
                 return;
               }
               doAllCheckoutThings();
@@ -432,7 +472,11 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
             function(err) {
               // Discount didn't work so don't checkout.
               $scope.cardsLoading = false;
-              alert('Oh no! Your deal didn\'t work :( Try a different code?');
+              var alertPopup = $ionicPopup.alert({
+                title: 'Burgie says...',
+                template: 'Oh no! Your deal didn\'t work :( Try a different code?',
+                okText: 'Hush, burgie.',
+              });
               return;
             }
           );
@@ -448,12 +492,20 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
         console.log('Error adding address.');
         if (!err.data.message || err.data.message.length === 0) {
           analytics.trackEvent('nav', 'add_address__done_pressed__failure', 'weird_failure');
-          alert("A weeeird error occurred. Going to be real with you here-- " +
+          var alertPopup = $ionicPopup.alert({
+            title: 'Burgie says...',
+            template: "A weeeird error occurred. Going to be real with you here-- " +
                 "not quite sure what happened but it's probably a " +
-                "connectivity issue, which isn't my fault.");
+                "connectivity issue, which isn't my fault.",
+            okText: 'Hush, burgie.',
+          });
           return;
         }
-        alert(err.data.message[0].user_msg);
+        var alertPopup = $ionicPopup.alert({
+          title: 'Burgie says...',
+          template: err.data.message[0].user_msg,
+          okText: 'Hush, burgie.',
+        });
 
         return;
     });

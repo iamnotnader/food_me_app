@@ -1,8 +1,8 @@
 /*jshint eqnull: true */
-angular.module('foodMeApp.chooseCard', ['ngRoute', 'foodmeApp.localStorage', 'foodmeApp.sharedState', 'foodmeApp.cartHelper'])
+angular.module('foodMeApp.chooseCard', ['ngRoute', 'foodmeApp.localStorage', 'foodmeApp.sharedState', 'foodmeApp.cartHelper', 'ionic'])
 
-.controller('ChooseCardCtrl', ["$scope", "$location", "fmaLocalStorage", "$http", "fmaSharedState", "$rootScope", "$timeout", "$q", "$route", "fmaCartHelper",
-function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, $timeout, $q, $route, fmaCartHelper) {
+.controller('ChooseCardCtrl', ["$scope", "$location", "fmaLocalStorage", "$http", "fmaSharedState", "$rootScope", "$timeout", "$q", "$route", "fmaCartHelper", "$ionicPopup",
+function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, $timeout, $q, $route, fmaCartHelper, $ionicPopup) {
   var mainViewObj = $('#main_view_container');
   if (fmaSharedState.testModeEnabled) {
     alert('Warning-- you are using the sandbox.');
@@ -26,7 +26,11 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
   if ($scope.rawAccessToken === null) {
     analytics.trackEvent('reroute', 'choose_card__intro_screen');
 
-    alert('In order to choose a card, we need you to log in first.');
+    var alertPopup = $ionicPopup.alert({
+      title: 'Burgie says...',
+      template: 'In order to choose a card, we need you to log in first.',
+      okText: 'Hush, burgie.',
+    });
     mainViewObj.removeClass();
     mainViewObj.addClass('slide-right');
     $location.path('/accounts_page');
@@ -37,7 +41,11 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
     analytics.trackEvent('reroute', 'choose_card__cart_page');
 
     // We redirect to the cart page if the cart is empty.
-    alert('We need something in your cart first.');
+    var alertPopup = $ionicPopup.alert({
+      title: 'Burgie says...',
+      template: 'We need something in your cart first.',
+      okText: 'Hush, burgie.',
+    });
     mainViewObj.removeClass();
     mainViewObj.addClass('slide-right');
     $location.path('/home_page_v2/swipe_page_v2');
@@ -82,10 +90,14 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
       }, Math.max(fmaSharedState.minLoadingMs - timePassedMs, 0));
     },
     function(err) {
-      alert('Error fetching credit card numbers. This usually happens '+
-            'when you login to delivery.com outside of FoodMe. Just re-add ' +
-            'this account on the accounts page and '+
-            'everything should be fiiine.');
+      var alertPopup = $ionicPopup.alert({
+        title: 'Burgie says...',
+        template: 'Error fetching credit card numbers. This usually happens '+
+                  'when you login to delivery.com outside of FoodMe. Just re-add ' +
+                  'this account on the accounts page and '+
+                  'everything should be fiiine.',
+        okText: 'Hush, burgie.',
+      });
       console.log(err);
       $scope.cardsLoading = false;
       return;
@@ -107,7 +119,11 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
     console.log('Finish button pressed.');
 
     if ($scope.selectedCardIndex.value == null) {
-      alert("SELECT A CARD. DO AS I SAY.");
+      var alertPopup = $ionicPopup.alert({
+        title: 'Burgie says...',
+        template: "SELECT A CARD. DO AS I SAY.",
+        okText: 'Hush, burgie.',
+      });
       return;
     }
 
