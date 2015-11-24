@@ -3,7 +3,7 @@ angular.module('foodMeApp.introScreen', ['ngRoute', 'foodmeApp.localStorage', 'f
 .controller('IntroScreenCtrl', ["$scope", "$location", "$http", "fmaLocalStorage", 'fmaSharedState', '$rootScope', '$timeout',
 function($scope, $location, $http, fmaLocalStorage, fmaSharedState, $rootScope, $timeout) {
   // If you want to test a specific page, comment this in and set testEnabled = true.
-  //$location.path('/choose_card');
+  var topViewObj = $('#top_view_container');
 
   if (fmaSharedState.testModeEnabled) {
     alert('Warning-- you are using the sandbox.');
@@ -67,6 +67,7 @@ function($scope, $location, $http, fmaLocalStorage, fmaSharedState, $rootScope, 
     analytics.trackEvent('button', 'intro_screen__get_started_pressed');
 
     console.log("Get started press!");
+    topViewObj.attr('class', 'fade-class');
     $location.path('/home_page_v2/swipe_page_v2');
     return;
   };

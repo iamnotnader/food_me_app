@@ -24,7 +24,6 @@ var initAngularStuff = function() {
   console.log('Engaging angular.');
   angular.module('foodMeApp', [
     'ionic','ionic.service.core',
-    
     'ngAnimate',
     'ui.router',
     'ngIOS9UIWebViewPatch',

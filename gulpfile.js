@@ -6,17 +6,26 @@ var sass = require('gulp-sass');
 var minifyCss = require('gulp-minify-css');
 var rename = require('gulp-rename');
 var sh = require('shelljs');
+var autoprefixer = require('gulp-autoprefixer');
 
 var paths = {
   sass: ['./www/styles/**/*.scss']
 };
 
-gulp.task('default', ['sass']);
+var default_tasks = [
+  'sass_and_prefix',
+];
 
-gulp.task('sass', function(done) {
+gulp.task('default', default_tasks);
+
+gulp.task('sass_and_prefix', function(done) {
   gulp.src('./www/styles/scss/*.scss')
     .pipe(sass())
     .on('error', sass.logError)
+    .pipe(autoprefixer({
+        browsers: ['last 2 versions'],
+        cascade: false
+    }))
     .pipe(gulp.dest('./www/styles/css/'))
     .pipe(minifyCss({
       keepSpecialComments: 0
@@ -27,7 +36,7 @@ gulp.task('sass', function(done) {
 });
 
 gulp.task('watch', function() {
-  gulp.watch(paths.sass, ['sass']);
+  gulp.watch(paths.sass, default_tasks);
 });
 
 gulp.task('install', ['git-check'], function() {

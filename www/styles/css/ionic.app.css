@@ -3110,7 +3110,6 @@ dfn {
  * Address differences between Firefox and other browsers.
  */
 hr {
-  -moz-box-sizing: content-box;
   box-sizing: content-box;
   height: 0; }
 
@@ -3252,9 +3251,7 @@ html input[disabled] {
  *  (include `-moz` to future-proof).
  */
 input[type="search"] {
-  -webkit-box-sizing: content-box;
   /* 2 */
-  -moz-box-sizing: content-box;
   box-sizing: content-box;
   -webkit-appearance: textfield;
   /* 1 */ }
@@ -3305,8 +3302,6 @@ table {
 *,
 *:before,
 *:after {
-  -webkit-box-sizing: border-box;
-  -moz-box-sizing: border-box;
   box-sizing: border-box; }
 
 html {
@@ -3320,7 +3315,7 @@ body,
   -webkit-font-smoothing: antialiased;
   font-smoothing: antialiased;
   -webkit-text-size-adjust: none;
-  -moz-text-size-adjust: none;
+  -ms-text-size-adjust: none;
   text-size-adjust: none;
   -webkit-tap-highlight-color: transparent;
   -webkit-tap-highlight-color: transparent;
@@ -3385,7 +3380,7 @@ body.grade-c {
   user-select: none;
   -webkit-touch-callout: none;
   -webkit-text-size-adjust: none;
-  -moz-text-size-adjust: none;
+  -ms-text-size-adjust: none;
   text-size-adjust: none;
   -webkit-transform-origin: left top;
   transform-origin: left top; }
@@ -3425,7 +3420,6 @@ body.grade-c {
   border-radius: 4px;
   background: rgba(0, 0, 0, 0.3);
   opacity: 1;
-  -webkit-transition: opacity 0.3s linear;
   transition: opacity 0.3s linear; }
   .scroll-bar-indicator.scroll-bar-fade-out {
     opacity: 0; }
@@ -3438,31 +3432,24 @@ body.grade-c {
   background: #aaa; }
   .grade-b .scroll-bar-indicator.scroll-bar-fade-out,
   .grade-c .scroll-bar-indicator.scroll-bar-fade-out {
-    -webkit-transition: none;
     transition: none; }
 
 ion-infinite-scroll {
   height: 60px;
   width: 100%;
   display: block;
-  display: -webkit-box;
   display: -webkit-flex;
-  display: -moz-box;
   display: -moz-flex;
   display: -ms-flexbox;
   display: flex;
-  -webkit-box-direction: normal;
-  -webkit-box-orient: horizontal;
   -webkit-flex-direction: row;
   -moz-flex-direction: row;
   -ms-flex-direction: row;
   flex-direction: row;
-  -webkit-box-pack: center;
   -ms-flex-pack: center;
   -webkit-justify-content: center;
   -moz-justify-content: center;
   justify-content: center;
-  -webkit-box-align: center;
   -ms-flex-align: center;
   -webkit-align-items: center;
   -moz-align-items: center;
@@ -3525,7 +3512,6 @@ ion-infinite-scroll {
 .pane {
   -webkit-transform: translate3d(0, 0, 0);
   transform: translate3d(0, 0, 0);
-  -webkit-transition-duration: 0;
   transition-duration: 0;
   z-index: 1; }
 
@@ -3701,7 +3687,6 @@ a.subdued {
  * --------------------------------------------------
  */
 .action-sheet-backdrop {
-  -webkit-transition: background-color 150ms ease-in-out;
   transition: background-color 150ms ease-in-out;
   position: fixed;
   top: 0;
@@ -3716,7 +3701,6 @@ a.subdued {
 .action-sheet-wrapper {
   -webkit-transform: translate3d(0, 100%, 0);
   transform: translate3d(0, 100%, 0);
-  -webkit-transition: all cubic-bezier(0.36, 0.66, 0.04, 1) 500ms;
   transition: all cubic-bezier(0.36, 0.66, 0.04, 1) 500ms;
   position: absolute;
   bottom: 0;
@@ -3830,7 +3814,6 @@ a.subdued {
   background-color: rgba(0, 0, 0, 0.4);
   visibility: hidden;
   opacity: 0;
-  -webkit-transition: 0.1s opacity linear;
   transition: 0.1s opacity linear; }
   .backdrop.visible {
     visibility: visible; }
@@ -3842,9 +3825,7 @@ a.subdued {
  * --------------------------------------------------
  */
 .bar {
-  display: -webkit-box;
   display: -webkit-flex;
-  display: -moz-box;
   display: -moz-flex;
   display: -ms-flexbox;
   display: flex;
@@ -3858,8 +3839,6 @@ a.subdued {
   right: 0;
   left: 0;
   z-index: 9;
-  -webkit-box-sizing: border-box;
-  -moz-box-sizing: border-box;
   box-sizing: border-box;
   padding: 5px;
   width: 100%;
@@ -4315,19 +4294,14 @@ a.subdued {
  * A navigation bar with any number of tab items supported.
  */
 .tabs {
-  display: -webkit-box;
   display: -webkit-flex;
-  display: -moz-box;
   display: -moz-flex;
   display: -ms-flexbox;
   display: flex;
-  -webkit-box-direction: normal;
-  -webkit-box-orient: horizontal;
   -webkit-flex-direction: horizontal;
   -moz-flex-direction: horizontal;
   -ms-flex-direction: horizontal;
   flex-direction: horizontal;
-  -webkit-box-pack: center;
   -ms-flex-pack: center;
   -webkit-justify-content: center;
   -moz-justify-content: center;
@@ -5001,10 +4975,6 @@ ion-tabs.tabs-color-active-dark .tab-item {
   padding-bottom: 0; }
   .tabs-top.tabs-striped .tab-item {
     background: transparent;
-    -webkit-transition: color .1s ease;
-    -moz-transition: color .1s ease;
-    -ms-transition: color .1s ease;
-    -o-transition: color .1s ease;
     transition: color .1s ease; }
     .tabs-top.tabs-striped .tab-item.tab-item-active, .tabs-top.tabs-striped .tab-item.active, .tabs-top.tabs-striped .tab-item.activated {
       margin-top: 1px;
@@ -5013,10 +4983,6 @@ ion-tabs.tabs-color-active-dark .tab-item {
       .tabs-top.tabs-striped .tab-item.tab-item-active > .badge, .tabs-top.tabs-striped .tab-item.tab-item-active > i, .tabs-top.tabs-striped .tab-item.active > .badge, .tabs-top.tabs-striped .tab-item.active > i, .tabs-top.tabs-striped .tab-item.activated > .badge, .tabs-top.tabs-striped .tab-item.activated > i {
         margin-top: -1px; }
     .tabs-top.tabs-striped .tab-item .badge {
-      -webkit-transition: color .2s ease;
-      -moz-transition: color .2s ease;
-      -ms-transition: color .2s ease;
-      -o-transition: color .2s ease;
       transition: color .2s ease; }
   .tabs-top.tabs-striped:not(.tabs-icon-left):not(.tabs-icon-top) .tab-item.tab-item-active .tab-title, .tabs-top.tabs-striped:not(.tabs-icon-left):not(.tabs-icon-top) .tab-item.tab-item-active i, .tabs-top.tabs-striped:not(.tabs-icon-left):not(.tabs-icon-top) .tab-item.active .tab-title, .tabs-top.tabs-striped:not(.tabs-icon-left):not(.tabs-icon-top) .tab-item.active i, .tabs-top.tabs-striped:not(.tabs-icon-left):not(.tabs-icon-top) .tab-item.activated .tab-title, .tabs-top.tabs-striped:not(.tabs-icon-left):not(.tabs-icon-top) .tab-item.activated i {
     display: block;
@@ -5045,9 +5011,7 @@ ion-tabs.tabs-color-active-dark .tab-item {
   border-bottom-width: 0; }
 
 .tab-item {
-  -webkit-box-flex: 1;
   -webkit-flex: 1;
-  -moz-box-flex: 1;
   -moz-flex: 1;
   -ms-flex: 1;
   flex: 1;
@@ -5180,9 +5144,7 @@ ion-tabs.tabs-color-active-dark .tab-item {
     color: #444; }
 
 .item.tabs {
-  display: -webkit-box;
   display: -webkit-flex;
-  display: -moz-box;
   display: -moz-flex;
   display: -ms-flexbox;
   display: flex;
@@ -5234,8 +5196,6 @@ ion-tabs.tabs-color-active-dark .tab-item {
 
 .grade-b .menu-content,
 .grade-c .menu-content {
-  -webkit-box-sizing: content-box;
-  -moz-box-sizing: content-box;
   box-sizing: content-box;
   right: -1px;
   left: -1px;
@@ -5253,8 +5213,9 @@ ion-tabs.tabs-color-active-dark .tab-item {
   display: none; }
 
 .menu-animated {
-  -webkit-transition: -webkit-transform 200ms ease;
-  transition: transform 200ms ease; }
+  transition: -webkit-transform 200ms ease;
+  transition: transform 200ms ease;
+  transition: transform 200ms ease, -webkit-transform 200ms ease; }
 
 /**
  * Modals
@@ -5310,7 +5271,6 @@ ion-tabs.tabs-color-active-dark .tab-item {
   .platform-ios.platform-cordova .modal-wrapper .modal .has-header.has-subheader.has-tabs-top {
     top: 137px; }
   .modal-backdrop-bg {
-    -webkit-transition: opacity 300ms ease-in-out;
     transition: opacity 300ms ease-in-out;
     background-color: #000;
     opacity: 0; }
@@ -5386,9 +5346,7 @@ ion-tabs.tabs-color-active-dark .tab-item {
   border-radius: 10px; }
 
 .platform-ios .popover .bar-header {
-  -webkit-border-top-right-radius: 10px;
   border-top-right-radius: 10px;
-  -webkit-border-top-left-radius: 10px;
   border-top-left-radius: 10px; }
 
 .platform-ios .popover .scroll-content {
@@ -5462,18 +5420,14 @@ ion-tabs.tabs-color-active-dark .tab-item {
   bottom: 0;
   right: 0;
   background: transparent;
-  display: -webkit-box;
   display: -webkit-flex;
-  display: -moz-box;
   display: -moz-flex;
   display: -ms-flexbox;
   display: flex;
-  -webkit-box-pack: center;
   -ms-flex-pack: center;
   -webkit-justify-content: center;
   -moz-justify-content: center;
   justify-content: center;
-  -webkit-box-align: center;
   -ms-flex-align: center;
   -webkit-align-items: center;
   -moz-align-items: center;
@@ -5506,14 +5460,10 @@ ion-tabs.tabs-color-active-dark .tab-item {
     max-height: 90%;
     border-radius: 0px;
     background-color: rgba(255, 255, 255, 0.9);
-    display: -webkit-box;
     display: -webkit-flex;
-    display: -moz-box;
     display: -moz-flex;
     display: -ms-flexbox;
     display: flex;
-    -webkit-box-direction: normal;
-    -webkit-box-orient: vertical;
     -webkit-flex-direction: column;
     -moz-flex-direction: column;
     -ms-flex-direction: column;
@@ -5543,14 +5493,10 @@ ion-tabs.tabs-color-active-dark .tab-item {
   overflow: auto; }
 
 .popup-buttons {
-  display: -webkit-box;
   display: -webkit-flex;
-  display: -moz-box;
   display: -moz-flex;
   display: -ms-flexbox;
   display: flex;
-  -webkit-box-direction: normal;
-  -webkit-box-orient: horizontal;
   -webkit-flex-direction: row;
   -moz-flex-direction: row;
   -ms-flex-direction: row;
@@ -5558,9 +5504,7 @@ ion-tabs.tabs-color-active-dark .tab-item {
   padding: 10px;
   min-height: 65px; }
   .popup-buttons .button {
-    -webkit-box-flex: 1;
     -webkit-flex: 1;
-    -moz-box-flex: 1;
     -moz-flex: 1;
     -ms-flex: 1;
     flex: 1;
@@ -5590,23 +5534,18 @@ ion-tabs.tabs-color-active-dark .tab-item {
   right: 0;
   bottom: 0;
   z-index: 13;
-  display: -webkit-box;
   display: -webkit-flex;
-  display: -moz-box;
   display: -moz-flex;
   display: -ms-flexbox;
   display: flex;
-  -webkit-box-pack: center;
   -ms-flex-pack: center;
   -webkit-justify-content: center;
   -moz-justify-content: center;
   justify-content: center;
-  -webkit-box-align: center;
   -ms-flex-align: center;
   -webkit-align-items: center;
   -moz-align-items: center;
   align-items: center;
-  -webkit-transition: 0.2s opacity linear;
   transition: 0.2s opacity linear;
   visibility: hidden;
   opacity: 0; }
@@ -5670,9 +5609,7 @@ ion-tabs.tabs-color-active-dark .tab-item {
   .item p:last-child {
     margin-bottom: 0; }
   .item .badge {
-    display: -webkit-box;
     display: -webkit-flex;
-    display: -moz-box;
     display: -moz-flex;
     display: -ms-flexbox;
     display: flex;
@@ -5972,13 +5909,10 @@ a.item-content {
  */
 .item-icon-left .icon,
 .item-icon-right .icon {
-  display: -webkit-box;
   display: -webkit-flex;
-  display: -moz-box;
   display: -moz-flex;
   display: -ms-flexbox;
   display: flex;
-  -webkit-box-align: center;
   -ms-flex-align: center;
   -webkit-align-items: center;
   -moz-align-items: center;
@@ -6046,13 +5980,10 @@ a.item-content {
 
 .item-button-left > .button,
 .item-button-left .item-content > .button {
-  display: -webkit-box;
   display: -webkit-flex;
-  display: -moz-box;
   display: -moz-flex;
   display: -ms-flexbox;
   display: flex;
-  -webkit-box-align: center;
   -ms-flex-align: center;
   -webkit-align-items: center;
   -moz-align-items: center;
@@ -6086,13 +6017,10 @@ button.item.item-button-right {
 .item-button-right .item-content > .button,
 .item-button-right > .buttons,
 .item-button-right .item-content > .buttons {
-  display: -webkit-box;
   display: -webkit-flex;
-  display: -moz-box;
   display: -moz-flex;
   display: -ms-flexbox;
   display: flex;
-  -webkit-box-align: center;
   -ms-flex-align: center;
   -webkit-align-items: center;
   -moz-align-items: center;
@@ -6252,13 +6180,11 @@ button.item.item-button-right {
 
 .item-left-editable .item-content,
 .item-right-editable .item-content {
-  -webkit-transition-duration: 250ms;
   transition-duration: 250ms;
-  -webkit-transition-timing-function: ease-in-out;
   transition-timing-function: ease-in-out;
-  -webkit-transition-property: -webkit-transform;
-  -moz-transition-property: -moz-transform;
-  transition-property: transform; }
+  transition-property: -webkit-transform;
+  transition-property: transform;
+  transition-property: transform, -webkit-transform; }
 
 .list-left-editing .item-left-editable .item-content,
 .item-left-editing.item-left-editable .item-content {
@@ -6266,15 +6192,11 @@ button.item.item-button-right {
   transform: translate3d(50px, 0, 0); }
 
 .item-remove-animate.ng-leave {
-  -webkit-transition-duration: 300ms;
   transition-duration: 300ms; }
 
 .item-remove-animate.ng-leave .item-content, .item-remove-animate.ng-leave:last-of-type {
-  -webkit-transition-duration: 300ms;
   transition-duration: 300ms;
-  -webkit-transition-timing-function: ease-in;
   transition-timing-function: ease-in;
-  -webkit-transition-property: all;
   transition-property: all; }
 
 .item-remove-animate.ng-leave.ng-leave-active .item-content {
@@ -6286,17 +6208,13 @@ button.item.item-button-right {
   opacity: 0; }
 
 .item-remove-animate.ng-leave.ng-leave-active ~ ion-item:not(.ng-leave) {
-  -webkit-transform: translate3d(0, -webkit-calc(-100% + 1px), 0);
+  -webkit-transform: translate3d(0, calc(-100% + 1px), 0);
   transform: translate3d(0, calc(-100% + 1px), 0);
-  -webkit-transition-duration: 300ms;
   transition-duration: 300ms;
-  -webkit-transition-timing-function: cubic-bezier(0.25, 0.81, 0.24, 1);
   transition-timing-function: cubic-bezier(0.25, 0.81, 0.24, 1);
-  -webkit-transition-property: all;
   transition-property: all; }
 
 .item-left-edit {
-  -webkit-transition: all ease-in-out 125ms;
   transition: all ease-in-out 125ms;
   position: absolute;
   top: 0;
@@ -6312,13 +6230,10 @@ button.item.item-button-right {
   .item-left-edit .button {
     height: 100%; }
     .item-left-edit .button.icon {
-      display: -webkit-box;
       display: -webkit-flex;
-      display: -moz-box;
       display: -moz-flex;
       display: -ms-flexbox;
       display: flex;
-      -webkit-box-align: center;
       -ms-flex-align: center;
       -webkit-align-items: center;
       -moz-align-items: center;
@@ -6334,7 +6249,6 @@ button.item.item-button-right {
       transform: translate3d(8px, 0, 0); }
 
 .list-left-editing .item-left-edit {
-  -webkit-transition-delay: 125ms;
   transition-delay: 125ms; }
 
 .item-delete .button.icon {
@@ -6344,7 +6258,6 @@ button.item.item-button-right {
     opacity: .7; }
 
 .item-right-edit {
-  -webkit-transition: all ease-in-out 250ms;
   transition: all ease-in-out 250ms;
   position: absolute;
   top: 0;
@@ -6362,13 +6275,10 @@ button.item.item-button-right {
     min-width: 50px;
     height: 100%; }
     .item-right-edit .button.icon {
-      display: -webkit-box;
       display: -webkit-flex;
-      display: -moz-box;
       display: -moz-flex;
       display: -ms-flexbox;
       display: flex;
-      -webkit-box-align: center;
       -ms-flex-align: center;
       -webkit-align-items: center;
       -moz-align-items: center;
@@ -6415,12 +6325,10 @@ button.item.item-button-right {
     height: 100%;
     border: none;
     border-radius: 0;
-    display: -webkit-inline-box;
     display: -webkit-inline-flex;
     display: -moz-inline-flex;
     display: -ms-inline-flexbox;
     display: inline-flex;
-    -webkit-box-align: center;
     -ms-flex-align: center;
     -webkit-align-items: center;
     -moz-align-items: center;
@@ -6640,7 +6548,6 @@ button.item.item-button-right {
     text-decoration: none;
     opacity: 0.3; }
     .slider-pager .slider-pager-page.active {
-      -webkit-transition: opacity 0.4s ease-in;
       transition: opacity 0.4s ease-in;
       opacity: 1; }
 
@@ -6648,7 +6555,6 @@ button.item.item-button-right {
 .slider-pager-page.ng-enter,
 .slider-pager-page.ng-leave,
 .slider-pager-page.ng-animate {
-  -webkit-transition: none !important;
   transition: none !important; }
 
 .slider-slide.ng-animate,
@@ -6708,10 +6614,9 @@ button.item.item-button-right {
     -webkit-transform: translate3d(0, 0, 0) rotate(-180deg);
     transform: translate3d(0, 0, 0) rotate(-180deg); }
   .scroll-refresher.active.refreshing {
-    -webkit-transition: -webkit-transform 0.2s;
     transition: -webkit-transform 0.2s;
-    -webkit-transition: transform 0.2s;
     transition: transform 0.2s;
+    transition: transform 0.2s, -webkit-transform 0.2s;
     -webkit-transform: scale(1, 1);
     transform: scale(1, 1); }
     .scroll-refresher.active.refreshing .icon-pulling,
@@ -6743,8 +6648,10 @@ button.item.item-button-right {
 
 @keyframes refresh-spin {
   0% {
+    -webkit-transform: translate3d(0, 0, 0) rotate(0);
     transform: translate3d(0, 0, 0) rotate(0); }
   100% {
+    -webkit-transform: translate3d(0, 0, 0) rotate(180deg);
     transform: translate3d(0, 0, 0) rotate(180deg); } }
 
 @-webkit-keyframes refresh-spin-back {
@@ -6755,8 +6662,10 @@ button.item.item-button-right {
 
 @keyframes refresh-spin-back {
   0% {
+    -webkit-transform: translate3d(0, 0, 0) rotate(180deg);
     transform: translate3d(0, 0, 0) rotate(180deg); }
   100% {
+    -webkit-transform: translate3d(0, 0, 0) rotate(0);
     transform: translate3d(0, 0, 0) rotate(0); } }
 
 /**
@@ -6874,13 +6783,10 @@ textarea {
   font-family: "Helvetica Neue", "Roboto", "Segoe UI", sans-serif; }
 
 .item-input {
-  display: -webkit-box;
   display: -webkit-flex;
-  display: -moz-box;
   display: -moz-flex;
   display: -ms-flexbox;
   display: flex;
-  -webkit-box-align: center;
   -ms-flex-align: center;
   -webkit-align-items: center;
   -moz-align-items: center;
@@ -6889,11 +6795,8 @@ textarea {
   overflow: hidden;
   padding: 6px 0 5px 16px; }
   .item-input input {
-    -webkit-border-radius: 0;
     border-radius: 0;
-    -webkit-box-flex: 1;
     -webkit-flex: 1 220px;
-    -moz-box-flex: 1;
     -moz-flex: 1 220px;
     -ms-flex: 1 220px;
     flex: 1 220px;
@@ -6904,9 +6807,7 @@ textarea {
     padding-right: 24px;
     background-color: transparent; }
   .item-input .button .icon {
-    -webkit-box-flex: 0;
     -webkit-flex: 0 0 24px;
-    -moz-box-flex: 0;
     -moz-flex: 0 0 24px;
     -ms-flex: 0 0 24px;
     flex: 0 0 24px;
@@ -6916,11 +6817,8 @@ textarea {
     text-align: center;
     font-size: 16px; }
   .item-input .button-bar {
-    -webkit-border-radius: 0;
     border-radius: 0;
-    -webkit-box-flex: 1;
     -webkit-flex: 1 0 220px;
-    -moz-box-flex: 1;
     -moz-flex: 1 0 220px;
     -ms-flex: 1 0 220px;
     flex: 1 0 220px;
@@ -6931,16 +6829,15 @@ textarea {
     min-width: 14px; }
 
 .platform-windowsphone .item-input input {
+  -webkit-flex-shrink: 1;
+  -ms-flex-negative: 1;
   flex-shrink: 1; }
 
 .item-input-inset {
-  display: -webkit-box;
   display: -webkit-flex;
-  display: -moz-box;
   display: -moz-flex;
   display: -ms-flexbox;
   display: flex;
-  -webkit-box-align: center;
   -ms-flex-align: center;
   -webkit-align-items: center;
   -moz-align-items: center;
@@ -6950,24 +6847,18 @@ textarea {
   padding: 10.66667px; }
 
 .item-input-wrapper {
-  display: -webkit-box;
   display: -webkit-flex;
-  display: -moz-box;
   display: -moz-flex;
   display: -ms-flexbox;
   display: flex;
-  -webkit-box-flex: 1;
   -webkit-flex: 1 0;
-  -moz-box-flex: 1;
   -moz-flex: 1 0;
   -ms-flex: 1 0;
   flex: 1 0;
-  -webkit-box-align: center;
   -ms-flex-align: center;
   -webkit-align-items: center;
   -moz-align-items: center;
   align-items: center;
-  -webkit-border-radius: 4px;
   border-radius: 4px;
   padding-right: 8px;
   padding-left: 8px;
@@ -7008,7 +6899,6 @@ textarea {
 
 .item-stacked-label input,
 .item-stacked-label textarea {
-  -webkit-border-radius: 2px;
   border-radius: 2px;
   padding: 4px 8px 3px 0;
   border: none;
@@ -7027,12 +6917,10 @@ textarea {
     padding: 5px 0 0 0;
     opacity: 0;
     top: 10px;
-    -webkit-transition: opacity 0.15s ease-in, top 0.2s linear;
     transition: opacity 0.15s ease-in, top 0.2s linear; }
     .item-floating-label .input-label.has-input {
       opacity: 1;
       top: 0;
-      -webkit-transition: opacity 0.15s ease-in, top 0.2s linear;
       transition: opacity 0.15s ease-in, top 0.2s linear; }
 
 textarea,
@@ -7286,7 +7174,6 @@ input[type="checkbox"][readonly] {
     border-radius: 28px;
     background: #fff;
     content: ' ';
-    -webkit-transition: background-color 20ms ease-in-out;
     transition: background-color 20ms ease-in-out; }
 
 .checkbox input:checked:before,
@@ -7295,7 +7182,6 @@ input:checked + .checkbox-icon:before {
 
 .checkbox input:after,
 .checkbox-icon:after {
-  -webkit-transition: opacity 0.05s ease-in-out;
   transition: opacity 0.05s ease-in-out;
   -webkit-transform: rotate(-45deg);
   transform: rotate(-45deg);
@@ -7429,11 +7315,8 @@ input:checked + .checkbox-icon:after {
 
 /* the track appearance when the toggle is "off" */
 .toggle .track {
-  -webkit-transition-timing-function: ease-in-out;
   transition-timing-function: ease-in-out;
-  -webkit-transition-duration: 0.3s;
   transition-duration: 0.3s;
-  -webkit-transition-property: background-color, border;
   transition-property: background-color, border;
   display: inline-block;
   box-sizing: border-box;
@@ -7454,10 +7337,10 @@ input:checked + .checkbox-icon:after {
 /* the handle (circle) thats inside the toggle's track area */
 /* also the handle's appearance when it is "off" */
 .toggle .handle {
-  -webkit-transition: 0.3s cubic-bezier(0, 1.1, 1, 1.1);
   transition: 0.3s cubic-bezier(0, 1.1, 1, 1.1);
-  -webkit-transition-property: background-color, transform;
+  transition-property: background-color, -webkit-transform;
   transition-property: background-color, transform;
+  transition-property: background-color, transform, -webkit-transform;
   position: absolute;
   display: block;
   width: 27px;
@@ -7625,7 +7508,6 @@ input:checked + .checkbox-icon:after {
   width: auto;
   height: 43px;
   outline: none;
-  background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #ccc), color-stop(100%, #ccc));
   background: linear-gradient(to right, #ccc 0%, #ccc 100%);
   background-position: center;
   background-size: 99% 2px;
@@ -7681,13 +7563,10 @@ input:checked + .checkbox-icon:after {
     background: #ccc; }
 
 .range {
-  display: -webkit-box;
   display: -webkit-flex;
-  display: -moz-box;
   display: -moz-flex;
   display: -ms-flexbox;
   display: flex;
-  -webkit-box-align: center;
   -ms-flex-align: center;
   -webkit-align-items: center;
   -moz-align-items: center;
@@ -7731,9 +7610,7 @@ input:checked + .checkbox-icon:after {
     background: #444; }
 
 .range .icon {
-  -webkit-box-flex: 0;
   -webkit-flex: 0;
-  -moz-box-flex: 0;
   -moz-flex: 0;
   -ms-flex: 0;
   flex: 0;
@@ -7743,9 +7620,7 @@ input:checked + .checkbox-icon:after {
   font-size: 24px; }
 
 .range input {
-  -webkit-box-flex: 1;
   -webkit-flex: 1;
-  -moz-box-flex: 1;
   -moz-flex: 1;
   -ms-flex: 1;
   flex: 1;
@@ -7754,9 +7629,7 @@ input:checked + .checkbox-icon:after {
   margin-left: 10px; }
 
 .range-label {
-  -webkit-box-flex: 0;
   -webkit-flex: 0 0 auto;
-  -moz-box-flex: 0;
   -moz-flex: 0 0 auto;
   -ms-flex: 0 0 auto;
   flex: 0 0 auto;
@@ -8196,7 +8069,6 @@ progress {
     line-height: 51px; }
 
 .button-icon {
-  -webkit-transition: opacity 0.1s;
   transition: opacity 0.1s;
   padding: 0 6px;
   min-width: initial;
@@ -8211,7 +8083,6 @@ progress {
     font-size: 32px; }
 
 .button-clear {
-  -webkit-transition: opacity 0.1s;
   transition: opacity 0.1s;
   padding: 0 6px;
   max-height: 42px;
@@ -8230,7 +8101,6 @@ progress {
     opacity: 0.3; }
 
 .button-outline {
-  -webkit-transition: opacity 0.1s;
   transition: opacity 0.1s;
   background: none;
   box-shadow: none; }
@@ -8283,15 +8153,11 @@ a.button {
  * --------------------------------------------------
  */
 .button-bar {
-  display: -webkit-box;
   display: -webkit-flex;
-  display: -moz-box;
   display: -moz-flex;
   display: -ms-flexbox;
   display: flex;
-  -webkit-box-flex: 1;
   -webkit-flex: 1;
-  -moz-box-flex: 1;
   -moz-flex: 1;
   -ms-flex: 1;
   flex: 1;
@@ -8312,9 +8178,7 @@ a.button {
       float: left; }
 
 .button-bar > .button {
-  -webkit-box-flex: 1;
   -webkit-flex: 1;
-  -moz-box-flex: 1;
   -moz-flex: 1;
   -ms-flex: 1;
   flex: 1;
@@ -8350,9 +8214,7 @@ a.button {
  * up the height of the tallest .col in the same .row.
  */
 .row {
-  display: -webkit-box;
   display: -webkit-flex;
-  display: -moz-box;
   display: -moz-flex;
   display: -ms-flexbox;
   display: flex;
@@ -8361,7 +8223,6 @@ a.button {
 
 .row-wrap {
   -webkit-flex-wrap: wrap;
-  -moz-flex-wrap: wrap;
   -ms-flex-wrap: wrap;
   flex-wrap: wrap; }
 
@@ -8375,9 +8236,7 @@ a.button {
   padding-top: 0; }
 
 .col {
-  -webkit-box-flex: 1;
   -webkit-flex: 1;
-  -moz-box-flex: 1;
   -moz-flex: 1;
   -ms-flex: 1;
   flex: 1;
@@ -8388,35 +8247,30 @@ a.button {
 /* Vertically Align Columns */
 /* .row-* vertically aligns every .col in the .row */
 .row-top {
-  -webkit-box-align: start;
   -ms-flex-align: start;
   -webkit-align-items: flex-start;
   -moz-align-items: flex-start;
   align-items: flex-start; }
 
 .row-bottom {
-  -webkit-box-align: end;
   -ms-flex-align: end;
   -webkit-align-items: flex-end;
   -moz-align-items: flex-end;
   align-items: flex-end; }
 
 .row-center {
-  -webkit-box-align: center;
   -ms-flex-align: center;
   -webkit-align-items: center;
   -moz-align-items: center;
   align-items: center; }
 
 .row-stretch {
-  -webkit-box-align: stretch;
   -ms-flex-align: stretch;
   -webkit-align-items: stretch;
   -moz-align-items: stretch;
   align-items: stretch; }
 
 .row-baseline {
-  -webkit-box-align: baseline;
   -ms-flex-align: baseline;
   -webkit-align-items: baseline;
   -moz-align-items: baseline;
@@ -8424,21 +8278,18 @@ a.button {
 
 /* .col-* vertically aligns an individual .col */
 .col-top {
-  -webkit-align-self: flex-start;
-  -moz-align-self: flex-start;
   -ms-flex-item-align: start;
+  -webkit-align-self: flex-start;
   align-self: flex-start; }
 
 .col-bottom {
-  -webkit-align-self: flex-end;
-  -moz-align-self: flex-end;
   -ms-flex-item-align: end;
+  -webkit-align-self: flex-end;
   align-self: flex-end; }
 
 .col-center {
-  -webkit-align-self: center;
-  -moz-align-self: center;
   -ms-flex-item-align: center;
+  -webkit-align-self: center;
   align-self: center; }
 
 /* Column Offsets */
@@ -8474,81 +8325,63 @@ a.button {
 /* across the grid. However, you can specify individual */
 /* columns to take up a certain size of the available area */
 .col-10 {
-  -webkit-box-flex: 0;
   -webkit-flex: 0 0 10%;
-  -moz-box-flex: 0;
   -moz-flex: 0 0 10%;
   -ms-flex: 0 0 10%;
   flex: 0 0 10%;
   max-width: 10%; }
 
 .col-20 {
-  -webkit-box-flex: 0;
   -webkit-flex: 0 0 20%;
-  -moz-box-flex: 0;
   -moz-flex: 0 0 20%;
   -ms-flex: 0 0 20%;
   flex: 0 0 20%;
   max-width: 20%; }
 
 .col-25 {
-  -webkit-box-flex: 0;
   -webkit-flex: 0 0 25%;
-  -moz-box-flex: 0;
   -moz-flex: 0 0 25%;
   -ms-flex: 0 0 25%;
   flex: 0 0 25%;
   max-width: 25%; }
 
 .col-33, .col-34 {
-  -webkit-box-flex: 0;
   -webkit-flex: 0 0 33.3333%;
-  -moz-box-flex: 0;
   -moz-flex: 0 0 33.3333%;
   -ms-flex: 0 0 33.3333%;
   flex: 0 0 33.3333%;
   max-width: 33.3333%; }
 
 .col-50 {
-  -webkit-box-flex: 0;
   -webkit-flex: 0 0 50%;
-  -moz-box-flex: 0;
   -moz-flex: 0 0 50%;
   -ms-flex: 0 0 50%;
   flex: 0 0 50%;
   max-width: 50%; }
 
 .col-66, .col-67 {
-  -webkit-box-flex: 0;
   -webkit-flex: 0 0 66.6666%;
-  -moz-box-flex: 0;
   -moz-flex: 0 0 66.6666%;
   -ms-flex: 0 0 66.6666%;
   flex: 0 0 66.6666%;
   max-width: 66.6666%; }
 
 .col-75 {
-  -webkit-box-flex: 0;
   -webkit-flex: 0 0 75%;
-  -moz-box-flex: 0;
   -moz-flex: 0 0 75%;
   -ms-flex: 0 0 75%;
   flex: 0 0 75%;
   max-width: 75%; }
 
 .col-80 {
-  -webkit-box-flex: 0;
   -webkit-flex: 0 0 80%;
-  -moz-box-flex: 0;
   -moz-flex: 0 0 80%;
   -ms-flex: 0 0 80%;
   flex: 0 0 80%;
   max-width: 80%; }
 
 .col-90 {
-  -webkit-box-flex: 0;
   -webkit-flex: 0 0 90%;
-  -moz-box-flex: 0;
   -moz-flex: 0 0 90%;
   -ms-flex: 0 0 90%;
   flex: 0 0 90%;
@@ -8561,17 +8394,11 @@ a.button {
 /* to any columns in the row for clearity */
 @media (max-width: 567px) {
   .responsive-sm {
-    -webkit-box-direction: normal;
-    -moz-box-direction: normal;
-    -webkit-box-orient: vertical;
-    -moz-box-orient: vertical;
     -webkit-flex-direction: column;
     -ms-flex-direction: column;
     flex-direction: column; }
     .responsive-sm .col, .responsive-sm .col-10, .responsive-sm .col-20, .responsive-sm .col-25, .responsive-sm .col-33, .responsive-sm .col-34, .responsive-sm .col-50, .responsive-sm .col-66, .responsive-sm .col-67, .responsive-sm .col-75, .responsive-sm .col-80, .responsive-sm .col-90 {
-      -webkit-box-flex: 1;
       -webkit-flex: 1;
-      -moz-box-flex: 1;
       -moz-flex: 1;
       -ms-flex: 1;
       flex: 1;
@@ -8582,17 +8409,11 @@ a.button {
 
 @media (max-width: 767px) {
   .responsive-md {
-    -webkit-box-direction: normal;
-    -moz-box-direction: normal;
-    -webkit-box-orient: vertical;
-    -moz-box-orient: vertical;
     -webkit-flex-direction: column;
     -ms-flex-direction: column;
     flex-direction: column; }
     .responsive-md .col, .responsive-md .col-10, .responsive-md .col-20, .responsive-md .col-25, .responsive-md .col-33, .responsive-md .col-34, .responsive-md .col-50, .responsive-md .col-66, .responsive-md .col-67, .responsive-md .col-75, .responsive-md .col-80, .responsive-md .col-90 {
-      -webkit-box-flex: 1;
       -webkit-flex: 1;
-      -moz-box-flex: 1;
       -moz-flex: 1;
       -ms-flex: 1;
       flex: 1;
@@ -8603,17 +8424,11 @@ a.button {
 
 @media (max-width: 1023px) {
   .responsive-lg {
-    -webkit-box-direction: normal;
-    -moz-box-direction: normal;
-    -webkit-box-orient: vertical;
-    -moz-box-orient: vertical;
     -webkit-flex-direction: column;
     -ms-flex-direction: column;
     flex-direction: column; }
     .responsive-lg .col, .responsive-lg .col-10, .responsive-lg .col-20, .responsive-lg .col-25, .responsive-lg .col-33, .responsive-lg .col-34, .responsive-lg .col-50, .responsive-lg .col-66, .responsive-lg .col-67, .responsive-lg .col-75, .responsive-lg .col-80, .responsive-lg .col-90 {
-      -webkit-box-flex: 1;
       -webkit-flex: 1;
-      -moz-box-flex: 1;
       -moz-flex: 1;
       -ms-flex: 1;
       flex: 1;
@@ -8918,7 +8733,6 @@ a.button {
     position: fixed; } }
 
 .platform-c:not(.enable-transitions) * {
-  -webkit-transition: none !important;
   transition: none !important; }
 
 .slide-in-up {
@@ -8927,7 +8741,6 @@ a.button {
 
 .slide-in-up.ng-enter,
 .slide-in-up > .ng-enter {
-  -webkit-transition: all cubic-bezier(0.1, 0.7, 0.1, 1) 400ms;
   transition: all cubic-bezier(0.1, 0.7, 0.1, 1) 400ms; }
 
 .slide-in-up.ng-enter-active,
@@ -8937,7 +8750,6 @@ a.button {
 
 .slide-in-up.ng-leave,
 .slide-in-up > .ng-leave {
-  -webkit-transition: all ease-in-out 250ms;
   transition: all ease-in-out 250ms; }
 
 @-webkit-keyframes scaleOut {
@@ -8950,9 +8762,11 @@ a.button {
 
 @keyframes scaleOut {
   from {
+    -webkit-transform: scale(1);
     transform: scale(1);
     opacity: 1; }
   to {
+    -webkit-transform: scale(0.8);
     transform: scale(0.8);
     opacity: 0; } }
 
@@ -8966,20 +8780,21 @@ a.button {
 
 @keyframes superScaleIn {
   from {
+    -webkit-transform: scale(1.2);
     transform: scale(1.2);
     opacity: 0; }
   to {
+    -webkit-transform: scale(1);
     transform: scale(1);
     opacity: 1; } }
 
 [nav-view-transition="ios"] [nav-view="entering"],
 [nav-view-transition="ios"] [nav-view="leaving"] {
-  -webkit-transition-duration: 500ms;
   transition-duration: 500ms;
-  -webkit-transition-timing-function: cubic-bezier(0.36, 0.66, 0.04, 1);
   transition-timing-function: cubic-bezier(0.36, 0.66, 0.04, 1);
-  -webkit-transition-property: opacity, -webkit-transform, box-shadow;
-  transition-property: opacity, transform, box-shadow; }
+  transition-property: opacity, box-shadow, -webkit-transform;
+  transition-property: opacity, transform, box-shadow;
+  transition-property: opacity, transform, box-shadow, -webkit-transform; }
 
 [nav-view-transition="ios"][nav-view-direction="forward"], [nav-view-transition="ios"][nav-view-direction="back"] {
   background-color: #000; }
@@ -8996,12 +8811,11 @@ a.button {
 [nav-bar-transition="ios"] .title,
 [nav-bar-transition="ios"] .buttons,
 [nav-bar-transition="ios"] .back-text {
-  -webkit-transition-duration: 500ms;
   transition-duration: 500ms;
-  -webkit-transition-timing-function: cubic-bezier(0.36, 0.66, 0.04, 1);
   transition-timing-function: cubic-bezier(0.36, 0.66, 0.04, 1);
-  -webkit-transition-property: opacity, -webkit-transform;
-  transition-property: opacity, transform; }
+  transition-property: opacity, -webkit-transform;
+  transition-property: opacity, transform;
+  transition-property: opacity, transform, -webkit-transform; }
 
 [nav-bar-transition="ios"] [nav-bar="active"],
 [nav-bar-transition="ios"] [nav-bar="entering"] {
@@ -9017,12 +8831,11 @@ a.button {
 
 [nav-view-transition="android"] [nav-view="entering"],
 [nav-view-transition="android"] [nav-view="leaving"] {
-  -webkit-transition-duration: 200ms;
   transition-duration: 200ms;
-  -webkit-transition-timing-function: cubic-bezier(0.4, 0.6, 0.2, 1);
   transition-timing-function: cubic-bezier(0.4, 0.6, 0.2, 1);
-  -webkit-transition-property: -webkit-transform;
-  transition-property: transform; }
+  transition-property: -webkit-transform;
+  transition-property: transform;
+  transition-property: transform, -webkit-transform; }
 
 [nav-view-transition="android"] [nav-view="active"],
 [nav-view-transition="android"][nav-view-direction="forward"] [nav-view="entering"],
@@ -9035,11 +8848,8 @@ a.button {
 
 [nav-bar-transition="android"] .title,
 [nav-bar-transition="android"] .buttons {
-  -webkit-transition-duration: 200ms;
   transition-duration: 200ms;
-  -webkit-transition-timing-function: cubic-bezier(0.4, 0.6, 0.2, 1);
   transition-timing-function: cubic-bezier(0.4, 0.6, 0.2, 1);
-  -webkit-transition-property: opacity;
   transition-property: opacity; }
 
 [nav-bar-transition="android"] [nav-bar="active"],
@@ -9058,18 +8868,14 @@ a.button {
 [nav-swipe="fast"] .title,
 [nav-swipe="fast"] .buttons,
 [nav-swipe="fast"] .back-text {
-  -webkit-transition-duration: 50ms;
   transition-duration: 50ms;
-  -webkit-transition-timing-function: linear;
   transition-timing-function: linear; }
 
 [nav-swipe="slow"] [nav-view],
 [nav-swipe="slow"] .title,
 [nav-swipe="slow"] .buttons,
 [nav-swipe="slow"] .back-text {
-  -webkit-transition-duration: 160ms;
   transition-duration: 160ms;
-  -webkit-transition-timing-function: linear;
   transition-timing-function: linear; }
 
 [nav-view="cached"],
@@ -9078,7 +8884,6 @@ a.button {
 
 [nav-view="stage"] {
   opacity: 0;
-  -webkit-transition-duration: 0;
   transition-duration: 0; }
 
 [nav-bar="stage"] .title,
@@ -9086,5 +8891,4 @@ a.button {
 [nav-bar="stage"] .back-text {
   position: absolute;
   opacity: 0;
-  -webkit-transition-duration: 0s;
   transition-duration: 0s; }

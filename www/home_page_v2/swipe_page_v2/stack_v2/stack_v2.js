@@ -112,15 +112,17 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
           if (res.data == null || res.data.responseData == null ||
               res.data.responseData.results == null ||
               res.data.responseData.results.length == 0 ||
-              res.data.responseData.results[0] != null &&
+              res.data.responseData.results[0] == null ||
               res.data.responseData.results[0].url == null) {
             resolve(null);
+            return;
           }
           resolve(res.data.responseData.results[0].url);
           return;
         },
         function(err) {
           resolve(null);
+          return;
         });
     });
   };
@@ -584,12 +586,12 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
           }
 
           // Shuffle the results for fun.
-          resolve(_.shuffle(foodData));
+          return resolve(_.shuffle(foodData));
         },
         function(err) {
           // Messed up response???
           console.warn("Error getting menu for merchant.");
-          reject(err);
+          return reject(err);
         }
       );
     });
@@ -705,11 +707,11 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
           $scope.globals.minimumLeft = parseFloat(currentMerchant.ordering.minimum);
           setMerchantName();
         }
-        resolve(getOpenDishesForMerchantPromise(currentMerchant));
+        return resolve(getOpenDishesForMerchantPromise(currentMerchant));
       },
       function(err) {
         console.log('Error searching address.');
-        reject(err);
+        return reject(err);
       });
     });
   };

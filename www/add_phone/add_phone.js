@@ -3,7 +3,7 @@ angular.module('foodMeApp.addPhone', ['ngRoute', 'foodmeApp.localStorage', 'food
 
 .controller('AddPhoneCtrl', ["$scope", "$location", "fmaLocalStorage", "$http", "fmaSharedState", "$rootScope", "$timeout", "$q", "$route", "fmaCartHelper", "$ionicPopup",
 function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, $timeout, $q, $route, fmaCartHelper, $ionicPopup) {
-  var mainViewObj = $('#main_view_container');
+  var topViewObj = $('#top_view_container');
   console.log('In add_phone controller.');
   $scope.userToken = fmaLocalStorage.getObject('userToken');
   $scope.rawAccessToken = null;
@@ -22,8 +22,7 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
       template: 'In order to choose a card, we need you to log in first.',
       okText: 'Hush, burgie.',
     });
-    mainViewObj.removeClass();
-    mainViewObj.addClass('slide-right');
+    topViewObj.attr('class', 'slide-right');
     $location.path('/accounts_page');
     return;
   }
@@ -37,8 +36,7 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
       template: 'We need something in your cart first.',
       okText: 'Hush, burgie.',
     });
-    mainViewObj.removeClass();
-    mainViewObj.addClass('slide-right');
+    topViewObj.attr('class', 'slide-right');
     $location.path('/home_page_v2/cart_page_v2');
     return;
   }
@@ -51,8 +49,7 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
       template: 'We need to get an address from you first.',
       okText: 'Hush, burgie.',
     });
-    mainViewObj.removeClass();
-    mainViewObj.addClass('slide-right');
+    topViewObj.attr('class', 'slide-right');
     $location.path('/home_page_v2/swipe_page_v2');
     return;
   }
@@ -65,8 +62,7 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
       template: 'We need to get an address from you first.',
       okText: 'Hush, burgie.',
     });
-    mainViewObj.removeClass();
-    mainViewObj.addClass('slide-right');
+    topViewObj.attr('class', 'slide-right');
     $location.path('/choose_card');
     return;
   }
@@ -75,8 +71,7 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
 
   $scope.enterPhoneCancelPressed = function() {
     console.log('Enter phone cancel.');
-    mainViewObj.removeClass();
-    mainViewObj.addClass('slide-right');
+    topViewObj.attr('class', 'slide-right');
     $location.path('/choose_card');    
   };
 
@@ -282,8 +277,7 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
                                fmaSharedState.testModeEnabled);
           
           // Go back to the address page.
-          mainViewObj.removeClass();
-          mainViewObj.addClass('slide-right');
+          topViewObj.attr('class', 'slide-right');
           $location.path('/home_page_v2/swipe_page_v2');
         }, Math.max(fmaSharedState.minLoadingMs - timePassedMs, 0));
       },

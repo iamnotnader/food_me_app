@@ -4,8 +4,12 @@ angular.module('foodMeApp.homePageV2', ['ngRoute', 'foodmeApp.localStorage', 'fo
 
 .controller('HomePageV2Ctrl', ["$scope", "$location", "fmaLocalStorage", "$http", "fmaSharedState", "$q", "fmaStackHelper", "$timeout", "$interval", "$ionicPopup",
 function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $q, fmaStackHelper, $timeout, $interval, $ionicPopup) {
+  var topViewObj = $('#top_view_container');
+  var subviewObj = $('#home_page_v2__subview_container');
+
   $scope.searchButtonPressed = function() {
     console.log('Search button pressed.');
+    subviewObj.attr('class', 'slide-right');
     $('.swipe_page__bottom_bar').css({left: '0%'});
     $location.path('/home_page_v2/search_page_v2');
   };
@@ -13,11 +17,20 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $q, fmaStack
     console.log('Refresh button pressed.');
     $scope.globals.saveSearchParams();
     $('.swipe_page__bottom_bar').css({left: '33.33333%'});
+    if ($location.path() == "/home_page_v2/swipe_page_v2") {
+      return;
+    }
+    if ($location.path() == "/home_page_v2/cart_page_v2") {
+      subviewObj.attr('class', 'slide-right');
+    } else {
+      subviewObj.attr('class', 'slide-left');
+    }
     $location.path('/home_page_v2/swipe_page_v2');
   };
   $scope.cartButtonPressed = function() {
     console.log('Cart button pressed.');
     $('.swipe_page__bottom_bar').css({left: '66.66666%'});
+    subviewObj.attr('class', 'slide-left');
     $location.path('/home_page_v2/cart_page_v2');
   };
   
@@ -103,7 +116,7 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $q, fmaStack
     fmaLocalStorage.setObjectWithExpirationSeconds(
         'minimumLeft', $scope.globals.minimumLeft,
         fmaSharedState.foodItemValidationSeconds);
-
+    topViewObj.attr('class', 'slide-left');
     $location.path('/accounts_page');
     return;
   }

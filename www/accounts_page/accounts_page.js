@@ -4,7 +4,8 @@ angular.module('foodMeApp.accountsPage', ['ngRoute', 'foodmeApp.localStorage', '
 
 .controller('AccountsPageCtrl', ["$scope", "$location", "$http", "fmaLocalStorage", 'fmaSharedState', '$rootScope', '$timeout', '$ionicPopup',
 function($scope, $location, $http, fmaLocalStorage, fmaSharedState, $rootScope, $timeout, $ionicPopup) {
-  var mainViewObj = $('#main_view_container');
+  var topViewObj = $('#top_view_container');
+
   if (window.analytics != null) {
     // For some reason deviceready doesn't execute fast enough sometimes.
     analytics.trackView('/accounts_page');
@@ -181,18 +182,16 @@ function($scope, $location, $http, fmaLocalStorage, fmaSharedState, $rootScope, 
         'userToken', selectedAccount.token,
         fmaSharedState.testing_invalidation_seconds);
     // Need to transition to next page here.
-    mainViewObj.removeClass();
-    mainViewObj.addClass('slide-left');
+    topViewObj.attr('class', 'slide-left');
     $location.path('/choose_card');
     return;
-  }
+  };
 
   $scope.backButtonPressed = function() {
     analytics.trackEvent('nav', 'accounts_page__back_pressed');
 
     console.log('Accounts back button pressed.');
-    mainViewObj.removeClass();
-    mainViewObj.addClass('slide-right');
+    topViewObj.attr('class', 'slide-right');
     $location.path('/home_page_v2/swipe_page_v2');
   };
 }]);

@@ -1,66 +1,70 @@
-<div ng-show="globals.userAddress != null" class="stack__overall_container">
-  <div class="stack__restaurant">
-    <div class="stack__restaurant_name"></div>
-  </div>
-  <div class="stack__delivery_minimum" ng-show="globals.minimumLeft != null">
-    <div class="stack__delivery_minimum_text">
-      <div class="stack__delivery_minimum_text__message">{{minimumString}}</div>
-      <div class="stack__delivery_minimum_text__price" ng-if="globals.minimumLeft > 0" style="color: #EB6B4E;">${{globals.minimumLeft.toFixed(2)}}</div>
-      <div class="stack__delivery_minimum_text__price" ng-if="globals.minimumLeft <= 0" style="color: #67DB9C;">${{cartTotal}}</div>
+<div class="fade-class">
+  <div ng-show="globals.userAddress != null" class="stack__overall_container">
+    <div class="stack__restaurant">
+      <div class="stack__restaurant_name"></div>
     </div>
-  </div>
-  <div class="stack__buttons">
-    <div class="stack__buttons__container">
-      <div class="stack__buttons__info" ng-click="infoPressed()"></div>
-      <div class="stack__buttons__like" ng-click="likePressed()"></div>
-      <div class="stack__buttons__dislike" ng-click="dislikePressed()"></div>
-      <div class="stack__buttons__shuffle_dishes">
-        <div class="stack__buttons__shuffle_dishes_press" ng-click="shuffleDishesPressed()"></div>
-      </div>
-      <div class="stack__buttons__new_merchants">
-        <div class="stack__buttons__shuffle_merchants_press" ng-click="shuffleMerchantsPressed()"></div>
+    <div class="stack__delivery_minimum" ng-show="globals.minimumLeft != null">
+      <div class="stack__delivery_minimum_text">
+        <div class="stack__delivery_minimum_text__message">{{minimumString}}</div>
+        <div class="stack__delivery_minimum_text__price" ng-if="globals.minimumLeft > 0" style="color: #EB6B4E;">${{globals.minimumLeft.toFixed(2)}}</div>
+        <div class="stack__delivery_minimum_text__price" ng-if="globals.minimumLeft <= 0" style="color: #67DB9C;">${{cartTotal}}</div>
       </div>
     </div>
-  </div>
-  <div class="stack__cards__empty" ng-click="initEverything();" ng-if="emptyStackConfirmed && (globals.allMerchants == null || globals.allMerchants.length === 0)">
-    <div class="stack__cards__empty_text">
-      Aww.<br>Looks like we couldn't find any merchants.
-    </div>
-    <div class="stack__cards__empty_button">
-      Try again?
-    </div>
-  </div>
-  <div class="stack__cards__empty" ng-show="emptyStackConfirmed && globals.allMerchants != null && globals.allMerchants.length > 0">
-    <div class="stack__cards__empty_inner">
-      Bummer.<br>This merchant doesn't have any matching items. Loosen your search or try another merhant.
-    </div>
-  </div>
-  <div class="stack__cards" ng-show="!emptyStackConfirmed">
-    <div class="stack__cards__cards_container">
-      <div class="stack__single_card">
-        <!--Some crazy shit happens in javascript to make this refresh. It's very bad.-->
-        <!--Basically be careful when you make changes to this class.-->
-        <div class= "stack__single_card__food_image_loading">
-          <div class="stack__single_card__food_image_waiting">No image yet-- but keep swiping!</div>
+    <div class="stack__buttons">
+      <div class="stack__buttons__container">
+        <div class="stack__buttons__info" ng-click="infoPressed()"></div>
+        <div class="stack__buttons__like" ng-click="likePressed()"></div>
+        <div class="stack__buttons__dislike" ng-click="dislikePressed()"></div>
+        <div class="stack__buttons__shuffle_dishes">
+          <div class="stack__buttons__shuffle_dishes_press" ng-click="shuffleDishesPressed()"></div>
         </div>
-        <div class= "stack__single_card__food_image"></div>
-        <img class="overall__attribution_img" src="img/powered_by_google.png">
-        <div class="stack__single_card__text_container">
-          <div class="stack__single_card__item_name">
-            <div class="stack__single_card__item_name_inner">
-            </div>
+        <div class="stack__buttons__new_merchants">
+          <div class="stack__buttons__shuffle_merchants_press" ng-click="shuffleMerchantsPressed()"></div>
+        </div>
+      </div>
+    </div>
+    <div class="stack__cards__empty" ng-click="initEverything();" ng-if="emptyStackConfirmed && (globals.allMerchants == null || globals.allMerchants.length === 0)">
+      <div class="stack__cards__empty_text">
+        Aww.<br>Looks like we couldn't find any merchants.
+      </div>
+      <div class="stack__cards__empty_button">
+        Try again?
+      </div>
+    </div>
+    <div class="stack__cards__empty" ng-show="emptyStackConfirmed && globals.allMerchants != null && globals.allMerchants.length > 0">
+      <div class="stack__cards__empty_inner">
+        Bummer.<br>This merchant doesn't have any matching items. Loosen your search or try another merhant.
+      </div>
+    </div>
+    <div class="stack__cards" ng-show="!emptyStackConfirmed">
+      <div class="stack__cards__cards_container">
+        <div class="stack__single_card">
+          <!--Some crazy shit happens in javascript to make this refresh. It's very bad.-->
+          <!--Basically be careful when you make changes to this class.-->
+          <div class= "stack__single_card__food_image_loading">
+            <div class="stack__single_card__food_image_waiting">No image yet-- but keep swiping!</div>
           </div>
-          <div class="stack__single_card__item_price">
-            <div class="stack__single_card__item_price_inner"></div>
-         </div>         
+          <div class= "stack__single_card__food_image"></div>
+          <img class="overall__attribution_img" src="img/powered_by_google.png">
+          <div class="stack__single_card__text_container">
+            <div class="stack__single_card__item_name">
+              <div class="stack__single_card__item_name_inner">
+              </div>
+            </div>
+            <div class="stack__single_card__item_price">
+              <div class="stack__single_card__item_price_inner"></div>
+          </div>         
+          </div>
         </div>
+        <!--Cards get put in here with jquery.-->
       </div>
-      <!--Cards get put in here with jquery.-->
     </div>
   </div>
 </div>
-<div class="stack__overall_container" ng-show="globals.userAddress == null">
-  <div class="stack__top_text">Enter an address.</div>
-  <div class="stack__winking_burgie"></div>
-  <div class="stack__bottom_text">Have a pea-some.</div>
+<div class="fade-class">
+  <div class="stack__overall_container fade-class" ng-show="globals.userAddress == null">
+    <div class="stack__top_text">Enter an address.</div>
+    <div class="stack__winking_burgie"></div>
+    <div class="stack__bottom_text">Have a pea-some.</div>
+  </div>
 </div>

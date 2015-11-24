@@ -3,10 +3,10 @@ angular.module('foodMeApp.chooseCard', ['ngRoute', 'foodmeApp.localStorage', 'fo
 
 .controller('ChooseCardCtrl', ["$scope", "$location", "fmaLocalStorage", "$http", "fmaSharedState", "$rootScope", "$timeout", "$q", "$route", "fmaCartHelper", "$ionicPopup",
 function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, $timeout, $q, $route, fmaCartHelper, $ionicPopup) {
-  var mainViewObj = $('#main_view_container');
   if (fmaSharedState.testModeEnabled) {
     alert('Warning-- you are using the sandbox.');
   }
+  var topViewObj = $('#top_view_container');
 
   // On this screen, we need a valid user token. If we are missing one, we need
   // to go back to the intro_screen to get it.
@@ -31,8 +31,7 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
       template: 'In order to choose a card, we need you to log in first.',
       okText: 'Hush, burgie.',
     });
-    mainViewObj.removeClass();
-    mainViewObj.addClass('slide-right');
+    topViewObj.attr('class', 'slide-right');
     $location.path('/accounts_page');
     return;
   }
@@ -46,8 +45,7 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
       template: 'We need something in your cart first.',
       okText: 'Hush, burgie.',
     });
-    mainViewObj.removeClass();
-    mainViewObj.addClass('slide-right');
+    topViewObj.attr('class', 'slide-right');
     $location.path('/home_page_v2/swipe_page_v2');
     return;
   }
@@ -107,8 +105,7 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
     analytics.trackEvent('nav', 'choose_card__back_pressed');
 
     console.log('Back button pressed.');
-    mainViewObj.removeClass();
-    mainViewObj.addClass('slide-right');
+    topViewObj.attr('class', 'slide-right');
     $location.path('accounts_page');
     return;
   };
@@ -131,8 +128,7 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
         'cardSelected', $scope.cardList[$scope.selectedCardIndex.value],
         fmaSharedState.testing_invalidation_seconds);
 
-    mainViewObj.removeClass();
-    mainViewObj.addClass('slide-left');
+    topViewObj.attr('class', 'slide-left');
     $location.path('/add_phone');
     return;      
   };
@@ -157,8 +153,7 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
     analytics.trackEvent('cell', 'choose_card__add_card_pressed');
 
     console.log('Add card pressed!');
-    mainViewObj.removeClass();
-    mainViewObj.addClass('slide-left');
+    topViewObj.attr('class', 'slide-left');
     $location.path('/add_card');
     return;
   };

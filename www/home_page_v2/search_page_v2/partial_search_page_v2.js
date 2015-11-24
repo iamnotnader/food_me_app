@@ -3,6 +3,8 @@ angular.module('foodMeApp.searchPageV2', ['ngRoute', 'foodmeApp.localStorage', '
 
 .controller('SearchPageV2Ctrl', ["$scope", "$location", "$http", "fmaLocalStorage", 'fmaSharedState', '$rootScope', '$timeout',
 function($scope, $location, $http, fmaLocalStorage, fmaSharedState, $rootScope, $timeout) {
+  var subviewObj = $('#home_page_v2__subview_container');
+
   // Sort all the merchants.
   $scope.sortedMerchants = [];
   if ($scope.globals.allMerchants != null) {
@@ -62,6 +64,7 @@ function($scope, $location, $http, fmaLocalStorage, fmaSharedState, $rootScope, 
     // Save our search variables and go back to the swipe page.
     $scope.globals.saveSearchParams();
     $('.swipe_page__bottom_bar').css({left: '33.33333%'});
+    subviewObj.attr('class', 'slide-left');
     $location.path('/home_page_v2/swipe_page_v2');
     return;
   };

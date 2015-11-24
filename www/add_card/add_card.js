@@ -4,9 +4,9 @@ angular.module('foodMeApp.addCard', ['ngRoute', 'foodmeApp.localStorage', 'foodm
 
 .controller('AddCardCtrl', ["$scope", "$location", "fmaLocalStorage", "$http", "fmaSharedState", "$ionicPopup",
 function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $ionicPopup) {
-  var mainViewObj = $('#main_view_container');
   // For this page we need an access token. If we don't have one, we
   // need to go back to the selection page.
+  var topViewObj = $('#top_view_container');
   $scope.userToken = fmaLocalStorage.getObject('userToken');
   $scope.rawAccessToken = null;
   if (fmaSharedState.fake_token) {
@@ -19,8 +19,7 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $ionicPopup)
     analytics.trackEvent('reroute', 'add_address__intro_screen');
 
     // TODO(daddy): Add a direction animation here.
-    mainViewObj.removeClass();
-    mainViewObj.addClass('slide-right');
+    topViewObj.attr('class', 'slide-right');
     $location.path('/accounts_page');
     return;
   }
@@ -38,8 +37,7 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $ionicPopup)
   };
 
   $scope.cancelPressed = function() {
-    mainViewObj.removeClass();
-    mainViewObj.addClass('slide-right');
+    topViewObj.attr('class', 'slide-right');
     $location.path('choose_card');
     return;
   };
@@ -97,8 +95,7 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $ionicPopup)
           template: 'Successfully added your card!',
           okText: 'Hush, burgie.',
         });
-        mainViewObj.removeClass();
-        mainViewObj.addClass('slide-right');
+        topViewObj.attr('class', 'slide-right');
         $location.path('choose_card');
         return;
       },
