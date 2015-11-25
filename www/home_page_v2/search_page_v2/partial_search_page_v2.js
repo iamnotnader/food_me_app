@@ -4,6 +4,9 @@ angular.module('foodMeApp.searchPageV2', ['ngRoute', 'foodmeApp.localStorage', '
 .controller('SearchPageV2Ctrl', ["$scope", "$location", "$http", "fmaLocalStorage", 'fmaSharedState', '$rootScope', '$timeout', '$ionicPopup',
 function($scope, $location, $http, fmaLocalStorage, fmaSharedState, $rootScope, $timeout, $ionicPopup) {
   var subviewObj = $('#home_page_v2__subview_container');
+  // TODO(daddy): This is shit. I wrote this at 3am. There is almost definitely
+  // a better way to do this. I was trying to make the search not change if the
+  // user changes their mind about clearing their cart.
   $scope.globals.initialSearch = {
     selectedMerchantId: $scope.globals.selectedMerchantId,
     deliveryMinimumLimit: $scope.globals.deliveryMinimumLimit,
@@ -91,6 +94,9 @@ function($scope, $location, $http, fmaLocalStorage, fmaSharedState, $rootScope, 
           return;
         } else {
           console.log('Not changing search.');
+          // TODO(daddy): This is shit. I wrote this at 3am. There is almost definitely
+          // a better way to do this. I was trying to make the search not change if the
+          // user changes their mind about clearing their cart.
           $scope.globals.selectedMerchantId = $scope.globals.initialSearch.selectedMerchantId;
           $scope.globals.deliveryMinimumLimit = $scope.globals.initialSearch.deliveryMinimumLimit;
           $scope.globals.keywordValue = $scope.globals.initialSearch.keywordValue;

@@ -69,6 +69,70 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
   // After this, we should have an address, a card, a cart full of items,
   // and a token.
 
+  var foodNames = [];
+  var sum = 0.0;
+  for (var v1 = 0; v1 < $scope.userCart.length; v1++) {
+    foodNames.push($scope.userCart[v1].name + ': <b>$' + $scope.userCart[v1].price + '</b>');
+    sum += parseFloat($scope.userCart[v1].price);
+  }
+  // Update the deal.
+  var taxAmount = sum*.09;
+  var tipAmount = fmaSharedState.tipAmount;
+  var confirmationString = "Are you ready to order the following to <br><b>" +
+      fmaSharedState.addressToString($scope.userAddress) +
+      "</b>?<br><br>" + foodNames.join('<br>') +
+      '<br><br>Tax: <b>$' + taxAmount.toFixed(2) + '</b>' +
+      '<br><br>Tip: <b>$' + tipAmount.toFixed(2) + '</b>' +
+      '<br><br>For a total of: ';
+  sum = sum + taxAmount + tipAmount;
+  if ($scope.deal != null && $scope.deal.reward != null &&
+      $scope.deal.reward === 'dollar_off' && $scope.deal.value != null) {
+    // Process dollars off an order.
+    confirmationString = 'Your deal worked! You\'re getting $' +
+        $scope.deal.value.toFixed(2) + ' off of your order :)<br><br>' +
+        confirmationString + '$' +
+        sum.toFixed(2) + ' - $' +
+        $scope.deal.value.toFixed(2) + ' = <b>$' +
+        (sum - $scope.deal.value).toFixed(2) + '</b>?';
+  } else if ($scope.deal != null && $scope.deal.reward != null &&
+      $scope.deal.reward === 'percent_off' && $scope.deal.value != null) {
+    // Process percent off an order.
+    confirmationString = 'Your deal worked! You\'re getting ' +
+        $scope.deal.value.toFixed(0) + '% off of your order :)<br><br>' +
+        confirmationString + '$' +
+        sum.toFixed(2) + ' - $' +
+        (sum * $scope.deal.value / 100.0).toFixed(2) + ' = $<b>' +
+        (sum * (100.0-$scope.deal.value) / 100.0).toFixed(2) + '</b>?';
+  } else if ($scope.deal != null && $scope.deal.reward != null &&
+      $scope.deal.reward === 'points' && $scope.deal.value != null) {
+    // Process points with an order.
+    confirmationString = 'Your deal worked! You\'re getting ' +
+        $scope.deal.value + ' points with your order :)<br><br>' +
+        confirmationString + ' <b>$'
+        sum.toFixed(2) + '</b>?';
+  } else {
+    // Process order with no deals.
+    confirmationString +=  '<b>$' + sum.toFixed(2) + '</b>?';
+  }
+  var confirmPopup = $ionicPopup.confirm({
+    title: 'Burgie wants to know.',
+    template: confirmationString,
+    okText: 'Sounds chill.',
+    cancelText: 'No thanks, I hate food.',
+  });
+  confirmPopup.then(function(res) {
+    if(res) {
+      analytics.trackEvent('purchase', 'choose_card__confirmed_purchase');
+      console.log('Order confirmed!');
+
+    } else {
+      console.log('Order cancelled.');
+      // Take them back to the cart page.
+      topViewObj.attr('class', 'slide-right');
+      $location.path('/home_page_v2/cart_page_v2');
+    }
+  });
+
   $scope.enterPhoneCancelPressed = function() {
     console.log('Enter phone cancel.');
     topViewObj.attr('class', 'slide-right');
@@ -307,71 +371,7 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
   };
 
   var doAllCheckoutThings = function() {
-    console.log('Doing all checkout things, sir!');
 
-    var foodNames = [];
-    var sum = 0.0;
-    for (var v1 = 0; v1 < $scope.userCart.length; v1++) {
-      foodNames.push($scope.userCart[v1].name + ': <b>$' + $scope.userCart[v1].price + '</b>');
-      sum += parseFloat($scope.userCart[v1].price);
-    }
-    // Update the deal.
-    var taxAmount = sum*.09;
-    var tipAmount = fmaSharedState.tipAmount;
-    var confirmationString = "Are you ready to order the following to <br><b>" +
-        fmaSharedState.addressToString($scope.userAddress) +
-        "</b>?<br><br>" + foodNames.join('<br>') +
-        '<br><br>Tax: <b>$' + taxAmount.toFixed(2) + '</b>' +
-        '<br><br>Tip: <b>$' + tipAmount.toFixed(2) + '</b>' +
-        '<br><br>For a total of: ';
-    sum = sum + taxAmount + tipAmount;
-    if ($scope.deal != null && $scope.deal.reward != null &&
-        $scope.deal.reward === 'dollar_off' && $scope.deal.value != null) {
-      // Process dollars off an order.
-      confirmationString = 'Your deal worked! You\'re getting $' +
-          $scope.deal.value.toFixed(2) + ' off of your order :)<br><br>' +
-          confirmationString + '$' +
-          sum.toFixed(2) + ' - $' +
-          $scope.deal.value.toFixed(2) + ' = <b>$' +
-          (sum - $scope.deal.value).toFixed(2) + '</b>?';
-    } else if ($scope.deal != null && $scope.deal.reward != null &&
-        $scope.deal.reward === 'percent_off' && $scope.deal.value != null) {
-      // Process percent off an order.
-      confirmationString = 'Your deal worked! You\'re getting ' +
-          $scope.deal.value.toFixed(0) + '% off of your order :)<br><br>' +
-          confirmationString + '$' +
-          sum.toFixed(2) + ' - $' +
-          (sum * $scope.deal.value / 100.0).toFixed(2) + ' = $<b>' +
-          (sum * (100.0-$scope.deal.value) / 100.0).toFixed(2) + '</b>?';
-    } else if ($scope.deal != null && $scope.deal.reward != null &&
-        $scope.deal.reward === 'points' && $scope.deal.value != null) {
-      // Process points with an order.
-      confirmationString = 'Your deal worked! You\'re getting ' +
-          $scope.deal.value + ' points with your order :)<br><br>' +
-          confirmationString + ' <b>$'
-          sum.toFixed(2) + '</b>?';
-    } else {
-      // Process order with no deals.
-      confirmationString +=  '<b>$' + sum.toFixed(2) + '</b>?';
-    }
-
-    var confirmPopup = $ionicPopup.confirm({
-      title: 'Burgie wants to know.',
-      template: confirmationString,
-      okText: 'Sounds chill.',
-      cancelText: 'No thanks, I hate food.',
-    });
-    confirmPopup.then(function(res) {
-      if(res) {
-        analytics.trackEvent('purchase', 'choose_card__confirmed_purchase');
-        console.log('Order confirmed!');
-
-        takeMoneyAndFinish();
-      } else {
-        console.log('Order cancelled.');
-      }
-    });
-    return;
   };
 
   $scope.missingAddressData = {
@@ -460,7 +460,8 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
                 });
                 return;
               }
-              doAllCheckoutThings();
+              console.log('Doing all checkout things, sir!');
+              takeMoneyAndFinish();
               return;
             },
             function(err) {
@@ -476,9 +477,8 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
           );
           return;
         }
-        $scope.cardsLoading = false;
-        doAllCheckoutThings();
-
+        console.log('Doing all checkout things, sir!');
+        takeMoneyAndFinish();
         return;
       },
       function(err) {
