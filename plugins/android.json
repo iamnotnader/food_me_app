@@ -86,9 +86,6 @@
         }
     },
     "installed_plugins": {
-        "cordova-plugin-whitelist": {
-            "PACKAGE_NAME": "com.phonegap.helloworld"
-        },
         "cordova-plugin-device": {
             "PACKAGE_NAME": "com.phonegap.helloworld"
         },
@@ -123,6 +120,9 @@
             "PACKAGE_NAME": "io.foodme"
         },
         "ionic-plugin-deploy": {
+            "PACKAGE_NAME": "io.foodme"
+        },
+        "cordova-plugin-whitelist": {
             "PACKAGE_NAME": "io.foodme"
         }
     },

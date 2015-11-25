@@ -49,6 +49,9 @@
         },
         "ionic-plugin-deploy": {
             "PACKAGE_NAME": "io.foodme"
+        },
+        "cordova-plugin-whitelist": {
+            "PACKAGE_NAME": "io.foodme"
         }
     },
     "dependent_plugins": {},

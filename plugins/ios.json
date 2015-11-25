@@ -136,9 +136,6 @@
         "cordova-plugin-device": {
             "PACKAGE_NAME": "io.foodme"
         },
-        "cordova-plugin-whitelist": {
-            "PACKAGE_NAME": "io.foodme"
-        },
         "org.apache.cordova.dialogs": {
             "PACKAGE_NAME": "io.foodme"
         },
@@ -170,6 +167,9 @@
             "PACKAGE_NAME": "io.foodme"
         },
         "ionic-plugin-deploy": {
+            "PACKAGE_NAME": "io.foodme"
+        },
+        "cordova-plugin-whitelist": {
             "PACKAGE_NAME": "io.foodme"
         }
     },
