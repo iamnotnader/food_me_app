@@ -12,7 +12,21 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
     $scope.cartTotal = total.toFixed(2);
   };
 
+  var setDedupedCart = function() {
+    dedupedCart = [];
+    for (var v1 = 0; v1 < $scope.globals.userCart.length; v1++) {
+      dedupedCart.push({
+        name: $scope.globals.userCart[v1].name,
+        merchantName: $scope.globals.userCart[v1].merchantName,
+        price: $scope.globals.userCart[v1].price,
+        id: Math.random(),
+      });
+    }
+    $scope.dedupedCart = dedupedCart;
+  };
+
   setCartTotal();
+  setDedupedCart();
   $scope.$watch(
     function(scope) {
       // We only watch the cart length for efficiency reaasons.
@@ -46,6 +60,7 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
   $scope.removeFromCart = function(index) {
     console.log("Removing item " + index);
     $scope.globals.userCart.splice(index, 1);
+    $scope.dedupedCart.splice(index, 1);
     fmaLocalStorage.setObjectWithExpirationSeconds(
         'userCart', $scope.globals.userCart,
         fmaSharedState.testing_invalidation_seconds);

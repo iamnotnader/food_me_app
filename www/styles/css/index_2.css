@@ -941,6 +941,12 @@ h3.popup-title {
   text-transform: none;
   font-size: 4vh; }
 
+.popup-buttons {
+  border-top: 1px solid #B2B2B2; }
+
+.popup-head {
+  border-bottom: 1px solid #B2B2B2; }
+
 .stack__cards__empty {
   position: absolute;
   top: 10%;

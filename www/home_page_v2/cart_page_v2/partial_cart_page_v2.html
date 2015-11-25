@@ -7,8 +7,8 @@
 <div class="cart_page_v2__items_container">
   <div class="cart_page_v2__item_list">
     <div style="min-height: 101%">
-      <div ng-repeat="cartItem in globals.userCart" class="cart_page__repeated_cell_animated fade-out-500ms">
-        <div class="cart_page_v2__list_cell">
+      <div ng-repeat="cartItem in dedupedCart" class="cart_page__repeated_cell_animated fade-out-500ms">
+        <div class="cart_page_v2__list_cell" style="margin-bottom: 5px;">
           <div class="cart_page__invisible_cart_remove_button" ng-click="removeFromCart($index)">
             <div class="cart_page_v2__delete_button"></div>
           </div>
@@ -24,7 +24,7 @@
             ${{cartItem.price}}
           </div>
           <!--Don't put a border on the last cell-->
-          <div class="choose_address__cell_border" ng-if="globals.userCart.length < 5 || ($index !== globals.userCart.length - 1)"></div>
+          <div class="choose_address__cell_border"></div>
         </div>
         </div>
       <div class="cart_page__empty_cart" ng-if="globals.userCart.length === 0">

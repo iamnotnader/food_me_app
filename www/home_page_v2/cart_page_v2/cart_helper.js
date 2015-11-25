@@ -77,6 +77,19 @@ angular.module('foodmeApp.cartHelper', [])
     return requestObj;
   };
 
+  // **************************************************************************
+  // READ THIS!
+  // READ THIS!
+  // READ THIS!
+  // READ THIS!
+  //
+  // This function assumes all items in the cart come from the same merchant.
+  //
+  // READ THIS!
+  // READ THIS!
+  // READ THIS!
+  // READ THIS!
+  // **************************************************************************
   // Takes all of the menu items (cartItemsFound), looks at their options, and
   // constructs "proper" Item objects that we can then pass to the delivery.com
   // cart API.
@@ -84,7 +97,7 @@ angular.module('foodmeApp.cartHelper', [])
   // https://developers.delivery.com/customer-cart/#item-object
   var createCartRequestsFromItems = function(cartItems) {
     // One request object for each thing in cartItems.
-    var finalItemRequestObjects = [];
+    var allItemRequestObjects = [];
     for (var v1 = 0; v1 < cartItems.length; v1++) {
       var currentItem = cartItems[v1];
       var optionsForItem = getOptionsForItem(currentItem);
@@ -99,23 +112,30 @@ angular.module('foodmeApp.cartHelper', [])
         instructions: fmaSharedState.instructions,
         option_qty: optionRequestObject,
       };
-      var finalRequestObject = {
-        order_type: "delivery",
-        client_id: fmaSharedState.client_id,
-        item: itemRequestObject,
-        order_time: 'ASAP',
-      };
       // Add the request object to our list.
-      finalItemRequestObjects.push(finalRequestObject);
+      allItemRequestObjects.push(itemRequestObject);
     }
-    return finalItemRequestObjects;
+    var finalRequestObject = {
+      order_type: "delivery",
+      client_id: fmaSharedState.client_id,
+      items: allItemRequestObjects,
+      order_time: 'ASAP',
+    };
+    return [finalRequestObject];
   };
 
+  // NOTE: THIS FUNCTION ASSUMES WE ONLY HAVE ONE MERCHANT.
+  // TODO(daddy): DELETE THIS FUNCTION. I incurred a lot of tech debt on it
+  // out of total, utter laziness.
   var clearCartsPromise = function(cartItems, rawAccessToken) {
     return $q(function(resolve, reject) {
-      var successfulPromisesReturned = 0;
-      var failedPromisesReturned = 0;
-      for (var v1 = 0; v1 < cartItems.length; v1++) {
+      if (cartItems.length === 0) {
+        
+      }
+      // TODO(daddy): This is shit. I used to do one delete call for each
+      // item because items could come from mutiple merchants. Now I don't
+      // do that anymore.
+      for (var v1 = 0; v1 < 1; v1++) {
         $http({
           method: 'DELETE',
           url: fmaSharedState.endpoint+'/customer/cart/'+cartItems[v1].merchantId+'?client_id=' + fmaSharedState.client_id,
@@ -126,19 +146,11 @@ angular.module('foodmeApp.cartHelper', [])
           }
         }).then(
           function(res) {
-            successfulPromisesReturned++;
-            if (successfulPromisesReturned +
-                failedPromisesReturned === cartItems.length) {
-              resolve();
-            }
+            resolve();
           },
           function(err) {
             console.log(err);
-            failedPromisesReturned++;
-            if (successfulPromisesReturned +
-                failedPromisesReturned === cartItems.length) {
-              resolve();
-            }
+            resolve();
           }
         );
       }
@@ -287,6 +299,9 @@ angular.module('foodmeApp.cartHelper', [])
   // If merchantId is null, add all the items.
   var clearCartThenUpdateCartPromise = function(cartItems, rawAccessToken, merchantId) {
     return $q(function(resolve, reject) {
+      if (cartItems.length === 0) {
+        resolve();
+      }
       // Actual init.
       itemRequestObjects = createCartRequestsFromItems(cartItems);
       // Clear the user's cart.
@@ -294,21 +309,25 @@ angular.module('foodmeApp.cartHelper', [])
       .then(
         // At this point the cart should be cleared.
         function(res) {
-          addCartsPromise(cartItems, itemRequestObjects, rawAccessToken, merchantId)
-          .then(
+          $http({
+            method: 'POST',
+            url: fmaSharedState.endpoint+'/customer/cart/'+cartItems[0].merchantId+'?client_id=' + fmaSharedState.client_id,
+            data: itemRequestObjects[0],
+            headers: {
+              "Authorization": rawAccessToken,
+              "Content-Type": "application/json",
+            }
+          }).then(
             function(res) {
-              // Cleared the cart and refreshed it with all our new items
-              // YAY!
-              resolve(res);
-            },
-            function(err) {
-              reject(err);
+              return resolve(cartItems);
+            }, function(reject) {
+              return resolve(cartItems);
             }
           );
         },
         function(err) {
           // We can't ever get here because clearCartsPromise always resolves.
-          reject(err);
+          return reject(err);
         }
       );
     });

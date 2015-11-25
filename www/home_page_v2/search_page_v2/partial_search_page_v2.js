@@ -63,6 +63,8 @@ function($scope, $location, $http, fmaLocalStorage, fmaSharedState, $rootScope, 
   $scope.doneButtonPressed = function() {
     // Save our search variables and go back to the swipe page.
     $scope.globals.saveSearchParams();
+    $scope.globals.allMerchants = null;
+    $scope.globals.allFoodItems = null;
     $('.swipe_page__bottom_bar').css({left: '33.33333%'});
     subviewObj.attr('class', 'slide-left');
     $location.path('/home_page_v2/swipe_page_v2');

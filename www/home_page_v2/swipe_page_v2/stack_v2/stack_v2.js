@@ -303,7 +303,6 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
     // Add to cart...
     var itemInfo = $scope.globals.allFoodItems[$scope.globals.itemIndex];
     $scope.globals.userCart.push(itemInfo);
-    $scope.globals.userCart = _.uniq($scope.globals.userCart);
     fmaLocalStorage.setObjectWithExpirationSeconds(
         'userCart', $scope.globals.userCart,
         fmaSharedState.foodItemValidationSeconds);
@@ -368,16 +367,59 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
     $scope.restaurantName.text("");
   };
 
-  $scope.shuffleDishesPressed = function() {
+  var putFirstCardBack = function() {
+    console.log('Putting card back.');
+    // Remove the top card.
+    var stackCards = $scope.stackContainer.children();
+    var oldTopCard = $(stackCards[stackCards.length - 1]);
+    $scope.canManipulateCards = false;
+    oldTopCard.unbind();
+
+    // We take a card that's not in the stack yet and put it in the stack at
+    // the front. We loop if necessary.
+    newTopCard = oldTopCard.clone();
+    XAndY = getXAndYCoords(oldTopCard);
+    newTopCard.css('transform',
+        "translate(" +
+            (XAndY.startX - 2*oldTopCard.width()) + "px, " +
+            XAndY.startY + "px) rotate(-100deg)"
+    );
+    var imageElement = newTopCard.find('.stack__single_card__food_image');
+    if (imageElement != null) {
+      imageElement.css('background', "");
+    }
+    var numItems = $scope.globals.allFoodItems.length;
+    var previousItemIndex = ($scope.globals.itemIndex + numItems - 1) % numItems;
+    $scope.globals.itemIndex = previousItemIndex;
+    var newCardInfo = $scope.globals.allFoodItems[previousItemIndex];
+
+    fillCard(newTopCard, newCardInfo);
+    $scope.stackContainer.append(newTopCard);
+    newTopCard.animate({
+      transform: "translate("+XAndY.startX+"px,"+XAndY.startY+"px)"
+      },
+      300,
+      function() {
+        // Set the event listeners on the new top card.
+        setEventHandlers(newTopCard);
+      }
+    );
+    stackCards = $scope.stackContainer.children();
+    if (stackCards.length == 1) {
+      return;
+    }
+    var lastCard = $(stackCards[0]);
+    lastCard.remove();
+  }
+
+  // This is now a back button.
+  $scope.lastDishPressed = function() {
     console.log('shuffleDishes');
     if (!$scope.canManipulateCards || $scope.emptyStackConfirmed) {
       console.log('Not shuffling dishes because can\'t manipulate cards');
       return;
     }
-    resetStack();
-    $scope.globals.allFoodItems = _.shuffle($scope.globals.allFoodItems);
-    $scope.globals.itemIndex = 0;
-    initStackWithCards($scope.globals.allFoodItems, MAX_CARDS_IN_STACK, $scope.stackContainer);
+    putFirstCardBack();
   };
 
   var setMerchantName = function() {
@@ -572,11 +614,6 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
                 currentItem.price == null) {
               continue;
             }
-            if ($scope.globals.keywordValue != null && $scope.globals.keywordValue != '' &&
-                merchantObj.matched_items != null &&
-                merchantObj.matched_items[currentItem.unique_id] == null) {
-              continue;
-            }
             // Add the tax and tip to make it accurate.
             //currentItem.price = (currentItem.price + deliveryCharge) *
             //    (1 + fmaSharedState.taxRate) + fmaSharedState.tipAmount;
@@ -586,7 +623,18 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
           }
 
           // Shuffle the results for fun.
-          return resolve(_.shuffle(foodData));
+          foodData = _.shuffle(foodData);
+          // Sort foodData to put the matched items at the front.
+          if ($scope.globals.keywordValue != null && $scope.globals.keywordValue != '' &&
+              merchantObj.matched_items != null) {
+            foodData = _.sortBy(foodData, function(foodItem) {
+              if (merchantObj.matched_items[foodItem.unique_id] != null) {
+                return 0;
+              }
+              return 1;
+            });
+          }
+          return resolve(foodData);
         },
         function(err) {
           // Messed up response???
