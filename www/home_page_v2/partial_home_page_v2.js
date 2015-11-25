@@ -13,9 +13,8 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $q, fmaStack
     $('.swipe_page__bottom_bar').css({left: '0%'});
     $location.path('/home_page_v2/search_page_v2');
   };
-  $scope.homeButtonPressed = function() {
-    console.log('Refresh button pressed.');
-    $scope.globals.saveSearchParams();
+
+  var homeButtonTransition = function () {
     $('.swipe_page__bottom_bar').css({left: '33.33333%'});
     if ($location.path() == "/home_page_v2/swipe_page_v2") {
       return;
@@ -26,6 +25,39 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $q, fmaStack
       subviewObj.attr('class', 'slide-left');
     }
     $location.path('/home_page_v2/swipe_page_v2');
+  }
+  $scope.homeButtonPressed = function() {
+    console.log('Refresh button pressed.');
+    var currentSearch =
+        JSON.stringify($scope.globals.selectedMerchantId) +
+        JSON.stringify($scope.globals.deliveryMinimumLimit) +
+        JSON.stringify($scope.globals.keywordValue);
+    if ($scope.globals.lastSearch !== currentSearch &&
+        $scope.globals.userCart.length > 0) {
+      var confirmPopup = $ionicPopup.confirm({
+        title: 'Burgie says...',
+        template: 'Changing your search preferences will clear your cart. You sure you want to do that?',
+        cancelText: 'Nah',
+        okText: 'Yeah',
+      });
+      confirmPopup.then(function(res) {
+        if(res) {
+          $scope.globals.changeSearch();
+          homeButtonTransition();
+        } else {
+          console.log('Not changing search.');
+          // TODO(daddy): This is shit. I wrote this at 3am. There is almost definitely
+          // a better way to do this. I was trying to make the search not change if the
+          // user changes their mind about clearing their cart.
+          $scope.globals.selectedMerchantId = $scope.globals.initialSearch.selectedMerchantId;
+          $scope.globals.deliveryMinimumLimit = $scope.globals.initialSearch.deliveryMinimumLimit;
+          $scope.globals.keywordValue = $scope.globals.initialSearch.keywordValue;
+          homeButtonTransition();
+        }
+      });
+      return;
+    }
+    homeButtonTransition();
   };
   $scope.cartButtonPressed = function() {
     console.log('Cart button pressed.');
@@ -55,7 +87,13 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $q, fmaStack
       total += parseFloat(cartArg[v1].price);
     }
     return total;
-  } ;
+  };
+
+  var changeSearch = function() {
+    $scope.globals.saveSearchParams();
+    $scope.globals.allMerchants = null;
+    $scope.globals.allFoodItems = null;
+  };
   $scope.globals = {
     userAddress: fmaLocalStorage.getObject('userAddress'),
     userCart: userCart,
@@ -71,6 +109,7 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $q, fmaStack
     lastSearch: fmaLocalStorage.getObject('lastSearch'),
     computeCartTotal: computeCartTotal,
     minimumLeft: fmaLocalStorage.getObject('minimumLeft'),
+    changeSearch: changeSearch,
     DEFAULT_MERCHANT_ID: "-1",
   };
 

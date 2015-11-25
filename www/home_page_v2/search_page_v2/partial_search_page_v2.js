@@ -1,9 +1,14 @@
 /* jshint eqnull: true */
 angular.module('foodMeApp.searchPageV2', ['ngRoute', 'foodmeApp.localStorage', 'foodmeApp.sharedState'])
 
-.controller('SearchPageV2Ctrl', ["$scope", "$location", "$http", "fmaLocalStorage", 'fmaSharedState', '$rootScope', '$timeout',
-function($scope, $location, $http, fmaLocalStorage, fmaSharedState, $rootScope, $timeout) {
+.controller('SearchPageV2Ctrl', ["$scope", "$location", "$http", "fmaLocalStorage", 'fmaSharedState', '$rootScope', '$timeout', '$ionicPopup',
+function($scope, $location, $http, fmaLocalStorage, fmaSharedState, $rootScope, $timeout, $ionicPopup) {
   var subviewObj = $('#home_page_v2__subview_container');
+  $scope.globals.initialSearch = {
+    selectedMerchantId: $scope.globals.selectedMerchantId,
+    deliveryMinimumLimit: $scope.globals.deliveryMinimumLimit,
+    keywordValue: $scope.globals.keywordValue,
+  };
 
   // Sort all the merchants.
   $scope.sortedMerchants = [];
@@ -60,14 +65,42 @@ function($scope, $location, $http, fmaLocalStorage, fmaSharedState, $rootScope, 
     $scope.globals.deliveryMinimumLimit--;
   };
 
-  $scope.doneButtonPressed = function() {
-    // Save our search variables and go back to the swipe page.
-    $scope.globals.saveSearchParams();
-    $scope.globals.allMerchants = null;
-    $scope.globals.allFoodItems = null;
+  var doneTransition = function() {
     $('.swipe_page__bottom_bar').css({left: '33.33333%'});
     subviewObj.attr('class', 'slide-left');
     $location.path('/home_page_v2/swipe_page_v2');
-    return;
+  };
+  $scope.doneButtonPressed = function() {
+    // Save our search variables and go back to the swipe page.
+    var currentSearch =
+        JSON.stringify($scope.globals.selectedMerchantId) +
+        JSON.stringify($scope.globals.deliveryMinimumLimit) +
+        JSON.stringify($scope.globals.keywordValue);
+    if ($scope.globals.lastSearch !== currentSearch &&
+        $scope.globals.userCart.length > 0) {
+      var confirmPopup = $ionicPopup.confirm({
+        title: 'Burgie says...',
+        template: 'Changing your search preferences will clear your cart. You sure you want to do that?',
+        cancelText: 'Nah',
+        okText: 'Yeah',
+      });
+      confirmPopup.then(function(res) {
+        if(res) {
+          $scope.globals.changeSearch();
+          doneTransition();
+          return;
+        } else {
+          console.log('Not changing search.');
+          $scope.globals.selectedMerchantId = $scope.globals.initialSearch.selectedMerchantId;
+          $scope.globals.deliveryMinimumLimit = $scope.globals.initialSearch.deliveryMinimumLimit;
+          $scope.globals.keywordValue = $scope.globals.initialSearch.keywordValue;
+
+          doneTransition();
+          return;
+        }
+      });
+      return;
+    }
+    doneTransition();
   };
 }]);
