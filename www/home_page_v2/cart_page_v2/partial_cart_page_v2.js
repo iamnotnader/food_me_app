@@ -48,6 +48,7 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
       if(res) {
         console.log('Clearing cart.');
         $scope.globals.userCart = [];
+        $scope.dedupedCart = [];
         fmaLocalStorage.setObjectWithExpirationSeconds(
             'userCart', [],
             fmaSharedState.testing_invalidation_seconds);
