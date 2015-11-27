@@ -107,6 +107,7 @@ function($scope, $location, $http, fmaLocalStorage, fmaSharedState, $rootScope, 
       });
       return;
     }
+    $scope.globals.changeSearch();
     doneTransition();
   };
 }]);

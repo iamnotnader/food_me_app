@@ -100,16 +100,16 @@ body {
   background-color: #D8715C;
 }
 .home_page_v2__cart_badge__inner {
-  height: 100%;
-  width: 100%;
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  font-size: 2.2vh;
-  transform: translateY(-50%)translateX(-50%);
-  text-align: center;
-  font-family: TitleFont;
-  text-transform: none;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    font-size: 2.2vh;
+    line-height: 2.2vh;
+    -webkit-transform: translateY(-50%) translateX(-50%);
+    transform: translateY(-50%) translateX(-50%);
+    text-align: center;
+    font-family: TitleFont;
+    text-transform: none;
 }
 .swipe_page__bottom_button {
   display: inline-block;
@@ -213,7 +213,7 @@ input.choose_address_v2__inner_input {
   position: absolute;
   top: 100%;
   width: 100%;
-  height: 28vh;
+  height: 30vh;
   overflow: hidden;
   transition:height 1s ease;
   z-index: 2;
@@ -375,6 +375,10 @@ input.choose_address_v2__inner_input {
   width: 100%;
   height: 100%;
 }
+.stack__buttons__info__tappable {
+  width: 100%;
+  height: 100%;
+}
 $like-height: 200%;
 .stack__buttons__like {
   background: url(../../img/like_button.png) no-repeat center center;
@@ -441,19 +445,18 @@ $like-height: 200%;
   right: 0;
   text-align: center;
   font-size: 6vh;
+  line-height: 6vh;
 }
 .stack__winking_burgie {
-  background: url("../../img/wink.gif") no-repeat center center;
-  -webkit-background-size: cover;
-  -moz-background-size: cover;
-  -o-background-size: cover;
-  background-size: cover;
-  width: 40vh;
-  position: absolute;
-  height: 54vh;
-  top: 46%;
-  left: 50%;
-  transform: translateX(-50%)translateY(-50%);
+    background: url("../../img/wink.gif") no-repeat center center;
+    background-size: cover;
+    width: 40vh;
+    position: absolute;
+    height: 54vh;
+    top: 46vh;
+    left: 50%;
+    -webkit-transform: translateX(-50%) translateY(-50%);
+    transform: translateX(-50%) translateY(-50%);
 }
 .stack__bottom_text {
   @extend .stack__top_text;
@@ -1007,6 +1010,7 @@ div#home_page_v2__subview_container {
   transition:left .2s ease-in-out, opacity .7s ease;
 }
 
+/**************************************************************************************/
 // Slide left
 .slide-left > .ng-enter {
   left: 100%;
@@ -1056,5 +1060,91 @@ div#home_page_v2__subview_container {
 .fade-class > .ng-hide {
   opacity:0;
 }
- 
+/**************************************************************************************/
 
+.foodme__lower_popover {
+    width: 50vw;
+    position: absolute;
+    left: 50%;
+    -webkit-transform: translateX(-50%);
+    transform: translateX(-50%);
+    top: 100%;
+    z-index: 2;
+    text-transform: none;
+    font-family: TaglineFont;
+    padding: 0.5vh 0;
+    border-radius: 5px;
+    font-size: 2.5vh;
+    -webkit-animation-name: bluePulse;
+    -webkit-animation-duration: 2s;
+    -webkit-animation-iteration-count: infinite;
+    text-align: center;
+    color: white;
+    border: 1px solid white;
+    padding: 1vh;
+}
+@-webkit-keyframes bluePulse {
+  from { background-color:#007d9a;-webkit-box-shadow:0 0 9px #333; }
+  50% { background-color:#2daebf;-webkit-box-shadow:0 0 18px #2daebf; }
+  to { background-color:#007d9a;-webkit-box-shadow:0 0 9px #333; }
+}
+@-webkit-keyframes bluePulseTriangle {
+  from { border-bottom:2vh solid #007d9a; }
+  50% { border-bottom:2vh solid #2daebf; }
+  to { border-bottom:2vh solid #007d9a; }
+}
+@-webkit-keyframes bluePulseTriangleBottom {
+  from { border-top:2vh solid #007d9a; }
+  50% { border-top:2vh solid #2daebf; }
+  to { border-top:2vh solid #007d9a; }
+}
+.foodme__lower_popover__arrow {
+    position: absolute;
+    top: -1.9vh;
+    border-left: 2vh solid transparent;
+    border-right: 2vh solid transparent;
+    border-bottom: 2vh solid #007d9a; // hack for safari.
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 0;
+    -webkit-animation-name: bluePulseTriangle;
+    -webkit-animation-duration: 2s;
+    -webkit-animation-iteration-count: infinite;
+}
+.foodme__lower_popover__arrow__border {
+    position: absolute;
+    top: -2.1vh;
+    border-left: 2vh solid transparent;
+    border-right: 2vh solid transparent;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 0;
+    border-bottom: 2vh solid white;
+}
+.foodme__lower_popover__arrow__border__down {
+  position: absolute;
+  bottom: -2.1vh;
+  border-left: 2vh solid transparent;
+  border-right: 2vh solid transparent;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border-top: 2vh solid white;
+}
+.foodme__lower_popover__arrow__down {
+  position: absolute;
+  bottom: -1.9vh;
+  border-left: 2vh solid transparent;
+  border-right: 2vh solid transparent;
+  border-top: 2vh solid #007d9a; // hack for safari
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  -webkit-animation-name: bluePulseTriangleBottom;
+  -webkit-animation-duration: 2s;
+  -webkit-animation-iteration-count: infinite;
+}

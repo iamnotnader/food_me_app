@@ -70,7 +70,7 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
         posY = deltaY + mainElemStartY;
         var percent = deltaX * 1.0 / mainElem.width() * 100 / 2;
 
-        mainElem.css("transform", "translate(" + posX + "px," + posY + "px) rotate(" + percent + "deg)");
+        mainElem.css("transform", "translate3d(" + posX + "px," + posY + "px, 0px) rotate3d(0,0,1," + percent + "deg)");
         break;
       case 'mouseup':
       case 'touchend':
@@ -279,6 +279,7 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
 
   $scope.infoPressed = function() {
     console.log('info');
+    $scope.globals.updateTutorialIndex(0);
   };
 
   $scope.likePressed = function() {
@@ -827,7 +828,7 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
             $scope.globals.deliveryMinimumLimit <= 15) {
           var confirmPopup = $ionicPopup.confirm({
             title: 'Burgie says...',
-            template: 'Shoot. There aren\'t any matching merchants. Want to loosen your search preferences?',
+            template: 'Shoot. There aren\'t any open, matching restaurants nearby. Want to loosen your search preferences?',
             cancelText: 'Nah',
             okText: 'Yeah',
           });

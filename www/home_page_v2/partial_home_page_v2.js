@@ -25,7 +25,7 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $q, fmaStack
       subviewObj.attr('class', 'slide-left');
     }
     $location.path('/home_page_v2/swipe_page_v2');
-  }
+  };
   $scope.homeButtonPressed = function() {
     console.log('Refresh button pressed.');
     var currentSearch =
@@ -94,6 +94,20 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $q, fmaStack
     $scope.globals.allMerchants = null;
     $scope.globals.allFoodItems = null;
   };
+  var tutorialIndex = fmaLocalStorage.getObject('tutorialIndex');
+  if (tutorialIndex == null) {
+    tutorialIndex = 0;
+  }
+  var updateTutorialIndex = function(newIndex) {
+    if (newIndex == null) {
+      // Increment by one if newIndex is null.
+      newIndex = $scope.globals.tutorialIndex + 1;
+    }
+    $scope.globals.tutorialIndex = newIndex;
+    fmaLocalStorage.setObjectWithExpirationSeconds(
+        'tutorialIndex', $scope.globals.tutorialIndex,
+        fmaSharedState.testing_invalidation_seconds);
+  };
   $scope.globals = {
     userAddress: fmaLocalStorage.getObject('userAddress'),
     userCart: userCart,
@@ -111,6 +125,8 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $q, fmaStack
     minimumLeft: fmaLocalStorage.getObject('minimumLeft'),
     changeSearch: changeSearch,
     DEFAULT_MERCHANT_ID: "-1",
+    tutorialIndex: tutorialIndex,
+    updateTutorialIndex: updateTutorialIndex,
   };
 
   $scope.checkoutButtonPressed = function() {

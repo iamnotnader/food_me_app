@@ -9,6 +9,16 @@
     <!--</div>-->
   </div>
   <div class="home_page_v2__right_text" ng-click="checkoutButtonPressed()" style="right: 0; width: 36vw;">
+    <div ng-if="globals.tutorialIndex === 8" ng-click="globals.updateTutorialIndex()">
+      <div class="foodme__lower_popover" style="width: 29vw; line-height: 3.5vw; font-size: 3.5vw;">
+        <div class="foodme__lower_popover__arrow__border"></div>
+        <div class="foodme__lower_popover__arrow"></div>
+        <div>
+          When you're done, tap here to checkout.
+        </div>
+        <div>(tap to dismiss)</div>
+      </div>
+    </div>
     <div class="home_page_v2__next">
       Checkout
     </div>
@@ -17,6 +27,16 @@
 
 <div class="swipe_page__bottom_menu">
   <div ng-click="searchButtonPressed()" class="swipe_page__bottom_button">
+    <div ng-if="globals.tutorialIndex === 6" ng-click="globals.updateTutorialIndex()">
+      <div class="foodme__lower_popover" style="width: 29vw; line-height: 3.5vw; font-size: 3.5vw; top: -117%;">
+        <div class="foodme__lower_popover__arrow__border__down"></div>
+        <div class="foodme__lower_popover__arrow__down"></div>
+        <div>
+          Tap here to apply filters.
+        </div>
+        <div>(tap to dismiss)</div>
+      </div>
+    </div>
     <div class="home_page_v2__search_icon">
     </div>
   </div>
@@ -25,6 +45,16 @@
     </div>
   </div>
   <div ng-click="cartButtonPressed()" class="swipe_page__bottom_button">
+    <div ng-if="globals.tutorialIndex === 7" ng-click="globals.updateTutorialIndex()">
+      <div class="foodme__lower_popover" style="width: 29vw; line-height: 3.5vw; font-size: 3.5vw; top: -117%;">
+        <div class="foodme__lower_popover__arrow__border__down"></div>
+        <div class="foodme__lower_popover__arrow__down"></div>
+        <div>
+          Tap here to edit your cart.
+        </div>
+        <div>(tap to dismiss)</div>
+      </div>
+    </div>
     <div class="home_page_v2__cart_icon">
       <div class="home_page_v2__cart_badge" ng-show="globals.userCart.length !== 0">
         <div class="home_page_v2__cart_badge__inner">{{globals.userCart.length}}</div>
