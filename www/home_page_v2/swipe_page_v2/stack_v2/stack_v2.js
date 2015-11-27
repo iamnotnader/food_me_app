@@ -196,6 +196,10 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
         loadingElement.css({visibility: 'hidden'});
         if (res == null) {
           console.log('Error fetching image from Google.');
+          imageElement.css({
+            background: "url('') no-repeat center center",
+            "background-size": "cover"
+          });
           return;
         }
         imageElement.css({
