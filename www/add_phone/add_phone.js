@@ -127,9 +127,8 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
 
     } else {
       console.log('Order cancelled.');
-      // Take them back to the cart page.
       topViewObj.attr('class', 'slide-right');
-      $location.path('/home_page_v2/cart_page_v2');
+      $location.path('/home_page_v2/swipe_page_v2');
     }
   });
 

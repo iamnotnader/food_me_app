@@ -7,6 +7,7 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
   var MAX_CARDS_IN_STACK = 3;
   var MAX_RESTAURANT_NAME_LENGTH = 32;
   var MAX_ITEM_NAME_LENGTH = 42;
+  var ANIMATION_TIME_MS = 200;
 
   // Handles the user interaction with the card at the top of the stack.
   var getXAndYCoords = function(elem) {
@@ -15,6 +16,26 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
       startX: parseInt(matrixValues[4]),
       startY: parseInt(matrixValues[5]),
     };
+  };
+
+  // We need this function because animate() doesn't work with translate3d or rotate3d unless
+  // we use this complicated step function thingy. We really want to use the 3d functions
+  // because they utilize the GPU and are generally way faster.
+  var set3dAnimation = function(mainElem, duration, callback, finalX, finalY, finalDegrees) {
+    console.log('animating 3d');
+    mainElem.css('interpolator', 0);
+    var beginningXAndY = getXAndYCoords(mainElem);
+    var beginningDegrees = mainElem.rotationDegrees();
+    mainElem.animate({ interpolator: 1 }, {
+        step: function(now,fx) {
+            var currentX = (1 - now)*(beginningXAndY.startX) + now*(finalX);
+            var currentY = (1 - now)*(beginningXAndY.startY) + now*(finalY);
+            var currentDegrees = (1 - now)*(beginningDegrees) + now*(finalDegrees);
+            mainElem.css('transform', 'translate3d(' + currentX + 'px, ' + currentY + 'px, 0) rotate3d(0, 0, 1, ' + currentDegrees + 'deg)');
+        },
+        duration: duration,
+        complete: callback
+    },'swing');
   };
 
   var xStart, yStart, mainElem, mainElemStartX, mainElemStartY, posX, posY;
@@ -85,17 +106,13 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
           $scope.likePressed();
         } else if (finalOffset < -threshold) {
           $scope.dislikePressed();
-        } else if (finalOffset == 0) {
+        } else if (finalOffset === 0 && getXAndYCoords(mainElem).startY === mainElemStartY) {
           // This piece prevents transforms from queuing up unless the card
           // actually moves.
           break;
         } else {
-          mainElem.animate({
-              transform: "translate(" + mainElemStartX + "px, " + mainElemStartY + "px)"
-            },
-            function() {
-            }
-          );
+          console.log('touchend');
+          set3dAnimation(mainElem, ANIMATION_TIME_MS, function() {}, mainElemStartX, mainElemStartY, 0);
         }
         break;
     }
@@ -257,7 +274,7 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
     // We take a card that's not in the stack yet and put it in the stack at
     // the back. We loop if necessary.
     newLastCard = lastCard;
-    newLastCard.css({transform: "translateX(-50%)translateY(-50%)"});
+    newLastCard.css({transform: "translate3d(-50%, -50%, 0)"});
     var newCardDomIndex = ($scope.globals.itemIndex + stackCards.length) % $scope.globals.allFoodItems.length;
     var newCardInfo = $scope.globals.allFoodItems[newCardDomIndex];
     $scope.globals.itemIndex = ($scope.globals.itemIndex + 1) % $scope.globals.allFoodItems.length;
@@ -291,15 +308,15 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
     var stackCards = $scope.stackContainer.children();
     var lastCard = $(stackCards[stackCards.length - 1]);
     XAndY = getXAndYCoords(lastCard);
-    lastCard.animate({
-      transform: "translate(" +
-          (XAndY.startX + 2*lastCard.width()) + "px, " +
-          XAndY.startY + "px) rotate(100deg)"
-      },
-      300,
+    set3dAnimation(
+      lastCard,
+      ANIMATION_TIME_MS,
       function() {
         removeTopCardAddNewCard();
-      }
+      },
+      XAndY.startX + 2*lastCard.width(),
+      XAndY.startY,
+      100
     );
     // Add to cart...
     var itemInfo = $scope.globals.allFoodItems[$scope.globals.itemIndex];
@@ -318,15 +335,15 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
     var stackCards = $scope.stackContainer.children();
     var lastCard = $(stackCards[stackCards.length - 1]);
     XAndY = getXAndYCoords(lastCard);
-    lastCard.animate({
-      transform: "translate(" +
-          (XAndY.startX - 2*lastCard.width()) + "px, " +
-          XAndY.startY + "px) rotate(-100deg)"
-      },
-      300,
+    set3dAnimation(
+      lastCard,
+      ANIMATION_TIME_MS,
       function() {
         removeTopCardAddNewCard();
-      }
+      },
+      XAndY.startX - 2*lastCard.width(),
+      XAndY.startY,
+      -100
     );
   };
 
@@ -381,9 +398,9 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
     newTopCard = oldTopCard.clone();
     XAndY = getXAndYCoords(oldTopCard);
     newTopCard.css('transform',
-        "translate(" +
+        "translate3d(" +
             (XAndY.startX - 2*oldTopCard.width()) + "px, " +
-            XAndY.startY + "px) rotate(-100deg)"
+            XAndY.startY + "px, 0px) rotate3d(0, 0, 1, -100deg)"
     );
     var imageElement = newTopCard.find('.stack__single_card__food_image');
     if (imageElement != null) {
@@ -396,14 +413,15 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
 
     fillCard(newTopCard, newCardInfo);
     $scope.stackContainer.append(newTopCard);
-    newTopCard.animate({
-      transform: "translate("+XAndY.startX+"px,"+XAndY.startY+"px)"
-      },
-      300,
+    set3dAnimation(
+      newTopCard,
+      ANIMATION_TIME_MS,
       function() {
-        // Set the event listeners on the new top card.
         setEventHandlers(newTopCard);
-      }
+      },
+      XAndY.startX,
+      XAndY.startY,
+      0
     );
     stackCards = $scope.stackContainer.children();
     if (stackCards.length == 1) {
@@ -826,7 +844,6 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
         if (($scope.globals.keywordValue != null && $scope.globals.keywordValue !== '') ||
             $scope.globals.selectedMerchantId !== fmaSharedState.default_merchant_id ||
             $scope.globals.deliveryMinimumLimit <= 15) {
-          debugger;
           var confirmPopup = $ionicPopup.confirm({
             title: 'Burgie says...',
             template: 'Shoot. There aren\'t any open, matching restaurants nearby. Want to loosen your search preferences?',
