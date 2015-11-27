@@ -823,9 +823,10 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
         $scope.globals.allMerchants = null;
         $scope.globals.allFoodItems = null;
         $scope.globals.merchantIndex = null;
-        if (($scope.globals.keywordValue != null && $scope.globals.keywordValue !== '')||
-            $scope.globals.selectedMerchantId !== $scope.globals.DEFAULT_MERCHANT_ID ||
+        if (($scope.globals.keywordValue != null && $scope.globals.keywordValue !== '') ||
+            $scope.globals.selectedMerchantId !== fmaSharedState.default_merchant_id ||
             $scope.globals.deliveryMinimumLimit <= 15) {
+          debugger;
           var confirmPopup = $ionicPopup.confirm({
             title: 'Burgie says...',
             template: 'Shoot. There aren\'t any open, matching restaurants nearby. Want to loosen your search preferences?',

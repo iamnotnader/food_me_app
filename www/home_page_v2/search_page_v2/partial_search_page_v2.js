@@ -23,7 +23,7 @@ function($scope, $location, $http, fmaLocalStorage, fmaSharedState, $rootScope, 
       return merchant.summary.name;
     });
   }
-  $scope.sortedMerchants.unshift({id: $scope.globals.DEFAULT_MERCHANT_ID, summary: { name: 'Any merchant.' } });
+  $scope.sortedMerchants.unshift({id: fmaSharedState.default_merchant_id, summary: { name: 'Any merchant.' } });
 
   // Set the selected merchantId if we have one.
   var merchantIdIsMissing = _.every(
@@ -33,7 +33,7 @@ function($scope, $location, $http, fmaLocalStorage, fmaSharedState, $rootScope, 
     }
   );
   if ($scope.globals.selectedMerchantId == null || merchantIdIsMissing) {
-    $scope.globals.selectedMerchantId = $scope.globals.DEFAULT_MERCHANT_ID;
+    $scope.globals.selectedMerchantId = fmaSharedState.default_merchant_id;
   } else {
     $scope.globals.selectedMerchantId = $scope.globals.selectedMerchantId;
   }
@@ -56,7 +56,7 @@ function($scope, $location, $http, fmaLocalStorage, fmaSharedState, $rootScope, 
   $scope.keywordDidChange = function() {
     // We have to clear the select. You can't do both at the same time.
     // TODO(daddy): Warn the user when clearing the select.
-    $scope.globals.selectedMerchantId = $scope.globals.DEFAULT_MERCHANT_ID;
+    $scope.globals.selectedMerchantId = fmaSharedState.default_merchant_id;
   };
   $scope.clearKeywordPressed = function() {
     $scope.globals.keywordValue = '';

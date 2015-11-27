@@ -69,6 +69,7 @@ angular.module('foodmeApp.sharedState', [])
     },
 
     defaultDeliveryMinimumLimit: 30,
+    default_merchant_id: "-1",
 
     instructions: 'Tell people to download the FoodMe app and get more orders!',
 

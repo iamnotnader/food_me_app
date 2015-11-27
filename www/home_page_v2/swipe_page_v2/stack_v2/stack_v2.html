@@ -3,7 +3,7 @@
     <div class="stack__restaurant">
       <div class="stack__restaurant_name">
       </div>
-      <div ng-if="globals.tutorialIndex === 0" ng-click="globals.updateTutorialIndex()">
+      <div ng-if="globals.tutorialIndex === 0 && !(emptyStackConfirmed || globals.allMerchants == null || globals.allMerchants.length === 0)" ng-click="globals.updateTutorialIndex()">
         <div class="foodme__lower_popover">
           <div class="foodme__lower_popover__arrow__border"></div>
           <div class="foodme__lower_popover__arrow"></div>

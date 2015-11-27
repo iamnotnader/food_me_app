@@ -108,11 +108,25 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $q, fmaStack
         'tutorialIndex', $scope.globals.tutorialIndex,
         fmaSharedState.testing_invalidation_seconds);
   };
+  var currentDeliveryMinimumLimit = fmaLocalStorage.getObject('deliveryMinimumLimit');
+  if (currentDeliveryMinimumLimit == null) {
+    currentDeliveryMinimumLimit = fmaSharedState.defaultDeliveryMinimumLimit;
+    fmaLocalStorage.setObjectWithExpirationSeconds(
+        'deliveryMinimumLimit', currentDeliveryMinimumLimit,
+        fmaSharedState.testing_invalidation_seconds);
+  }
+  var selectedMerchantId = fmaLocalStorage.getObject('selectedMerchantId');
+  if (selectedMerchantId == null) {
+    selectedMerchantId = fmaSharedState.default_merchant_id;
+    fmaLocalStorage.setObjectWithExpirationSeconds(
+        'selectedMerchantId', fmaSharedState.default_merchant_id,
+        fmaSharedState.testing_invalidation_seconds);
+  }
   $scope.globals = {
     userAddress: fmaLocalStorage.getObject('userAddress'),
     userCart: userCart,
-    selectedMerchantId: fmaLocalStorage.getObject('selectedMerchantId'),
-    deliveryMinimumLimit: fmaLocalStorage.getObject('deliveryMinimumLimit'),
+    selectedMerchantId: selectedMerchantId,
+    deliveryMinimumLimit: currentDeliveryMinimumLimit,
     keywordValue: fmaLocalStorage.getObject('keywordValue'),
     saveSearchParams: saveSearchParams,
     itemIndex: fmaLocalStorage.getObject('stackItemIndex'),
@@ -124,7 +138,6 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $q, fmaStack
     computeCartTotal: computeCartTotal,
     minimumLeft: fmaLocalStorage.getObject('minimumLeft'),
     changeSearch: changeSearch,
-    DEFAULT_MERCHANT_ID: "-1",
     tutorialIndex: tutorialIndex,
     updateTutorialIndex: updateTutorialIndex,
   };
