@@ -31,6 +31,14 @@
                         {
                             "xml": "<feature name=\"IonicDeploy\"><param name=\"ios-package\" onload=\"true\" value=\"IonicDeploy\" /></feature>",
                             "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"UniversalAnalytics\"><param name=\"ios-package\" value=\"UniversalAnalyticsPlugin\" /></feature>",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"GoogleAnalytics\"><param name=\"ios-package\" value=\"GoogleAnalyticsPlugin\" /></feature>",
+                            "count": 1
                         }
                     ]
                 }
@@ -51,6 +59,12 @@
             "PACKAGE_NAME": "io.foodme"
         },
         "cordova-plugin-whitelist": {
+            "PACKAGE_NAME": "io.foodme"
+        },
+        "cordova-plugin-google-analytics": {
+            "PACKAGE_NAME": "io.foodme"
+        },
+        "com.cmackay.plugins.googleanalytics": {
             "PACKAGE_NAME": "io.foodme"
         }
     },
@@ -87,6 +101,22 @@
             "pluginId": "ionic-plugin-deploy",
             "clobbers": [
                 "IonicDeploy"
+            ]
+        },
+        {
+            "file": "plugins/cordova-plugin-google-analytics/www/analytics.js",
+            "id": "cordova-plugin-google-analytics.UniversalAnalytics",
+            "pluginId": "cordova-plugin-google-analytics",
+            "clobbers": [
+                "analytics"
+            ]
+        },
+        {
+            "file": "plugins/com.cmackay.plugins.googleanalytics/www/analytics.js",
+            "id": "com.cmackay.plugins.googleanalytics.GoogleAnalytics",
+            "pluginId": "com.cmackay.plugins.googleanalytics",
+            "clobbers": [
+                "navigator.analytics"
             ]
         }
     ]

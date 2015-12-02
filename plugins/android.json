@@ -98,9 +98,6 @@
         "org.apache.cordova.vibration": {
             "PACKAGE_NAME": "com.phonegap.helloworld"
         },
-        "cordova-plugin-google-analytics": {
-            "PACKAGE_NAME": "io.foodme"
-        },
         "org.apache.cordova.geolocation": {
             "PACKAGE_NAME": "io.foodme"
         },
@@ -123,6 +120,12 @@
             "PACKAGE_NAME": "io.foodme"
         },
         "cordova-plugin-whitelist": {
+            "PACKAGE_NAME": "io.foodme"
+        },
+        "cordova-plugin-google-analytics": {
+            "PACKAGE_NAME": "io.foodme"
+        },
+        "com.cmackay.plugins.googleanalytics": {
             "PACKAGE_NAME": "io.foodme"
         }
     },

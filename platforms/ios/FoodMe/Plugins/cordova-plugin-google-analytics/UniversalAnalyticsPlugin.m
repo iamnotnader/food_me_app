@@ -67,6 +67,23 @@
   [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
 }
 
+- (void) enableUncaughtExceptionReporting: (CDVInvokedUrlCommand*)command
+{
+    CDVPluginResult* pluginResult = nil;
+    
+    if ( ! _trackerStarted) {
+        pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:@"Tracker not started"];
+        [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+        return;
+    }
+    
+    bool enabled = [[command.arguments objectAtIndex:0] boolValue];
+    [[GAI sharedInstance] setTrackUncaughtExceptions:enabled];
+    
+    pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
+    [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+}
+
 - (void) addCustomDimension: (CDVInvokedUrlCommand*)command
 {
     CDVPluginResult* pluginResult = nil;
@@ -257,10 +274,8 @@
         currencyCode = [command.arguments objectAtIndex:5];
 
     id<GAITracker> tracker = [[GAI sharedInstance] defaultTracker];
-    
-    NSLog(@"Adding transaction!");
-    NSLog(@"transactionId: %@\naffiliation: %@\nrevenue: %@\ntax: %@\nshipping: %@\ncurrencyCode: %@",
-          transactionId, affiliation, revenue, tax, shipping, currencyCode);
+
+
     [tracker send:[[GAIDictionaryBuilder createTransactionWithId:transactionId             // (NSString) Transaction ID
                                                      affiliation:affiliation         // (NSString) Affiliation
                                                          revenue:revenue                  // (NSNumber) Order revenue (including tax and shipping)
@@ -316,10 +331,8 @@
         currencyCode = [command.arguments objectAtIndex:6];
 
     id<GAITracker> tracker = [[GAI sharedInstance] defaultTracker];
-    
-    NSLog(@"Adding transaction item!");
-    NSLog(@"transactionId: %@\nname: %@\nsku: %@\ncategory: %@\nprice: %@\nquantity: %@\ncurrencyCode: %@",
-          transactionId, name, sku, category, price, quantity, currencyCode);
+
+
     [tracker send:[[GAIDictionaryBuilder createItemWithTransactionId:transactionId         // (NSString) Transaction ID
                                                                 name:name  // (NSString) Product Name
                                                                  sku:sku           // (NSString) Product SKU

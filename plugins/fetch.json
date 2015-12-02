@@ -57,14 +57,6 @@
         "is_top_level": true,
         "variables": {}
     },
-    "cordova-plugin-google-analytics": {
-        "source": {
-            "type": "registry",
-            "id": "cordova-plugin-google-analytics"
-        },
-        "is_top_level": true,
-        "variables": {}
-    },
     "org.apache.cordova.geolocation": {
         "source": {
             "type": "registry",
@@ -145,6 +137,22 @@
         "source": {
             "type": "registry",
             "id": "cordova-plugin-whitelist@1"
+        },
+        "is_top_level": true,
+        "variables": {}
+    },
+    "cordova-plugin-google-analytics": {
+        "source": {
+            "type": "registry",
+            "id": "cordova-plugin-google-analytics"
+        },
+        "is_top_level": true,
+        "variables": {}
+    },
+    "com.cmackay.plugins.googleanalytics": {
+        "source": {
+            "type": "registry",
+            "id": "com.cmackay.plugins.googleanalytics"
         },
         "is_top_level": true,
         "variables": {}

@@ -32,6 +32,22 @@ module.exports = [
         "clobbers": [
             "IonicDeploy"
         ]
+    },
+    {
+        "file": "plugins/cordova-plugin-google-analytics/www/analytics.js",
+        "id": "cordova-plugin-google-analytics.UniversalAnalytics",
+        "pluginId": "cordova-plugin-google-analytics",
+        "clobbers": [
+            "analytics"
+        ]
+    },
+    {
+        "file": "plugins/com.cmackay.plugins.googleanalytics/www/analytics.js",
+        "id": "com.cmackay.plugins.googleanalytics.GoogleAnalytics",
+        "pluginId": "com.cmackay.plugins.googleanalytics",
+        "clobbers": [
+            "navigator.analytics"
+        ]
     }
 ];
 module.exports.metadata = 

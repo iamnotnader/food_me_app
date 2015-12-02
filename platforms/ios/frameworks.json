@@ -1,0 +1,7 @@
+{
+    "libsqlite3.dylib": 2,
+    "libsqlite3.0.dylib": null,
+    "SystemConfiguration.framework": 2,
+    "CoreData.framework": 2,
+    "libz.dylib": 2
+}
