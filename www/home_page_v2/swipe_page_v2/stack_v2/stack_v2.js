@@ -90,25 +90,30 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
   };
 
   var getImageFromItemNamePromise = function(itemName) {
-    var urlToFetch = 'https://ajax.googleapis.com/ajax/services/search/images?v=1.0&safe=active&imgsz=large&rsz='+
-                      fmaSharedState.numImagesToFetch+'&q=' +
-        itemName.split(/\s+/).join('+');
+    
+    var urlToFetch = 'https://api.flickr.com/services/rest/?method=flickr.photos.search&'+
+                     'tags=food,delicious,foodie&format=json&sort=relevance&api_key='+
+                     fmaSharedState.flickr_api_key+'&text=' +
+                     itemName.split(/\s+/).join('+');
     return $q(function(resolve, reject) {
       $http.get(urlToFetch)
       .then(
         function(res) {
-          if (res.data == null || res.data.responseData == null ||
-              res.data.responseData.results == null ||
-              res.data.responseData.results.length == 0 ||
-              res.data.responseData.results[0] == null ||
-              res.data.responseData.results[0].url == null) {
+          picObj = JSON.parse(res.data.slice(14, -1));
+          if (picObj == null || picObj.photos == null || picObj.photos.photo == null ||
+              picObj.photos.photo[0] == null) {
+            console.log('Failed to load: ' + itemName);
             resolve(null);
             return;
           }
-          resolve(res.data.responseData.results[0].url);
+          resolve('https://farm'+picObj.photos.photo[0].farm+
+                  '.staticflickr.com/'+picObj.photos.photo[0].server+
+                  '/'+picObj.photos.photo[0].id+'_'+
+                  picObj.photos.photo[0].secret+'.jpg');
           return;
         },
         function(err) {
+          debugger;
           resolve(null);
           return;
         });

@@ -32,6 +32,7 @@ angular.module('foodmeApp.sharedState', [])
     endpoint: 'https://www.delivery.com/api',
     redirect_uri: 'http://localhost:3000',
 
+    flickr_api_key: '846a0cb8bb20838fee1727f5c5539396',
 
     // This determines whether or not we redirect the user to different screens.
     // For example, we might redirect the user to the intro_screen if their
