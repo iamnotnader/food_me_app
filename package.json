@@ -47,7 +47,8 @@
     "cordova-plugin-splashscreen@2.0",
     "cordova-plugin-statusbar",
     "ionic-plugin-keyboard",
-    "ionic-plugin-deploy"
+    "ionic-plugin-deploy",
+    "cordova-plugin-google-analytics"
   ],
   "cordovaPlatforms": [
     "ios",
