@@ -171,9 +171,6 @@
         },
         "cordova-plugin-google-analytics": {
             "PACKAGE_NAME": "io.foodme"
-        },
-        "com.cmackay.plugins.googleanalytics": {
-            "PACKAGE_NAME": "io.foodme"
         }
     },
     "dependent_plugins": {}

@@ -40,14 +40,6 @@ module.exports = [
         "clobbers": [
             "analytics"
         ]
-    },
-    {
-        "file": "plugins/com.cmackay.plugins.googleanalytics/www/analytics.js",
-        "id": "com.cmackay.plugins.googleanalytics.GoogleAnalytics",
-        "pluginId": "com.cmackay.plugins.googleanalytics",
-        "clobbers": [
-            "navigator.analytics"
-        ]
     }
 ];
 module.exports.metadata = 
