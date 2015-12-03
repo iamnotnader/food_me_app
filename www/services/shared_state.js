@@ -7,6 +7,15 @@ var testModeEnabled = false;
 // turn payment on/off.
 var takePayment = true;
 
+// Handles the user interaction with the card at the top of the stack.
+var getXAndYCoords = function(elem) {
+  var matrixValues = elem.css('transform').replace('matrix(', '').replace(')', '').split(', ');
+  return {
+    startX: parseInt(matrixValues[4]),
+    startY: parseInt(matrixValues[5]),
+  };
+};
+
 angular.module('foodmeApp.sharedState', [])
 
 // Just holds some global configuration variables that we can set to whatever
@@ -202,6 +211,28 @@ angular.module('foodmeApp.sharedState', [])
     foodItemValidationSeconds: 60 * 60,
     fake_token: null,
 
+    // Handles the user interaction with the card at the top of the stack.
+    getXAndYCoords: getXAndYCoords,
+
+    // We need this function because animate() doesn't work with translate3d or rotate3d unless
+    // we use this complicated step function thingy. We really want to use the 3d functions
+    // because they utilize the GPU and are generally way faster.
+    set3dAnimation: function(mainElem, duration, callback, finalX, finalY, finalDegrees) {
+      console.log('animating 3d');
+      mainElem.css('interpolator', 0);
+      var beginningXAndY = getXAndYCoords(mainElem);
+      var beginningDegrees = mainElem.rotationDegrees();
+      mainElem.animate({ interpolator: 1 }, {
+          step: function(now,fx) {
+              var currentX = (1 - now)*(beginningXAndY.startX) + now*(finalX);
+              var currentY = (1 - now)*(beginningXAndY.startY) + now*(finalY);
+              var currentDegrees = (1 - now)*(beginningDegrees) + now*(finalDegrees);
+              mainElem.css('transform', 'translate3d(' + currentX + 'px, ' + currentY + 'px, 0) rotate3d(0, 0, 1, ' + currentDegrees + 'deg)');
+          },
+          duration: duration,
+          complete: callback
+      },'swing');
+    },
   };
   // iamnotnader+fakeacct3@gmail.com
   // !Nader2009

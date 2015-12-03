@@ -9,35 +9,6 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
   var MAX_ITEM_NAME_LENGTH = 42;
   var ANIMATION_TIME_MS = 200;
 
-  // Handles the user interaction with the card at the top of the stack.
-  var getXAndYCoords = function(elem) {
-    var matrixValues = elem.css('transform').replace('matrix(', '').replace(')', '').split(', ');
-    return {
-      startX: parseInt(matrixValues[4]),
-      startY: parseInt(matrixValues[5]),
-    };
-  };
-
-  // We need this function because animate() doesn't work with translate3d or rotate3d unless
-  // we use this complicated step function thingy. We really want to use the 3d functions
-  // because they utilize the GPU and are generally way faster.
-  var set3dAnimation = function(mainElem, duration, callback, finalX, finalY, finalDegrees) {
-    console.log('animating 3d');
-    mainElem.css('interpolator', 0);
-    var beginningXAndY = getXAndYCoords(mainElem);
-    var beginningDegrees = mainElem.rotationDegrees();
-    mainElem.animate({ interpolator: 1 }, {
-        step: function(now,fx) {
-            var currentX = (1 - now)*(beginningXAndY.startX) + now*(finalX);
-            var currentY = (1 - now)*(beginningXAndY.startY) + now*(finalY);
-            var currentDegrees = (1 - now)*(beginningDegrees) + now*(finalDegrees);
-            mainElem.css('transform', 'translate3d(' + currentX + 'px, ' + currentY + 'px, 0) rotate3d(0, 0, 1, ' + currentDegrees + 'deg)');
-        },
-        duration: duration,
-        complete: callback
-    },'swing');
-  };
-
   var xStart, yStart, mainElem, mainElemStartX, mainElemStartY, posX, posY;
   var touchStart = false;
   var topCardHandler = function(ev) {
@@ -54,7 +25,7 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
         yStart = ev.originalEvent.touches[0].pageY;
         mainElem = $(this);
         if (mainElemStartX == null || mainElemStartY == null) {
-          XYObj = getXAndYCoords(mainElem);
+          XYObj = fmaSharedState.getXAndYCoords(mainElem);
           mainElemStartX = XYObj.startX;
           mainElemStartY = XYObj.startY;
         }
@@ -71,7 +42,7 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
         yStart = ev.pageY;
         mainElem = $(this);
         if (mainElemStartX == null || mainElemStartY == null) {
-          XYObj = getXAndYCoords(mainElem);
+          XYObj = fmaSharedState.getXAndYCoords(mainElem);
           mainElemStartX = XYObj.startX;
           mainElemStartY = XYObj.startY;
         }
@@ -106,13 +77,13 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
           $scope.likePressed();
         } else if (finalOffset < -threshold) {
           $scope.dislikePressed();
-        } else if (finalOffset === 0 && getXAndYCoords(mainElem).startY === mainElemStartY) {
+        } else if (finalOffset === 0 && fmaSharedState.getXAndYCoords(mainElem).startY === mainElemStartY) {
           // This piece prevents transforms from queuing up unless the card
           // actually moves.
           break;
         } else {
           console.log('touchend');
-          set3dAnimation(mainElem, ANIMATION_TIME_MS, function() {}, mainElemStartX, mainElemStartY, 0);
+          fmaSharedState.set3dAnimation(mainElem, ANIMATION_TIME_MS, function() {}, mainElemStartX, mainElemStartY, 0);
         }
         break;
     }
@@ -311,8 +282,8 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
     }
     var stackCards = $scope.stackContainer.children();
     var lastCard = $(stackCards[stackCards.length - 1]);
-    XAndY = getXAndYCoords(lastCard);
-    set3dAnimation(
+    XAndY = fmaSharedState.getXAndYCoords(lastCard);
+    fmaSharedState.set3dAnimation(
       lastCard,
       ANIMATION_TIME_MS,
       function() {
@@ -338,8 +309,8 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
     }
     var stackCards = $scope.stackContainer.children();
     var lastCard = $(stackCards[stackCards.length - 1]);
-    XAndY = getXAndYCoords(lastCard);
-    set3dAnimation(
+    XAndY = fmaSharedState.getXAndYCoords(lastCard);
+    fmaSharedState.set3dAnimation(
       lastCard,
       ANIMATION_TIME_MS,
       function() {
@@ -400,7 +371,7 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
     // We take a card that's not in the stack yet and put it in the stack at
     // the front. We loop if necessary.
     newTopCard = oldTopCard.clone();
-    XAndY = getXAndYCoords(oldTopCard);
+    XAndY = fmaSharedState.getXAndYCoords(oldTopCard);
     newTopCard.css('transform',
         "translate3d(" +
             (XAndY.startX - 2*oldTopCard.width()) + "px, " +
@@ -417,7 +388,7 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
 
     fillCard(newTopCard, newCardInfo);
     $scope.stackContainer.append(newTopCard);
-    set3dAnimation(
+    fmaSharedState.set3dAnimation(
       newTopCard,
       ANIMATION_TIME_MS,
       function() {
