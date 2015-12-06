@@ -1,9 +1,9 @@
 /* jshint eqnull: true */
 
-angular.module('foodMeApp.stackV2', ['ngRoute', 'foodmeApp.localStorage', 'foodmeApp.sharedState', 'ionic'])
+angular.module('foodMeApp.stackV2', ['ngRoute', 'foodmeApp.localStorage', 'foodmeApp.sharedState', 'ionic', 'foodmeApp.base64'])
 
-.controller('StackV2Ctrl', ["$scope", "$location", "fmaLocalStorage", "$http", "fmaSharedState", "$rootScope", "$timeout", "$q", "$ionicPopup",
-function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, $timeout, $q, $ionicPopup) {
+.controller('StackV2Ctrl', ["$scope", "$location", "fmaLocalStorage", "$http", "fmaSharedState", "$rootScope", "$timeout", "$q", "$ionicPopup", "base64",
+function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, $timeout, $q, $ionicPopup, base64) {
   var MAX_CARDS_IN_STACK = 3;
   var MAX_RESTAURANT_NAME_LENGTH = 32;
   var MAX_ITEM_NAME_LENGTH = 42;
@@ -91,25 +91,25 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
 
   var getImageFromItemNamePromise = function(itemName) {
     
-    var urlToFetch = 'https://api.flickr.com/services/rest/?method=flickr.photos.search&'+
-                     'tags=food,delicious,foodie&format=json&sort=relevance&api_key='+
-                     fmaSharedState.flickr_api_key+'&text=' +
-                     itemName.split(/\s+/).join('+');
+    var urlToFetch = "https://api.datamarket.azure.com/Bing/Search/Image?$format=json&$top=1&Query='" +
+                     itemName.split(/\s+/).join(" ") + "'";
     return $q(function(resolve, reject) {
-      $http.get(urlToFetch)
-      .then(
+      $http({
+        url: urlToFetch,
+        method: 'GET',
+        headers: {
+          'Authorization': 'Basic ' + base64.encode('' + ':' + fmaSharedState.get_bing_api_key())
+        }
+      }).then(
         function(res) {
-          picObj = JSON.parse(res.data.slice(14, -1));
-          if (picObj == null || picObj.photos == null || picObj.photos.photo == null ||
-              picObj.photos.photo[0] == null) {
+          if (res == null || res.data == null || res.data.d == null ||
+              res.data.d.results == null || res.data.d.results.length === 0 ||
+              res.data.d.results[0] == null || res.data.d.results[0].MediaUrl == null) {
             console.log('Failed to load: ' + itemName);
             resolve(null);
             return;
           }
-          resolve('https://farm'+picObj.photos.photo[0].farm+
-                  '.staticflickr.com/'+picObj.photos.photo[0].server+
-                  '/'+picObj.photos.photo[0].id+'_'+
-                  picObj.photos.photo[0].secret+'.jpg');
+          resolve(res.data.d.results[0].MediaUrl);
           return;
         },
         function(err) {

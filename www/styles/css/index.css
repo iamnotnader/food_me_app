@@ -1215,7 +1215,8 @@ form.oauth_form {
 .intro_screen__delivery_text {
   display: inline-block;
   vertical-align: top;
-  margin-top: 3.8vh;
+  margin-top: 3.4vh;
   font-size: 3vh;
+  line-height: 3vh;
   margin-right: 0.2vh;
   font-family: TaglineFont; }

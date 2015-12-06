@@ -32,7 +32,24 @@ angular.module('foodmeApp.sharedState', [])
     endpoint: 'https://www.delivery.com/api',
     redirect_uri: 'http://localhost:3000',
 
-    flickr_api_key: '846a0cb8bb20838fee1727f5c5539396',
+    flickr_api_key: '846a0cb8bb20838fee1727f5c5539396', // Not used?
+    bing_api_keys: [
+      // Check quota at: https://datamarket.azure.com/dataset/explore/bing/search
+      // Password for all accounts is: FUCKMICROSOFt
+      '/9xwyWjxxf9Ls10ylR4ayw6HLXc1RnfaKfB6a/xDSX4', // iamnotnader@gmail.com
+      'SPxMKtQpFJQr0LlKX/+5YSNTROtwNtPn65UQ/a7F5QM', // burgietheburger@foodme.io
+      'js+jKMhuRQrJVFQPoZVjKAqmV4nqTJXuatPGhMrD76k', // 1@foodme.io
+      '1Rx8Z39741AzjIw395Zw4IQKRBBDCudBgjXpvw480l0', // 2@foodme.io
+      'PLElW2BBLTYKD6zOhX/3yZ8uzh3AjeTCSb2cF4QT86w', // 3@foodme.io
+      'Afm4Wq8lqwaMd6CeMhj8IadStsgKJzwWcY4a9r5XeCI', // 4@foodme.io
+      'K1kK0GvSAQh5b4gZBq9cXZbVYMU7LNrH3bwKzbWgKWA', // 5@foodme.io
+      'aOuP3E72wiUTIdpTVCXssCl4KTscRj8baSYL3XTdJUY', // 6@foodme.io
+      'rPXBAJ+ZMQ9yzuPiXFra81DkSbGr8LDAlXt5VWUN36s', // 7@foodme.io
+      '6o1fC7IsOjX6s51TfpV20GrBBBD5/NZjsCg82zp08h4', // 8@foodme.io
+    ],
+    get_bing_api_key: function() {
+      return this.bing_api_keys[Math.floor(Math.random()*this.bing_api_keys.length)];
+    },
 
     // This determines whether or not we redirect the user to different screens.
     // For example, we might redirect the user to the intro_screen if their
