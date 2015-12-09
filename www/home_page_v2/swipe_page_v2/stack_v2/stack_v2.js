@@ -89,11 +89,15 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
     }
   };
 
-  var getImageFromItemNamePromise = function(itemName) {
-    
+  var getImageFromItemNamePromise = function(itemName) { 
     var urlToFetch = "https://api.datamarket.azure.com/Bing/Search/Image?$format=json&$top=1&Query='" +
                      itemName.split(/\s+/).join(" ") + "'";
     return $q(function(resolve, reject) {
+      if (fmaSharedState.disableImages) {
+        // We do this so we don't use image search quota when testing.
+        resolve(null);
+        return;
+      }
       $http({
         url: urlToFetch,
         method: 'GET',
@@ -205,7 +209,6 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
   $scope.emptyStackConfirmed = false;
   var initStackWithCards = function(cardInfoList, maxCardsInStack, stackContainer) {
     console.log('initStackWithCards');
-    // Shuffle the food items to keep things fun.
     $scope.globals.allFoodItems = cardInfoList;
     if ($scope.globals.allFoodItems == null ||
         $scope.globals.allFoodItems.length === 0) {
@@ -240,6 +243,7 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
     $scope.canManipulateCards = false;
     lastCard.unbind();
     setEventHandlers(lastCard);
+    $scope.globals.saveStackContext();
   };
 
   var removeTopCardAddNewCard = function() {
@@ -454,15 +458,16 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
     getOpenDishesForMerchantPromise(currentMerchant)
     .then(
       function(res) {
+        $scope.globals.allMenus = res.allMenus;
         $scope.globals.itemIndex = 0;
-        initStackWithCards(res, MAX_CARDS_IN_STACK, $scope.stackContainer);
+        initStackWithCards(res.foodData, MAX_CARDS_IN_STACK, $scope.stackContainer);
       },
       function(err) {
         console.log('Error getting open dishes for merchant.');
         return;
       }
     );
-  }
+  };
 
   $scope.shuffleMerchantsPressed = function() {
     console.log('shuffleMerchants');
@@ -510,7 +515,7 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
     actualMinimum = parseFloat(currentMerchant.ordering.minimum);
     var cartTotal = $scope.globals.computeCartTotal($scope.globals.userCart);
     $scope.globals.minimumLeft = Math.max(0, actualMinimum - cartTotal);
-  }
+  };
 
   setCartTotal();
   $scope.$watch(
@@ -570,13 +575,16 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
     return nameStr;
   };
 
-  // Resolves to an array of dishes!
+  // Resolves to an object: {
+  //   foodData: array of dishes,
+  //   allMenus: array of menu objects and their items
+  // }
   var getOpenDishesForMerchantPromise = function(merchantObj) {
     return $q(function(resolve, reject) {
       if (merchantObj == null || merchantObj.summary == null ||
           merchantObj.summary.url == null ||
           merchantObj.summary.url.short_tag == null) {
-        return resolve([]);
+        return resolve({foodData: [], allMenus: []});
       }
 
       $http.get(fmaSharedState.endpoint+'/merchant/' +
@@ -595,6 +603,14 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
               var forbiddenObj = res.data.warnings[v1];
               forbiddenItemIds = forbiddenItemIds.concat(forbiddenObj.items);
             }
+          }
+          var allMenus = [];
+          for (var ii = 0; ii < menuArr.length; ii++) {
+            var newMenuObj = {
+              fullMenu: menuArr[ii],
+              items: findMenuItemsRecursive(menuArr[ii], [], forbiddenItemIds),
+            };
+            allMenus.push(newMenuObj);
           }
           menuItemsFound = findMenuItems(menuArr, forbiddenItemIds);
           var foodData = [];
@@ -618,11 +634,17 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
             //    (1 + fmaSharedState.taxRate) + fmaSharedState.tipAmount;
             currentItem.price = currentItem.price.toFixed(2);
 
+            // Keep the original index so we can get the original order back later.
+            currentItem.originalIndex = ii;
+
             foodData.push(currentItem);
           }
 
-          // Shuffle the results for fun.
-          foodData = _.shuffle(foodData);
+          // Shuffle the results for fun-- but only if an item hasn't been selected.
+          // If an item has been selected, we want to go in menu order.
+          if ($scope.globals.itemToStartOn == null) {
+            foodData = _.shuffle(foodData);
+          }
           // Sort foodData to put the matched items at the front.
           if ($scope.globals.keywordValue != null && $scope.globals.keywordValue != '' &&
               merchantObj.matched_items != null) {
@@ -633,7 +655,7 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
               return 1;
             });
           }
-          return resolve(foodData);
+          return resolve({foodData: foodData, allMenus: allMenus});
         },
         function(err) {
           // Messed up response???
@@ -779,6 +801,7 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
     // Save the stackContainer so we can avoid crawling the dom.
     $scope.stackContainer = $('.stack__cards__cards_container');
     $scope.restaurantName = $('.stack__restaurant_name');
+    // Pull the stack from the cache
     if ($scope.globals.allFoodItems != null &&
         JSON.stringify($scope.globals.lastAddress) == JSON.stringify(userAddress) &&
         $scope.globals.lastSearch == currentSearch) {
@@ -789,7 +812,25 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
       }
       setMerchantName();
       $scope.globals.minimumLeft = Math.max(0, $scope.globals.minimumLeft - $scope.cartTotal);
-
+      // If we have an item to start on, find it and set the index there. Also
+      // we want the food items to be sorted in this case, not shuffled.
+      if ($scope.globals.itemToStartOn != null && $scope.globals.allFoodItems != null) {
+        var itemToStartOn = $scope.globals.itemToStartOn;
+        $scope.globals.itemToStartOn = null;
+        // Get back the original order of the items.
+        $scope.globals.allFoodItems = _.sortBy($scope.globals.allFoodItems,
+          function(foodItem) {
+            return foodItem.originalIndex;
+          }
+        );
+        for (var ii = 0; ii < $scope.globals.allFoodItems.length; ii++) {
+          var currentItem = $scope.globals.allFoodItems[ii];
+          if (currentItem.unique_key === itemToStartOn.unique_key) {
+            $scope.globals.itemIndex = ii;
+            break;
+          }
+        }
+      }
       initStackWithCards(
           $scope.globals.allFoodItems,
           MAX_CARDS_IN_STACK,
@@ -807,13 +848,14 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
         fmaSharedState.foodItemValidationSeconds);
     getMerchantsAndFoodItemsPromise(userAddress).then(
       function(res) {
-        $scope.globals.itemIndex = 0;
         var currentMerchant = $scope.globals.allMerchants[$scope.globals.merchantIndex];
         if (currentMerchant.ordering && currentMerchant.ordering.minimum) {
           $scope.globals.minimumLeft = parseFloat(currentMerchant.ordering.minimum);
         }
         setMerchantName();
-        initStackWithCards(res, MAX_CARDS_IN_STACK, $scope.stackContainer);
+        $scope.globals.allMenus = res.allMenus;
+        $scope.globals.itemIndex = 0;
+        initStackWithCards(res.foodData, MAX_CARDS_IN_STACK, $scope.stackContainer);
       },
       function(err) {
         $scope.emptyStackConfirmed = true;

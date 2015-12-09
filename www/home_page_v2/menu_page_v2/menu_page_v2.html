@@ -1,0 +1,28 @@
+<div class="cart_page_v2__top_text">
+  <div class="cart_page_v2__top_text__inner">
+    Tap an item.
+  </div>
+  <div class="home_page_v2__cell_border"></div>
+</div>
+<div class="menu_page__overall_container">
+  <div class="menu_page__menu_container" ng-repeat="menuObj in allMenus">
+    <div class="menu_page__menu_name" ng-click="menuObj.is_tapped = !menuObj.is_tapped">
+      <div class="menu_page__menu_name_inner">
+        {{menuObj.fullMenu.name}}
+      </div>
+    </div>
+    <div class="menu_page__items_container grow-animation shrink-animation" ng-repeat="itemObj in menuObj.items"
+        ng-if="itemObj.name != null && menuObj.is_tapped" ng-click="itemTapped(itemObj)">
+      <div class="menu_page__item_name">
+        <div class="menu_page__item_name_inner">
+          {{itemObj.name}}
+        </div>
+      </div>
+      <div class="menu_page__item_price">
+        <div class="menu_page__item_price_inner">
+          ${{itemObj.price}}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

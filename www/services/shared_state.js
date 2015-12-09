@@ -3,6 +3,9 @@
 // Otherwise, we're in prod mode, which means we hit api.delivery.com.
 var testModeEnabled = false;
 
+// A boolean we enable so we don't use up image search quota when testing.
+var disableImages = false;
+
 // Even if testModeEnabled = false, it's nice to have a flag we can use to
 // turn payment on/off.
 var takePayment = true;
@@ -24,6 +27,7 @@ angular.module('foodmeApp.sharedState', [])
   var stateObj = {
     testModeEnabled: testModeEnabled,
     takePayment: takePayment,
+    disableImages: disableImages,
 
     // These are the credentials we need to interact with delivery.com's API
     client_id: 'NDIyZDg1MjA0M2M4Y2NhYzgxOGY1NDhjMmE0YTIwMTJh',

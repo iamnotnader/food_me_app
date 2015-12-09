@@ -26,6 +26,14 @@
 </div>
 
 <div class="swipe_page__bottom_menu">
+  <div ng-click="homeButtonPressed()" class="swipe_page__bottom_button">
+    <div class="home_page_v2__burgie_icon">
+    </div>
+  </div>
+  <div ng-click="menuButtonPressed()" class="swipe_page__bottom_button">
+    <div class="home_page_v2__menu_icon">
+    </div>
+  </div>
   <div ng-click="searchButtonPressed()" class="swipe_page__bottom_button">
     <div ng-if="globals.tutorialIndex === 6" ng-click="globals.updateTutorialIndex()">
       <div class="foodme__lower_popover" style="width: 29vw; line-height: 3.5vw; font-size: 3.5vw; top: -117%;">
@@ -38,10 +46,6 @@
       </div>
     </div>
     <div class="home_page_v2__search_icon">
-    </div>
-  </div>
-  <div ng-click="homeButtonPressed()" class="swipe_page__bottom_button">
-    <div class="home_page_v2__burgie_icon">
     </div>
   </div>
   <div ng-click="cartButtonPressed()" class="swipe_page__bottom_button">
@@ -61,5 +65,5 @@
       </div>
     </div>
   </div>
-  <div class="swipe_page__bottom_bar" style="left: 33.333333%"></div>
+  <div class="swipe_page__bottom_bar" style="left: 0"></div>
 </div>

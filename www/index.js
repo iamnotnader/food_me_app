@@ -37,6 +37,7 @@ var initAngularStuff = function() {
     'foodMeApp.chooseAddressV3',
     'foodMeApp.partialSwipePageV2',
     'foodMeApp.stackV2',
+    'foodMeApp.menuPageV2',
     'foodMeApp.cartPageV2',
     'foodMeApp.searchPageV2',
   ]).
@@ -86,6 +87,11 @@ var initAngularStuff = function() {
           templateUrl: 'home_page_v2/cart_page_v2/partial_cart_page_v2.html',
           controller: 'CartPageV2Ctrl'
       })
+      .state('home_page_v2.menu_page_v2', {
+          url: '/menu_page_v2',
+          templateUrl: 'home_page_v2/menu_page_v2/menu_page_v2.html',
+          controller: 'MenuPageV2Ctrl'
+      })
       .state('home_page_v2.swipe_page_v2', {
           url: '/swipe_page_v2',
           views: {
@@ -104,7 +110,7 @@ var initAngularStuff = function() {
               templateUrl: ('home_page_v2/swipe_page_v2/' +
                             'stack_v2/stack_v2.html'),
               controller: 'StackV2Ctrl',
-            }
+            },
           }
       });
   }]).

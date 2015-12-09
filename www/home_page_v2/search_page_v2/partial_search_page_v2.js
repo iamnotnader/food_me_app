@@ -69,7 +69,7 @@ function($scope, $location, $http, fmaLocalStorage, fmaSharedState, $rootScope, 
   };
 
   var doneTransition = function() {
-    $('.swipe_page__bottom_bar').css({left: '33.33333%'});
+    $('.swipe_page__bottom_bar').css({left: '0'});
     subviewObj.attr('class', 'slide-left');
     $location.path('/home_page_v2/swipe_page_v2');
   };

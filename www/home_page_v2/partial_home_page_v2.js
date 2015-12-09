@@ -9,21 +9,21 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $q, fmaStack
 
   $scope.searchButtonPressed = function() {
     console.log('Search button pressed.');
-    subviewObj.attr('class', 'slide-right');
-    $('.swipe_page__bottom_bar').css({left: '0%'});
-    $location.path('/home_page_v2/search_page_v2');
-  };
-
-  var homeButtonTransition = function () {
-    $('.swipe_page__bottom_bar').css({left: '33.33333%'});
-    if ($location.path() == "/home_page_v2/swipe_page_v2") {
-      return;
-    }
     if ($location.path() == "/home_page_v2/cart_page_v2") {
       subviewObj.attr('class', 'slide-right');
     } else {
       subviewObj.attr('class', 'slide-left');
     }
+    $('.swipe_page__bottom_bar').css({left: '50%'});
+    $location.path('/home_page_v2/search_page_v2');
+  };
+
+  var homeButtonTransition = function () {
+    $('.swipe_page__bottom_bar').css({left: '0'});
+    if ($location.path() == "/home_page_v2/swipe_page_v2") {
+      return;
+    }
+    subviewObj.attr('class', 'slide-right');
     $location.path('/home_page_v2/swipe_page_v2');
   };
   $scope.homeButtonPressed = function() {
@@ -61,9 +61,19 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $q, fmaStack
   };
   $scope.cartButtonPressed = function() {
     console.log('Cart button pressed.');
-    $('.swipe_page__bottom_bar').css({left: '66.66666%'});
+    $('.swipe_page__bottom_bar').css({left: '75%'});
     subviewObj.attr('class', 'slide-left');
     $location.path('/home_page_v2/cart_page_v2');
+  };
+  $scope.menuButtonPressed = function() {
+    console.log('Cart button pressed.');
+    $('.swipe_page__bottom_bar').css({left: '25%'});
+    if ($location.path() == "/home_page_v2/swipe_page_v2") {
+      subviewObj.attr('class', 'slide-left');
+    } else {
+      subviewObj.attr('class', 'slide-right');
+    }
+    $location.path('/home_page_v2/menu_page_v2');
   };
   
   var saveSearchParams = function() {
@@ -122,6 +132,33 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $q, fmaStack
         'selectedMerchantId', fmaSharedState.default_merchant_id,
         fmaSharedState.testing_invalidation_seconds);
   }
+  var saveStackContext = function() {
+    fmaLocalStorage.setObjectWithExpirationSeconds(
+        'stackItemIndex', $scope.globals.itemIndex,
+        fmaSharedState.foodItemValidationSeconds);
+    fmaLocalStorage.setObjectWithExpirationSeconds(
+        'allFoodItems', $scope.globals.allFoodItems,
+        fmaSharedState.foodItemValidationSeconds);
+    fmaLocalStorage.setObjectWithExpirationSeconds(
+        'allMenus', $scope.globals.allMenus,
+        fmaSharedState.foodItemValidationSeconds);
+    fmaLocalStorage.setObjectWithExpirationSeconds(
+        'allMerchants', $scope.globals.allMerchants,
+        fmaSharedState.foodItemValidationSeconds);
+    fmaLocalStorage.setObjectWithExpirationSeconds(
+        'stackMerchantIndex', $scope.globals.merchantIndex,
+        fmaSharedState.foodItemValidationSeconds);
+    fmaLocalStorage.setObjectWithExpirationSeconds(
+        'lastAddress', $scope.globals.lastAddress,
+        fmaSharedState.foodItemValidationSeconds);
+    fmaLocalStorage.setObjectWithExpirationSeconds(
+        'lastSearch', $scope.globals.lastSearch,
+        fmaSharedState.foodItemValidationSeconds);
+    fmaLocalStorage.setObjectWithExpirationSeconds(
+        'minimumLeft', $scope.globals.minimumLeft,
+        fmaSharedState.foodItemValidationSeconds);
+  };
+
   $scope.globals = {
     userAddress: fmaLocalStorage.getObject('userAddress'),
     userCart: userCart,
@@ -137,10 +174,13 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $q, fmaStack
     lastSearch: fmaLocalStorage.getObject('lastSearch'),
     computeCartTotal: computeCartTotal,
     minimumLeft: fmaLocalStorage.getObject('minimumLeft'),
+    allMenus: fmaLocalStorage.getObject('allMenus'),
     changeSearch: changeSearch,
     tutorialIndex: tutorialIndex,
     updateTutorialIndex: updateTutorialIndex,
+    saveStackContext: saveStackContext,
   };
+
 
   $scope.checkoutButtonPressed = function() {
     console.log('Checkout button pressed.');
@@ -163,27 +203,7 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $q, fmaStack
     }
 
     // Save the state of the stack.
-    fmaLocalStorage.setObjectWithExpirationSeconds(
-        'stackItemIndex', $scope.globals.itemIndex,
-        fmaSharedState.foodItemValidationSeconds);
-    fmaLocalStorage.setObjectWithExpirationSeconds(
-        'allFoodItems', $scope.globals.allFoodItems,
-        fmaSharedState.foodItemValidationSeconds);
-    fmaLocalStorage.setObjectWithExpirationSeconds(
-        'allMerchants', $scope.globals.allMerchants,
-        fmaSharedState.foodItemValidationSeconds);
-    fmaLocalStorage.setObjectWithExpirationSeconds(
-        'stackMerchantIndex', $scope.globals.merchantIndex,
-        fmaSharedState.foodItemValidationSeconds);
-    fmaLocalStorage.setObjectWithExpirationSeconds(
-        'lastAddress', $scope.globals.lastAddress,
-        fmaSharedState.foodItemValidationSeconds);
-    fmaLocalStorage.setObjectWithExpirationSeconds(
-        'lastSearch', $scope.globals.lastSearch,
-        fmaSharedState.foodItemValidationSeconds);
-    fmaLocalStorage.setObjectWithExpirationSeconds(
-        'minimumLeft', $scope.globals.minimumLeft,
-        fmaSharedState.foodItemValidationSeconds);
+    saveStackContext();
     topViewObj.attr('class', 'slide-left');
     $location.path('/accounts_page');
     return;
