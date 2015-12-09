@@ -700,8 +700,7 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
     // call the function on them individually.
     var menuItemList = [];
     for (var menuIndex = 0; menuIndex < menuArr.length; menuIndex++) {
-      if (menuArr[menuIndex] == null || menuArr[menuIndex].name == null ||
-          menuArr[menuIndex].name.match(/beverage/i) != null) {
+      if (menuArr[menuIndex] == null || menuArr[menuIndex].name == null) {
         continue;
       }
       findMenuItemsRecursive(menuArr[menuIndex], menuItemList, forbiddenItemIds);

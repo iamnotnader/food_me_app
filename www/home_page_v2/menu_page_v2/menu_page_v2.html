@@ -3,6 +3,16 @@
     Tap an item.
   </div>
   <div class="home_page_v2__cell_border"></div>
+  <div ng-if="globals.tutorialIndex === 7" ng-click="globals.updateTutorialIndex(); menuButtonPressed()">
+    <div class="foodme__lower_popover" style="width: 55vw; line-height: 5.5vw; font-size: 5.5vw; top: 120%;">
+      <div class="foodme__lower_popover__arrow__border"></div>
+      <div class="foodme__lower_popover__arrow"></div>
+      <div>
+        Tap an item to start swiping at that point in the menu.
+      </div>
+      <div>(tap to dismiss)</div>
+    </div>
+  </div>
 </div>
 <div class="menu_page__overall_container">
   <div class="menu_page__menu_container" ng-repeat="menuObj in allMenus">
