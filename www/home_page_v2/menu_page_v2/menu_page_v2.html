@@ -16,13 +16,13 @@
 </div>
 <div class="menu_page__overall_container">
   <div class="menu_page__menu_container" ng-repeat="menuObj in allMenus">
-    <div class="menu_page__menu_name" ng-click="menuObj.is_tapped = !menuObj.is_tapped">
+    <div class="menu_page__menu_name" ng-click="menuObj.is_tapped = !menuObj.is_tapped" ng-if="menuObj.items != null && menuObj.items.length > 0">
       <div class="menu_page__menu_name_inner">
         {{menuObj.fullMenu.name}}
       </div>
     </div>
     <div class="menu_page__items_container grow-animation shrink-animation" ng-repeat="itemObj in menuObj.items"
-        ng-if="itemObj.name != null && menuObj.is_tapped" ng-click="itemTapped(itemObj)">
+        ng-if="$index <= 50 && itemObj.name != null && menuObj.is_tapped" ng-click="itemTapped(itemObj)">
       <div class="menu_page__item_name">
         <div class="menu_page__item_name_inner">
           {{itemObj.name}}

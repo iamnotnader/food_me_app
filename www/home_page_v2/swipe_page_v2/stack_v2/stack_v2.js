@@ -90,27 +90,25 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
   };
 
   var getImageFromItemNamePromise = function(itemName) {
-    
-    var urlToFetch = 'https://api.flickr.com/services/rest/?method=flickr.photos.search&'+
-                     'tags=food,delicious,foodie&format=json&sort=relevance&api_key='+
-                     fmaSharedState.flickr_api_key+'&text=' +
-                     itemName.split(/\s+/).join('+');
-    return $q(function(resolve, reject) {
-      $http.get(urlToFetch)
-      .then(
-        function(res) {
-          picObj = JSON.parse(res.data.slice(14, -1));
-          if (picObj == null || picObj.photos == null || picObj.photos.photo == null ||
-              picObj.photos.photo[0] == null) {
-            console.log('Failed to load: ' + itemName);
-            resolve(null);
-            return;
-          }
-          resolve('https://farm'+picObj.photos.photo[0].farm+
-                  '.staticflickr.com/'+picObj.photos.photo[0].server+
-                  '/'+picObj.photos.photo[0].id+'_'+
-                  picObj.photos.photo[0].secret+'.jpg');
-          return;
+    var urlToFetch = 'https://www.googleapis.com/customsearch/v1?key=AIzaSyDzkhL0nQB8WC5en7fa09EWoYJPzmTh0pc&cx=013379291263518575228:buw8pcm2jp0&searchQuery=image&imgSize=large&q='+
+        itemName.split(/\s+/).join('+');
+     return $q(function(resolve, reject) {
+       $http.get(urlToFetch)
+       .then(
+         function(res) {
+           if (res.data == null || res.data.items == null ||
+               res.data.items.length === 0 ||
+               res.data.items[0] == 0 ||
+               res.data.items[0].pagemap == null ||
+               res.data.items[0].pagemap.cse_image == null ||
+               res.data.items[0].pagemap.cse_image.length === 0 ||
+               res.data.items[0].pagemap.cse_image[0] == null ||
+               res.data.items[0].pagemap.cse_image[0].src == null) {
+             resolve(null);
+             return;
+           }
+           resolve(res.data.items[0].pagemap.cse_image[0].src);
+           return;
         },
         function(err) {
           debugger;
