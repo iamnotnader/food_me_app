@@ -116,24 +116,6 @@ var initAngularStuff = function() {
   }]).
   run(['$rootScope', 'fmaSharedState', function($rootScope, fmaSharedState) {
     ga_id = fmaSharedState.ga_id;
-    window.analytics = {
-      trackEvent: function (cat, str) {
-        console.log('Tried to track event but not loaded yet: ' + cat + ' ' + str);
-      },
-      trackView: function() {
-        console.log('Tried to track view but not loaded yet.');
-      },
-      trackTiming: function() {
-        console.log('Tried to track timing but not loaded yet.');
-      },
-      addTransaction: function() {
-        console.log('Adding transaction!');
-      },
-      addTransactionItem: function() {
-        console.log('Adding transaction ITEM!');
-      },
-    };
-
   }]);
 };
 
@@ -165,13 +147,15 @@ var app = {
       setTimeout(function() {
         navigator.splashscreen.hide();
       }, 600);
+
       // The ga_id is set in intitAngular
       window.analytics.startTrackerWithId(ga_id);
+      //window.analytics.debugMode();
 
       // If we're on Android, we need special css because of webkit bugs.
       document.body.className = device.platform.toLowerCase();
 
-      // Keep this shit at the end.. it breaks stuff.
+      // Leave this shit at the bottom-- it breaks things...
       cordova.plugins.Keyboard.hideKeyboardAccessoryBar(false);
     }
 };
