@@ -93,6 +93,10 @@ function($scope, $location, fmaLocalStorage, $http, fmaSharedState, $rootScope, 
     var urlToFetch = 'https://www.googleapis.com/customsearch/v1?key=AIzaSyDzkhL0nQB8WC5en7fa09EWoYJPzmTh0pc&cx=013379291263518575228:buw8pcm2jp0&searchQuery=image&imgSize=large&q='+
         itemName.split(/\s+/).join('+');
      return $q(function(resolve, reject) {
+       if (fmaSharedState.disableImages) {
+         resolve(null);
+         return;
+       }
        $http.get(urlToFetch)
        .then(
          function(res) {

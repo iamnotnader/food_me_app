@@ -114,7 +114,7 @@ var initAngularStuff = function() {
           }
       });
   }]).
-  run(['$rootScope', 'fmaSharedState', '$ionicPlatform', function($rootScope, fmaSharedState, $ionicPlatform) {
+  run(['$rootScope', 'fmaSharedState', function($rootScope, fmaSharedState) {
     ga_id = fmaSharedState.ga_id;
     window.analytics = {
       trackEvent: function (cat, str) {
@@ -165,25 +165,13 @@ var app = {
       setTimeout(function() {
         navigator.splashscreen.hide();
       }, 600);
-      cordova.plugins.Keyboard.hideKeyboardAccessoryBar(false);
-      window.alert = function (txt) {
-          navigator.notification.alert(txt, function(){
-          }, "Burgie says..", "hush, burgie");
-      };
-      window.confirm = function(txt, callback) {
-        navigator.notification.confirm(
-          txt,   // message
-          callback,    // callback to invoke with index of button pressed
-          'Burgie wants to know..',           // title
-          ['Sounds chill.', "No thanks, I hate food."]         // buttonLabels
-        );
-        return ret;
-      };
       // The ga_id is set in intitAngular
       window.analytics.startTrackerWithId(ga_id);
-      //window.analytics.debugMode();
 
       // If we're on Android, we need special css because of webkit bugs.
       document.body.className = device.platform.toLowerCase();
+
+      // Keep this shit at the end.. it breaks stuff.
+      cordova.plugins.Keyboard.hideKeyboardAccessoryBar(false);
     }
 };
