@@ -1,3 +1,8 @@
+FoodMe is Tinder for food delivery! It's an app I made with PhoneGap that's fully-launched for Android and iOS. As of 20160501 it makes about $20 a month :)
+
+[iOS app](https://itunes.apple.com/us/app/foodme-swipe-for-food-delivery/id1035175486?mt=8)
+[Android app](https://play.google.com/store/apps/details?id=io.foodme&hl=en)
+
 0) Install bower and npm (after installing homebrew from brew.sh):
 
 brew install npm
