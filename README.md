@@ -5,6 +5,8 @@ FoodMe is Tinder for food delivery! It's an app I made with PhoneGap that's full
   
 ![Swipe for food!](https://lh3.googleusercontent.com/B19wHjONbvwAmKUd85Ep9FQKBUQXjIzUD0y1IEgS7Y57XPtTrqMxLVwZzwiPaZEwbQ=h900-rw)
   
+![Swipe for food!](https://lh3.googleusercontent.com/nCOHPA6cs-hP8X1YqjwqHUFrE1q8vVKbSb9LAzyKERVLVNouoORgxvYFpVs1BOr8OMI=h900-rw)
+
 0) Install bower and npm (after installing homebrew from brew.sh):
 
 brew install npm
